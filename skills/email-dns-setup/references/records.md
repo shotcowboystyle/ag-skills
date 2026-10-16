@@ -229,8 +229,9 @@ parent's `sp=reject` once that is set; no per-subdomain records are needed.
   receivers concatenate with no separator. Split long DKIM keys or SPF at any point, never inside
   a tag name.
 - Zone-file quoting (`"v=spf1 ... -all"`) is what `dig` shows. Web UIs usually want the value
-  without the outer quotes; APIs vary (Route 53 and some Terraform providers require the quotes
-  in the value). Check with `dig` after entry; a value shown as `"\"v=spf1 ...\""` has doubled quotes.
+  without the outer quotes. The Route 53 console and raw API require them; Terraform/OpenTofu
+  providers (AWS, Cloudflare) add them for you, so never quote inside the HCL string. Check with
+  `dig` after entry; a value shown as `"\"v=spf1 ...\""` has doubled quotes and will not validate.
 - Case: tags are case-insensitive, but DKIM `p=` and selectors must be copied exactly.
 - Semicolons: DMARC and DKIM use `;` separators with optional spaces; SPF uses spaces only.
 - Some UIs silently strip a trailing `;` or add a space; harmless for DMARC, fatal inside a DKIM key.

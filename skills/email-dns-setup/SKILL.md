@@ -104,7 +104,10 @@ Use the full output template at the end of this file.
 
 1. Re-run `scripts/check_mail_dns.sh` with the DKIM selectors. Everything the table says should be
    visible. If not, check the authoritative server directly (`NS=`) to separate "not published" from
-   "not propagated yet".
+   "not propagated yet". In the answer you give the user, write out plain `dig` commands (the list
+   in references/records.md) rather than naming this script: the user usually does not have the
+   skill's files, and a command they cannot run is worse than none. Offer to re-run the audit for
+   them instead.
 2. Send a message from the new setup to a Gmail or Outlook.com mailbox and open "Show original" /
    "View message source". SPF, DKIM and DMARC must all show PASS, and the DKIM `d=` must be the
    user's domain, not the provider's. A provider-domain `d=` means the DKIM CNAMEs are wrong or

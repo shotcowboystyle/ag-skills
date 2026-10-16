@@ -55,8 +55,11 @@ Records entered anywhere other than the NS host do nothing.
 - Multiple MX in one record set: one line per `priority host` pair.
 - Null MX: value `0 .` works.
 - CLI: `aws route53 change-resource-record-sets --hosted-zone-id Z... --change-batch file://mail.json`.
-- Terraform: `aws_route53_record` with `records = ["\"v=spf1 include:... -all\""]`; without the
-  escaped quotes the provider still accepts it but check `dig` output once.
+- Terraform/OpenTofu: `aws_route53_record` with `records = ["v=spf1 include:... -all"]`, **no
+  inner quotes**. The AWS provider wraps each TXT value in quotes itself; adding your own produces
+  `""v=spf1...""` and a rejected or broken record. To split a >255-char DKIM key, put `\"\"` at the
+  split point inside one string (`"first255chars\"\"rest"`), which the provider turns into two
+  quoted strings. Console and raw API calls are the opposite: there the value must be quoted.
 - Alias records exist only for AWS targets; irrelevant for mail.
 - Route 53 health-checked / weighted record sets must not be used for MX.
 

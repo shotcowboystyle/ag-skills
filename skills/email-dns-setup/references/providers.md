@@ -146,7 +146,7 @@ Set these on a **sending subdomain** (`notify.example.com`) unless the user expl
 
 ### Postmark
 ```
-<token>._domainkey.notify   TXT    "k=rsa; p=<from Postmark>"        ; Postmark gives a TXT, not CNAME
+<timestamp>pm._domainkey.notify  TXT  "k=rsa; p=<from Postmark>"    ; hostname like 20261016pm._domainkey; TXT, not CNAME
 pm-bounces.notify           CNAME  pm.mtasv.net.                      ; custom return-path
 ```
 SPF not required (Postmark return-path is on pm.mtasv.net until the CNAME above, then aligned).
