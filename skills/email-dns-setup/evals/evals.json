@@ -1,0 +1,59 @@
+{
+  "skill_name": "email-dns-setup",
+  "evals": [
+    {
+      "id": 0,
+      "name": "multi-domain-purelymail-cloudflare",
+      "prompt": "ok so I have three domains, all with DNS on Cloudflare (registered at Namecheap): kalmiawoods.com and charlestonbonsai.com are two little side businesses and I just signed up for Purelymail for both. the third one, kalmiawoods.co, I only bought so nobody else grabs it, it just redirects to the .com. Purelymail's setup page gives me a bunch of records including a _dmarc CNAME. Can you give me exactly what to put in Cloudflare for all three and tell me if I'm doing anything dumb? I also have external-dns running in my k8s cluster against the same Cloudflare account if that matters.",
+      "expected_output": "A markdown plan with per-zone record tables for both Purelymail domains (MX, SPF, 3 DKIM CNAMEs, ownership TXT, own DMARC TXT at p=none with rua), a null-MX / spf -all / p=reject / empty wildcard DKIM lockdown for the parked .co, explicit advice to decline the Purelymail _dmarc CNAME, Cloudflare DNS-only warning for the DKIM CNAMEs, external-dns scope warning, verification steps, and hygiene checklist.",
+      "files": [],
+      "assertions": [
+        "Declines the Purelymail _dmarc CNAME and publishes an owned DMARC TXT with p=none and rua=",
+        "Lists all three Purelymail DKIM CNAMEs (purelymail1/2/3._domainkey) for each mail domain",
+        "Gives a lockdown set for kalmiawoods.co: null MX (0 .), v=spf1 -all, p=reject DMARC, empty wildcard DKIM",
+        "Warns that Cloudflare DKIM CNAMEs must be DNS only (not proxied)",
+        "Addresses external-dns: scope/ownership and the --cloudflare-proxied risk, advises adding mail records outside external-dns",
+        "States exactly one SPF record per name and ends it in -all or ~all",
+        "Includes verification steps (dig/audit and a Gmail 'Show original' header check)",
+        "Mentions registrar/DNS account hygiene (2FA, auto-renew/lock) and postmaster@/abuse@ or role addresses",
+        "Gives a staged DMARC rollout (none -> quarantine -> reject)"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "migrate-workspace-to-fastmail-with-postmark",
+      "prompt": "We're moving our company mail for brightpath.studio off Google Workspace to Fastmail at the end of the month (6 people). DNS is on Namecheap BasicDNS. Our Rails app also sends receipts and password resets from no-reply@brightpath.studio through Postmark, and lately customers say those land in spam. Write me the DNS migration plan: what to add, what to remove, in what order, and how to fix the Postmark deliverability thing at the same time.",
+      "expected_output": "Ordered migration plan (TTL lowering, add Fastmail DKIM fm1-3 + SPF alongside Google, data migration, MX switch, cleanup of google selector/SPF include/verification), Postmark moved to a sending subdomain or at least DKIM + custom return-path CNAME so it aligns, single merged SPF record during overlap, DMARC with p=none and rua then tightening, Namecheap Custom MX setting note, deletion list, verification via Gmail headers.",
+      "files": [],
+      "assertions": [
+        "Orders the migration: lower TTLs, add Fastmail DKIM/SPF alongside Google, migrate data, switch MX, then clean up",
+        "Lists all three Fastmail DKIM CNAMEs fm1/fm2/fm3 with the *.dkim.fmhosted.com targets",
+        "Gives an explicit deletion list including the google._domainkey record, the _spf.google.com include, and Google MX",
+        "Keeps a single merged SPF record during overlap (no second v=spf1 record)",
+        "Fixes Postmark alignment: DKIM record for the Postmark domain and the custom return-path (pm-bounces CNAME) and/or a dedicated sending subdomain",
+        "Recommends a sending subdomain or separate stream for app mail with reasoning",
+        "Namecheap-specific: Mail Settings must be Custom MX / warns about Namecheap presets overwriting MX",
+        "Includes a DMARC record with p=none and rua= plus a tightening plan",
+        "Includes verification via Gmail headers (SPF/DKIM/DMARC PASS, d= brightpath.studio)"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "dmarc-failures-m365-route53-mailchimp",
+      "prompt": "our domain is harborlightpt.com, mail is Microsoft 365, DNS is in Route 53 managed with Terraform. I turned on DMARC reports last month through dmarcian and they show a ton of failures from Mailchimp (we send a monthly patient newsletter from hello@harborlightpt.com) and some from Zendesk. Current dmarc is v=DMARC1; p=none; rua=mailto:abc123@ag.dmarcian.com. I want to get to p=reject safely. What do I change?",
+      "expected_output": "Explanation of why Mailchimp/Zendesk fail (no DKIM alignment), add Mailchimp k2/k3 DKIM CNAMEs (ideally on a news. subdomain with the From moved there, or on the root), Zendesk DKIM CNAMEs on the root, SPF review with lookup count, staged DMARC rollout (quarantine pct 25 -> 100 -> reject) with sp= considered, Route 53 / Terraform quoting notes and aws_route53_record snippets, and a verification plan using the dmarcian reports.",
+      "files": [],
+      "assertions": [
+        "Explains the failures as missing DKIM alignment for Mailchimp and Zendesk (not an SPF-only problem)",
+        "Adds Mailchimp DKIM CNAMEs (k2/k3._domainkey -> dkim2/dkim3.mcsv.net) and Zendesk DKIM CNAMEs",
+        "Recommends or discusses moving the newsletter to a subdomain (e.g. news.harborlightpt.com) with relaxed alignment",
+        "Gives a staged rollout: p=quarantine with pct ramp, then p=reject, with wait periods tied to dmarcian reports",
+        "Discusses sp= for subdomains",
+        "Provides Terraform aws_route53_record snippets with TXT values quoted correctly",
+        "Mentions the SPF 10-lookup limit and checks/estimates the current count",
+        "Includes a verification step (headers or dmarcian) before each tightening",
+        "Does not recommend adding a second SPF record"
+      ]
+    }
+  ]
+}

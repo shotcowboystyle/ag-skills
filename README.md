@@ -5,6 +5,12 @@ Create, test, and validate portable AI agent skills. Skills follow the
 skill directory works in Claude Code, Codex, Cursor, and any other agent that
 reads the spec.
 
+## Skills
+
+| Skill | What it does |
+|---|---|
+| [email-dns-setup](skills/email-dns-setup/SKILL.md) | Plan, generate, audit and verify mail DNS (MX, SPF, DKIM, DMARC, MTA-STS, TLS-RPT, BIMI) for any domain on any registrar/DNS host with any mailbox provider or sending service. Includes a read-only `dig` audit script. |
+
 ## Layout
 
 ```
