@@ -178,8 +178,8 @@ difference between "mail works today" and "mail still works in a year".
 1. ...
 
 ### DMARC rollout
-- Now: p=none, rua -> ... ; review reports <date>.
-- Then: p=quarantine; then p=reject.
+- Now: p=none; rua -> ... ; alignment adkim=r/aspf=r because <sending subdomains | strict because only apex sends>; review reports <date>.
+- Then: p=quarantine (pct=25 then 100); then p=reject; set sp= explicitly for subdomains.
 
 ### Hygiene checklist
 - [ ] registrar 2FA + auto-renew + lock  - [ ] DNS host 2FA  - [ ] postmaster@/abuse@/dmarc@ exist  - [ ] ...
