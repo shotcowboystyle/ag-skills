@@ -1,0 +1,11 @@
+{
+  "name": "email-deliverability",
+  "displayName": "Email Deliverability",
+  "version": "1.0.0",
+  "description": "Email DNS planning, auditing, and verification for any domain, DNS host, and mail provider: MX, SPF, DKIM, DMARC rollout, MTA-STS, TLS-RPT, BIMI, and lockdown of domains that never send",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "license": "MIT"
+}

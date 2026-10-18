@@ -1,43 +1,60 @@
 # ag-skills
 
-Create, test, and validate portable AI agent skills. Skills follow the
-[Agent Skills](https://agentskills.io/specification) `SKILL.md` format, so one
-skill directory works in Claude Code, Codex, Cursor, and any other agent that
-reads the spec.
+Agents, skills, and commands for seven coding tools: Claude Code, OpenAI Codex CLI,
+Cursor, OpenCode, Google Antigravity CLI (`agy`), GitHub Copilot, and Pi.
 
-## Skills
+The marketplace (`claude-code-workflows`) holds 74 plugins (73 local + 1 external),
+172 agents, 167 skills, and 94 commands. Sources live under `plugins/` in Claude Code
+format; adapters in `tools/adapters/` emit each other tool's format. Skills follow the
+[Agent Skills](https://agentskills.io/specification) `SKILL.md` spec.
 
-| Skill | What it does |
-|---|---|
-| [email-dns-setup](skills/email-dns-setup/SKILL.md) | Plan, generate, audit and verify mail DNS (MX, SPF, DKIM, DMARC, MTA-STS, TLS-RPT, BIMI) for any domain on any registrar/DNS host with any mailbox provider or sending service. Includes a read-only `dig` audit script. |
+## Install
 
-## Layout
+```bash
+# Claude Code
+/plugin marketplace add shotcowboystyle/ag-skills
+/plugin install email-deliverability@claude-code-workflows
 
-```
-skills/<name>/          one skill per directory
-  SKILL.md              frontmatter + instructions (required)
-  scripts/              runnable helpers
-  references/           long-form docs the skill links to
-  assets/               templates and files the skill hands out
-  tests/*.test.mjs      node:test checks for this skill
-tools/                  validator, scaffolder, linker
-tests/                  validator unit tests and fixtures
+# Skills only, any agent
+gh skill install shotcowboystyle/ag-skills email-dns-setup
+npx skills add shotcowboystyle/ag-skills --skill email-dns-setup
 ```
 
-## Commands
+Codex, Cursor, OpenCode, Antigravity, Copilot, and Pi setup: [docs/harnesses.md](docs/harnesses.md).
+
+## Docs
+
+- [AGENTS.md](AGENTS.md) — repo map and working rules (`CLAUDE.md` links to it)
+- [ARCHITECTURE.md](ARCHITECTURE.md) — adapter framework overview
+- [docs/plugins.md](docs/plugins.md) — plugin catalog
+- [docs/agents.md](docs/agents.md) and [docs/agent-skills.md](docs/agent-skills.md) — agent and skill reference
+- [docs/usage.md](docs/usage.md) — commands and workflows
+- [docs/authoring.md](docs/authoring.md) — how to write a plugin
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Quality gates
+
+```bash
+make validate STRICT=1   # structural validation of every harness output
+make garden STRICT=1     # drift detection (dead links, stale counts, oversize skills)
+make lint                # ruff + ty
+make test                # pytest (plugin-eval + tools/tests)
+make smoke-test          # real-CLI checks; skips CLIs not on PATH
+make generate-all        # regenerate harness artifacts before committing source changes
+```
+
+## Standalone skills (`skills/`)
+
+`skills/` holds skills that are not part of a plugin, checked by a small Node toolchain:
 
 ```bash
 pnpm install
-pnpm new <name> "<description>"   # scaffold skills/<name>
-pnpm validate                     # lint every skill against the spec
-pnpm test                         # node:test across tests/ and skills/*/tests/
-pnpm check                        # validate + test (CI runs this)
+pnpm new <name> "<description>"         # scaffold skills/<name>
+pnpm check                              # validate + node:test (CI runs this)
 pnpm install-skill <name> [--to <dir>]  # symlink into ~/.claude/skills (or another agent's dir)
 ```
 
-## Validation rules
-
-Errors fail the build: missing `SKILL.md`, invalid YAML, missing or malformed
-`name`/`description`, name not matching the directory, wrong types on optional
-fields, empty body, broken relative links. Warnings print only: unknown
-frontmatter keys, body over 500 lines, non-executable files in `scripts/`.
+`pnpm validate` fails on a missing `SKILL.md`, invalid YAML, a missing or malformed
+`name`/`description`, a name that differs from the directory, wrong types on optional
+fields, an empty body, or broken relative links. It warns on unknown frontmatter keys,
+bodies over 500 lines, and non-executable files in `scripts/`.

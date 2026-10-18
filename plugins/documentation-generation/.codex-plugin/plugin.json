@@ -1,0 +1,23 @@
+{
+  "name": "documentation-generation",
+  "version": "1.2.3",
+  "description": "OpenAPI specification generation, Mermaid diagram creation, tutorial writing, API reference documentation",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/documentation-generation",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "architecture-decision-records",
+    "changelog-automation",
+    "openapi-spec-generation"
+  ],
+  "interface": {
+    "displayName": "Documentation Generation",
+    "shortDescription": "OpenAPI specification generation, Mermaid diagram creation, tutorial writing, API reference documentation",
+    "category": "Coding"
+  }
+}

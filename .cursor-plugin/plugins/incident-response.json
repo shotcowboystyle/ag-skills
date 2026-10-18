@@ -1,0 +1,11 @@
+{
+  "name": "incident-response",
+  "displayName": "Incident Response",
+  "version": "1.4.0",
+  "description": "Production incident management, triage workflows, and automated incident resolution",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "license": "MIT"
+}

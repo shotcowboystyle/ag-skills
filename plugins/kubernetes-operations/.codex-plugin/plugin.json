@@ -1,0 +1,24 @@
+{
+  "name": "kubernetes-operations",
+  "version": "1.2.3",
+  "description": "Kubernetes manifest generation, networking configuration, security policies, observability setup, GitOps workflows, and auto-scaling",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/kubernetes-operations",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "gitops-workflow",
+    "helm-chart-scaffolding",
+    "k8s-manifest-generator",
+    "k8s-security-policies"
+  ],
+  "interface": {
+    "displayName": "Kubernetes Operations",
+    "shortDescription": "Kubernetes manifest generation, networking configuration, security policies, observability setup, GitOps workflows\u2026",
+    "category": "Coding"
+  }
+}

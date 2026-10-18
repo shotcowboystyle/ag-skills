@@ -1,0 +1,22 @@
+{
+  "name": "hr-legal-compliance",
+  "version": "1.2.3",
+  "description": "HR policy documentation, legal compliance templates (GDPR/SOC2/HIPAA), employment contracts, and regulatory documentation",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/hr-legal-compliance",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "employment-contract-templates",
+    "gdpr-data-handling"
+  ],
+  "interface": {
+    "displayName": "Hr Legal Compliance",
+    "shortDescription": "HR policy documentation, legal compliance templates (GDPR/SOC2/HIPAA), employment contracts, and regulatory\u2026",
+    "category": "Coding"
+  }
+}
