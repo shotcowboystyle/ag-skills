@@ -1,0 +1,10 @@
+{
+  "name": "database-design",
+  "version": "1.2.1",
+  "description": "Database architecture, schema design, and SQL optimization for production systems",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "license": "MIT"
+}

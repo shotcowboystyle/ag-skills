@@ -148,3 +148,27 @@ vite.config.ts.timestamp-*
 # Turbo Repo
 .turbo
 .eval-results/
+
+# Python / tooling caches
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+
+# Claude Code local worktrees
+.claude/worktrees/
+
+# Generated harness artifacts — rebuild with `make generate-all`.
+# Committed exceptions (small native-install registries): .agents/plugins/marketplace.json,
+# plugins/*/.codex-plugin/plugin.json, .cursor-plugin/, .cursor/rules/ (see docs/harnesses.md).
+.codex/skills/
+.codex/agents/
+.opencode/
+opencode.json
+.antigravity/
+.copilot/
+.pi/skills/
+.pi/prompts/
+.pi/agents/

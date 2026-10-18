@@ -1,0 +1,6 @@
+# GitHub's ubuntu-26.04 image (public preview since 2026-06) postdates the label list
+# bundled with actionlint 1.7.12; declare it so runner-label checks pass.
+self-hosted-runner:
+  labels:
+    - ubuntu-26.04
+    - ubuntu-26.04-arm
