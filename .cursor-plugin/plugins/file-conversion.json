@@ -1,0 +1,12 @@
+{
+  "name": "file-conversion",
+  "displayName": "File Conversion",
+  "version": "2.0.0",
+  "description": "Convert common image, audio, video, document, and data formats with installed local tools while preserving originals.",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/file-conversion",
+  "license": "MIT"
+}

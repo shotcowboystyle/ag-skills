@@ -1,0 +1,28 @@
+{
+  "name": "llm-application-dev",
+  "version": "2.0.6",
+  "description": "LLM application development with LangGraph, RAG systems, vector search, and AI agent architectures for Claude 4.6 and GPT-5.4",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/llm-application-dev",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "embedding-strategies",
+    "hybrid-search-implementation",
+    "langchain-architecture",
+    "llm-evaluation",
+    "prompt-engineering-patterns",
+    "rag-implementation",
+    "similarity-search-patterns",
+    "vector-index-tuning"
+  ],
+  "interface": {
+    "displayName": "Llm Application Dev",
+    "shortDescription": "LLM application development with LangGraph, RAG systems, vector search, and AI agent architectures for Claude 4.6\u2026",
+    "category": "Coding"
+  }
+}

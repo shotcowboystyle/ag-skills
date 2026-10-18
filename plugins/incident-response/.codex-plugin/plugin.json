@@ -1,0 +1,24 @@
+{
+  "name": "incident-response",
+  "version": "1.4.0",
+  "description": "Production incident management, triage workflows, and automated incident resolution",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/incident-response",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "connectivity-triage",
+    "incident-runbook-templates",
+    "on-call-handoff-patterns",
+    "postmortem-writing"
+  ],
+  "interface": {
+    "displayName": "Incident Response",
+    "shortDescription": "Production incident management, triage workflows, and automated incident resolution",
+    "category": "Coding"
+  }
+}

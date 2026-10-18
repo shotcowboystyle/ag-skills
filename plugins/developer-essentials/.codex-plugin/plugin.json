@@ -1,0 +1,31 @@
+{
+  "name": "developer-essentials",
+  "version": "1.0.4",
+  "description": "Essential developer skills including Git workflows, SQL optimization, error handling, code review, E2E testing, authentication, debugging, and monorepo management",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/developer-essentials",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "auth-implementation-patterns",
+    "bazel-build-optimization",
+    "code-review-excellence",
+    "debugging-strategies",
+    "e2e-testing-patterns",
+    "error-handling-patterns",
+    "git-advanced-workflows",
+    "monorepo-management",
+    "nx-workspace-patterns",
+    "sql-optimization-patterns",
+    "turborepo-caching"
+  ],
+  "interface": {
+    "displayName": "Developer Essentials",
+    "shortDescription": "Essential developer skills including Git workflows, SQL optimization, error handling, code review, E2E testing\u2026",
+    "category": "Coding"
+  }
+}

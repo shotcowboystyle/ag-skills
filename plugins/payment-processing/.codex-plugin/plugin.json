@@ -1,0 +1,24 @@
+{
+  "name": "payment-processing",
+  "version": "1.2.3",
+  "description": "Payment gateway integration with Stripe, PayPal, checkout flow implementation, subscription billing, and PCI compliance",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "curtis@shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/payment-processing",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "billing-automation",
+    "paypal-integration",
+    "pci-compliance",
+    "stripe-integration"
+  ],
+  "interface": {
+    "displayName": "Payment Processing",
+    "shortDescription": "Payment gateway integration with Stripe, PayPal, checkout flow implementation, subscription billing, and PCI compliance",
+    "category": "Coding"
+  }
+}
