@@ -1,6 +1,6 @@
 # Complete Plugin Reference
 
-Browse all 74 marketplace plugins organized by category: 73 local plugins plus 1 external Claude Code marketplace entry (`hol-guard`). The local source supports seven coding tools through native formats and adapters. Install commands below use Claude Code syntax. See the [tool setup guide](./harnesses.md) for other installation routes.
+Browse all 81 marketplace plugins organized by category: 80 local plugins plus 1 external Claude Code marketplace entry (`hol-guard`). The local source supports seven coding tools through native formats and adapters. Install commands below use Claude Code syntax. See the [tool setup guide](./harnesses.md) for other installation routes.
 
 ## Quick Start - Essential Plugins
 
@@ -108,14 +108,16 @@ Next.js, React + Vite, and Node.js project setup with pnpm and TypeScript best p
 
 ## Complete Plugin Catalog
 
-### 🎨 Development (6 plugins)
+### 🎨 Development (8 plugins)
 
 | Plugin                          | Description                                                           | Install                                       |
 | ------------------------------- | --------------------------------------------------------------------- | --------------------------------------------- |
 | **debugging-toolkit**           | Interactive debugging and DX optimization                             | `/plugin install debugging-toolkit`           |
 | **backend-development**         | Backend API design with GraphQL and TDD                               | `/plugin install backend-development`         |
 | **frontend-mobile-development** | Frontend UI and mobile development                                    | `/plugin install frontend-mobile-development` |
-| **ui-design**                   | UI/UX design for mobile (iOS, Android, React Native) and web          | `/plugin install ui-design`                   |
+| **design-ops** | UX/UI design ops graded against live Awwwards/Mobbin references; Compose, React Native, web components (absorbs ui-design) | `/plugin install design-ops` |
+| **ios-ops** | Native iOS/SwiftUI, Liquid Glass, on-device AI, framework routing, device-backed release proof | `/plugin install ios-ops` |
+| **meta-wearables-ops** | Meta smart-glasses Device Access Toolkit (iOS/Android), display Web Apps, device proof | `/plugin install meta-wearables-ops` |
 | **multi-platform-apps**         | Cross-platform app coordination (web/iOS/Android)                     | `/plugin install multi-platform-apps`         |
 | **developer-essentials**        | Essential Git, SQL, code review, auth, debugging, and monorepo skills | `/plugin install developer-essentials`        |
 
@@ -157,15 +159,17 @@ Next.js, React + Vite, and Node.js project setup with pnpm and TypeScript best p
 | **plugin-eval**                | Static lint for Claude Code plugins and skills, with experimental LLM scoring for skills | `/plugin install plugin-eval`                |
 | **skill-forge-essentials**     | Behavioral skills for AI code debt detection and session compaction survival             | `/plugin install skill-forge-essentials`     |
 
-### 🛠️ Utilities (3 plugins)
+### 🛠️ Utilities (5 plugins)
 
 | Plugin                    | Description                                | Install                                 |
 | ------------------------- | ------------------------------------------ | --------------------------------------- |
 | **error-debugging**       | Error analysis and trace debugging         | `/plugin install error-debugging`       |
 | **file-conversion**       | Local file conversion with installed tools | `/plugin install file-conversion`       |
+| **image-ops** | Image editing, batch ops, WebP/AVIF/JXL conversion, metadata, library organization, dedupe | `/plugin install image-ops` |
+| **travel-packing-assistant** | Baggage allowances per segment, weight-based pack solving, excess-fee options, Typst packing docs | `/plugin install travel-packing-assistant` |
 | **team-collaboration**    | Team workflows and standup automation      | `/plugin install team-collaboration`    |
 
-### 🤖 AI & ML (6 plugins)
+### 🤖 AI & ML (7 plugins)
 
 | Plugin                   | Description                                                                                                                  | Install                                |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
@@ -175,6 +179,7 @@ Next.js, React + Vite, and Node.js project setup with pnpm and TypeScript best p
 | **machine-learning-ops** | ML training pipelines and MLOps                                                                                              | `/plugin install machine-learning-ops` |
 | **llm-finetuning**       | Eval-gated LLM fine-tuning lifecycle: dataset prep, LoRA/QLoRA training, and promotion gating                                | `/plugin install llm-finetuning`       |
 | **dgx-spark-ops**        | NVIDIA DGX Spark (GB10) environment ops: aarch64/CUDA-13 stack setup, training preflights, unified-memory/thermal management | `/plugin install dgx-spark-ops`        |
+| **ai-video-producer** | End-to-end AI video production: brief, models, script, storyboard, generation pipelines, assembly, plus an index of agent-callable video/audio tools | `/plugin install ai-video-producer` |
 
 ### 📊 Data (1 plugin)
 
@@ -215,7 +220,7 @@ Next.js, React + Vite, and Node.js project setup with pnpm and TypeScript best p
 | **cicd-automation**       | CI/CD pipeline configuration                | `/plugin install cicd-automation`       |
 | **email-deliverability**  | MX/SPF/DKIM/DMARC planning, audit, verify   | `/plugin install email-deliverability`  |
 
-### 🔒 Security (6 plugins)
+### 🔒 Security (7 plugins)
 
 | Plugin                       | Description                                                            | Install                                    |
 | ---------------------------- | ---------------------------------------------------------------------- | ------------------------------------------ |
@@ -225,6 +230,7 @@ Next.js, React + Vite, and Node.js project setup with pnpm and TypeScript best p
 | **reverse-engineering**      | Binary analysis, malware triage, firmware security (authorized)        | `/plugin install reverse-engineering`      |
 | **block-no-verify**          | PreToolUse hook blocking `--no-verify` and hook-bypass flags           | `/plugin install block-no-verify`          |
 | **hol-guard**                | Local pre-execution policy and pre-install agent supply-chain scanning | `/plugin install hol-guard`                |
+| **evidence-ops** | Chain-of-custody evidence: hash, timestamp, custody log, BagIt, verify, WORM/Object Lock sync | `/plugin install evidence-ops` |
 
 ### 🛡️ Governance (3 plugins)
 
@@ -256,7 +262,7 @@ Next.js, React + Vite, and Node.js project setup with pnpm and TypeScript best p
 | **seo-analysis-monitoring**    | Content analysis and authority building | `/plugin install seo-analysis-monitoring`    |
 | **social-publishing**          | Multi-platform social media publishing  | `/plugin install social-publishing`          |
 
-### 💼 Business (4 plugins)
+### 💼 Business (5 plugins)
 
 | Plugin                       | Description                                                                           | Install                                    |
 | ---------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------ |
@@ -264,6 +270,7 @@ Next.js, React + Vite, and Node.js project setup with pnpm and TypeScript best p
 | **startup-business-analyst** | Market sizing, financial modeling, team planning, and strategic research for startups | `/plugin install startup-business-analyst` |
 | **before-you-build**         | Pre-build product risk review for founders, product teams, and AI-assisted builders   | `/plugin install before-you-build`         |
 | **hr-legal-compliance**      | HR policies and legal templates                                                       | `/plugin install hr-legal-compliance`      |
+| **matter-ops** | Legal and OSINT matter workspaces: document analysis, sources, entities, timelines, redaction, briefs | `/plugin install matter-ops` |
 
 ### 💻 Languages (4 plugins)
 
@@ -328,7 +335,7 @@ The marketplace commands in this section run inside Claude Code. Other tools use
 /plugin marketplace add shotcowboystyle/ag-skills
 ```
 
-This makes all 74 marketplace plugins available for installation, but **does not load any agents or tools** into your context.
+This makes all 81 marketplace plugins available for installation, but **does not load any agents or tools** into your context.
 
 ### Step 2: Install Specific Plugins
 
@@ -382,7 +389,7 @@ Selectors, install paths, and gotchas: [harnesses.md](./harnesses.md#skills-only
 
 ## See Also
 
-- [Agent Skills](./agent-skills.md) - 167 specialized skills across plugins
+- [Agent Skills](./agent-skills.md) - 322 specialized skills across plugins
 - [Agent Reference](./agents.md) - Complete agent catalog
 - [Usage Guide](./usage.md) - Commands and workflows
 - [Architecture](./architecture.md) - Design principles

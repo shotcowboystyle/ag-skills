@@ -1,0 +1,28 @@
+{
+  "name": "meta-wearables-ops",
+  "version": "0.2.0",
+  "description": "Meta smart-glasses engineering \u2014 Wearables Device Access SDK integration on iOS and Android, camera, display, sensors, transport reliability, on-device compliance, and device-backed release proof.",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "public@shotcowboystyle.com",
+    "url": "https://shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/meta-wearables-ops",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "meta-wearables",
+    "wearables-device-access",
+    "smart-glasses",
+    "android",
+    "ios",
+    "sdk-integration",
+    "device-proof"
+  ],
+  "interface": {
+    "displayName": "Meta Wearables Ops",
+    "shortDescription": "Meta smart-glasses engineering \u2014 Wearables Device Access SDK integration on iOS and Android, camera, display\u2026",
+    "category": "Coding"
+  }
+}

@@ -141,6 +141,28 @@ class TestCodexAdapter:
         # Warning recorded
         assert any("body exceeded" in w for w in result.warnings)
 
+    def test_skill_support_files_mirrored(self, tmp_path: Path, output_root: Path):
+        """scripts/ and assets/ travel with the skill, not only references/; dotfiles stay out."""
+        from tools.tests.conftest import _make_skill
+
+        plugin_dir = tmp_path / "demo"
+        plugin_dir.mkdir()
+        skill = _make_skill(plugin_dir, "tool", "name: tool\ndescription: Use when tool.", "# T\n")
+        (skill.dir / "scripts").mkdir()
+        (skill.dir / "scripts" / "run.py").write_text("print(1)\n")
+        (skill.dir / "assets" / "tpl").mkdir(parents=True)
+        (skill.dir / "assets" / "tpl" / "a.md").write_text("x\n")
+        (skill.dir / ".secret").write_text("no\n")
+        plugin = PluginSource(
+            name="demo", dir=plugin_dir, plugin_json={"name": "demo"}, skills=[skill]
+        )
+        CodexAdapter(output_root=output_root).emit_plugin(plugin)
+
+        out = output_root / ".codex" / "skills" / "demo__tool"
+        assert (out / "scripts" / "run.py").read_text() == "print(1)\n"
+        assert (out / "assets" / "tpl" / "a.md").is_file()
+        assert not (out / ".secret").exists()
+
     def test_split_helper_handles_runaway_head(self):
         """If the H1 + intro alone is bigger than cap, the splitter hard-cuts."""
         body = "# Big\n\n" + ("x" * 12000)
@@ -1783,6 +1805,18 @@ class TestFrontmatterYamlSafety:
         block = _antigravity_frontmatter({"tools": list(_FLOW_DELIMITER_ITEMS)})
         loaded = yaml.safe_load(block[len("---\n") : -len("\n---")])
         assert loaded["tools"] == list(_FLOW_DELIMITER_ITEMS)
+
+    def test_antigravity_emits_boolean_fields_as_booleans(self):
+        """agy decodes these keys as bool; the source parser hands them over as strings."""
+        from tools.adapters.antigravity import _antigravity_frontmatter
+
+        block = _antigravity_frontmatter(
+            {"disable-model-invocation": "true", "user-invocable": "false", "name": "true"}
+        )
+        loaded = yaml.safe_load(block[len("---\n") : -len("\n---")])
+        assert loaded["disable-model-invocation"] is True
+        assert loaded["user-invocable"] is False
+        assert loaded["name"] == "true"
 
     def test_every_frontmatter_emitter_round_trips_hostile_values(self):
         """The adapters that share `yaml_scalar` must agree on every hostile shape.

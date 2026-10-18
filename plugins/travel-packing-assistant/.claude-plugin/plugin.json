@@ -1,0 +1,23 @@
+{
+  "name": "travel-packing-assistant",
+  "version": "1.0.1",
+  "description": "Work out the real baggage allowance for every segment of an itinerary, inventory what is carried by weight, solve the pack against the binding limit, price excess-baggage options, rank a leave-behind list, and render a counter card and packing list with Typst.",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "public@shotcowboystyle.com",
+    "url": "https://shotcowboystyle.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "travel",
+    "packing",
+    "baggage",
+    "luggage",
+    "airline",
+    "allowance",
+    "excess-baggage",
+    "itinerary",
+    "typst",
+    "packing-cubes"
+  ]
+}

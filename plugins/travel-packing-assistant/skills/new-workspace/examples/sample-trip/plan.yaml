@@ -1,0 +1,98 @@
+generated_on: '2026-10-18T15:38:35-04:00'
+solver: pack_solver.py 1.0.0
+objective: max-min-headroom
+binding_limits:
+  checked:
+    pieces: 1
+    max_weight_kg: 23
+  cabin:
+    pieces: 1
+    max_weight_kg: 7
+  personal:
+    pieces: 1
+    max_weight_kg: 3
+bags:
+- id: CAB1
+  label: Black cabin roller
+  type: cabin
+  allowance_kg: 7.0
+  tare_kg: 2.1
+  contents_kg: 3.93
+  cube_tare_kg: 0.1
+  projected_gross_kg: 6.13
+  headroom_kg: 0.87
+  status: tight
+  cubes:
+  - id: CUBE-C
+    items:
+    - I004
+    - I015
+    - I016
+    - I018
+  loose_items:
+  - I020
+  - I021
+  - I023
+  last_weighing_kg: 7.5
+- id: CHK1
+  label: Large red hardshell
+  type: checked
+  allowance_kg: 23.0
+  tare_kg: 4.2
+  contents_kg: 17.78
+  cube_tare_kg: 0.21
+  projected_gross_kg: 22.19
+  headroom_kg: 0.81
+  status: tight
+  cubes:
+  - id: CUBE-A
+    items:
+    - I001
+    - I002
+    - I003
+    - I005
+    - I006
+    - I011
+    - I014
+  - id: CUBE-B
+    items:
+    - I007
+    - I008
+    - I009
+    - I013
+  loose_items:
+  - I010
+  - I012
+  - I022
+  last_weighing_kg: 22.4
+- id: PER1
+  label: Grey shoulder bag
+  type: personal
+  allowance_kg: 3.0
+  tare_kg: 0.6
+  contents_kg: 1.59
+  cube_tare_kg: 0.0
+  projected_gross_kg: 2.19
+  headroom_kg: 0.81
+  status: tight
+  loose_items:
+  - I017
+  - I019
+  - I024
+  - I025
+  - I026
+unassigned:
+- item: I027
+  name: Camping gas canister
+  reason: carriage=prohibited; cannot fly
+warnings:
+- Allowance for S2 is confidence=assumed; plan is provisional.
+- CAB1 has only 0.87 kg of headroom; anything inside 1.5 kg is treated as tight, not
+  ok.
+- CHK1 has only 0.81 kg of headroom; anything inside 1.5 kg is treated as tight, not
+  ok.
+- PER1 has only 0.81 kg of headroom; anything inside 1.5 kg is treated as tight, not
+  ok.
+- 1 item(s) did not fit and are listed under `unassigned`.
+- 'Unaccounted mass on CAB1: 1.37 kg between itemised total and last weighing (outbound).
+  Run scripts/reconcile.py.'
