@@ -6,7 +6,7 @@
     "url": "https://github.com/shotcowboystyle"
   },
   "metadata": {
-    "description": "Production-ready workflow orchestration with 74 marketplace plugins, 172 local specialized agents, and 167 local skills - optimized for granular installation and minimal token usage",
+    "description": "Production-ready workflow orchestration with 81 marketplace plugins, 183 local specialized agents, and 322 local skills - optimized for granular installation and minimal token usage",
     "version": "1.0.0"
   },
   "plugins": [
@@ -48,6 +48,38 @@
       "category": "workflows",
       "homepage": "https://github.com/shotcowboystyle/ag-skills",
       "license": "MIT"
+    },
+    {
+      "name": "ai-video-producer",
+      "description": "Drive an AI-generated video project end to end \u2014 brief, model selection, characters, script, storyboard, generation pipelines (text-to-image, image-to-video, voice, lip-sync), GPU-aware assembly, ComfyUI import/export, budgets, export \u2014 plus a curated index of agent-callable video and audio tooling.",
+      "version": "1.3.0",
+      "author": {
+        "name": "Curtis Blanton",
+        "email": "public@shotcowboystyle.com",
+        "url": "https://shotcowboystyle.com"
+      },
+      "source": "./plugins/ai-video-producer",
+      "category": "media",
+      "homepage": "https://github.com/shotcowboystyle/ag-skills",
+      "license": "MIT",
+      "keywords": [
+        "video",
+        "generative-ai",
+        "fal",
+        "replicate",
+        "wavespeed",
+        "minimax",
+        "hailuo",
+        "elevenlabs",
+        "lifecycle",
+        "pipeline",
+        "lip-sync",
+        "text-to-video",
+        "image-to-video",
+        "comfyui",
+        "ffmpeg",
+        "nvenc"
+      ]
     },
     {
       "name": "api-scaffolding",
@@ -361,6 +393,30 @@
       "license": "MIT"
     },
     {
+      "name": "design-ops",
+      "description": "UX/UI design ops \u2014 briefs, tokens, components, screens and pages graded against live Awwwards and Mobbin references, plus Material 3/Compose, React Native, and web component design. Absorbs the former ui-design plugin.",
+      "version": "1.3.0",
+      "author": {
+        "name": "Curtis Blanton",
+        "email": "public@shotcowboystyle.com",
+        "url": "https://shotcowboystyle.com"
+      },
+      "source": "./plugins/design-ops",
+      "category": "development",
+      "homepage": "https://github.com/shotcowboystyle/ag-skills",
+      "license": "Apache-2.0",
+      "keywords": [
+        "ux",
+        "ui",
+        "design-system",
+        "design-tokens",
+        "accessibility",
+        "figma",
+        "awwwards",
+        "mobbin"
+      ]
+    },
+    {
       "name": "developer-essentials",
       "source": "./plugins/developer-essentials",
       "description": "Essential developer skills including Git workflows, SQL optimization, error handling, code review, E2E testing, authentication, debugging, and monorepo management",
@@ -450,6 +506,30 @@
       "homepage": "https://github.com/shotcowboystyle/ag-skills",
       "license": "MIT",
       "category": "utilities"
+    },
+    {
+      "name": "evidence-ops",
+      "description": "Chain-of-custody evidence handling \u2014 hash, timestamp, inspect metadata, append to an immutable custody register, package as BagIt, verify, and sync to WORM or S3 Object Lock storage.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Curtis Blanton",
+        "email": "public@shotcowboystyle.com",
+        "url": "https://shotcowboystyle.com"
+      },
+      "source": "./plugins/evidence-ops",
+      "category": "security",
+      "homepage": "https://github.com/shotcowboystyle/ag-skills",
+      "license": "MIT",
+      "keywords": [
+        "evidence",
+        "chain-of-custody",
+        "forensics",
+        "hashing",
+        "opentimestamps",
+        "bagit",
+        "exiftool",
+        "object-lock"
+      ]
     },
     {
       "name": "file-conversion",
@@ -571,6 +651,27 @@
       "category": "business"
     },
     {
+      "name": "image-ops",
+      "description": "Image editing, batch operations, format conversion (WebP, AVIF, JPEG XL, PDF), metadata, and library organization \u2014 bucket by resolution, aspect ratio, orientation, format, capture time, and camera; dedupe near-duplicates.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Curtis Blanton",
+        "email": "public@shotcowboystyle.com",
+        "url": "https://shotcowboystyle.com"
+      },
+      "source": "./plugins/image-ops",
+      "category": "media",
+      "homepage": "https://github.com/shotcowboystyle/ag-skills",
+      "license": "MIT",
+      "keywords": [
+        "media-editing",
+        "image-editing",
+        "image-ops",
+        "filesystem-organization",
+        "exif"
+      ]
+    },
+    {
       "name": "incident-response",
       "description": "Production incident management, triage workflows, and automated incident resolution",
       "version": "1.4.0",
@@ -582,6 +683,30 @@
       "category": "operations",
       "homepage": "https://github.com/shotcowboystyle/ag-skills",
       "license": "MIT"
+    },
+    {
+      "name": "ios-ops",
+      "description": "Native iOS and Apple-platform engineering guidance \u2014 SwiftUI, Liquid Glass, on-device intelligence, framework routing, and device-backed release verification, grounded in a versioned knowledge base.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Curtis Blanton",
+        "email": "public@shotcowboystyle.com",
+        "url": "https://shotcowboystyle.com"
+      },
+      "source": "./plugins/ios-ops",
+      "category": "development",
+      "homepage": "https://github.com/shotcowboystyle/ag-skills",
+      "license": "MIT",
+      "keywords": [
+        "ios",
+        "swiftui",
+        "liquid-glass",
+        "apple-intelligence",
+        "xcode",
+        "hig",
+        "on-device-ai",
+        "release-verification"
+      ]
     },
     {
       "name": "javascript-typescript",
@@ -647,6 +772,53 @@
       "category": "ai-ml",
       "homepage": "https://github.com/shotcowboystyle/ag-skills",
       "license": "MIT"
+    },
+    {
+      "name": "matter-ops",
+      "description": "Legal and OSINT matter workspaces \u2014 analyse documents, track sources and entities, build timelines, redact for disclosure, and render typeset briefs from workspace material.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Curtis Blanton",
+        "email": "public@shotcowboystyle.com",
+        "url": "https://shotcowboystyle.com"
+      },
+      "source": "./plugins/matter-ops",
+      "category": "business",
+      "homepage": "https://github.com/shotcowboystyle/ag-skills",
+      "license": "MIT",
+      "keywords": [
+        "legal",
+        "osint",
+        "investigation",
+        "document-analysis",
+        "redaction",
+        "timeline",
+        "typst",
+        "case-management"
+      ]
+    },
+    {
+      "name": "meta-wearables-ops",
+      "description": "Meta smart-glasses engineering \u2014 Wearables Device Access SDK integration on iOS and Android, camera, display, sensors, transport reliability, on-device compliance, and device-backed release proof.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Curtis Blanton",
+        "email": "public@shotcowboystyle.com",
+        "url": "https://shotcowboystyle.com"
+      },
+      "source": "./plugins/meta-wearables-ops",
+      "category": "development",
+      "homepage": "https://github.com/shotcowboystyle/ag-skills",
+      "license": "MIT",
+      "keywords": [
+        "meta-wearables",
+        "wearables-device-access",
+        "smart-glasses",
+        "android",
+        "ios",
+        "sdk-integration",
+        "device-proof"
+      ]
     },
     {
       "name": "multi-platform-apps",
@@ -999,17 +1171,30 @@
       "category": "utilities"
     },
     {
-      "name": "ui-design",
-      "description": "Comprehensive UI/UX design plugin for mobile (iOS, Android, React Native) and web applications with design systems, accessibility, and modern patterns",
-      "version": "1.0.5",
+      "name": "travel-packing-assistant",
+      "description": "Work out the real baggage allowance for every segment of an itinerary, inventory what is carried by weight, solve the pack against the binding limit, price excess-baggage options, rank a leave-behind list, and render a counter card and packing list with Typst.",
+      "version": "1.0.1",
       "author": {
         "name": "Curtis Blanton",
-        "email": "curtis@shotcowboystyle.com"
+        "email": "public@shotcowboystyle.com",
+        "url": "https://shotcowboystyle.com"
       },
-      "source": "./plugins/ui-design",
-      "category": "development",
+      "source": "./plugins/travel-packing-assistant",
+      "category": "productivity",
       "homepage": "https://github.com/shotcowboystyle/ag-skills",
-      "license": "MIT"
+      "license": "MIT",
+      "keywords": [
+        "travel",
+        "packing",
+        "baggage",
+        "luggage",
+        "airline",
+        "allowance",
+        "excess-baggage",
+        "itinerary",
+        "typst",
+        "packing-cubes"
+      ]
     },
     {
       "name": "unit-testing",

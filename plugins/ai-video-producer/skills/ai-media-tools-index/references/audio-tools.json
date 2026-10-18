@@ -1,0 +1,276 @@
+{
+  "Agents365-ai/video-podcast-maker": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "Skills \u2014 Podcast Pipelines"
+    ],
+    "description": "AI-powered video podcast creation skill for coding agents. Supports Bilibili & YouTube, multi-language (zh-CN/en-US), 6 TTS engines (Edge/Azure/ElevenLabs/OpenAI/Doubao/CosyVoice), 4K Remotion rendering.",
+    "full_name": "Agents365-ai/video-podcast-maker",
+    "html_url": "https://github.com/Agents365-ai/video-podcast-maker",
+    "language": "TypeScript",
+    "license": "MIT",
+    "pushed_at": "2026-04-26T15:27:01Z",
+    "stargazers_count": 606,
+    "topics": [
+      "agent-skills",
+      "ai-video",
+      "bilibili",
+      "claude-code",
+      "claude-code-skill",
+      "claude-skills",
+      "elevenlabs",
+      "openai-tts",
+      "openclaw",
+      "openclaw-skills",
+      "remotion",
+      "skill-md",
+      "skillsmp",
+      "tts",
+      "video-pipeline",
+      "video-podcast",
+      "youtube"
+    ]
+  },
+  "KingJing1/podcast-transcript-txt-skill": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "Skills \u2014 Transcription"
+    ],
+    "description": "Turn any podcast source into clean TXT \u2014 YouTube, episode webpages, Xiaoyuzhou, Apple Podcasts, X links, or just a title.",
+    "full_name": "KingJing1/podcast-transcript-txt-skill",
+    "html_url": "https://github.com/KingJing1/podcast-transcript-txt-skill",
+    "language": "Python",
+    "license": "MIT",
+    "pushed_at": "2026-04-04T06:59:37Z",
+    "stargazers_count": 21,
+    "topics": []
+  },
+  "OrangeViolin/content-pipeline": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "Skills \u2014 Podcast Pipelines"
+    ],
+    "description": "AI-powered content production pipeline for creators. One prompt \u2192 multi-platform publishing. Claude Code Skill.",
+    "full_name": "OrangeViolin/content-pipeline",
+    "html_url": "https://github.com/OrangeViolin/content-pipeline",
+    "language": "TypeScript",
+    "license": "MIT",
+    "pushed_at": "2026-04-12T18:56:12Z",
+    "stargazers_count": 146,
+    "topics": [
+      "01fish",
+      "ai-tools",
+      "automation",
+      "claude-code",
+      "content-creation",
+      "content-pipeline",
+      "podcast",
+      "self-media",
+      "wechat",
+      "xiaohongshu"
+    ]
+  },
+  "SamurAIGPT/Generative-Media-Skills": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "Skills \u2014 Synthesis (TTS)"
+    ],
+    "description": "Multi-modal Generative Media Skills for AI Agents (Claude Code, Cursor, Gemini CLI). High-quality image, video, and audio generation powered by muapi.ai.",
+    "full_name": "SamurAIGPT/Generative-Media-Skills",
+    "html_url": "https://github.com/SamurAIGPT/Generative-Media-Skills",
+    "language": "Shell",
+    "license": "MIT",
+    "pushed_at": "2026-04-26T02:14:52Z",
+    "stargazers_count": 3107,
+    "topics": [
+      "agent-tools",
+      "ai-agents",
+      "ai-art",
+      "ai-music",
+      "ai-video",
+      "claude-code",
+      "flux",
+      "generative-ai",
+      "image-generation",
+      "kling",
+      "mcp",
+      "midjourney",
+      "muapi",
+      "multimodal-ai",
+      "skills",
+      "suno",
+      "text-to-audio",
+      "text-to-image",
+      "text-to-video",
+      "video-generation"
+    ]
+  },
+  "alfredang/notebooklm-mcp": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "MCPs"
+    ],
+    "description": "Bridge Google NotebookLM with Claude via MCP. Full programmatic access to create notebooks, manage sources, and generate AI-powered content \u2014 podcasts, videos, slides, mind maps, quizzes, flashcards, and reports \u2014 all through natural language.",
+    "full_name": "alfredang/notebooklm-mcp",
+    "html_url": "https://github.com/alfredang/notebooklm-mcp",
+    "language": "Python",
+    "license": null,
+    "pushed_at": "2026-01-26T17:22:29Z",
+    "stargazers_count": 17,
+    "topics": [
+      "claude",
+      "claude-code",
+      "claude-desktop",
+      "mcp",
+      "notebooklm"
+    ]
+  },
+  "danielrosehill/Claude-Audio-Production-Plugin": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "Skills \u2014 Editing & Processing"
+    ],
+    "description": "Claude Code plugin: audio production workflow \u2014 normalize, VAD, transcribe, diarize, podcast assembly, with engineering/podcast/transcript variants.",
+    "full_name": "danielrosehill/Claude-Audio-Production-Plugin",
+    "html_url": "https://github.com/danielrosehill/Claude-Audio-Production-Plugin",
+    "language": null,
+    "license": null,
+    "pushed_at": "2026-04-19T13:02:48Z",
+    "stargazers_count": 0,
+    "topics": []
+  },
+  "elevenlabs/elevenlabs-mcp": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "MCPs"
+    ],
+    "description": "The official ElevenLabs MCP server",
+    "full_name": "elevenlabs/elevenlabs-mcp",
+    "html_url": "https://github.com/elevenlabs/elevenlabs-mcp",
+    "language": "Python",
+    "license": "MIT",
+    "pushed_at": "2026-03-20T11:04:51Z",
+    "stargazers_count": 1330,
+    "topics": [
+      "elevenlabs",
+      "elevenlabs-api",
+      "mcp"
+    ]
+  },
+  "fanyu-meng/podcast-content-studio": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "Skills \u2014 Podcast Pipelines"
+    ],
+    "description": "Agent skill for generating podcast show notes from transcripts",
+    "full_name": "fanyu-meng/podcast-content-studio",
+    "html_url": "https://github.com/fanyu-meng/podcast-content-studio",
+    "language": null,
+    "license": null,
+    "pushed_at": "2026-04-01T07:31:14Z",
+    "stargazers_count": 7,
+    "topics": []
+  },
+  "hardhackerlabs/podwise-cli": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "CLIs"
+    ],
+    "description": "CLI client for podwise.ai \u2014 turn any podcast episode into AI-powered insights, designed for use in AI agents and skills workflows.",
+    "full_name": "hardhackerlabs/podwise-cli",
+    "html_url": "https://github.com/hardhackerlabs/podwise-cli",
+    "language": "Go",
+    "license": "MIT",
+    "pushed_at": "2026-04-04T02:52:23Z",
+    "stargazers_count": 224,
+    "topics": []
+  },
+  "luoyuweidu1/podcastcut-skills": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "Skills \u2014 Podcast Pipelines"
+    ],
+    "description": "Claude Code Skills for podcast/video editing: transcription, content editing, rough/fine cut, final polish",
+    "full_name": "luoyuweidu1/podcastcut-skills",
+    "html_url": "https://github.com/luoyuweidu1/podcastcut-skills",
+    "language": "HTML",
+    "license": null,
+    "pushed_at": "2026-03-17T03:25:20Z",
+    "stargazers_count": 28,
+    "topics": []
+  },
+  "misbahsy/video-audio-mcp": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "MCPs"
+    ],
+    "description": "An FFMPEG powered MCP server for basic Video and Audio editing",
+    "full_name": "misbahsy/video-audio-mcp",
+    "html_url": "https://github.com/misbahsy/video-audio-mcp",
+    "language": "Python",
+    "license": "MIT",
+    "pushed_at": "2025-05-24T19:15:22Z",
+    "stargazers_count": 71,
+    "topics": []
+  },
+  "slhck/ffmpeg-normalize": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "CLIs"
+    ],
+    "description": "Audio Normalization for Python/ffmpeg",
+    "full_name": "slhck/ffmpeg-normalize",
+    "html_url": "https://github.com/slhck/ffmpeg-normalize",
+    "language": "HTML",
+    "license": "NOASSERTION",
+    "pushed_at": "2026-04-13T11:59:53Z",
+    "stargazers_count": 1500,
+    "topics": [
+      "audio",
+      "ffmpeg",
+      "python"
+    ]
+  },
+  "wastee/REAPER-MCP-Skills-Example": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "MCPs"
+    ],
+    "description": "MCP server for controlling REAPER DAW through Python scripts. ",
+    "full_name": "wastee/REAPER-MCP-Skills-Example",
+    "html_url": "https://github.com/wastee/REAPER-MCP-Skills-Example",
+    "language": "Python",
+    "license": "MIT",
+    "pushed_at": "2026-01-27T14:23:57Z",
+    "stargazers_count": 5,
+    "topics": []
+  },
+  "win4r/podcastfy-clawdbot-skill": {
+    "added_at": "2026-04-26",
+    "archived": false,
+    "categories": [
+      "Skills \u2014 Podcast Pipelines"
+    ],
+    "description": "A Clawdbot skill that generates a podcast-style MP3 from one or more URLs using the open-source Podcastfy project.",
+    "full_name": "win4r/podcastfy-clawdbot-skill",
+    "html_url": "https://github.com/win4r/podcastfy-clawdbot-skill",
+    "language": "Python",
+    "license": null,
+    "pushed_at": "2026-01-31T02:15:26Z",
+    "stargazers_count": 16,
+    "topics": []
+  }
+}

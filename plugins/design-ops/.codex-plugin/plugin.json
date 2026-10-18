@@ -1,0 +1,29 @@
+{
+  "name": "design-ops",
+  "version": "1.3.0",
+  "description": "UX/UI design ops \u2014 briefs, tokens, components, screens and pages graded against live Awwwards and Mobbin references, plus Material 3/Compose, React Native, and web component design. Absorbs the former ui-design plugin.",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "public@shotcowboystyle.com",
+    "url": "https://shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/design-ops",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "ux",
+    "ui",
+    "design-system",
+    "design-tokens",
+    "accessibility",
+    "figma",
+    "awwwards",
+    "mobbin"
+  ],
+  "interface": {
+    "displayName": "Design Ops",
+    "shortDescription": "UX/UI design ops \u2014 briefs, tokens, components, screens and pages graded against live Awwwards and Mobbin references\u2026",
+    "category": "Coding"
+  }
+}

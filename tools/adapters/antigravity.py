@@ -78,9 +78,16 @@ def _yaml_flow_scalar(value: object) -> str:
     return yaml_scalar(s)
 
 
+# Boolean frontmatter keys agy decodes strictly. The source parser yields strings, so
+# a quoted "true" would fail agy's unmarshal and the loader would skip the skill.
+_BOOL_FIELDS = {"disable-model-invocation", "user-invocable"}
+
+
 def _antigravity_frontmatter(fm: dict) -> str:
     lines = ["---"]
     for k, v in fm.items():
+        if k in _BOOL_FIELDS and str(v).lower() in ("true", "false"):
+            v = str(v).lower() == "true"
         if isinstance(v, list):
             value = ", ".join(_yaml_flow_scalar(x) for x in v)
             lines.append(f"{k}: [{value}]")

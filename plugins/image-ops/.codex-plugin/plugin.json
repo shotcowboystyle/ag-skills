@@ -1,0 +1,26 @@
+{
+  "name": "image-ops",
+  "version": "1.1.0",
+  "description": "Image editing, batch operations, format conversion (WebP, AVIF, JPEG XL, PDF), metadata, and library organization \u2014 bucket by resolution, aspect ratio, orientation, format, capture time, and camera; dedupe near-duplicates.",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "public@shotcowboystyle.com",
+    "url": "https://shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/image-ops",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "media-editing",
+    "image-editing",
+    "image-ops",
+    "filesystem-organization",
+    "exif"
+  ],
+  "interface": {
+    "displayName": "Image Ops",
+    "shortDescription": "Image editing, batch operations, format conversion (WebP, AVIF, JPEG XL, PDF), metadata, and library organization \u2014\u2026",
+    "category": "Coding"
+  }
+}

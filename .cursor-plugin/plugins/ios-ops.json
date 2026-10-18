@@ -1,0 +1,11 @@
+{
+  "name": "ios-ops",
+  "displayName": "Ios Ops",
+  "version": "0.2.0",
+  "description": "Native iOS and Apple-platform engineering guidance \u2014 SwiftUI, Liquid Glass, on-device intelligence, framework routing, and device-backed release verification, grounded in a versioned knowledge base.",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "public@shotcowboystyle.com"
+  },
+  "license": "MIT"
+}

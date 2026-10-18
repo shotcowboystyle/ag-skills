@@ -1,0 +1,11 @@
+{
+  "name": "ai-video-producer",
+  "displayName": "Ai Video Producer",
+  "version": "1.3.0",
+  "description": "Drive an AI-generated video project end to end \u2014 brief, model selection, characters, script, storyboard, generation pipelines (text-to-image, image-to-video, voice, lip-sync), GPU-aware assembly, ComfyUI import/export, budgets, export \u2014 plus a curated index of agent-callable video and audio tooling.",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "public@shotcowboystyle.com"
+  },
+  "license": "MIT"
+}

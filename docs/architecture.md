@@ -36,7 +36,7 @@ The repository shares agents, skills, and commands across seven AI coding tools.
 
 ### Plugin Distribution
 
-- **74 marketplace plugins** (73 local + 1 external via git-subdir) optimized for specific use cases
+- **81 marketplace plugins** (80 local + 1 external via git-subdir) optimized for specific use cases
 - **Skills-only distribution** through `gh skill install shotcowboystyle/ag-skills` and `npx skills add shotcowboystyle/ag-skills`, which read `plugins/*/skills/` directly (see [harnesses.md](./harnesses.md#skills-only-installers))
 - **22 clear categories** with 1-8 plugins each for easy discovery
 - Organized by domain:
@@ -49,7 +49,7 @@ The repository shares agents, skills, and commands across seven AI coding tools.
 
 ### Component Breakdown
 
-**172 Local Specialized Agents**
+**183 Local Specialized Agents**
 
 - Domain experts with deep knowledge
 - Organized across architecture, languages, infrastructure, quality, data/AI, documentation, business, and SEO
@@ -70,7 +70,7 @@ The repository shares agents, skills, and commands across seven AI coding tools.
   - Component scaffolding (React, React Native)
   - Infrastructure setup (Terraform, Kubernetes)
 
-**167 Local Agent Skills**
+**322 Local Agent Skills**
 
 - Modular knowledge packages
 - Progressive disclosure architecture
@@ -193,7 +193,7 @@ description: What the skill does. Use when [trigger]. # Required: < 1024 chars
 - **Composability**: Mix and match skills across workflows
 - **Maintainability**: Isolated updates don't affect other skills
 
-See [Agent Skills](./agent-skills.md) for complete details on the 167 skills.
+See [Agent Skills](./agent-skills.md) for complete details on the 322 skills.
 
 ## Model Configuration Strategy
 
@@ -262,7 +262,7 @@ code-reviewer (Sonnet) validates architecture
 ### Component Coverage
 
 - **Full component coverage** - every plugin includes at least one agent, command, or skill
-- **100% component availability** - all 172 local agents accessible across plugins
+- **100% component availability** - all 183 local agents accessible across plugins
 - **Efficient distribution** - 5.9 components per plugin average
 
 ### Discoverability
@@ -392,5 +392,5 @@ Feature Development Workflow:
 
 - [Agent Skills](./agent-skills.md) - Modular knowledge packages
 - [Agent Reference](./agents.md) - Complete agent catalog
-- [Plugin Reference](./plugins.md) - All 74 marketplace plugins
+- [Plugin Reference](./plugins.md) - All 81 marketplace plugins
 - [Usage Guide](./usage.md) - Commands and workflows

@@ -1,0 +1,11 @@
+{
+  "name": "image-ops",
+  "displayName": "Image Ops",
+  "version": "1.1.0",
+  "description": "Image editing, batch operations, format conversion (WebP, AVIF, JPEG XL, PDF), metadata, and library organization \u2014 bucket by resolution, aspect ratio, orientation, format, capture time, and camera; dedupe near-duplicates.",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "public@shotcowboystyle.com"
+  },
+  "license": "MIT"
+}

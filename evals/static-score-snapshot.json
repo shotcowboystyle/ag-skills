@@ -119,6 +119,186 @@
       "token_efficiency": 1.0
     }
   },
+  "ai-video-producer/ai-media-tools-index": {
+    "badge": "bronze",
+    "composite": 64.92424242424242,
+    "digest": "4b847681dee5bb5e87c742d80136f7468eefb89401a900e747632fb828a110d5",
+    "static_score": 0.6372,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/budget-estimator": {
+    "badge": "no_badge",
+    "composite": 59.31656995486782,
+    "digest": "22ebb047b611e1746e9fcc87a7fea8754647648ee37bb6a1c8dc6076adbb9830",
+    "static_score": 0.5989340425531915,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.9914893617021276
+    }
+  },
+  "ai-video-producer/comfyui-export": {
+    "badge": "no_badge",
+    "composite": 58.71212121212122,
+    "digest": "a10a44fdec8d244dc01fbc94a0b3c99649b6aadba91557e1db0fd36728fd55b2",
+    "static_score": 0.5847,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/comfyui-import": {
+    "badge": "no_badge",
+    "composite": 58.257575757575765,
+    "digest": "78c015b1ecb75a5398e8e66cce82301e7476d254219e705b0644a94505b47688",
+    "static_score": 0.5747,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.15,
+      "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/model-researcher": {
+    "badge": "bronze",
+    "composite": 62.247474747474755,
+    "digest": "bcfae2c0d7a1bd4849e300c457b06e02803d29957ed65e5f2ac1627a40ab1f58",
+    "static_score": 0.6174999999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.3,
+      "token_efficiency": 0.9888888888888889
+    }
+  },
+  "ai-video-producer/recommend-model": {
+    "badge": "bronze",
+    "composite": 62.351515151515144,
+    "digest": "7f6031d5f1efd968cd3a8628e3decc3a582afe649beb8ea750cea914664e1ca0",
+    "static_score": 0.62198,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.992
+    }
+  },
+  "ai-video-producer/script-to-tts": {
+    "badge": "bronze",
+    "composite": 61.74242424242424,
+    "digest": "1f8706c8f63b9baab16b6ff91c0e6cef745ce2731c915e73767b338ffdb8b763",
+    "static_score": 0.6077,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/text-to-image-to-video": {
+    "badge": "bronze",
+    "composite": 61.51515151515151,
+    "digest": "e2460191ef623f66a41b2267e4237f23099dee7e8f3b50a20834f47c66d351c7",
+    "static_score": 0.6027,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/text-to-video-direct": {
+    "badge": "bronze",
+    "composite": 61.51515151515151,
+    "digest": "420a05e8994ab8d7e37f262c5e80ea416fe29ca242e1737e0fc5d149911d9c72",
+    "static_score": 0.6027,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/upscale-and-interpolate": {
+    "badge": "no_badge",
+    "composite": 58.484848484848484,
+    "digest": "bb07eb949e216bf9624bfc538917c68ab6124d9a2271ab9bbcf6bc26cea4816d",
+    "static_score": 0.5797,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/video-workspace-conventions": {
+    "badge": "bronze",
+    "composite": 61.96969696969696,
+    "digest": "29bd695f41704de31b095608f3437bd120d452768a758dec871abd08e185a483",
+    "static_score": 0.6127,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.3,
+      "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/voice-to-lip-sync": {
+    "badge": "bronze",
+    "composite": 64.92424242424242,
+    "digest": "55dbe054f75c769bd57a5447583bb71bd87bd99166ae69a96444fcc3283715c2",
+    "static_score": 0.6315,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
   "api-scaffolding/fastapi-templates": {
     "badge": "bronze",
     "composite": 69.86711376055639,
@@ -347,7 +527,7 @@
   "cicd-automation/deployment-pipeline-design": {
     "badge": "silver",
     "composite": 76.18544600938968,
-    "digest": "791dbf6eb26565669b989a039292c10d9dc1a447c5e988c645058c2222b7624e",
+    "digest": "80321d81008306d4b3ff72f0b3795dc91dacc2f93a57dbdc474744730cd4d584",
     "static_score": 0.7738859154929578,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -642,6 +822,741 @@
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.65,
       "token_efficiency": 0.9725490196078431
+    }
+  },
+  "design-ops/accessibility-inclusive-design": {
+    "badge": "silver",
+    "composite": 72.72727272727273,
+    "digest": "cceb70541f891f67f0364b25677a67a2c2dddccd20e9e1c6e5869f62afd54113",
+    "static_score": 0.717,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/agentic-ai-generative-ux": {
+    "badge": "bronze",
+    "composite": 69.69696969696969,
+    "digest": "155d9dab9f4d0ca4e69ab4c8a63f72c4fb5f11ec0e12971609f88a24589b24f8",
+    "static_score": 0.694,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/ai-design-generation": {
+    "badge": "bronze",
+    "composite": 69.20216147488874,
+    "digest": "e4a6dcd76d1862c99ed553f6fcb60817fdd5de8c7f72da6b267cd2aa9e1064a6",
+    "static_score": 0.6911013986013985,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.4,
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.9622377622377623
+    }
+  },
+  "design-ops/ai-spatial-voice-ux": {
+    "badge": "silver",
+    "composite": 79.54545454545455,
+    "digest": "8e2f2b8e09285f1407f6697699857d7401b0cb37707adcc94729395d7a83cc44",
+    "static_score": 0.7706999999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.95,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/ambient-calm-zero-ui": {
+    "badge": "bronze",
+    "composite": 66.66666666666666,
+    "digest": "b4ffddf86908797bc16118e51bbde3c60340eb1d1eddc71360c8388371905412",
+    "static_score": 0.6685,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6499999999999999,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/animation-recipe-library": {
+    "badge": "bronze",
+    "composite": 63.930185836263185,
+    "digest": "38b61292e90775be5bfbb14220817f83e84cd7cd8b56d21817d3ab4495f9396d",
+    "static_score": 0.6606088397790055,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.6,
+      "token_efficiency": 0.9823204419889503
+    }
+  },
+  "design-ops/business-design-templates": {
+    "badge": "bronze",
+    "composite": 63.33333333333332,
+    "digest": "ae7622a6fa572aa7a6ffc5e180822a5c10f30ece77be0b4e5bba0c72e012bb13",
+    "static_score": 0.633,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/cognitive-psychology-ux": {
+    "badge": "silver",
+    "composite": 72.72727272727273,
+    "digest": "cab164f6a616058659b3ca4fac01c5fbe5ef5eb6d473263fcac4cf4ea7ce0087",
+    "static_score": 0.7145,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/color-palette-library": {
+    "badge": "bronze",
+    "composite": 69.84848484848484,
+    "digest": "674a8a6c17984bbe24c6ffd58b638bb51e5e1dfa1238790a4cec73f5913a7d32",
+    "static_score": 0.6965,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/component-patterns-code": {
+    "badge": "silver",
+    "composite": 78.17300916138126,
+    "digest": "79ddf7a5df8d5ba0759a89f802b219a5f45db5c5daf809e504a2d2d80b79b943",
+    "static_score": 0.7633627906976744,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 0.9906976744186047
+    }
+  },
+  "design-ops/conversion-optimization-patterns": {
+    "badge": "silver",
+    "composite": 73.16873773708306,
+    "digest": "c5c4595de9552b9d4780517397564dda265e786d34138bc12720ea13eebc4193",
+    "static_score": 0.7220705035971223,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.85,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 0.9985611510791367
+    }
+  },
+  "design-ops/cross-cultural-i18n-ux": {
+    "badge": "silver",
+    "composite": 72.72727272727273,
+    "digest": "945d7afc74ed7d7ddcb73b3ebb661b379b0773c1e5bc75ea0387d7e4658dc64f",
+    "static_score": 0.7145,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/data-visualization-mastery": {
+    "badge": "silver",
+    "composite": 71.48218158372897,
+    "digest": "41ec6a2ed0d1d11044ac198e8a10f1495f33d4549cd87b7a139b9f1b9d20538b",
+    "static_score": 0.7339235976789168,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.7000000000000001,
+      "token_efficiency": 0.9713733075435202
+    }
+  },
+  "design-ops/design-critique-case-studies": {
+    "badge": "silver",
+    "composite": 71.96969696969695,
+    "digest": "c3696030541c996c39677aeba0bd1cbacd07e1ca243191341847469cd1b5f2e1",
+    "static_score": 0.6995,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/design-memory": {
+    "badge": "bronze",
+    "composite": 64.06926406926407,
+    "digest": "57dc6c5e888acfdafb6dc3ecd260b9026d47d2f7860aefa1b0ce5c730a2c3ab9",
+    "static_score": 0.6514357142857142,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9892857142857143
+    }
+  },
+  "design-ops/design-ops-orchestrator": {
+    "badge": "bronze",
+    "composite": 61.43939393939394,
+    "digest": "f5bb8ba45b713d6c7a7b64ea6dfda1f50c4690eddc3b3b502247997325812e51",
+    "static_score": 0.6232,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/design-process-methods": {
+    "badge": "silver",
+    "composite": 77.65362604371893,
+    "digest": "246d1ae6f3a08d335d826eb9e328de4c9c7d2e0dcd8d0ee7a6465ca3861c89e7",
+    "static_score": 0.7667708978328174,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.85,
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.9752321981424148
+    }
+  },
+  "design-ops/design-systems-architecture": {
+    "badge": "silver",
+    "composite": 78.21133412042504,
+    "digest": "57db1fdd88bfa2ef637b4145c9f671ccc486ad84701ae8c95deebc5e82f5d282",
+    "static_score": 0.7699922077922078,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.9532467532467532
+    }
+  },
+  "design-ops/design-token-presets": {
+    "badge": "silver",
+    "composite": 71.69777242624924,
+    "digest": "bba7ae9cae87ff9d4aef2630770a25428e3c1cd6be00b0c40eeba0168e1ac42e",
+    "static_score": 0.7168079470198675,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.5499999999999999,
+      "token_efficiency": 0.9867549668874173
+    }
+  },
+  "design-ops/desktop-app-design": {
+    "badge": "silver",
+    "composite": 70.45454545454545,
+    "digest": "16798d0b4addcd8aadd72437f01276af667aa1b5e12ef85ec7bc03be17e36b65",
+    "static_score": 0.6905,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/figma-design-tool-workflows": {
+    "badge": "silver",
+    "composite": 74.01515151515152,
+    "digest": "366a1ee5d3171c43b2af983e22c52dd7a0d90b140f049362ab416cd0c0e557bd",
+    "static_score": 0.7137,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/form-design-encyclopedia": {
+    "badge": "silver",
+    "composite": 71.32034632034632,
+    "digest": "3a089f5d14a74a526c5c7b40b91c86c1f63aecd0a6768f714c5ee57e583c5a0e",
+    "static_score": 0.7075714285714285,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9952380952380953
+    }
+  },
+  "design-ops/icon-illustration-systems": {
+    "badge": "silver",
+    "composite": 70.34848484848484,
+    "digest": "a5830514988b8b438e826934cb3111ccef1a8aa9644950e9213b356e8af5850a",
+    "static_score": 0.7097,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.6,
+      "token_efficiency": 0.98
+    }
+  },
+  "design-ops/image-media-patterns": {
+    "badge": "bronze",
+    "composite": 63.740653286107815,
+    "digest": "6d7346b21032be6dcf9170290b3067f179518347d3b12c9bca987bb8a917f043",
+    "static_score": 0.6425324675324675,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9948051948051948
+    }
+  },
+  "design-ops/interaction-motion-design": {
+    "badge": "silver",
+    "composite": 73.89393939393939,
+    "digest": "4084499625325d996890956fec37b3c24c79b188869cab4d1903bb98c4bbbd59",
+    "static_score": 0.7258,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.97
+    }
+  },
+  "design-ops/layout-block-intelligence": {
+    "badge": "silver",
+    "composite": 71.80830039525692,
+    "digest": "4f9967bd9ab3036ccc2d170e41dbe35417dd7d6b55a105c45ff8ea9ca8086725",
+    "static_score": 0.7206521739130435,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.6,
+      "token_efficiency": 0.9739130434782609
+    }
+  },
+  "design-ops/micro-copy-intelligence": {
+    "badge": "silver",
+    "composite": 77.43627867459642,
+    "digest": "794002847d53c0333835718b5b01a73e2bef3172acb9665326f5308383a1ae8b",
+    "static_score": 0.7618691588785046,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.85,
+      "structural_completeness": 0.49999999999999994,
+      "token_efficiency": 0.9763239875389408
+    }
+  },
+  "design-ops/mobile-android-design": {
+    "badge": "silver",
+    "composite": 70.0,
+    "digest": "3efe94f8d1182a680440eaa7d1b8e296eb7a08ab036eb47953f57ec82b81b980",
+    "static_score": 0.6982,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9333333333333333
+    }
+  },
+  "design-ops/mobile-ux-design": {
+    "badge": "silver",
+    "composite": 74.01515151515152,
+    "digest": "cdab5643cb50e93ee68d8deda473b6bfca584b54b1cd044a367455bee8114010",
+    "static_score": 0.7235,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/navigation-pattern-encyclopedia": {
+    "badge": "bronze",
+    "composite": 63.28610783156237,
+    "digest": "bf83c463d1c3c6c740fdfa156602036b02321cc69d6d66ea07e85ca679e6fd1f",
+    "static_score": 0.6325324675324675,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 0.9948051948051948
+    }
+  },
+  "design-ops/nng-ux-heuristics": {
+    "badge": "silver",
+    "composite": 71.02198455139632,
+    "digest": "0b578d50d9ddf241886b8dcfbe699574f647ad616c444ee925ba7297b4c71c48",
+    "static_score": 0.7036176470588235,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 0.9790849673202614
+    }
+  },
+  "design-ops/page-composition-engine": {
+    "badge": "silver",
+    "composite": 75.05982572506178,
+    "digest": "16ab93b1921db6184cf11869b96224f25f3bab64895dac429f3e092d71642c56",
+    "static_score": 0.7530922746781116,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.9399141630901288
+    }
+  },
+  "design-ops/performance-states-patterns": {
+    "badge": "silver",
+    "composite": 75.64185814185814,
+    "digest": "b9fc28148ed4a7a15ae5a68b173e83ca94cc94d05162ab64d5fa28aa6b95d9f3",
+    "static_score": 0.7483043956043957,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.9956043956043956
+    }
+  },
+  "design-ops/platform-visual-standards": {
+    "badge": "bronze",
+    "composite": 68.61610431707676,
+    "digest": "52a9e4943cd88d5ec6f9011798c0e5d36fbc5af97f832255d42ccbaed9f2117e",
+    "static_score": 0.69974943273906,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.4,
+      "structural_completeness": 0.65,
+      "token_efficiency": 0.9727714748784441
+    }
+  },
+  "design-ops/react-native-design": {
+    "badge": "silver",
+    "composite": 71.92104531554074,
+    "digest": "2b3e9a33508f42a434ee9c2d8ac0c6a1ccc18cf5885a12d7da6a48b127bd2a42",
+    "static_score": 0.7137183486238532,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9779816513761468
+    }
+  },
+  "design-ops/reference-intelligence": {
+    "badge": "bronze",
+    "composite": 68.3927886459532,
+    "digest": "c5b9032d05b3a95f27ac0ca9e6384dd3224d355a389042d89a6c042469c10347",
+    "static_score": 0.6882886075949367,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9898734177215189
+    }
+  },
+  "design-ops/responsive-block-patterns": {
+    "badge": "bronze",
+    "composite": 69.09090909090908,
+    "digest": "6433d4f7ff3bf0f1eca42c883d57db6540348fec1be87e47f2e22d49dcdba890",
+    "static_score": 0.6852,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.45,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/screen-flow-patterns": {
+    "badge": "silver",
+    "composite": 72.80355276907,
+    "digest": "ee811c548e68cf01b6bd71702583a5368cd49ca723a9011d1226f6dde399fe7a",
+    "static_score": 0.7212551724137931,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9917241379310344
+    }
+  },
+  "design-ops/scroll-experience-direction": {
+    "badge": "bronze",
+    "composite": 66.58636363636363,
+    "digest": "b3909b0466333352f348d78c499b0a8f39c00dabec6d912a6e87f29e7425fc0a",
+    "static_score": 0.666235,
+    "sub_scores": {
+      "ecosystem_coherence": 0.58,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/sector-style-intelligence": {
+    "badge": "bronze",
+    "composite": 67.60042283298098,
+    "digest": "52613725c3ffd267a93a291b956aea88554b4a1de50297cf8bb783dfcb3c2a9f",
+    "static_score": 0.6729441860465116,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.986046511627907
+    }
+  },
+  "design-ops/shadow-elevation-density": {
+    "badge": "silver",
+    "composite": 73.60703812316716,
+    "digest": "08fbcf2a3247b424bd438224049482c03a365ef01a350b71f50039ec4582bace",
+    "static_score": 0.7269096774193549,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9967741935483871
+    }
+  },
+  "design-ops/typography-pairing-recipes": {
+    "badge": "silver",
+    "composite": 70.6961120640366,
+    "digest": "a9d2c0bd6d66a48b54567dac045b4893d65e43dfb31b5b87183e6dc53230aebf",
+    "static_score": 0.7151415094339623,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.49999999999999994,
+      "token_efficiency": 0.9849056603773585
+    }
+  },
+  "design-ops/ui-pattern-intelligence": {
+    "badge": "bronze",
+    "composite": 67.87878787878788,
+    "digest": "6f9d450d7142d27a26fa3dc693c07b90497f52e57d095591f8a2da4363b48527",
+    "static_score": 0.6749999999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/ui-visual-design-system": {
+    "badge": "silver",
+    "composite": 75.52071346375145,
+    "digest": "6cfdeb39fb44ecb8f68df11f603a3ff7e714493d34da95abbbb6aedb81058bd1",
+    "static_score": 0.7496050632911393,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9822784810126582
+    }
+  },
+  "design-ops/ux-ethics-content-strategy": {
+    "badge": "silver",
+    "composite": 72.72727272727273,
+    "digest": "120f908863a4c826c70c70c7dff7962a05ea72cfc8a6501499c4717cc7496fd3",
+    "static_score": 0.717,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/ux-metrics-measurement": {
+    "badge": "silver",
+    "composite": 76.51515151515152,
+    "digest": "93dacfd70dfadbed751a44156c6b2a9d42f0f7972f2a327ee019414a4ed62f36",
+    "static_score": 0.7477,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/ux-research-methods": {
+    "badge": "bronze",
+    "composite": 66.66666666666666,
+    "digest": "8232fa2571f12769d1d0493f3072092a0f959d79a9be723961b649bfe6e6c56e",
+    "static_score": 0.6709999999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/visual-design-mastery": {
+    "badge": "bronze",
+    "composite": 65.67772317772318,
+    "digest": "990e2b92033f5064ca9c98630692906d3227f83572ec3b24decf9c79198f0578",
+    "static_score": 0.6704594594594594,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.9828828828828828
+    }
+  },
+  "design-ops/web-component-design": {
+    "badge": "silver",
+    "composite": 77.14876033057851,
+    "digest": "7d7ef66ec90b241ea62e7fbc7b086e8e74010ddd9fef91912b35b1c84e354262",
+    "static_score": 0.7904727272727273,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.8500000000000001,
+      "token_efficiency": 0.9363636363636364
     }
   },
   "developer-essentials/auth-implementation-patterns": {
@@ -944,6 +1859,216 @@
       "token_efficiency": 1.0
     }
   },
+  "evidence-ops/bag-evidence": {
+    "badge": "bronze",
+    "composite": 60.63973063973064,
+    "digest": "ecd8909ac8585585b886664d3fdd9734bc33b78521497adf5412a3c4cd467fc9",
+    "static_score": 0.6085333333333334,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9703703703703703
+    }
+  },
+  "evidence-ops/capture-web": {
+    "badge": "bronze",
+    "composite": 60.497427101200685,
+    "digest": "925db3ab204fa34e9bdba34cd591ee2e414af50426a040e3b8d5c120a36c4f2d",
+    "static_score": 0.6071245283018868,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9547169811320755
+    }
+  },
+  "evidence-ops/environment-check": {
+    "badge": "bronze",
+    "composite": 61.00413223140496,
+    "digest": "fd2488d430721b8dbec9c260b7fd015fead9fe2f36336602d8399a8e580fbbe2",
+    "static_score": 0.6148909090909092,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9854545454545455
+    }
+  },
+  "evidence-ops/evidence-install-deps": {
+    "badge": "bronze",
+    "composite": 60.68181818181818,
+    "digest": "6877dc632c60929feae35daa206189cf94f3607463644a0bf044a914dc3cf183",
+    "static_score": 0.6117,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.95
+    }
+  },
+  "evidence-ops/evidence-onboard": {
+    "badge": "bronze",
+    "composite": 62.956091527520094,
+    "digest": "2cecb098a764d8f4a2f04c4ebdbaca242d14bdc5e5280a7dcc551fa2699cd178",
+    "static_score": 0.632765306122449,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9918367346938776
+    }
+  },
+  "evidence-ops/evidence-reference-lookup": {
+    "badge": "bronze",
+    "composite": 66.21212121212122,
+    "digest": "effc8848aae46018ce9d6caf3dd23cf1e88784172741e72aefc44c65987b807f",
+    "static_score": 0.6545,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 0.9833333333333334
+    }
+  },
+  "evidence-ops/hash-evidence": {
+    "badge": "bronze",
+    "composite": 60.539291217257315,
+    "digest": "d60f1b6b20023bbb8e32a582c4e1d2adba43611969d92e797d0965e7e1cd5f96",
+    "static_score": 0.6075389830508475,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9593220338983051
+    }
+  },
+  "evidence-ops/init-evidence-store": {
+    "badge": "bronze",
+    "composite": 63.948382126348235,
+    "digest": "23f77b9e336825934887bdba43103b239da5f1674c3d3f40709ef33856485f45",
+    "static_score": 0.6363389830508475,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9593220338983051
+    }
+  },
+  "evidence-ops/inspect-metadata": {
+    "badge": "bronze",
+    "composite": 62.552246603970744,
+    "digest": "bf7728990772d0272b9c54a8d8b96ae252390a39f35ab0ed11862fab5d9cdd24",
+    "static_score": 0.6260172413793104,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9724137931034482
+    }
+  },
+  "evidence-ops/log-custody": {
+    "badge": "bronze",
+    "composite": 65.2939393939394,
+    "digest": "554da25c0762b32187a2db644a0c3cf6c8e14926ed32ec520f826b72761e2a0a",
+    "static_score": 0.65436,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9573333333333334
+    }
+  },
+  "evidence-ops/setup-storage": {
+    "badge": "bronze",
+    "composite": 63.97360703812317,
+    "digest": "508ed6957613913b94e94ec1f8ecfc216f92681caa6167d87bf65f7863348468",
+    "static_score": 0.6338387096774193,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 0.9870967741935484
+    }
+  },
+  "evidence-ops/sync-immutable": {
+    "badge": "bronze",
+    "composite": 60.55718475073314,
+    "digest": "7cd53948e9339eec9c34478844e279a5f919da4374869f89cc5d3b946138b72a",
+    "static_score": 0.6077161290322581,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9612903225806452
+    }
+  },
+  "evidence-ops/timestamp-evidence": {
+    "badge": "bronze",
+    "composite": 60.51239669421488,
+    "digest": "089e07639b5edda23df049a72259866080fa2061f24d25c8e3b3f8f3e57faedc",
+    "static_score": 0.6072727272727273,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9563636363636363
+    }
+  },
+  "evidence-ops/verify-bundle": {
+    "badge": "bronze",
+    "composite": 60.662557781201855,
+    "digest": "2252232c388801a729dca137710ab36f8270ada93b1acef21107390808277821",
+    "static_score": 0.6087593220338983,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9728813559322034
+    }
+  },
   "file-conversion/file-conversion": {
     "badge": "silver",
     "composite": 72.14015151515152,
@@ -1079,6 +2204,426 @@
       "token_efficiency": 0.9773584905660377
     }
   },
+  "image-ops/auto-deskew": {
+    "badge": "silver",
+    "composite": 71.14718614718615,
+    "digest": "c377dd9b3daa358e5492fa7467ee7cfd1766f371d217ed21d5f911b02ffc4475",
+    "static_score": 0.7012571428571428,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 0.85,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.6,
+      "token_efficiency": 0.9428571428571428
+    }
+  },
+  "image-ops/auto-tone": {
+    "badge": "bronze",
+    "composite": 67.98671647986716,
+    "digest": "0eda8fdd47757b1d8be986ac31f691e41cd3ec1f9c62263617a42538493a016e",
+    "static_score": 0.6712684931506849,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9452054794520548
+    }
+  },
+  "image-ops/auto-white-balance": {
+    "badge": "silver",
+    "composite": 71.08734402852049,
+    "digest": "89bda801ddf40b53bde62c15df62ecc235bf570026b312209dd75abede3caeb9",
+    "static_score": 0.7061647058823529,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9529411764705882
+    }
+  },
+  "image-ops/batch-set-copyright": {
+    "badge": "bronze",
+    "composite": 68.23781291172595,
+    "digest": "650c606a91b915e93977a58e9ea8f960bf20ee7e8b994427afa5c72de607e23b",
+    "static_score": 0.6765043478260869,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9478260869565217
+    }
+  },
+  "image-ops/convert-to-avif": {
+    "badge": "bronze",
+    "composite": 62.703761755485885,
+    "digest": "d2bbfc0323a8911225a5b18d392bd2c878f37ee6dccb9acea746820d765c694a",
+    "static_score": 0.6302172413793103,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9724137931034482
+    }
+  },
+  "image-ops/fast-resize": {
+    "badge": "bronze",
+    "composite": 63.48124098124098,
+    "digest": "4f242a78c9c1fb3ce59701c451177ae9fe55a91b7ebe85e64c44e66554b801ab",
+    "static_score": 0.6269142857142858,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9746031746031746
+    }
+  },
+  "image-ops/fast-thumbnail": {
+    "badge": "bronze",
+    "composite": 66.37793024585477,
+    "digest": "85c3d84bf0b230d83d32cc52c88a7d33b2f69ca310d5ec6885e886f908b2d726",
+    "static_score": 0.6458415094339622,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 1.0,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.3,
+      "token_efficiency": 0.9849056603773585
+    }
+  },
+  "image-ops/from-jxl": {
+    "badge": "silver",
+    "composite": 73.50298762270593,
+    "digest": "854c6bae4d17433b669bd75d51393f6b44a01d1e6825ef52a646f13bcc792c10",
+    "static_score": 0.7183295774647888,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 1.0,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9436619718309859
+    }
+  },
+  "image-ops/image-ops-install-deps": {
+    "badge": "bronze",
+    "composite": 65.5668449197861,
+    "digest": "be8a93d916b04a7702c1c8da9096467569785934a5f63c7c68b36c54e5cc7b82",
+    "static_score": 0.6598117647058824,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.5,
+      "token_efficiency": 0.9623529411764706
+    }
+  },
+  "image-ops/images-to-pdf": {
+    "badge": "bronze",
+    "composite": 68.12520812520813,
+    "digest": "b0152542941498bf474498cee2d975ac73a9096d8e771a1a860617c193a50f32",
+    "static_score": 0.6726395604395604,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9604395604395605
+    }
+  },
+  "image-ops/nano-tech-diagrams": {
+    "badge": "silver",
+    "composite": 71.57899216887981,
+    "digest": "1663f626e99ff43f8bb35db9822953185ee36144655cc777ea2bb3101ba3d219",
+    "static_score": 0.7025820224719102,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 1.0,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9820224719101124
+    }
+  },
+  "image-ops/new-project": {
+    "badge": "no_badge",
+    "composite": 59.20255183413078,
+    "digest": "6dd8d18e241a5298be13653b276ce617612aa6cafb5e22547fc51ff1693ceb0c",
+    "static_score": 0.5978052631578947,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.9789473684210526
+    }
+  },
+  "image-ops/new-workflow": {
+    "badge": "bronze",
+    "composite": 66.19683069224354,
+    "digest": "001cedbbe4fa77250ee6126e7bd783bf31dbdcba9fbccc645ea58fae473bddb8",
+    "static_score": 0.662548623853211,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 0.85,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.6,
+      "token_efficiency": 0.981651376146789
+    }
+  },
+  "image-ops/open-workspace": {
+    "badge": "no_badge",
+    "composite": 56.40819964349375,
+    "digest": "5a9c6129a62af84677eec6e27bf2a75b83b84a66feb9d6622b419d34ee071ad0",
+    "static_score": 0.5571411764705883,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.1,
+      "token_efficiency": 0.9882352941176471
+    }
+  },
+  "image-ops/optimize-jpeg": {
+    "badge": "bronze",
+    "composite": 63.356389986824766,
+    "digest": "b0b84acbf536112a04784c604cf8f92a206f4e655028ed01a23c5fd411c24eed",
+    "static_score": 0.6331782608695652,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9608695652173913
+    }
+  },
+  "image-ops/optimize-png": {
+    "badge": "no_badge",
+    "composite": 58.86363636363636,
+    "digest": "913bf149350ad3827763d9940619438a55491513ae03fa0d12f835274de733de",
+    "static_score": 0.5917,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9666666666666667
+    }
+  },
+  "image-ops/pdf-extract-embedded-images": {
+    "badge": "silver",
+    "composite": 70.0990675990676,
+    "digest": "932746dbb621bdfac9c7a9fc70daf1b85fd2da9afb58e844cf476558788639b9",
+    "static_score": 0.6832307692307692,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 1.0,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9692307692307692
+    }
+  },
+  "image-ops/pdf-to-images": {
+    "badge": "silver",
+    "composite": 70.03787878787878,
+    "digest": "e8edee93d33fbaa2804fff6dd15530e203614a6dbfefc1f1c630b6cfceb655e5",
+    "static_score": 0.6826249999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 1.0,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9625
+    }
+  },
+  "image-ops/read-metadata": {
+    "badge": "bronze",
+    "composite": 67.4090909090909,
+    "digest": "f4a2f54c1b5924eccf7888ae518b1441988cdc1d0ab2486fbbe1f5690325359c",
+    "static_score": 0.6793,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.94
+    }
+  },
+  "image-ops/scrub-metadata": {
+    "badge": "bronze",
+    "composite": 65.18270944741533,
+    "digest": "3c633ecb4e41249c71e6f85121ba14ab00a5a6814eaeb5d8d35658e62173fb8f",
+    "static_score": 0.6532588235294118,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9450980392156862
+    }
+  },
+  "image-ops/set-metadata": {
+    "badge": "bronze",
+    "composite": 67.51940896568996,
+    "digest": "aaa24c9c6a06f385c005cb3b67589a3bbbfdcc7238ff74e7588ced2ab7178ee0",
+    "static_score": 0.6804421487603306,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.943801652892562
+    }
+  },
+  "image-ops/svg-to-raster": {
+    "badge": "bronze",
+    "composite": 67.25757575757575,
+    "digest": "5c69408e8530af013032158ba26a553e397d0c72612cc84ad0c16ba02e5199b4",
+    "static_score": 0.6723,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9733333333333334
+    }
+  },
+  "image-ops/to-jxl": {
+    "badge": "bronze",
+    "composite": 68.16399286987522,
+    "digest": "0a85c5e24d8aed799eefd318121316a425221857a8835652c42bc49b014a1fa7",
+    "static_score": 0.6730235294117647,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9647058823529412
+    }
+  },
+  "image-ops/transcode-jpeg-to-jxl-lossless": {
+    "badge": "bronze",
+    "composite": 65.27777777777779,
+    "digest": "b2cc5a373955c134970798458550451ab6f3e285a2b5a93626df27b7ecd12717",
+    "static_score": 0.6542,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9555555555555555
+    }
+  },
+  "image-ops/upscale-image": {
+    "badge": "silver",
+    "composite": 71.01119894598156,
+    "digest": "1586c180a06e29497e9f5819c69fceeba60c118728796812e52bf34f696a5633",
+    "static_score": 0.6914608695652174,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 1.0,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9695652173913043
+    }
+  },
+  "image-ops/vectorize": {
+    "badge": "bronze",
+    "composite": 68.79609346476816,
+    "digest": "1d5c0b7ea3fc6ad722d2964ee75fadd779773c9675161e5c3fd005824bfa1aa8",
+    "static_score": 0.6840313253012048,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9759036144578314
+    }
+  },
+  "image-ops/web-ready": {
+    "badge": "bronze",
+    "composite": 67.36812570145902,
+    "digest": "7f9fb36bcd0793141b3f7f26e6b500ba5cc71a3fb2510441ed65ebe4ace9077d",
+    "static_score": 0.6761444444444444,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9604938271604938
+    }
+  },
+  "image-ops/workspace-setup": {
+    "badge": "bronze",
+    "composite": 64.93197278911565,
+    "digest": "d5a0bbaca823c43401b72b8e074ef16d65752f35fa8681f5a3e10fbbaa324d4c",
+    "static_score": 0.6490265306122449,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.44999999999999996,
+      "token_efficiency": 0.9591836734693877
+    }
+  },
   "incident-response/connectivity-triage": {
     "badge": "silver",
     "composite": 76.67464114832536,
@@ -1137,6 +2682,306 @@
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.49999999999999994,
       "token_efficiency": 0.983448275862069
+    }
+  },
+  "ios-ops/apple-sdk-route": {
+    "badge": "bronze",
+    "composite": 65.68181818181817,
+    "digest": "f24649bcb50b22d22c6a25fb4b6be4a2ba1b3c61b06c174b3a130da31c3a9d83",
+    "static_score": 0.6465,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-agentic-apple-engineering-team": {
+    "badge": "silver",
+    "composite": 71.28787878787878,
+    "digest": "ef06f0d2153d53051570d775b105787ff851fa334a31dad45548ab25979d4574",
+    "static_score": 0.7136,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6799999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-capability-route-planner": {
+    "badge": "silver",
+    "composite": 70.68181818181817,
+    "digest": "bacef7aa344a9a7d373622038b00bd986d449905d9fd0cbad721616161b07493",
+    "static_score": 0.6967,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.3,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-commerce-identity-and-security": {
+    "badge": "bronze",
+    "composite": 64.77272727272727,
+    "digest": "fd93bac3e88d0417ab466d3cd7c9fc2f5540f84f14b7e66d4671f3b8b8a6a0ba",
+    "static_score": 0.6437,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-companion-communications": {
+    "badge": "no_badge",
+    "composite": 54.6969696969697,
+    "digest": "e66546d6f6898108a6ee4ef31744df828391c611a3c4761db287860cb83d93cb",
+    "static_score": 0.5602,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-data-and-device-services": {
+    "badge": "no_badge",
+    "composite": 54.69696969696969,
+    "digest": "38d32b1e33f6f378e29c50e37449ff40cc10be5d89d00220071db19ffe175424",
+    "static_score": 0.5547,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.5499999999999999,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-device-release-proof": {
+    "badge": "bronze",
+    "composite": 60.530303030303024,
+    "digest": "5972d4595200eb0bd0f418efed953ad51be1b370e8ddadc046f45fac4cba3dc1",
+    "static_score": 0.615,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.4,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-knowledge-base": {
+    "badge": "bronze",
+    "composite": 61.5151515151515,
+    "digest": "57b843a778b619e95ea0b1656fa2c6d175032504cab33bcb6f1b041d7f6c3769",
+    "static_score": 0.6083999999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-media-ml-and-inputs": {
+    "badge": "bronze",
+    "composite": 64.54545454545453,
+    "digest": "af16159faae7309ad344c4da9df7f318b3620a1662cf67b61efdaf7bbfd63bc2",
+    "static_score": 0.6387,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-native-design-verification": {
+    "badge": "bronze",
+    "composite": 61.74242424242424,
+    "digest": "10a3a8a6dbc23b3af669e72b6d0e3b6d4a208d26374d1ee016fe44445819f4f6",
+    "static_score": 0.6207,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-on-device-intelligence-evaluation": {
+    "badge": "bronze",
+    "composite": 63.78787878787878,
+    "digest": "dc4f9224c6cbfe276fab3f8c4b25b95165767955fe0fafcb8c0e4d94765265a7",
+    "static_score": 0.6237,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-privacy-performance-release-proof": {
+    "badge": "bronze",
+    "composite": 60.9090909090909,
+    "digest": "70a802398084ccefed3cbd9413f4b3d1e9699305f73322187b6645c86ac897db",
+    "static_score": 0.6242,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.4,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-project-target-architect": {
+    "badge": "no_badge",
+    "composite": 58.712121212121204,
+    "digest": "7418522d387317e62f2e259a6d5d429c7ec26d1571947cced21f23ae7834668d",
+    "static_score": 0.5977,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6499999999999999,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-source-refresh-and-availability": {
+    "badge": "bronze",
+    "composite": 65.75757575757576,
+    "digest": "d7de377eb547ed1035734d50a6511d68ba0232affe98f0da6eb3fddc0046572f",
+    "static_score": 0.6527000000000001,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-spatial-graphics-and-games": {
+    "badge": "no_badge",
+    "composite": 57.72727272727272,
+    "digest": "d839bb64025e648c5dfe9e05b2c8011089105c0979ef9f2e9a5e59b0f17a7528",
+    "static_score": 0.5777,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.6499999999999999,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-system-surfaces-and-background": {
+    "badge": "no_badge",
+    "composite": 57.72727272727272,
+    "digest": "6e8659d6e29a1af6e4e28204bef1f8d49b219f7c01467a29d97f8c7cdbc0b18c",
+    "static_score": 0.5832,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-testing-and-release-assurance": {
+    "badge": "bronze",
+    "composite": 64.24242424242424,
+    "digest": "fc86f6c0668378423e82d2b4ee0f915c8b0577689522a5d6680afe05b9c50938",
+    "static_score": 0.6412,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/liquid-glass-design": {
+    "badge": "bronze",
+    "composite": 61.36363636363635,
+    "digest": "1e46c2e36bae5cbddfa6196a49407d69ddfb4e1a2cb11cd35fb30ec546f8cf8c",
+    "static_score": 0.617,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/on-device-ai-feature": {
+    "badge": "bronze",
+    "composite": 65.9090909090909,
+    "digest": "9c385d9b6d87921e37c962aa623082fd1b15c325adcc4714ee586dbc6a625fdd",
+    "static_score": 0.6425,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 0.85,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/swiftui-native-design": {
+    "badge": "bronze",
+    "composite": 66.66666666666666,
+    "digest": "e62a8ac905dcfff8eb190ac32a9188c6c47b380b5585f6da3f67c224fff9b90d",
+    "static_score": 0.6592,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
     }
   },
   "javascript-typescript/javascript-testing-patterns": {
@@ -1556,6 +3401,486 @@
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 1.0
+    }
+  },
+  "matter-ops/analyze-document": {
+    "badge": "bronze",
+    "composite": 63.787878787878796,
+    "digest": "3a15b0aceecbef5563b1b279ff333eaf68bd6ea0a48af8af4e5b2c88f340954c",
+    "static_score": 0.6485,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.45,
+      "token_efficiency": 1.0
+    }
+  },
+  "matter-ops/build-timeline": {
+    "badge": "no_badge",
+    "composite": 59.85563178959406,
+    "digest": "a78cec46862f6db1587e04229fc12f3a947d5de629cdf082173c781130ebb893",
+    "static_score": 0.6090207547169811,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 0.9924528301886792
+    }
+  },
+  "matter-ops/generate-brief": {
+    "badge": "bronze",
+    "composite": 60.378787878787875,
+    "digest": "23a802198f9a66ce7fe2163ebf5c40670894bc6f06d121316bf7f68e4fd3abe6",
+    "static_score": 0.6197,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.45,
+      "token_efficiency": 1.0
+    }
+  },
+  "matter-ops/matter-status": {
+    "badge": "bronze",
+    "composite": 67.73036487322202,
+    "digest": "a704f6d37d3c355070794947e99469c25fff57d6db7bbcbf9724dcfabff8ae97",
+    "static_score": 0.671530612244898,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 0.9836734693877551
+    }
+  },
+  "matter-ops/new-matter": {
+    "badge": "bronze",
+    "composite": 69.41634656423389,
+    "digest": "4580c91c886c6b47082da6098901b129b34b2165be42997274f8ebdc78890e1c",
+    "static_score": 0.6949718309859155,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9774647887323944
+    }
+  },
+  "matter-ops/osint-source": {
+    "badge": "no_badge",
+    "composite": 59.46969696969697,
+    "digest": "ec600a0b2b39d2bfbe7a52f56bb16c6672a8b2d019a967db24341605109a7d03",
+    "static_score": 0.5997,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "matter-ops/redact-content": {
+    "badge": "bronze",
+    "composite": 66.74242424242424,
+    "digest": "48f41c60cf88600b27b528d5e0aabf0619fd1b0b249ce65e316f4400499cf6a6",
+    "static_score": 0.6597,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 1.0
+    }
+  },
+  "matter-ops/track-entities": {
+    "badge": "no_badge",
+    "composite": 58.71212121212122,
+    "digest": "9989a0fe36b735fc0632bd84fac3374052d57da2a3becbf73be5a8031b890229",
+    "static_score": 0.5847,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-dat-android-api-atlas": {
+    "badge": "bronze",
+    "composite": 68.40909090909089,
+    "digest": "cfee294286fcdde7a13e19f0fd7d2f1fa20afb8a18eaa0acd86e18bb04b830a0",
+    "static_score": 0.6849999999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-dat-android-integration": {
+    "badge": "bronze",
+    "composite": 64.77272727272727,
+    "digest": "93776fa306844197772032904a47cf91db2b345da95c414a3068d563f1576f78",
+    "static_score": 0.6512,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-dat-api-atlas": {
+    "badge": "bronze",
+    "composite": 68.02575757575758,
+    "digest": "174b42259843860cac6d15b97f1f964aa20e4b03d7258e0d7e126f4feee103ec",
+    "static_score": 0.669465,
+    "sub_scores": {
+      "ecosystem_coherence": 0.83,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-dat-camera-audio": {
+    "badge": "no_badge",
+    "composite": 57.50454545454544,
+    "digest": "b810347415af40855eeb8b0d7a9dd11f072c1d494d63af3f6461573f8d6719c6",
+    "static_score": 0.57834,
+    "sub_scores": {
+      "ecosystem_coherence": 0.91,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-dat-display": {
+    "badge": "no_badge",
+    "composite": 56.44772727272727,
+    "digest": "f50a94f1f297cfc7d3cd8f517ff67d8c350b4fc738f088762e7a5578c78c96b6",
+    "static_score": 0.561765,
+    "sub_scores": {
+      "ecosystem_coherence": 0.99,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-dat-ios-integration": {
+    "badge": "no_badge",
+    "composite": 56.89848484848485,
+    "digest": "680b64abf931aeb45cc099cfc6dc0d673c769536b62d88163a5b22aa7b4c8b90",
+    "static_score": 0.5655899999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.99,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.15,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-agentic-team": {
+    "badge": "bronze",
+    "composite": 68.60151515151514,
+    "digest": "0deb1c66ff7cd2ffe3bfee96c1da13d339e9ffacac8335c90789a29e7c76e5ea",
+    "static_score": 0.6820999999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.83,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-app-architecture": {
+    "badge": "silver",
+    "composite": 72.72727272727273,
+    "digest": "96b9dc6754ef69b03ac6dfe2756a88a2cc712f0f1ff7401f58c3dab86e08ff67",
+    "static_score": 0.7145,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-debugging-observability": {
+    "badge": "no_badge",
+    "composite": 56.24242424242424,
+    "digest": "e9b0411f70ddb2e9fc88ec9833c678c25d7fa6ce2571a367cdd60196e191e260",
+    "static_score": 0.5645600000000001,
+    "sub_scores": {
+      "ecosystem_coherence": 1.0,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-developer-operations": {
+    "badge": "silver",
+    "composite": 75.22727272727272,
+    "digest": "46cefd3b0c58fa2572d33a65e297d36bedf660be9d4dc65e6649dbd089b11821",
+    "static_score": 0.7387,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-device-compatibility": {
+    "badge": "silver",
+    "composite": 72.5,
+    "digest": "5e916b6fdba55721a6900b24f3be0b790dccd93bf32437c155452e05651b3d4a",
+    "static_score": 0.7095,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-device-proof": {
+    "badge": "no_badge",
+    "composite": 52.6060606060606,
+    "digest": "f24df8aaeb9c5e3d3eb45871f9541db1368e701616c3446a0338c420acd23889",
+    "static_score": 0.53696,
+    "sub_scores": {
+      "ecosystem_coherence": 1.0,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-full-sdk-audit": {
+    "badge": "bronze",
+    "composite": 69.0909090909091,
+    "digest": "cc290301a641bd442c7ca1f886c228524ebcc43ad33908ccc13e9f2323b0fcfe",
+    "static_score": 0.6807,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-implementation-recipes": {
+    "badge": "silver",
+    "composite": 72.72727272727273,
+    "digest": "5553c6276530c2e92138f76c417248abcca7568ec57aae9e0c256a674af3ab04",
+    "static_score": 0.7145,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-input-sensors": {
+    "badge": "bronze",
+    "composite": 66.70909090909092,
+    "digest": "a9ad39e930f6af6f64108b207fe86bc06aa27b4c5046c6c13973d07c775831bd",
+    "static_score": 0.66969,
+    "sub_scores": {
+      "ecosystem_coherence": 0.91,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-knowledge-base": {
+    "badge": "no_badge",
+    "composite": 58.33333333333333,
+    "digest": "7e258c85c2e8dba584939d892798ab4775a84eb61a2c2f68a7f09a9bbc391dc0",
+    "static_score": 0.5674,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.0,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-on-device-compliance": {
+    "badge": "silver",
+    "composite": 72.95454545454545,
+    "digest": "c289dde71cebc93ae90d4454bfab00dc8284e946a52c35004bcdde51fef9075f",
+    "static_score": 0.7195,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-operational-readiness": {
+    "badge": "bronze",
+    "composite": 64.77272727272727,
+    "digest": "490aa7f5c03f7061a80289dd258ab3541d7b9c404ee51866a90a81ff71a29df0",
+    "static_score": 0.6437,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-privacy-publishing": {
+    "badge": "bronze",
+    "composite": 67.95454545454544,
+    "digest": "b1ed27b035c23ed72c26b523aeec005d3f52c0fe12d32214ae8821735e875721",
+    "static_score": 0.6675,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-route-planner": {
+    "badge": "bronze",
+    "composite": 60.22727272727272,
+    "digest": "4382332d92993fbd342b4e6844b48c2b0486570091a278c1b5e2bdbe2d5c4e92",
+    "static_score": 0.6092,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-security-attestation": {
+    "badge": "no_badge",
+    "composite": 44.21282360024082,
+    "digest": "fd400167af5e7d10f52cb9d1d8f6f1e00b7b69c6f9ae089197ee2c7edbbf96ba",
+    "static_score": 0.44055695364238406,
+    "sub_scores": {
+      "ecosystem_coherence": 1.0,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 0.9973509933774835
+    }
+  },
+  "meta-wearables-ops/meta-wearables-source-refresh": {
+    "badge": "bronze",
+    "composite": 63.49166666666666,
+    "digest": "5d9e4b8d4541c2393133f0266a5367a05cad9ebd7ca4dfa2d268cfec9db9a2bb",
+    "static_score": 0.6248149999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.83,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.15,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-transport-reliability": {
+    "badge": "silver",
+    "composite": 75.53030303030303,
+    "digest": "148e97eb297713cdabfc3e34632b51b1b4ec6150b8749a5b710fa0e500233adc",
+    "static_score": 0.7324999999999999,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.95,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-web-apps": {
+    "badge": "silver",
+    "composite": 72.72727272727273,
+    "digest": "c9943cb3d65118c12f8f777ca5c23dd81505289badc2b6e39b5c390f280033cd",
+    "static_score": 0.7145,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.25,
       "token_efficiency": 1.0
     }
   },
@@ -2369,139 +4694,139 @@
       "token_efficiency": 0.9771428571428571
     }
   },
-  "ui-design/accessibility-compliance": {
+  "travel-packing-assistant/baggage-policy-research": {
     "badge": "bronze",
-    "composite": 65.6060606060606,
-    "digest": "49d9957c65a2ae93ee98ff4b900d273d7a57ffc7dee7a0fef07f718b53f3409a",
-    "static_score": 0.6522,
+    "composite": 63.03030303030304,
+    "digest": "7be3ff8ddf1772aad646be821640a0ed5ba60fd318b3c0e805c0b9afc1051a24",
+    "static_score": 0.6217,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.35,
-      "token_efficiency": 1.0
-    }
-  },
-  "ui-design/design-system-patterns": {
-    "badge": "silver",
-    "composite": 70.6357048748353,
-    "digest": "ec610ad219072b07dd67a087671fea212dd39e73fb0178ac3209a9badf3fd9bf",
-    "static_score": 0.7072434782608695,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.5000000000000001,
-      "token_efficiency": 0.9782608695652174
-    }
-  },
-  "ui-design/interaction-design": {
-    "badge": "silver",
-    "composite": 78.72984562607205,
-    "digest": "830a542128c1258072432874cb3363a5e47bfad5f219026b45f6ce1dfb69f2fa",
-    "static_score": 0.7888754716981132,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.8,
-      "token_efficiency": 0.8852830188679245
-    }
-  },
-  "ui-design/mobile-android-design": {
-    "badge": "silver",
-    "composite": 70.0,
-    "digest": "3efe94f8d1182a680440eaa7d1b8e296eb7a08ab036eb47953f57ec82b81b980",
-    "static_score": 0.6982,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.9333333333333333
-    }
-  },
-  "ui-design/mobile-ios-design": {
-    "badge": "silver",
-    "composite": 76.45282878041499,
-    "digest": "98b5ecf4fd4bb1d32a9e40ac58a46c5debb1e3960025094e795431e4a843c28e",
-    "static_score": 0.7588330049261084,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.6000000000000001,
-      "token_efficiency": 0.9014778325123153
-    }
-  },
-  "ui-design/react-native-design": {
-    "badge": "silver",
-    "composite": 71.92104531554074,
-    "digest": "2b3e9a33508f42a434ee9c2d8ac0c6a1ccc18cf5885a12d7da6a48b127bd2a42",
-    "static_score": 0.7137183486238532,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
+      "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.9779816513761468
-    }
-  },
-  "ui-design/responsive-design": {
-    "badge": "bronze",
-    "composite": 65.6060606060606,
-    "digest": "793411d7d6c66a9c5c75b87c88e2b94f8879315c09ba2f0c9d1b9d698645518e",
-    "static_score": 0.6522,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.35,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.2,
       "token_efficiency": 1.0
     }
   },
-  "ui-design/visual-design-foundations": {
-    "badge": "silver",
-    "composite": 76.32634032634033,
-    "digest": "4db73294a9d982900601f11da848bc199b5a98ca4e2606f50635f8686975216a",
-    "static_score": 0.7748307692307692,
+  "travel-packing-assistant/itinerary-intake": {
+    "badge": "bronze",
+    "composite": 61.74242424242424,
+    "digest": "69bd6cac574fd607c05411eed1fdaff306963a8ee1fd6a7fcfc361c4b0f884d3",
+    "static_score": 0.6077,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
+      "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.8500000000000001,
-      "token_efficiency": 0.9292307692307692
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
     }
   },
-  "ui-design/web-component-design": {
-    "badge": "silver",
-    "composite": 77.14876033057851,
-    "digest": "7d7ef66ec90b241ea62e7fbc7b086e8e74010ddd9fef91912b35b1c84e354262",
-    "static_score": 0.7904727272727273,
+  "travel-packing-assistant/leave-behind": {
+    "badge": "no_badge",
+    "composite": 58.87878787878789,
+    "digest": "736b4440a7784bec2e355db78e7aa4fbbcbe014f57e94c9daf5d2f1ccae1a6ab",
+    "static_score": 0.5891,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.71,
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.8500000000000001,
-      "token_efficiency": 0.9363636363636364
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.3,
+      "token_efficiency": 0.9933333333333333
+    }
+  },
+  "travel-packing-assistant/new-workspace": {
+    "badge": "bronze",
+    "composite": 61.08748778103617,
+    "digest": "bbbe08481392b62d87fe83cde2df515b9207bdc11d39fffbb63a519003b6caee",
+    "static_score": 0.6122161290322581,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9612903225806452
+    }
+  },
+  "travel-packing-assistant/overage-options": {
+    "badge": "bronze",
+    "composite": 61.28787878787878,
+    "digest": "8a16cffb96d5ab787b4121ecbad2750bf5011ae462da299f3724479b65da137c",
+    "static_score": 0.5977,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.15000000000000002,
+      "token_efficiency": 1.0
+    }
+  },
+  "travel-packing-assistant/pack-plan": {
+    "badge": "bronze",
+    "composite": 66.28787878787878,
+    "digest": "a40024823bd778a50fd73915bb92de9bd6dfc564853efbce837810a2254c98e4",
+    "static_score": 0.6497,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
+    }
+  },
+  "travel-packing-assistant/packing-docs": {
+    "badge": "bronze",
+    "composite": 68.93206256109482,
+    "digest": "224727415875ec290977cc8a9fac9f63b7366b5d8e953ad80f3d2925312549cc",
+    "static_score": 0.6888774193548387,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.5499999999999999,
+      "token_efficiency": 0.9741935483870967
+    }
+  },
+  "travel-packing-assistant/packing-inventory": {
+    "badge": "bronze",
+    "composite": 61.28787878787878,
+    "digest": "d0c9661469a776811b5d7af76e12b42f1ac358a11f7f4759b8a47028abf48be2",
+    "static_score": 0.5977,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.15,
+      "token_efficiency": 1.0
+    }
+  },
+  "travel-packing-assistant/weigh-bags": {
+    "badge": "no_badge",
+    "composite": 59.166666666666664,
+    "digest": "6d9c5d114b19d7da4894bd8cd22efca022200365d24910cad444099e1246b1d7",
+    "static_score": 0.5947,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.35,
+      "token_efficiency": 1.0
     }
   }
 }

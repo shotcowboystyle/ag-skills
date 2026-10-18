@@ -1,6 +1,6 @@
 # Agent Reference
 
-Reference for 172 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
+Reference for 183 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
 
 ## Agent Categories
 
@@ -25,9 +25,13 @@ Reference for 172 local AI agents organized by category. The model column lists 
 
 | Agent                                                                                    | Model   | Description                                             |
 | ---------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------- |
-| [ui-designer](../plugins/ui-design/agents/ui-designer.md)                                | inherit | UI/UX design for mobile and web with modern patterns    |
-| [accessibility-expert](../plugins/ui-design/agents/accessibility-expert.md)              | inherit | WCAG compliance, accessibility audits, inclusive design |
-| [design-system-architect](../plugins/ui-design/agents/design-system-architect.md)        | inherit | Design tokens, component libraries, theming systems     |
+| [ui-designer](../plugins/design-ops/agents/ui-designer.md)                               | inherit | UI/UX design for mobile and web with modern patterns    |
+| [accessibility-expert](../plugins/design-ops/agents/accessibility-expert.md)             | inherit | WCAG compliance, accessibility audits, inclusive design |
+| [design-system-architect](../plugins/design-ops/agents/design-system-architect.md)       | inherit | Design tokens, component libraries, theming systems     |
+| [design-ops-art-director](../plugins/design-ops/agents/art-director.md)                  | inherit | Reference Board direction from captured design DNA      |
+| [design-ops-critic](../plugins/design-ops/agents/critic.md)                              | inherit | Side-by-side grading of a build against the board       |
+| [design-ops-scout](../plugins/design-ops/agents/scout.md)                                | inherit | Live Awwwards/Mobbin/MotionSites reference sourcing     |
+| [design-ops-ux-architect](../plugins/design-ops/agents/ux-architect.md)                  | inherit | Flows, screen inventory, IA from real app patterns      |
 | [ui-ux-designer](../plugins/multi-platform-apps/agents/ui-ux-designer.md)                | sonnet  | Interface design, wireframes, design systems            |
 | [ui-visual-validator](../plugins/accessibility-compliance/agents/ui-visual-validator.md) | sonnet  | Visual regression testing and UI verification           |
 | [mobile-developer](../plugins/multi-platform-apps/agents/mobile-developer.md)            | inherit | React Native and Flutter application development        |
@@ -165,6 +169,18 @@ Reference for 172 local AI agents organized by category. The model column lists 
 | [llm-finetuning-training-engineer](../plugins/llm-finetuning/agents/llm-finetuning-training-engineer.md) | sonnet  | Dataset prep, Unsloth training runs, artifact export                  |
 | [llm-finetuning-eval-engineer](../plugins/llm-finetuning/agents/llm-finetuning-eval-engineer.md)         | sonnet  | Golden sets, judge calibration, checkpoint promotion verdicts         |
 | [dgx-spark-ops-engineer](../plugins/dgx-spark-ops/agents/dgx-spark-ops-engineer.md)                      | sonnet  | DGX Spark (GB10/aarch64/CUDA 13) environment setup and diagnostics    |
+
+#### AI Video Production
+
+| Agent | Model | Description |
+| --- | --- | --- |
+| [ai-video-producer-script-writer](../plugins/ai-video-producer/agents/script-writer.md) | sonnet | Drafts and revises scripts from the project brief |
+| [ai-video-producer-pipeline-scaffolder](../plugins/ai-video-producer/agents/pipeline-scaffolder.md) | sonnet | Designs a generation pipeline as a SPEC.md |
+| [ai-video-producer-pipeline-builder](../plugins/ai-video-producer/agents/pipeline-builder.md) | sonnet | Turns an approved SPEC into runnable stage runners |
+| [ai-video-producer-pipeline-repo-setup](../plugins/ai-video-producer/agents/pipeline-repo-setup.md) | sonnet | Private GitHub repo for reusable pipelines |
+| [ai-video-producer-concatenator](../plugins/ai-video-producer/agents/concatenator.md) | sonnet | GPU-aware clip joining (NVENC/AMF/VAAPI/QSV/CPU) |
+| [ai-video-producer-normalizer](../plugins/ai-video-producer/agents/normalizer.md) | sonnet | EBU R128 loudness, framerate and pixel-format conform |
+| [ai-video-producer-aspect-converter](../plugins/ai-video-producer/agents/aspect-converter.md) | sonnet | Aspect conversion and upscaling for clips |
 
 ### Documentation & Technical Writing
 

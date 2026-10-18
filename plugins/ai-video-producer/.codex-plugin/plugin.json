@@ -1,0 +1,37 @@
+{
+  "name": "ai-video-producer",
+  "version": "1.3.0",
+  "description": "Drive an AI-generated video project end to end \u2014 brief, model selection, characters, script, storyboard, generation pipelines (text-to-image, image-to-video, voice, lip-sync), GPU-aware assembly, ComfyUI import/export, budgets, export \u2014 plus a curated index of agent-callable video and audio tooling.",
+  "skills": "./skills/",
+  "author": {
+    "name": "Curtis Blanton",
+    "email": "public@shotcowboystyle.com",
+    "url": "https://shotcowboystyle.com"
+  },
+  "homepage": "https://github.com/shotcowboystyle/ag-skills/tree/main/plugins/ai-video-producer",
+  "repository": "https://github.com/shotcowboystyle/ag-skills",
+  "license": "MIT",
+  "keywords": [
+    "video",
+    "generative-ai",
+    "fal",
+    "replicate",
+    "wavespeed",
+    "minimax",
+    "hailuo",
+    "elevenlabs",
+    "lifecycle",
+    "pipeline",
+    "lip-sync",
+    "text-to-video",
+    "image-to-video",
+    "comfyui",
+    "ffmpeg",
+    "nvenc"
+  ],
+  "interface": {
+    "displayName": "Ai Video Producer",
+    "shortDescription": "Drive an AI-generated video project end to end \u2014 brief, model selection, characters, script, storyboard, generation\u2026",
+    "category": "Coding"
+  }
+}
