@@ -16,7 +16,7 @@ AGENTS.md is the canonical context file. Codex, Cursor, OpenCode, Antigravity CL
 - **[docs/agents.md](docs/agents.md)** — agent reference (183 agents, model tiers)
 - **[docs/agent-skills.md](docs/agent-skills.md)** — skill reference (progressive disclosure model)
 - **[docs/usage.md](docs/usage.md)** — commands, workflows, examples
-- **[docs/authoring.md](docs/authoring.md)** — portable-content style guide (read before adding plugins)
+- **[docs/authoring.md](docs/authoring.md)** — portable-content style guide and content policy: model tiers, tools, agent shape, safety, freshness, harness requirements (read before adding plugins)
 - **[docs/harnesses.md](docs/harnesses.md)** — per-harness capability matrix
 - **[docs/plugin-eval.md](docs/plugin-eval.md)** — three-layer quality evaluation framework
 - **[docs/round-trip-results.md](docs/round-trip-results.md)** — real-CLI verification recipes

@@ -1614,6 +1614,53 @@ class TestHazardPatterns:
         assert _audit_run(tmp_path, monkeypatch, "hazards") == []
 
 
+class TestPolicyFields:
+    def _kinds(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> list[tuple[str, str]]:
+        _patch_paths(monkeypatch, tmp_path)
+        report = Report()
+        CHECKS["policy-fields"](report)
+        return sorted((f.severity, f.kind) for f in report.findings)
+
+    def test_bad_and_stale_last_verified(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(tmp_path, "p/agents/a.md", "---\nname: a\nlast_verified: recently\n---\nB\n")
+        _write(tmp_path, "p/commands/c.md", "---\nlast_verified: 2026-02-30\n---\nB\n")
+        _write(tmp_path, "p/skills/s/SKILL.md", "---\nname: s\nlast_verified: 2020-01-01\n---\nB\n")
+        assert self._kinds(tmp_path, monkeypatch) == [
+            ("audit", "STALE_LAST_VERIFIED"),
+            ("error", "BAD_LAST_VERIFIED"),
+            ("error", "BAD_LAST_VERIFIED"),
+        ]
+
+    def test_fresh_or_absent_last_verified(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        from datetime import date
+
+        today = date.today().isoformat()
+        _write(tmp_path, "p/skills/s/SKILL.md", f"---\nname: s\nlast_verified: {today}\n---\nB\n")
+        _write(tmp_path, "p/skills/t/SKILL.md", f"---\nname: t\nlast_verified: '{today}'\n---\nB\n")
+        _write(tmp_path, "p/agents/a.md", "---\nname: a\n---\nB\n")
+        assert self._kinds(tmp_path, monkeypatch) == []
+
+    @pytest.mark.parametrize(
+        ("harnesses", "ok"),
+        [
+            (["claude-code"], True),
+            (["claude-code", "opencode"], True),
+            ([], False),
+            ("claude-code", False),
+            (["claude"], False),
+        ],
+    )
+    def test_harnesses_declaration(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, harnesses: object, ok: bool
+    ):
+        _write(
+            tmp_path,
+            "p/.claude-plugin/plugin.json",
+            json.dumps({"name": "p", "harnesses": harnesses}),
+        )
+        assert self._kinds(tmp_path, monkeypatch) == ([] if ok else [("error", "BAD_HARNESSES")])
+
+
 def test_audit_findings_never_fail_strict(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ):

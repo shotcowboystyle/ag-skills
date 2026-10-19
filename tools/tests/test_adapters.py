@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from dataclasses import replace
 from pathlib import Path
 
@@ -2377,3 +2378,34 @@ class TestPiAdapter:
         assert not stale.exists()
         assert settings.is_file()
         assert extension.is_file()
+
+
+# ── Harness requirements (plugin.json `harnesses`) ───────────────────────────
+
+
+def test_generate_skips_plugins_that_exclude_the_harness(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    import tools.generate as gen
+
+    for name, extra in (("everywhere", {}), ("cc-only", {"harnesses": ["claude-code"]})):
+        plugin_dir = tmp_path / "plugins" / name
+        (plugin_dir / ".claude-plugin").mkdir(parents=True)
+        (plugin_dir / ".claude-plugin" / "plugin.json").write_text(
+            json.dumps({"name": name, "version": "1.0.0", "description": "d", **extra})
+        )
+        (plugin_dir / "commands").mkdir()
+        (plugin_dir / "commands" / "go.md").write_text(
+            "---\ndescription: Use when going.\n---\nGo.\n"
+        )
+    import tools.adapters.base as base
+
+    monkeypatch.setattr(base, "PLUGINS_DIR", tmp_path / "plugins")
+    monkeypatch.setattr(gen, "PLUGINS_DIR", tmp_path / "plugins")
+    out = tmp_path / "out"
+    monkeypatch.setattr(
+        sys, "argv", ["generate.py", "--harness", "pi", "--all", "--output-root", str(out)]
+    )
+    assert gen.main() == 0
+    assert (out / ".pi" / "prompts" / "everywhere__go.md").is_file()
+    assert not (out / ".pi" / "prompts" / "cc-only__go.md").exists()

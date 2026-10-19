@@ -5,7 +5,9 @@ import { join, basename, dirname, resolve } from "node:path";
 import YAML from "yaml";
 
 const NAME_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-const KNOWN_KEYS = new Set(["name", "description", "license", "compatibility", "metadata", "allowed-tools"]);
+// Spec keys plus this repo's `last_verified` (docs/authoring.md#freshness).
+const KNOWN_KEYS = new Set(["name", "description", "license", "compatibility", "metadata", "allowed-tools", "last_verified"]);
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const MAX_BODY_LINES = 500;
 
 export function parseSkillMd(text) {
@@ -45,6 +47,13 @@ export function validateSkill(dir) {
   if (fm.compatibility !== undefined) {
     if (typeof fm.compatibility !== "string") errors.push("compatibility must be a string");
     else if (fm.compatibility.length > 500) errors.push("compatibility exceeds 500 characters");
+  }
+  if (fm.last_verified !== undefined) {
+    const v = String(fm.last_verified);
+    const d = new Date(v);
+    // Round-trip rejects dates Date() rolls over, such as 2026-02-30.
+    if (!DATE_RE.test(v) || Number.isNaN(d.getTime()) || d.toISOString().slice(0, 10) !== v)
+      errors.push("last_verified must be a YYYY-MM-DD date");
   }
   if (fm.license !== undefined && typeof fm.license !== "string") errors.push("license must be a string");
   if (fm["allowed-tools"] !== undefined && typeof fm["allowed-tools"] !== "string") errors.push("allowed-tools must be a string");

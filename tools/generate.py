@@ -298,6 +298,10 @@ def main() -> int:
             print(f"  ! skipped (not a plugin dir): {name}", file=sys.stderr)
             total.skipped.append(name)
             continue
+        if not plugin.runs_on(args.harness):
+            print(f"  - {name}: skipped (plugin.json `harnesses` excludes {args.harness})")
+            total.skipped.append(name)
+            continue
         plugins.append(plugin)
         try:
             result = adapter.emit_plugin(plugin)
