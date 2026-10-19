@@ -1455,3 +1455,172 @@ class TestArgumentsFraming:
     ):
         _write_command(tmp_path, "alpha", "do.md", "Just do the thing.\n")
         assert self._run(tmp_path, monkeypatch).findings == []
+
+
+# ── Audit checks (warn-only) ─────────────────────────────────────────────────
+
+
+def _audit_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, check: str) -> list[str]:
+    _patch_paths(monkeypatch, tmp_path)
+    report = Report()
+    CHECKS[check](report)
+    assert all(f.severity == "audit" for f in report.findings)
+    return [f.kind for f in report.findings]
+
+
+def _write(tmp_path: Path, rel: str, text: str) -> Path:
+    path = tmp_path / "plugins" / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text)
+    return path
+
+
+class TestSplitCorruption:
+    def test_unclosed_fence_and_stray_heading(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        _write(
+            tmp_path,
+            "p/skills/s/SKILL.md",
+            '# S\n\n## Summary: {total_passed}...")\n\n```python\nprint(1)\n',
+        )
+        kinds = _audit_run(tmp_path, monkeypatch, "split-corruption")
+        assert sorted(kinds) == ["SPLIT_STRAY_HEADING", "SPLIT_UNCLOSED_FENCE"]
+
+    def test_balanced_fences_and_parenthesized_heading(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        _write(
+            tmp_path,
+            "p/skills/s/SKILL.md",
+            "# S\n\n## Setup (optional)\n\n````md\n```bash\nx\n```\n````\n",
+        )
+        assert _audit_run(tmp_path, monkeypatch, "split-corruption") == []
+
+
+class TestMissingBundledFiles:
+    def test_missing_and_cross_skill_paths(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(tmp_path, "p/skills/other/references/guide.md", "x\n")
+        _write(
+            tmp_path,
+            "p/skills/s/SKILL.md",
+            "Run `scripts/check.py`, then read `references/guide.md`.\n",
+        )
+        _patch_paths(monkeypatch, tmp_path)
+        report = Report()
+        CHECKS["bundled-refs"](report)
+        assert [f.kind for f in report.findings] == ["BUNDLED_FILE_MISSING"] * 2
+        assert "sibling skill `other`" in report.findings[1].message
+        assert report.findings[0].line == 1
+
+    def test_existing_placeholder_and_directory_paths(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        _write(tmp_path, "p/skills/s/scripts/check.py", "x\n")
+        _write(
+            tmp_path,
+            "p/skills/s/SKILL.md",
+            "Run `scripts/check.py`. Read `references/<topic>.md`. Write to `assets/out/`.\n",
+        )
+        assert _audit_run(tmp_path, monkeypatch, "bundled-refs") == []
+
+
+class TestCommandAgentRefs:
+    def test_bare_filename_and_agent_called_skill(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        _write(tmp_path, "p/agents/reviewer.md", "---\nname: p-reviewer\ndescription: x\n---\nB\n")
+        _write(
+            tmp_path,
+            "p/commands/go.md",
+            '---\ndescription: x\n---\nsubagent_type: "reviewer"\nInvoke the `reviewer` skill.\n',
+        )
+        kinds = _audit_run(tmp_path, monkeypatch, "command-agent-refs")
+        assert kinds == ["AGENT_REF_UNSCOPED", "AGENT_CALLED_SKILL"]
+
+    def test_scoped_name_and_real_skill(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(tmp_path, "p/agents/reviewer.md", "---\nname: p-reviewer\ndescription: x\n---\nB\n")
+        _write(tmp_path, "p/skills/scan/SKILL.md", "---\nname: scan\n---\nB\n")
+        _write(
+            tmp_path,
+            "p/commands/go.md",
+            '---\ndescription: x\n---\nsubagent_type: "p-reviewer"\nInvoke the `scan` skill.\n',
+        )
+        assert _audit_run(tmp_path, monkeypatch, "command-agent-refs") == []
+
+
+class TestSkillSize:
+    def test_oversized_with_references(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(tmp_path, "p/skills/s/references/details.md", "x\n")
+        _write(tmp_path, "p/skills/s/SKILL.md", "---\nname: s\n---\n" + "x" * 9000)
+        assert _audit_run(tmp_path, monkeypatch, "skill-size") == ["SKILL_OVER_8KB"]
+
+    def test_small_skill(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(tmp_path, "p/skills/s/references/details.md", "x\n")
+        _write(tmp_path, "p/skills/s/SKILL.md", "---\nname: s\n---\nshort\n")
+        assert _audit_run(tmp_path, monkeypatch, "skill-size") == []
+
+
+class TestAgentTools:
+    def test_missing_tools_and_writing_reviewer(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        _write(tmp_path, "p/agents/helper.md", "---\nname: helper\n---\nB\n")
+        _write(
+            tmp_path, "p/agents/code-reviewer.md", "---\nname: r\ntools: Read, Grep, Edit\n---\nB\n"
+        )
+        kinds = _audit_run(tmp_path, monkeypatch, "agent-tools")
+        assert sorted(kinds) == ["AGENT_NO_TOOLS", "READ_ONLY_AGENT_WRITES"]
+
+    def test_read_only_reviewer_and_writing_builder(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        _write(tmp_path, "p/agents/code-reviewer.md", "---\nname: r\ntools: Read, Grep\n---\nB\n")
+        _write(tmp_path, "p/agents/builder.md", "---\nname: b\ntools: [Read, Write]\n---\nB\n")
+        _write(tmp_path, "p/agents/locked.md", "---\nname: l\ntools: []\n---\nB\n")
+        assert _audit_run(tmp_path, monkeypatch, "agent-tools") == []
+
+
+class TestDuplicateAgentBodies:
+    def test_identical_bodies_across_plugins(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(tmp_path, "a/agents/x.md", "---\nname: a-x\n---\nSame body.\n")
+        _write(tmp_path, "b/agents/x.md", "---\nname: b-x\n---\r\nSame body.\r\n")
+        assert _audit_run(tmp_path, monkeypatch, "agent-duplicates") == ["AGENT_BODY_DUPLICATE"]
+
+    def test_distinct_bodies(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(tmp_path, "a/agents/x.md", "---\nname: a-x\n---\nOne body.\n")
+        _write(tmp_path, "b/agents/x.md", "---\nname: b-x\n---\nOther body.\n")
+        assert _audit_run(tmp_path, monkeypatch, "agent-duplicates") == []
+
+
+class TestHazardPatterns:
+    def test_overwrites_and_unconfirmed_push(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(
+            tmp_path,
+            "p/skills/s/SKILL.md",
+            "```bash\ncat > ~/.claude/settings.json <<EOF\n{}\nEOF\n"
+            "exiftool -all= -overwrite_original img.jpg\ngh repo create x --push\n```\n",
+        )
+        kinds = _audit_run(tmp_path, monkeypatch, "hazards")
+        assert kinds == ["HAZARD_OVERWRITE", "HAZARD_OVERWRITE", "HAZARD_UNCONFIRMED_PUSH"]
+
+    def test_confirmed_push_and_safe_writes(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _write(
+            tmp_path,
+            "p/commands/ship.md",
+            "Show the diff and ask the user to confirm.\n\n```bash\ngit push origin HEAD\n```\n"
+            "cat > ./out.txt\nexiftool -all= staged/copy.jpg\n",
+        )
+        assert _audit_run(tmp_path, monkeypatch, "hazards") == []
+
+
+def test_audit_findings_never_fail_strict(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+):
+    _patch_paths(monkeypatch, tmp_path)
+    _write(tmp_path, "p/agents/helper.md", "---\nname: helper\n---\nB\n")
+    monkeypatch.setattr(sys, "argv", ["doc_gardener.py", "--strict", "--check", "agent-tools"])
+    assert main() == 0
+    out = capsys.readouterr().out
+    assert "AGENT_NO_TOOLS           1" in out  # per-check count in the summary
+    assert "plugins/p/agents/helper.md:" in out
