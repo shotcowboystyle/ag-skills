@@ -11,6 +11,16 @@ Per the OpenAI harness engineering pattern, a recurring task scans for:
 7. Component counts quoted in README.md / AGENTS.md that no longer match reality
 8. Same-named agents whose bodies have diverged across plugins
 9. Generated Markdown artifacts with invalid YAML frontmatter
+10. Commands that interpolate `$ARGUMENTS` without framing it as data
+
+Warn-only audit checks (severity "audit": printed with counts, never fail the run):
+11. Skill-splitter corruption: unclosed code fences, headings ending in a stray `)`
+12. Backticked `references/`, `scripts/`, `assets/` paths missing from the skill
+13. Commands calling agents by file name, or calling agents "skills"
+14. SKILL.md bodies over 8 KB even with `references/`
+15. Agents without `tools:`, and review/audit/analyze/detect agents that can write
+16. Agent bodies duplicated byte-for-byte across plugins
+17. Hazards: `cat >` over user files, `exiftool -overwrite_original`, unconfirmed pushes
 
 Each finding ships with a `Fix:` remediation line.
 
@@ -100,19 +110,22 @@ INTENTIONAL_AGENT_VARIANTS = frozenset(
 @dataclass
 class Finding:
     kind: str
-    severity: str  # 'info' | 'warning' | 'error'
+    # 'info' | 'warning' | 'error' | 'audit'. Audit findings come from the 2026-10
+    # agent/skill audit (#6). They print with counts but never fail the run, not even
+    # under --strict, until the content is fixed and they are promoted to errors (#38).
+    severity: str
     path: Path
     message: str
     fix: str
+    line: int | None = None
 
     def render(self) -> str:
         try:
             rel = self.path.relative_to(WORKTREE)
         except ValueError:
             rel = self.path
-        return (
-            f"[{self.severity:7}] {self.kind:24} {rel}: {self.message}\n           Fix: {self.fix}"
-        )
+        where = f"{rel}:{self.line}" if self.line else f"{rel}"
+        return f"[{self.severity:7}] {self.kind:24} {where}: {self.message}\n           Fix: {self.fix}"
 
 
 @dataclass
@@ -891,6 +904,359 @@ def check_arguments_framing(report: Report) -> None:
             )
 
 
+# ── Audit checks (warn-only, #7) ─────────────────────────────────────────────
+# Mechanical findings from the 2026-10 agent/skill audit. Every one reports with
+# severity "audit" so the tree's existing debt shows up without failing CI. The
+# final remediation ticket (#38) flips them to errors.
+
+AUDIT = "audit"
+_HEADING_RE = re.compile(r"^ {0,3}#{1,6}\s")
+
+
+def _skill_markdown() -> list[Path]:
+    """Every SKILL.md and reference Markdown file under plugins/*/skills/."""
+    return sorted(PLUGINS_DIR.glob("*/skills/*/**/*.md")) if PLUGINS_DIR.is_dir() else []
+
+
+def _skill_dir(md: Path) -> Path:
+    """`plugins/<plugin>/skills/<skill>/`, however deep `md` sits inside it."""
+    return PLUGINS_DIR.joinpath(*md.relative_to(PLUGINS_DIR).parts[:3])
+
+
+def _lines_outside_fences(content: str) -> list[tuple[int, str]]:
+    """(1-based line number, text) for every line outside fenced code."""
+    kept: list[tuple[int, str]] = []
+    fence: str | None = None
+    for lineno, line in enumerate(content.splitlines(), 1):
+        match = _FENCE_PATTERN.match(line)
+        if fence is None:
+            if match:
+                fence = match.group(1)
+            else:
+                kept.append((lineno, line))
+            continue
+        run = line.strip()
+        if match and set(run) == {fence[0]} and len(run) >= len(fence):
+            fence = None
+    return kept
+
+
+def _unclosed_fence_line(content: str) -> int | None:
+    """Line of a code fence that is still open at end of file, if any.
+
+    Uses the same closing rule as _strip_code, so a ```` block holding ``` examples
+    is balanced. An odd number of fence lines leaves one open.
+    """
+    fence: str | None = None
+    opened_at = 0
+    for lineno, line in enumerate(content.splitlines(), 1):
+        match = _FENCE_PATTERN.match(line)
+        if fence is None:
+            if match:
+                fence, opened_at = match.group(1), lineno
+            continue
+        run = line.strip()
+        if match and set(run) == {fence[0]} and len(run) >= len(fence):
+            fence = None
+    return opened_at if fence is not None else None
+
+
+def check_split_corruption(report: Report) -> None:
+    """Damage left by the automatic skill splitter (audit S5).
+
+    The splitter cut files mid code block, leaving an unclosed fence, and turned
+    lines of code into headings such as `## Summary: {total_passed}…")`. A heading
+    that ends in `)` with more closing than opening parentheses is that residue.
+    """
+    for md in _skill_markdown():
+        content = read_text_or_none(md, report)
+        if content is None:
+            continue
+        open_line = _unclosed_fence_line(content)
+        if open_line is not None:
+            report.add(
+                kind="SPLIT_UNCLOSED_FENCE",
+                severity=AUDIT,
+                path=md,
+                line=open_line,
+                message="code fence opened here is never closed (odd fence count)",
+                fix="Re-fence the block; if the splitter cut it in half, rejoin the halves.",
+            )
+        for lineno, line in _lines_outside_fences(content):
+            text = line.rstrip()
+            if _HEADING_RE.match(text) and text.endswith(")") and text.count(")") > text.count("("):
+                report.add(
+                    kind="SPLIT_STRAY_HEADING",
+                    severity=AUDIT,
+                    path=md,
+                    line=lineno,
+                    message=f"heading ends in an unbalanced `)`: {text.strip()[:80]}",
+                    fix="This is code the splitter turned into a heading. Restore or delete it.",
+                )
+
+
+# Placeholders and globs name a pattern, not a file.
+_PLACEHOLDER_CHARS = frozenset("*<>{}$")
+
+
+def check_missing_bundled_files(report: Report) -> None:
+    """Backticked `references/`, `scripts/` or `assets/` paths that don't exist.
+
+    Paths are resolved from the skill folder, and from the file's own folder for
+    files inside references/. `**Reference:**` lines are left to check_dead_links.
+    When the file exists in a sibling skill instead, the message says so: that is a
+    cross-skill path written as if it were local.
+    """
+    for md in _skill_markdown():
+        content = read_text_or_none(md, report)
+        if content is None:
+            continue
+        skill_dir = _skill_dir(md)
+        for lineno, line in _lines_outside_fences(content):
+            if _SKILL_REFERENCE_PATTERN.match(line):
+                continue
+            for target in _SKILL_REFERENCE_PATH_PATTERN.findall(line):
+                target = target.rstrip(".,:;)")
+                # A trailing slash names a working directory in the user's project.
+                if target.endswith("/") or _PLACEHOLDER_CHARS & set(target):
+                    continue
+                if (skill_dir / target).exists() or (md.parent / target).exists():
+                    continue
+                siblings = [
+                    s.name
+                    for s in sorted(skill_dir.parent.iterdir())
+                    if s != skill_dir and (s / target).exists()
+                ]
+                where = f"; it exists in sibling skill `{siblings[0]}`" if siblings else ""
+                report.add(
+                    kind="BUNDLED_FILE_MISSING",
+                    severity=AUDIT,
+                    path=md,
+                    line=lineno,
+                    message=f"`{target}` is not in this skill's folder{where}",
+                    fix=(
+                        "Create the file, fix the path, or point at the other skill with a "
+                        "relative link the adapters can rewrite."
+                    ),
+                )
+
+
+_SUBAGENT_TYPE_RE = re.compile(r"subagent_type\W{0,4}([A-Za-z0-9][\w:-]*)")
+_USE_AGENT_RE = re.compile(r"^\s*Use:\s*`?([A-Za-z0-9][\w-]*)`?\s*$")
+_SKILL_WORD_RE = re.compile(r"`([A-Za-z0-9][\w-]*)` skill\b")
+
+
+def check_command_agent_refs(report: Report) -> None:
+    """Commands that call an agent by its file name, or call an agent a skill.
+
+    Agents are dispatched by their plugin-scoped `name:` (for example
+    `backend-development-backend-architect`), so `subagent_type: backend-architect`
+    resolves to nothing once the plugin is installed. A `` `review` skill `` that is
+    really an agent in the same plugin points the model at a tool that isn't there.
+    """
+    if not PLUGINS_DIR.is_dir():
+        return
+    names: set[str] = set()
+    stems: set[str] = set()
+    for agent in PLUGINS_DIR.glob("*/agents/*.md"):
+        raw = read_text_or_none(agent, report)
+        if raw is None:
+            continue
+        stems.add(agent.stem)
+        name = parse_frontmatter(raw.lstrip(BOM))[0].get("name")
+        if isinstance(name, str):
+            names.add(name)
+    for command in sorted(PLUGINS_DIR.glob("*/commands/*.md")):
+        raw = read_text_or_none(command, report)
+        if raw is None:
+            continue
+        plugin_dir = command.parent.parent
+        for lineno, line in enumerate(raw.splitlines(), 1):
+            called = _SUBAGENT_TYPE_RE.findall(line) + _USE_AGENT_RE.findall(line)
+            for agent in called:
+                if ":" in agent or agent in names or agent not in stems:
+                    continue
+                report.add(
+                    kind="AGENT_REF_UNSCOPED",
+                    severity=AUDIT,
+                    path=command,
+                    line=lineno,
+                    message=f"calls agent `{agent}` by file name, not its plugin-scoped `name:`",
+                    fix="Use the agent's frontmatter `name:` value.",
+                )
+            for skill in _SKILL_WORD_RE.findall(line):
+                if (plugin_dir / "agents" / f"{skill}.md").is_file() and not (
+                    plugin_dir / "skills" / skill
+                ).is_dir():
+                    report.add(
+                        kind="AGENT_CALLED_SKILL",
+                        severity=AUDIT,
+                        path=command,
+                        line=lineno,
+                        message=f"calls `{skill}` a skill, but it is an agent in this plugin",
+                        fix='Say "delegate to the `<name>` subagent" with the agent\'s `name:`.',
+                    )
+
+
+def check_skill_size(report: Report) -> None:
+    """SKILL.md bodies over 8 KB that pass SKILL_OVER_CODEX_CAP only because a
+    `references/` folder exists (audit S6). The Codex adapter still has to cut them.
+    """
+    for skill_md in sorted(PLUGINS_DIR.glob("*/skills/*/SKILL.md")) if PLUGINS_DIR.is_dir() else []:
+        if not (skill_md.parent / "references").is_dir():
+            continue  # check_codex_skill_caps reports these
+        content = read_text_or_none(skill_md, report)
+        if content is None:
+            continue
+        body_bytes = len(parse_frontmatter(content)[1].encode("utf-8"))
+        if body_bytes > CODEX_SKILL_CAP_BYTES:
+            report.add(
+                kind="SKILL_OVER_8KB",
+                severity=AUDIT,
+                path=skill_md,
+                message=f"body is {body_bytes} bytes (cap: {CODEX_SKILL_CAP_BYTES}) even with references/",
+                fix="Keep the core procedure in SKILL.md and move examples and long tables to references/.",
+            )
+
+
+_READ_ONLY_ROLE_RE = re.compile(r"review|audit|analy[sz]|detect")
+_WRITE_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
+
+
+def check_agent_tools(report: Report) -> None:
+    """Agents with no `tools:` allowlist, and read-only roles that can write (audit S3).
+
+    With no `tools:` field an agent inherits every tool. A reviewer, auditor,
+    analyzer or detector should not be able to edit the code it is judging.
+    """
+    if not PLUGINS_DIR.is_dir():
+        return
+    for agent in sorted(PLUGINS_DIR.glob("*/agents/*.md")):
+        raw = read_text_or_none(agent, report)
+        if raw is None:
+            continue
+        fields = parse_frontmatter(raw.lstrip(BOM))[0]
+        if "tools" not in fields:
+            report.add(
+                kind="AGENT_NO_TOOLS",
+                severity=AUDIT,
+                path=agent,
+                message="no `tools:` field, so the agent inherits every tool",
+                fix="Add a `tools:` allowlist with only what the agent needs.",
+            )
+            continue
+        tools = fields["tools"]
+        listed = tools if isinstance(tools, list) else str(tools).split(",")
+        writes = sorted(_WRITE_TOOLS & {str(t).strip() for t in listed})
+        if writes and _READ_ONLY_ROLE_RE.search(agent.stem):
+            report.add(
+                kind="READ_ONLY_AGENT_WRITES",
+                severity=AUDIT,
+                path=agent,
+                message=f"`{agent.stem}` is a read-only role but has {', '.join(writes)}",
+                fix="Drop the write tools; have the agent report findings instead.",
+            )
+
+
+def check_duplicate_agent_bodies(report: Report) -> None:
+    """Agent bodies copied verbatim across plugins (audit S1).
+
+    check_agent_divergence deliberately ignores identical copies. This check counts
+    them, one finding per group, so the dedupe work can show progress. Bodies are
+    compared after the frontmatter, with line endings and leading blank lines
+    normalized as in normalized_agent_text.
+    """
+    if not PLUGINS_DIR.is_dir():
+        return
+    groups: dict[str, list[Path]] = defaultdict(list)
+    for agent in sorted(PLUGINS_DIR.glob("*/agents/*.md")):
+        raw = read_text_or_none(agent, report)
+        if raw is None:
+            continue
+        body = parse_frontmatter(raw.lstrip(BOM).lstrip())[1]
+        normalized = BODY_LEADING_BLANKS_RE.sub("", body.replace("\r\n", "\n")).rstrip()
+        if normalized:
+            groups[hashlib.md5(normalized.encode("utf-8")).hexdigest()].append(agent)
+    for paths in groups.values():
+        plugins = {p.parent.parent.name for p in paths}
+        if len(plugins) < 2:
+            continue
+        copies = ", ".join(str(p.relative_to(PLUGINS_DIR)) for p in paths[1:])
+        report.add(
+            kind="AGENT_BODY_DUPLICATE",
+            severity=AUDIT,
+            path=paths[0],
+            message=f"body is identical in {len(paths) - 1} other file(s): {copies}",
+            fix="Keep one canonical source and have the generator build the copies.",
+        )
+
+
+_HAZARDS = (
+    (
+        re.compile(r"\bcat\s*>\s*(?:~/|\.claude/settings\.json)"),
+        "`cat >` overwrites a user or settings file",
+        "Merge into the file with a backup instead of overwriting it.",
+    ),
+    (
+        re.compile(r"\bexiftool\b[^\n]*-overwrite_original"),
+        "`exiftool -overwrite_original` rewrites the user's original files",
+        "Work on a staged copy, never the original.",
+    ),
+)
+_PUSH_RE = re.compile(r"\bgit\s+push\b|\bgh\s+repo\s+create\b[^\n]*--push")
+_CONFIRM_RE = re.compile(
+    r"confirm|approv|permission|ask (?:the )?user|ask first|\by/n\b|before (?:you )?push",
+    re.IGNORECASE,
+)
+_CONFIRM_WINDOW = 5
+
+
+def check_hazard_patterns(report: Report) -> None:
+    """Destructive or outward-facing commands in plugin source (audit S9).
+
+    Overwrites always report. A push reports only when no confirmation wording sits
+    within five lines of it. Fenced code is scanned too: that is where the commands
+    live. Frontmatter `allowed-tools` patterns are scanned as well, since they
+    pre-approve the command.
+    """
+    if not PLUGINS_DIR.is_dir():
+        return
+    sources = sorted(
+        {
+            *PLUGINS_DIR.glob("*/skills/*/**/*.md"),
+            *PLUGINS_DIR.glob("*/agents/*.md"),
+            *PLUGINS_DIR.glob("*/commands/*.md"),
+        }
+    )
+    for md in sources:
+        content = read_text_or_none(md, report)
+        if content is None:
+            continue
+        lines = content.splitlines()
+        for idx, line in enumerate(lines):
+            for pattern, message, fix in _HAZARDS:
+                if pattern.search(line):
+                    report.add(
+                        kind="HAZARD_OVERWRITE",
+                        severity=AUDIT,
+                        path=md,
+                        line=idx + 1,
+                        message=message,
+                        fix=fix,
+                    )
+            if _PUSH_RE.search(line):
+                window = "\n".join(lines[max(0, idx - _CONFIRM_WINDOW) : idx + _CONFIRM_WINDOW + 1])
+                if not _CONFIRM_RE.search(window):
+                    report.add(
+                        kind="HAZARD_UNCONFIRMED_PUSH",
+                        severity=AUDIT,
+                        path=md,
+                        line=idx + 1,
+                        message="pushes with no confirmation step within five lines",
+                        fix="Show what will be pushed and ask the user to confirm first.",
+                    )
+
+
 CHECKS = {
     "stale": check_stale_artifacts,
     "context": check_oversized_context_files,
@@ -901,6 +1267,13 @@ CHECKS = {
     "counts": check_doc_counts,
     "agent-divergence": check_agent_divergence,
     "arguments": check_arguments_framing,
+    "split-corruption": check_split_corruption,
+    "bundled-refs": check_missing_bundled_files,
+    "command-agent-refs": check_command_agent_refs,
+    "skill-size": check_skill_size,
+    "agent-tools": check_agent_tools,
+    "agent-duplicates": check_duplicate_agent_bodies,
+    "hazards": check_hazard_patterns,
 }
 
 
@@ -927,10 +1300,10 @@ def main() -> int:
         return 0
 
     # Sort by (severity priority, kind, path) so errors lead and similar findings group.
-    severity_order = {"error": 0, "warning": 1, "info": 2}
+    severity_order = {"error": 0, "warning": 1, "info": 2, "audit": 3}
     sorted_findings = sorted(
         report.findings,
-        key=lambda f: (severity_order.get(f.severity, 9), f.kind, str(f.path)),
+        key=lambda f: (severity_order.get(f.severity, 9), f.kind, str(f.path), f.line or 0),
     )
 
     # Print a per-kind summary up front so triage is one scroll.
@@ -954,8 +1327,12 @@ def main() -> int:
         errors = report.by_severity("error")
         warnings = report.by_severity("warning")
         infos = report.by_severity("info")
+        audits = report.by_severity("audit")
         print()
-        print(f"Totals: {len(errors)} error(s), {len(warnings)} warning(s), {len(infos)} info.")
+        print(
+            f"Totals: {len(errors)} error(s), {len(warnings)} warning(s), {len(infos)} info, "
+            f"{len(audits)} audit warning(s) (warn-only)."
+        )
 
     if report.by_severity("error"):
         return 1
