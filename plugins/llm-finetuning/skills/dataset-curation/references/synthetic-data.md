@@ -11,7 +11,7 @@ are never named as recommendations here — `TEACHER`
 and `STUDENT` are placeholders for whichever
 checkpoints a given run uses; see
 `finetuning-method-selection`'s
-`references/model-catalog.md` for actual model
+[`references/model-catalog.md`](../../finetuning-method-selection/references/model-catalog.md) for actual model
 choice.
 
 ## Generation-Method Ranking

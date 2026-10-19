@@ -24,7 +24,7 @@ from pathlib import Path
 # Allow `python tools/validate_generated.py` from repo root.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from tools.adapters.base import WORKTREE, parse_frontmatter
+from tools.adapters.base import WORKTREE, parse_frontmatter, rewrite_links
 from tools.adapters.capabilities import supported_harnesses
 
 # ── Findings ─────────────────────────────────────────────────────────────────
@@ -62,6 +62,30 @@ class Report:
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
+
+
+def _check_skill_links(report: Report, harness: str, skills_root: Path) -> None:
+    """Every relative Markdown link in an emitted skill resolves on disk.
+
+    Harnesses that rename skill directories break `../<skill>/...` links unless
+    the adapter rewrites them, so this checks the output, not the source.
+    """
+    for md in sorted(skills_root.rglob("*.md")):
+
+        def check(target: str, md: Path = md) -> None:
+            if not (md.parent / target).exists():
+                report.add(
+                    severity="error",
+                    harness=harness,
+                    path=md,
+                    message=f"relative link `{target}` does not resolve",
+                    remediation=(
+                        "Fix the link in the source skill, or rewrite it in the adapter "
+                        "(`HarnessAdapter.relink`), then regenerate."
+                    ),
+                )
+
+        rewrite_links(md.read_text(encoding="utf-8"), check)
 
 
 def _check_nonempty_str_field(
@@ -115,6 +139,7 @@ def validate_codex(report: Report) -> None:
     root = WORKTREE / ".codex"
     if not root.is_dir():
         return  # nothing generated yet
+    _check_skill_links(report, "codex", root / "skills")
 
     # 1. Every agent .toml parses and has required fields.
     required_agent_fields = {"name", "description", "developer_instructions"}
@@ -383,6 +408,7 @@ def validate_opencode(report: Report) -> None:
     root = WORKTREE / ".opencode"
     if not root.is_dir():
         return
+    _check_skill_links(report, "opencode", root / "skills")
 
     # 1. opencode.json
     cfg = WORKTREE / "opencode.json"
@@ -531,6 +557,8 @@ def validate_antigravity(report: Report) -> None:
     root = WORKTREE / ".antigravity" / "plugins"
     if not root.is_dir():
         return
+    for skills_root in sorted(root.glob("*/skills")):
+        _check_skill_links(report, "antigravity", skills_root)
 
     for plugin_dir in sorted(p for p in root.iterdir() if p.is_dir()):
         # 1. plugin.json parses, has a non-empty agy-safe `name`, and it matches the
@@ -664,6 +692,7 @@ def validate_pi(report: Report) -> None:
     root = WORKTREE / ".pi"
     if not root.is_dir():
         return
+    _check_skill_links(report, "pi", root / "skills")
     fix = "Regenerate via `make generate HARNESS=pi`."
 
     # 1. Skills: every skill directory has a SKILL.md, and that file names its own
@@ -763,6 +792,7 @@ def validate_copilot(report: Report) -> None:
     Checks that generated agent, skill, and command markdown files have valid
     frontmatter and the minimum metadata Copilot needs to discover them.
     """
+    _check_skill_links(report, "copilot", WORKTREE / ".copilot" / "skills")
     candidate_roots = [WORKTREE / ".copilot"]
     found_any = False
     for root in candidate_roots:

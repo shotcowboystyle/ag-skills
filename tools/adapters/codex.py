@@ -18,6 +18,7 @@ Sources: research summary by `a09b06ce7e593de86` synthesized into the plan.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 from tools.adapters.base import (
@@ -27,6 +28,7 @@ from tools.adapters.base import (
     HarnessAdapter,
     PluginSource,
     SkillSource,
+    rewrite_links,
     yaml_scalar,
 )
 from tools.adapters.capabilities import TOOL_NAME_MAPS, resolve_model
@@ -356,17 +358,25 @@ class CodexAdapter(HarnessAdapter):
 
     # ── Internals ──────────────────────────────────────────────────────────
 
+    def skill_dir(self, plugin: str, skill: str) -> Path:
+        return Path(".codex") / "skills" / f"{plugin}__{skill}"
+
     def _emit_skill(self, plugin: PluginSource, skill: SkillSource, result: EmitResult) -> None:
         skill_id = f"{plugin.name}__{skill.name}"
-        skill_dir = Path(".codex") / "skills" / skill_id
+        skill_dir = self.skill_dir(plugin.name, skill.name)
 
         fm = _filter_frontmatter(skill.frontmatter, _CLAUDE_ONLY_SKILL_FIELDS)
         # Codex requires `name` to match directory exactly.
         fm["name"] = skill_id
 
         body = _rewrite_body_for_codex(skill.body).rstrip() + "\n"
+        body = self.relink(skill, body, Path("SKILL.md"), Path("SKILL.md"))
         head, overflow = _split_body_if_oversized(body, self.SKILL_BODY_CAP)
         if overflow:
+            # Overflow links were written relative to SKILL.md; it now lives in references/.
+            overflow = rewrite_links(
+                overflow, lambda target: os.path.relpath(target, "references").replace(os.sep, "/")
+            )
             # If source already has references/details.md, route overflow to _overflow.md
             # so the source mirror pass below doesn't clobber it.
             source_has_details = (
@@ -396,7 +406,7 @@ class CodexAdapter(HarnessAdapter):
                 or any(part.startswith(".") for part in rel.parts)
             ):
                 continue
-            result.written.append(self.mirror_file(src, skill_dir / rel))
+            result.written.append(self.mirror_skill_file(skill, rel))
 
     def _emit_agent(self, plugin: PluginSource, agent: AgentSource, result: EmitResult) -> None:
         agent_id = f"{plugin.name}__{agent.name}"

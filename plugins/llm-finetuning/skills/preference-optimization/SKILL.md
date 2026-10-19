@@ -181,7 +181,7 @@ catastrophic-forgetting note live in
 `references/method-configs.md`. Those configs use
 the same current-TRL API conventions established
 in `lora-qlora-recipes`'s
-`references/unsloth-trl-mapping.md`
+[`references/unsloth-trl-mapping.md`](../lora-qlora-recipes/references/unsloth-trl-mapping.md)
 (`processing_class`, not `tokenizer=`).
 
 `references/method-configs.md` also carries the

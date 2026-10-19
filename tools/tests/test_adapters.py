@@ -23,6 +23,7 @@ from tools.adapters.codex import CodexAdapter, _split_body_if_oversized
 from tools.adapters.copilot import CopilotAdapter, _build_tools_list
 from tools.adapters.cursor import CursorAdapter
 from tools.adapters.opencode import OpenCodeAdapter, _opencode_skill_id
+from tools.adapters.pi import PiAdapter
 
 # ── Codex ────────────────────────────────────────────────────────────────────
 
@@ -2409,3 +2410,71 @@ def test_generate_skips_plugins_that_exclude_the_harness(
     assert gen.main() == 0
     assert (out / ".pi" / "prompts" / "everywhere__go.md").is_file()
     assert not (out / ".pi" / "prompts" / "cc-only__go.md").exists()
+
+
+# ── Links between skills ─────────────────────────────────────────────────────
+
+
+@pytest.mark.parametrize(
+    "adapter_cls",
+    [CodexAdapter, OpenCodeAdapter, CopilotAdapter, PiAdapter, AntigravityAdapter],
+)
+def test_links_between_skills_resolve_in_output(adapter_cls, tmp_path: Path, output_root: Path):
+    """`../<sibling>/...` links follow the harness's renamed skill directories."""
+    from tools.tests.conftest import _make_skill
+
+    plugin_dir = tmp_path / "demo"
+    plugin_dir.mkdir()
+    kb = _make_skill(plugin_dir, "kb", "name: kb\ndescription: Use when kb.", "# KB\n")
+    (kb.dir / "references").mkdir()
+    (kb.dir / "references" / "catalog.md").write_text("# Catalog\n")
+    body = (
+        "# User\n\n"
+        "See the [catalog](../kb/references/catalog.md#models) and\n"
+        "[the `kb`\nskill](../kb/SKILL.md), plus [local](references/notes.md).\n\n"
+        "```markdown\n[sample](../kb/SKILL.md)\n```\n"
+    )
+    user = _make_skill(plugin_dir, "user", "name: user\ndescription: Use when user.", body)
+    (user.dir / "references").mkdir()
+    (user.dir / "references" / "notes.md").write_text("Back to [kb](../../kb/SKILL.md).\n")
+    plugin = PluginSource(
+        name="demo", dir=plugin_dir, plugin_json={"name": "demo"}, skills=[kb, user]
+    )
+    adapter = adapter_cls(output_root=output_root)
+    adapter.emit_plugin(plugin)
+
+    out = output_root / adapter.skill_dir("demo", "user")
+    link_re = re.compile(r"\[[^\]]+\]\(([^)#]+)[^)]*\)")
+    skill_md = (out / "SKILL.md").read_text()
+    body_links = link_re.findall(skill_md.split("```markdown")[0])
+    assert len(body_links) == 3
+    for target in body_links:
+        assert (out / target).exists(), target
+    assert "#models)" in skill_md
+    # Sample links inside code stay as written.
+    assert "[sample](../kb/SKILL.md)" in skill_md
+    notes = out / "references" / "notes.md"
+    (target,) = link_re.findall(notes.read_text())
+    assert (notes.parent / target).is_file(), target
+
+
+def test_codex_overflow_links_resolve_from_references(tmp_path: Path, output_root: Path):
+    """Links moved into references/details.md by the 8 KB split are rebased."""
+    from tools.tests.conftest import _make_skill
+
+    plugin_dir = tmp_path / "demo"
+    plugin_dir.mkdir()
+    body = (
+        "# Big\n\n## A\n\n" + ("a" * 4000) + "\n\n"
+        "## B\n\nSee [kb](../kb/SKILL.md).\n\n" + ("b" * 4000) + "\n"
+    )
+    big = _make_skill(plugin_dir, "big", "name: big\ndescription: Use when big.", body)
+    kb = _make_skill(plugin_dir, "kb", "name: kb\ndescription: Use when kb.", "# KB\n")
+    plugin = PluginSource(
+        name="demo", dir=plugin_dir, plugin_json={"name": "demo"}, skills=[big, kb]
+    )
+    CodexAdapter(output_root=output_root).emit_plugin(plugin)
+
+    details = output_root / ".codex" / "skills" / "demo__big" / "references" / "details.md"
+    assert "[kb](../../demo__kb/SKILL.md)" in details.read_text()
+    assert (details.parent / "../../demo__kb/SKILL.md").is_file()

@@ -137,14 +137,18 @@ class AntigravityAdapter(HarnessAdapter):
             self.write(self._plugin_root(plugin) / "plugin.json", json.dumps(data, indent=2) + "\n")
         )
 
+    def skill_dir(self, plugin: str, skill: str) -> Path:
+        return Path(".antigravity") / "plugins" / plugin / "skills" / skill
+
     def _emit_skill(self, plugin: PluginSource, skill: SkillSource, result: EmitResult) -> None:
         """Mirror skill to <plugin-root>/skills/<skill>/SKILL.md — bare name, no
         namespacing (agy discovers skills scoped to their parent plugin already)."""
-        rel_dir = self._plugin_root(plugin) / "skills" / skill.name
+        rel_dir = self.skill_dir(plugin.name, skill.name)
         fm = dict(skill.frontmatter)
         fm["name"] = skill.name
 
-        content = _antigravity_frontmatter(fm) + "\n\n" + skill.body.rstrip() + "\n"
+        body = self.relink(skill, skill.body.rstrip() + "\n", Path("SKILL.md"), Path("SKILL.md"))
+        content = _antigravity_frontmatter(fm) + "\n\n" + body
         result.written.append(self.write(rel_dir / "SKILL.md", content))
 
         # Mirror every support file (references/, assets/, scripts/, resources/,
@@ -156,7 +160,7 @@ class AntigravityAdapter(HarnessAdapter):
             rel = src.relative_to(skill.dir)
             if any(part.startswith(".") for part in rel.parts):
                 continue
-            result.written.append(self.mirror_file(src, rel_dir / rel))
+            result.written.append(self.mirror_skill_file(skill, rel))
 
     def _emit_agent(self, plugin: PluginSource, agent: AgentSource, result: EmitResult) -> None:
         """Emit one agy subagent at <plugin-root>/agents/<agent>.md."""
