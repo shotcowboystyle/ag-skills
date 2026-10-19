@@ -11,7 +11,7 @@ is a technical property of that family, not a
 model choice. For which actual model to fine-tune
 at a given size class, see
 `finetuning-method-selection`'s
-`references/model-catalog.md`.
+[`references/model-catalog.md`](../../finetuning-method-selection/references/model-catalog.md).
 
 ## Per-Architecture Collator Table
 

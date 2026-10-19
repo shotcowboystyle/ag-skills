@@ -239,6 +239,12 @@ Link from `SKILL.md` like ``See `references/details.md` for the full algorithm.`
 link target as backticked path text so the gardener's dead-link checker doesn't false-positive
 on illustrative examples.
 
+To point at a file in another skill, use a real Markdown link whose target is a relative
+path, such as `../other-skill/references/catalog.md`. A backticked path can't be
+followed once a harness renames skill directories. The generators rewrite these links for
+each harness's directory names, and `make validate` fails on any relative link in
+generated output that doesn't resolve.
+
 ### Use globally unique agent names
 
 Claude Code keys installed agents by the YAML frontmatter `name`, so two plugins that

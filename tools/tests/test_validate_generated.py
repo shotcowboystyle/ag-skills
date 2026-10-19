@@ -793,3 +793,47 @@ class TestPiValidator:
         report = Report()
         validate_pi(report)
         assert any("provider/id" in f.message for f in report.errors())
+
+
+# ── Links in emitted skills ──────────────────────────────────────────────────
+
+
+class TestSkillLinks:
+    def _skill(self, root: Path, body: str) -> Path:
+        sk = root / "demo"
+        sk.mkdir(parents=True)
+        (sk / "SKILL.md").write_text(
+            f"---\nname: demo\ndescription: Use when testing.\n---\n\n{body}\n"
+        )
+        return sk
+
+    def test_unresolvable_link_errors(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _patch_worktree(monkeypatch, tmp_path)
+        self._skill(tmp_path / ".codex" / "skills", "See [kb](../kb/SKILL.md).")
+
+        report = Report()
+        validate_codex(report)
+        assert any("`../kb/SKILL.md` does not resolve" in f.message for f in report.errors())
+
+    def test_resolving_and_sample_links_pass(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _patch_worktree(monkeypatch, tmp_path)
+        skills = tmp_path / ".antigravity" / "plugins" / "demo" / "skills"
+        sk = self._skill(
+            skills,
+            "See [notes](references/notes.md#top), [site](https://example.com).\n\n"
+            "```markdown\n[sample](../missing.md)\n```\n`[inline](../missing.md)`",
+        )
+        (sk / "references").mkdir()
+        (sk / "references" / "notes.md").write_text("Back to [skill](../SKILL.md).\n")
+
+        report = Report()
+        validate_antigravity(report)
+        assert not [f for f in report.errors() if "does not resolve" in f.message]
+
+    def test_wrapped_link_text_is_checked(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        _patch_worktree(monkeypatch, tmp_path)
+        self._skill(tmp_path / ".pi" / "skills" / "demo", "See [the\nkb](../kb/SKILL.md).")
+
+        report = Report()
+        validate_pi(report)
+        assert any("does not resolve" in f.message for f in report.errors())

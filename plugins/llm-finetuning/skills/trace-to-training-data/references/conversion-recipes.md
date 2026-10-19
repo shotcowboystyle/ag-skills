@@ -16,7 +16,7 @@ Format Selection table exactly — field names are
 copied, not paraphrased. No base-model names
 appear below; where a model matters, load it from
 `finetuning-method-selection`'s
-`references/model-catalog.md`.
+[`references/model-catalog.md`](../../finetuning-method-selection/references/model-catalog.md).
 
 ## 1. Graded Trace to SFT Example
 

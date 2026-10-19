@@ -123,21 +123,20 @@ class CopilotAdapter(HarnessAdapter):
         content = _copilot_frontmatter(fm) + "\n\n" + body
         result.written.append(self.write(rel, content))
 
+    def skill_dir(self, plugin: str, skill: str) -> Path:
+        return Path(".copilot") / "skills" / f"{plugin}__{skill}"
+
     def _emit_skill(self, plugin: PluginSource, skill: SkillSource, result: EmitResult) -> None:
         """Emit one SKILL.md into the skills/ directory.
 
         Preserves the source skill's frontmatter (name, description, trigger
         phrases) and body verbatim, wrapped in YAML frontmatter.
         """
-        skill_id = f"{plugin.name}__{skill.name}"
-        skill_dir = Path(".copilot") / "skills" / skill_id
+        skill_dir = self.skill_dir(plugin.name, skill.name)
 
-        content = (
-            _copilot_frontmatter(skill.frontmatter)
-            + "\n\n"
-            + _rewrite_body_lowercase_tools(skill.body).rstrip()
-            + "\n"
-        )
+        body = _rewrite_body_lowercase_tools(skill.body).rstrip() + "\n"
+        body = self.relink(skill, body, Path("SKILL.md"), Path("SKILL.md"))
+        content = _copilot_frontmatter(skill.frontmatter) + "\n\n" + body
         result.written.append(self.write(skill_dir / "SKILL.md", content))
 
         # References and binary assets must travel with the skill that links them.
@@ -150,7 +149,7 @@ class CopilotAdapter(HarnessAdapter):
             if src.is_symlink():
                 raise ValueError(f"refusing skill support symlink: {src}")
             if src.is_file():
-                result.written.append(self.mirror_file(src, skill_dir / rel))
+                result.written.append(self.mirror_skill_file(skill, rel))
 
     def _emit_command_as_skill(
         self, plugin: PluginSource, command: CommandSource, result: EmitResult

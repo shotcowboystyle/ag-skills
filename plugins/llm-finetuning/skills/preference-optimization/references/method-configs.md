@@ -7,12 +7,12 @@ to by `SKILL.md`'s Method Selection table. Base
 models are never named here — every example uses
 `BASE_MODEL`/`SFT_CHECKPOINT` placeholders; see
 `finetuning-method-selection`'s
-`references/model-catalog.md` for which actual
+[`references/model-catalog.md`](../../finetuning-method-selection/references/model-catalog.md) for which actual
 checkpoint to load. All trainer calls use current
 TRL API conventions (`processing_class`, not
 `tokenizer=`) — the same conventions established
 in `lora-qlora-recipes`'s
-`references/unsloth-trl-mapping.md`.
+[`references/unsloth-trl-mapping.md`](../../lora-qlora-recipes/references/unsloth-trl-mapping.md).
 
 ## DPO — the Default
 

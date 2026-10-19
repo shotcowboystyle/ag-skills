@@ -310,7 +310,7 @@ user_service:
 ### Example 4: README Generation
 
 **README Template**
-```markdown
+````markdown
 # ${PROJECT_NAME}
 
 ${BADGES}
@@ -333,7 +333,7 @@ ${FEATURES_LIST}
 
 ```bash
 pip install ${PACKAGE_NAME}
-````
+```
 
 ### From source
 

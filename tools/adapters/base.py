@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -497,6 +499,55 @@ def list_plugins() -> list[str]:
     return sorted(p.name for p in PLUGINS_DIR.iterdir() if p.is_dir())
 
 
+# ── Markdown links ────────────────────────────────────────────────────────────
+
+_LINK_RE = re.compile(r"(\[[^\]]+\]\()([^)]+)(\))")
+_FENCE_RE = re.compile(r"^\s*(`{3,}|~{3,})")
+_CODE_SPAN_RE = re.compile(r"(`+)(?!`).*?(?<!`)\1(?!`)")
+
+
+def rewrite_links(text: str, rewrite: Callable[[str], str | None]) -> str:
+    """Apply `rewrite` to every relative Markdown link target outside code.
+
+    `rewrite` gets the target without its `#fragment` and returns a new target,
+    or None to keep it. Fenced blocks and code spans are skipped the way
+    doc_gardener skips them, so sample links in skills stay as written.
+    """
+
+    # Character ranges of fenced blocks and code spans. Links are matched over the
+    # whole text, since link text may wrap across lines.
+    code: list[tuple[int, int]] = []
+    fence: str | None = None
+    pos = 0
+    for line in text.splitlines(keepends=True):
+        end = pos + len(line)
+        match = _FENCE_RE.match(line)
+        if fence is None and match:
+            fence = match.group(1)
+            code.append((pos, end))
+        elif fence is None:
+            code.extend((pos + m.start(), pos + m.end()) for m in _CODE_SPAN_RE.finditer(line))
+        else:
+            code.append((pos, end))
+            run = line.strip()
+            if match and set(run) == {fence[0]} and len(run) >= len(fence):
+                fence = None
+        pos = end
+
+    def sub(match: re.Match) -> str:
+        if any(start <= match.start(2) < end for start, end in code):
+            return match.group(0)
+        target, sep, fragment = match.group(2).partition("#")
+        if not target or target.startswith(("/", "http://", "https://", "mailto:")):
+            return match.group(0)
+        new = rewrite(target)
+        if new is None:
+            return match.group(0)
+        return f"{match.group(1)}{new}{sep}{fragment}{match.group(3)}"
+
+    return _LINK_RE.sub(sub, text)
+
+
 # ── HarnessAdapter base class ─────────────────────────────────────────────────
 
 
@@ -573,6 +624,55 @@ class HarnessAdapter(ABC):
         Use this for `references/` assets (PDFs, images, etc.) that may not be UTF-8 text.
         """
         return self.write_bytes(rel_path, src.read_bytes())
+
+    def skill_dir(self, plugin: str, skill: str) -> Path:
+        """Where this harness emits a source skill, relative to `output_root`."""
+        raise NotImplementedError(f"{type(self).__name__} does not emit skills")
+
+    def relink(self, skill: SkillSource, text: str, src_rel: Path, out_rel: Path) -> str:
+        """Re-point links in `text` at the emitted copies of their targets.
+
+        `text` was written at `skill.dir / src_rel` and is emitted at `out_rel`
+        inside this harness's copy of the skill. Links into any source skill,
+        siblings included, are rewritten to that skill's emitted directory, so
+        they survive harnesses that rename skill directories. Links to other
+        existing files (a whole plugin, say) point back at the source. Links
+        that resolve nowhere stay as written.
+        """
+        plugins_root = skill.dir.parents[2]
+        src_dir = (skill.dir / src_rel).parent
+        out_dir = self.output_root / self.skill_dir(skill.plugin, skill.name) / out_rel.parent
+
+        def rewrite(target: str) -> str | None:
+            path = Path(os.path.normpath(src_dir / target))
+            parts = (
+                path.relative_to(plugins_root).parts if path.is_relative_to(plugins_root) else ()
+            )
+            if (
+                len(parts) >= 3
+                and parts[1] == "skills"
+                and (plugins_root.joinpath(*parts[:3]) / "SKILL.md").is_file()
+            ):
+                emitted = self.output_root / self.skill_dir(parts[0], parts[2]) / Path(*parts[3:])
+            elif path.exists():
+                emitted = path
+            else:
+                return None
+            new = Path(os.path.relpath(emitted, out_dir)).as_posix()
+            if target.endswith("/"):
+                new += "/"
+            return None if Path(new) == Path(target) else new
+
+        return rewrite_links(text, rewrite)
+
+    def mirror_skill_file(self, skill: SkillSource, rel: Path) -> Path:
+        """Mirror one support file of `skill`, relinking Markdown files."""
+        src = skill.dir / rel
+        out = self.skill_dir(skill.plugin, skill.name) / rel
+        if src.suffix != ".md":
+            return self.mirror_file(src, out)
+        text = src.read_bytes().decode("utf-8")
+        return self.write_bytes(out, self.relink(skill, text, rel, rel).encode("utf-8"))
 
     def strip_claude_tool_refs(self, body: str, tool_case: str = "lower") -> str:
         """Rewrite Claude Code tool names embedded in prose into harness-neutral verbs.

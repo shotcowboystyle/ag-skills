@@ -97,11 +97,15 @@ class PiAdapter(HarnessAdapter):
     def _root(self) -> Path:
         return Path(".pi")
 
+    def skill_dir(self, plugin: str, skill: str) -> Path:
+        return self._root() / "skills" / plugin / skill
+
     def _emit_skill(self, plugin: PluginSource, skill: SkillSource, result: EmitResult) -> None:
-        rel_dir = self._root() / "skills" / plugin.name / skill.name
+        rel_dir = self.skill_dir(plugin.name, skill.name)
         fm = dict(skill.frontmatter)
         fm["name"] = skill.name
         body = self.strip_claude_tool_refs(skill.body, tool_case="lower")
+        body = self.relink(skill, body, Path("SKILL.md"), Path("SKILL.md"))
         content = _pi_frontmatter(fm) + "\n\n" + body.rstrip() + "\n"
         result.written.append(self.write(rel_dir / "SKILL.md", content))
 
@@ -111,7 +115,7 @@ class PiAdapter(HarnessAdapter):
             rel = src.relative_to(skill.dir)
             if any(part.startswith(".") for part in rel.parts):
                 continue
-            result.written.append(self.mirror_file(src, rel_dir / rel))
+            result.written.append(self.mirror_skill_file(skill, rel))
 
     def _emit_prompt(self, plugin: PluginSource, cmd: CommandSource, result: EmitResult) -> None:
         rel = self._root() / "prompts" / f"{pi_prompt_id(plugin.name, cmd.name)}.md"

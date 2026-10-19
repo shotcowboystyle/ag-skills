@@ -194,6 +194,9 @@ class OpenCodeAdapter(HarnessAdapter):
 
     # ── Internals ──────────────────────────────────────────────────────────
 
+    def skill_dir(self, plugin: str, skill: str) -> Path:
+        return Path(".opencode") / "skills" / f"{plugin}-{skill}"
+
     def _emit_skill(self, plugin: PluginSource, skill: SkillSource, result: EmitResult) -> None:
         skill_id = _opencode_skill_id(plugin, skill)
         source_id = f"{plugin.name}/{skill.name}"
@@ -204,12 +207,13 @@ class OpenCodeAdapter(HarnessAdapter):
             )
         self._seen_skill_ids[skill_id] = source_id
 
-        skill_dir = Path(".opencode") / "skills" / skill_id
+        skill_dir = self.skill_dir(plugin.name, skill.name)
 
         fm = dict(skill.frontmatter)
         fm["name"] = skill_id
 
         body = _rewrite_body_lowercase_tools(skill.body).rstrip() + "\n"
+        body = self.relink(skill, body, Path("SKILL.md"), Path("SKILL.md"))
         content = _opencode_frontmatter(fm) + "\n\n" + body
         result.written.append(self.write(skill_dir / "SKILL.md", content))
 
@@ -219,7 +223,7 @@ class OpenCodeAdapter(HarnessAdapter):
             if not src.is_file() or src.name == "SKILL.md":
                 continue
             rel = src.relative_to(skill.dir)
-            result.written.append(self.mirror_file(src, skill_dir / rel))
+            result.written.append(self.mirror_skill_file(skill, rel))
 
     def _emit_agent(self, plugin: PluginSource, agent: AgentSource, result: EmitResult) -> None:
         agent_id = f"{plugin.name}__{agent.name}"

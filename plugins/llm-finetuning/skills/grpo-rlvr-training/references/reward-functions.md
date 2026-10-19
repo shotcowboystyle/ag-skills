@@ -10,7 +10,7 @@ keyword arguments, and returns a `list[float]` the
 same length as `completions`. Base models are never
 named here — `SFT_CHECKPOINT`/`JUDGE_MODEL` are
 placeholders; see `finetuning-method-selection`'s
-`references/model-catalog.md` for actual
+[`references/model-catalog.md`](../../finetuning-method-selection/references/model-catalog.md) for actual
 checkpoints.
 
 **These examples assume the standard (string)

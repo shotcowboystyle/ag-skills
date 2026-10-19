@@ -7,7 +7,7 @@ conventions, and the ShareGPT→role/content
 conversion note. Base models are never named here —
 every code example uses a `BASE_MODEL` placeholder;
 see `finetuning-method-selection`'s
-`references/model-catalog.md` for which actual
+[`references/model-catalog.md`](../../finetuning-method-selection/references/model-catalog.md) for which actual
 checkpoint to load.
 
 ## Instruct (SFT, Single-Turn)
@@ -121,7 +121,7 @@ trainer = SFTTrainer(
 
 (`processing_class`, not `tokenizer=` — see
 `lora-qlora-recipes`'s
-`references/unsloth-trl-mapping.md` for the full
+[`references/unsloth-trl-mapping.md`](../../lora-qlora-recipes/references/unsloth-trl-mapping.md) for the full
 Unsloth↔TRL kwarg mapping.)
 
 `assistant_only_loss=True` requires the tokenizer's
