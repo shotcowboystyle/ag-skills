@@ -429,6 +429,11 @@ class PluginSource:
     def author(self) -> dict:
         return self.plugin_json.get("author") or {}
 
+    def runs_on(self, harness_id: str) -> bool:
+        """False when plugin.json `harnesses` is declared and leaves this harness out."""
+        harnesses = self.plugin_json.get("harnesses")
+        return harnesses is None or harness_id in harnesses
+
 
 def load_plugin(plugin_name: str) -> PluginSource | None:
     """Load a plugin's source tree from `plugins/<name>/`.

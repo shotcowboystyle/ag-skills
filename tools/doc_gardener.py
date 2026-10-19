@@ -12,15 +12,17 @@ Per the OpenAI harness engineering pattern, a recurring task scans for:
 8. Same-named agents whose bodies have diverged across plugins
 9. Generated Markdown artifacts with invalid YAML frontmatter
 10. Commands that interpolate `$ARGUMENTS` without framing it as data
+11. Malformed `last_verified` dates and plugin.json `harnesses` declarations
 
 Warn-only audit checks (severity "audit": printed with counts, never fail the run):
-11. Skill-splitter corruption: unclosed code fences, headings ending in a stray `)`
-12. Backticked `references/`, `scripts/`, `assets/` paths missing from the skill
-13. Commands calling agents by file name, or calling agents "skills"
-14. SKILL.md bodies over 8 KB even with `references/`
-15. Agents without `tools:`, and review/audit/analyze/detect agents that can write
-16. Agent bodies duplicated byte-for-byte across plugins
-17. Hazards: `cat >` over user files, `exiftool -overwrite_original`, unconfirmed pushes
+12. Skill-splitter corruption: unclosed code fences, headings ending in a stray `)`
+13. Backticked `references/`, `scripts/`, `assets/` paths missing from the skill
+14. Commands calling agents by file name, or calling agents "skills"
+15. SKILL.md bodies over 8 KB even with `references/`
+16. Agents without `tools:`, and review/audit/analyze/detect agents that can write
+17. Agent bodies duplicated byte-for-byte across plugins
+18. Hazards: `cat >` over user files, `exiftool -overwrite_original`, unconfirmed pushes
+19. `last_verified` dates older than 180 days
 
 Each finding ships with a `Fix:` remediation line.
 
@@ -39,6 +41,7 @@ import re
 import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Any, cast
 
@@ -47,6 +50,7 @@ import yaml
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from tools.adapters.base import WORKTREE, list_plugins, parse_frontmatter
+from tools.adapters.capabilities import CAPABILITIES
 
 PLUGINS_DIR = WORKTREE / "plugins"
 DOCS_DIR = WORKTREE / "docs"
@@ -1257,6 +1261,82 @@ def check_hazard_patterns(report: Report) -> None:
                     )
 
 
+_LAST_VERIFIED_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+LAST_VERIFIED_MAX_AGE_DAYS = 180
+
+
+def check_policy_fields(report: Report) -> None:
+    """`last_verified` frontmatter and plugin.json `harnesses` (docs/authoring.md).
+
+    A malformed value is an error: it would silently disable the freshness audit or
+    the generator's harness skip. A date past LAST_VERIFIED_MAX_AGE_DAYS is an audit
+    warning (audit S8).
+    """
+    if not PLUGINS_DIR.is_dir():
+        return
+    today = date.today()
+    sources = [
+        *PLUGINS_DIR.glob("*/agents/*.md"),
+        *PLUGINS_DIR.glob("*/commands/*.md"),
+        *PLUGINS_DIR.glob("*/skills/*/SKILL.md"),
+    ]
+    for md in sorted(sources):
+        raw = read_text_or_none(md, report)
+        if raw is None:
+            continue
+        value = parse_frontmatter(raw.lstrip(BOM))[0].get("last_verified")
+        if value is None:
+            continue
+        value = str(value).strip("'")
+        try:
+            if not _LAST_VERIFIED_RE.fullmatch(value):
+                raise ValueError
+            verified = date.fromisoformat(value)
+        except ValueError:
+            report.add(
+                kind="BAD_LAST_VERIFIED",
+                severity="error",
+                path=md,
+                message=f"`last_verified: {value}` is not a YYYY-MM-DD date",
+                fix="Write the date the content was last checked, as `last_verified: YYYY-MM-DD`.",
+            )
+            continue
+        if (today - verified).days > LAST_VERIFIED_MAX_AGE_DAYS:
+            report.add(
+                kind="STALE_LAST_VERIFIED",
+                severity=AUDIT,
+                path=md,
+                message=f"last verified {value}, over {LAST_VERIFIED_MAX_AGE_DAYS} days ago",
+                fix="Re-check the pinned versions and APIs against upstream, then bump the date.",
+            )
+
+    for pj in sorted(PLUGINS_DIR.glob("*/.claude-plugin/plugin.json")):
+        raw = read_text_or_none(pj, report)
+        if raw is None:
+            continue
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            continue  # check_marketplace_consistency reports unreadable manifests
+        if not isinstance(data, dict) or "harnesses" not in data:
+            continue
+        harnesses = data["harnesses"]
+        unknown = (
+            sorted(set(map(str, harnesses)) - set(CAPABILITIES))
+            if isinstance(harnesses, list)
+            else []
+        )
+        if not isinstance(harnesses, list) or not harnesses or unknown:
+            report.add(
+                kind="BAD_HARNESSES",
+                severity="error",
+                path=pj,
+                message=f"`harnesses` must be a non-empty list of {sorted(CAPABILITIES)}"
+                + (f"; unknown: {unknown}" if unknown else ""),
+                fix='List the harnesses that can run the plugin, e.g. `"harnesses": ["claude-code"]`.',
+            )
+
+
 CHECKS = {
     "stale": check_stale_artifacts,
     "context": check_oversized_context_files,
@@ -1274,6 +1354,7 @@ CHECKS = {
     "agent-tools": check_agent_tools,
     "agent-duplicates": check_duplicate_agent_bodies,
     "hazards": check_hazard_patterns,
+    "policy-fields": check_policy_fields,
 }
 
 
