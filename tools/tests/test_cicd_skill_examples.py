@@ -42,7 +42,9 @@ def test_no_example_echoes_a_secret(name: str) -> None:
 
 
 def test_trufflehog_cli_calls_fail_on_findings() -> None:
-    calls = re.findall(r"^\s*(?:- )?(?:trufflehog|git file:///).*$", _text("secrets-management"), re.M)
+    calls = re.findall(
+        r"^\s*(?:- )?(?:trufflehog|git file:///).*$", _text("secrets-management"), re.M
+    )
     assert calls
     assert all("--fail" in c for c in calls), calls
 
@@ -55,7 +57,9 @@ def test_blocking_scans_are_not_allowed_to_fail(name: str) -> None:
 
 
 def test_github_workflows_default_to_read_only_permissions() -> None:
-    workflows = [b for b in _yaml_blocks("github-actions-templates") if re.search(r"^jobs:", b, re.M)]
+    workflows = [
+        b for b in _yaml_blocks("github-actions-templates") if re.search(r"^jobs:", b, re.M)
+    ]
     assert workflows
     for wf in workflows:
         assert re.search(r"^permissions:\n  contents: read$", wf, re.M), wf.splitlines()[0]
