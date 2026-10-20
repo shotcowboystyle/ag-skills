@@ -1,133 +1,133 @@
 ---
 name: protect-mcp-setup
-description: Configure Cedar policy enforcement and Ed25519 signed receipts for Claude Code tool calls. Use when setting up projects that need cryptographic audit trails, policy-gated tool execution, or compliance-ready evidence of agent actions.
+description: Configure Cedar policy enforcement and Ed25519 signed receipts for Claude Code tool calls. Use when setting up projects that need a signed audit trail, policy-gated tool execution, or evidence of which tools an agent ran.
+last_verified: 2026-10-20
 ---
 
 # protect-mcp — Policy Enforcement + Signed Receipts
 
-Cryptographic governance for every Claude Code tool call. Each invocation is
-evaluated against a Cedar policy and produces an Ed25519-signed receipt that
-anyone can verify offline.
+Each Claude Code tool call is evaluated against a Cedar policy before it runs,
+and each call that runs gets an Ed25519-signed receipt that can be verified
+offline with your public key.
+
+**Claude Code only.** Enforcement and signing run in Claude Code's
+`PreToolUse` and `PostToolUse` hooks. Other coding tools get this skill, the
+agents, and the commands, which can write policies and verify receipts, but
+nothing there evaluates a policy or signs a receipt.
 
 ## Overview
 
-Claude Code runs powerful tools: `Bash`, `Edit`, `Write`, `WebFetch`. By default
-there is no audit trail, no policy enforcement, and no way to prove what was
-decided after the fact. `protect-mcp` closes all three gaps:
+Claude Code runs powerful tools: `Bash`, `Edit`, `Write`, `WebFetch`. By
+default there is no policy gate and no signed record of what ran.
+`protect-mcp` adds both:
 
-- **Cedar policies** (AWS's open authorization engine) evaluate every tool call
-  before execution. Cedar deny is authoritative.
-- **Ed25519 receipts** record the name of each tool that ran, signed with
-  your key.
-- **Offline verification** via `npx @veritasacta/verify`. No server, no account,
-  no trust in the operator.
+- **Cedar policies** evaluate every tool call before execution. A call runs
+  only when at least one `permit` matches and no `forbid` matches.
+- **Ed25519 receipts** record the tool name and a SHA-256 of the tool input,
+  each linked to the previous receipt by hash.
+- **Offline verification** with `npx @veritasacta/verify` and your public key.
+  No server and no account.
 
-## Problem
+Read [Threat model](#threat-model) before relying on the receipts as evidence.
 
-AI agents make decisions that affect money, safety, and rights. The Claude Code
-session log records what happened, but the log is:
-
-- Mutable — anyone with access can edit it
-- Unsigned — there is no way to prove integrity
-- Operator-bound — verification requires trusting whoever holds the log
-
-For compliance contexts (finance, healthcare, regulated research), this is not
-sufficient. You need tamper-evident evidence that can be verified by third
-parties without trusting you.
-
-## Solution
-
-Add `protect-mcp` to your Claude Code project:
+## Setup
 
 ```bash
-# 1. Install the plugin (adds hooks + skill to your project)
-claude plugin install shotcowboystyle/ag-skills/protect-mcp
+# 1. Install the plugin. This registers both hooks.
+claude plugin marketplace add shotcowboystyle/ag-skills
+claude plugin install protect-mcp@claude-code-workflows
 
-# 2. Create ./protect.cedar (see below). The plugin installs the hooks.
+# 2. Create ./protect.cedar from the starter policy below.
 
-# 3. Create the signing key once (protect-mcp 0.7.4 sign does not create it).
-#    An existing key is never replaced. See references/receipt-format.md to rotate.
+# 3. Create the signing key once. An existing key is never replaced.
+#    See references/receipt-format.md to rotate it.
 if [ ! -e ./protect-mcp.key ]; then
-  d=$(mktemp -d) && npx protect-mcp@0.7.4 init --dir "$d" && mv "$d/keys/gateway.json" ./protect-mcp.key
+  d=$(mktemp -d) && npx protect-mcp@0.31.1 init --dir "$d" && mv "$d/keys/gateway.json" ./protect-mcp.key
 fi
-echo "/protect-mcp.key" >> .gitignore
+chmod 600 ./protect-mcp.key
+grep -qxF '/protect-mcp.key' .gitignore 2>/dev/null || echo '/protect-mcp.key' >> .gitignore
 
-# 4. Use Claude Code normally. Every tool call is now policy-evaluated
-#    and produces a signed receipt in ./receipts/
+# 4. Use Claude Code normally. Every tool call is policy-evaluated and
+#    produces a signed receipt in ./receipts/receipts.jsonl.
 ```
 
 ## Hook Configuration
 
-Installing the plugin adds both hooks from `hooks/hooks.json`. Each hook runs a
-script bundled with the plugin:
+Installing the plugin adds both hooks from `hooks/hooks.json`, each running a
+script bundled with the plugin. Claude Code passes the hook event to the command as JSON on stdin.
+`evaluate.sh` reads `tool_name` and `tool_input` from it and runs
+`protect-mcp evaluate`. `sign.sh` passes the payload to `protect-mcp sign`.
 
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": ".*",
-        "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/evaluate.sh" }]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": ".*",
-        "hooks": [{ "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/sign.sh" }]
-      }
-    ]
-  }
-}
-```
+| Variable | Default | Effect |
+|---|---|---|
+| `PROTECT_MCP_POLICY` | `./protect.cedar` | Policy file |
+| `PROTECT_MCP_RECEIPTS` | `./receipts/` | Directory for `receipts.jsonl` |
+| `PROTECT_MCP_KEY` | `./protect-mcp.key` | Signing key |
+| `PROTECT_MCP_FAIL_CLOSED` | unset | `1` denies every call when the policy file is missing |
 
-Claude Code passes the hook event to the command as JSON on stdin and does not
-set `TOOL_NAME` or `TOOL_INPUT` variables. `evaluate.sh` reads `tool_name` and
-`tool_input` from that payload and passes them to `protect-mcp` as flags; `sign.sh` reads
-`tool_name` only, because the 0.7.4 signer records nothing else. Set
-`PROTECT_MCP_POLICY`, `PROTECT_MCP_RECEIPTS`, and `PROTECT_MCP_KEY` to change the
-default paths. When the policy file is missing, the PreToolUse hook prints a
-warning to stderr and allows the call.
+When the policy file is missing, the hook prints a warning and **allows every
+call**. Set `PROTECT_MCP_FAIL_CLOSED=1` in the shell that starts Claude Code to
+deny instead. Create the policy file first: with fail-closed set and no policy,
+Claude cannot write one for you. A policy file that does not parse denies
+every call either way. The evaluator also denies when it cannot run.
 
-### What each hook does
+**PreToolUse** runs before the tool. If Cedar denies the call, the hook exits 2
+and Claude Code blocks it.
 
-**PreToolUse** — Runs BEFORE the tool executes. Evaluates the tool call against
-your Cedar policy file. If Cedar returns `deny`, the hook exits with code 2 and
-Claude Code blocks the tool call entirely.
-
-**PostToolUse** runs AFTER the tool completes. It signs a receipt that names
-the tool and appends it to `./receipts/receipts.jsonl`. protect-mcp 0.7.4 does
-not record the tool input or output.
+**PostToolUse** runs after the tool completes and appends a signed receipt. It
+does not record the tool output.
 
 ## Cedar Policy File
 
-Create `./protect.cedar` at the project root:
+Cedar denies by default. A call is allowed when at least one `permit` matches
+and no `forbid` matches. A matching `forbid` always wins, so the forbids below
+hold even if you add broader permits later.
+
+Create `./protect.cedar` at the project root and replace `/path/to/project`
+with the project's absolute path:
 
 ```cedar
-// Read-only tools: one rule can name several tools in `when`. Add WebFetch
-// with your own URL rule.
+// Read-only tools. Add WebFetch with your own URL rule.
 permit (principal, action == Action::"MCP::Tool::call", resource) when {
     resource == Tool::"Read" || resource == Tool::"Glob" || resource == Tool::"Grep"
 };
 
-// Safe commands only; git limited to read subcommands
+// Never read the signing key, .env files, or SSH keys. Grep and Glob take
+// `path`; keep the key gitignored as well, since Grep skips gitignored files.
+forbid (principal, action == Action::"MCP::Tool::call", resource) when {
+    (resource == Tool::"Read" || resource == Tool::"Grep" || resource == Tool::"Glob") &&
+    context has input &&
+    ((context.input has file_path &&
+      (context.input.file_path like "*protect-mcp.key*" ||
+       context.input.file_path like "*.env*" || context.input.file_path like "*.ssh*")) ||
+     (context.input has path &&
+      (context.input.path like "*protect-mcp.key*" ||
+       context.input.path like "*.env*" || context.input.path like "*.ssh*")))
+};
+
+// Shell: read-only git subcommands and a few harmless built-ins. No `cat`:
+// use Read, which the forbid above covers. No interpreter or package-manager
+// prefix (`npm`, `node`, `python`, `make`): they run arbitrary code.
 permit (principal, action == Action::"MCP::Tool::call", resource == Tool::"Bash") when {
     context has input && context.input has command &&
     (context.input.command like "git status*" || context.input.command like "git diff*" ||
      context.input.command like "git log*" || context.input.command like "git show*" ||
-     context.input.command like "npm*" || context.input.command like "ls*" ||
-     context.input.command like "cat*" || context.input.command like "echo*" ||
-     context.input.command like "pwd*" || context.input.command like "test*")
+     context.input.command like "ls*" || context.input.command like "pwd*" ||
+     context.input.command like "echo *" || context.input.command like "test *")
 };
 
 // No chaining (`&` also denies `2>&1`), `$` expansion, redirection (`>` or
-// `<`, which covers `<(`), file output (`git diff --output`), or rm -rf
+// `<`, which covers `<(`), file output (`git diff --output`), reads outside
+// git (`git diff --no-index`), rm -rf, or naming the secrets above
 forbid (principal, action == Action::"MCP::Tool::call", resource == Tool::"Bash") when {
     context has input && context.input has command &&
     (context.input.command like "*;*" || context.input.command like "*&*" ||
      context.input.command like "*|*" || context.input.command like "*$*" ||
      context.input.command like "*`*" || context.input.command like "*>*" ||
      context.input.command like "*<*" || context.input.command like "*\n*" ||
-     context.input.command like "*--output*" || context.input.command like "*rm -rf*")
+     context.input.command like "*--output*" || context.input.command like "*--no-index*" ||
+     context.input.command like "*rm -rf*" || context.input.command like "*protect-mcp.key*" ||
+     context.input.command like "*.env*" || context.input.command like "*.ssh*")
 };
 
 // Writes only inside the project (paths are absolute), never via `..`
@@ -136,16 +136,26 @@ permit (principal, action == Action::"MCP::Tool::call", resource) when {
     context has input && context.input has file_path &&
     context.input.file_path like "/path/to/project/*"
 };
+
+// Never write the policy, the key, the receipts, secrets, or Claude Code
+// settings (which can turn the hooks off)
 forbid (principal, action == Action::"MCP::Tool::call", resource) when {
     (resource == Tool::"Write" || resource == Tool::"Edit") &&
     context has input && context.input has file_path &&
-    (context.input.file_path like "*/../*" || context.input.file_path like "*/..")
+    (context.input.file_path like "*/../*" || context.input.file_path like "*/.." ||
+     context.input.file_path like "*protect.cedar*" ||
+     context.input.file_path like "*protect-mcp.key*" ||
+     context.input.file_path like "*/receipts/*" ||
+     context.input.file_path like "*.env*" || context.input.file_path like "*.ssh*" ||
+     context.input.file_path like "*/.claude/*")
 };
 ```
 
-String matching is best-effort: `like` checks the raw string, not a
-resolved path, and an `npm*` permit runs arbitrary code, so it is only as
-safe as the project's scripts.
+String matching is best-effort. `like` checks the raw string, not a resolved
+path or a parsed command, so a symlink or a reworded command can get past a
+rule. To allow a project command such as `npm test`, permit it by exact
+prefix, and remember that it runs whatever the project's files say, which the
+agent can edit.
 
 ## Verification
 
@@ -153,11 +163,15 @@ Verify every receipt against the public key in `./protect-mcp.key`:
 
 ```bash
 PUB=$(node -p 'JSON.parse(require("fs").readFileSync("./protect-mcp.key")).publicKey')
-npx @veritasacta/verify@0.9.2 --replay-chain ./receipts/receipts.jsonl --key "$PUB"
-# Exit 0 = every receipt verified
-# Exit 1 = a receipt failed (tampered, wrong key, or malformed line)
-# Exit 2 = the file could not be read
+npx @veritasacta/verify@0.10.26 --replay-chain ./receipts/receipts.jsonl --key "$PUB"
+# Exit 0 = every signature and chain link verified
+# Exit 1 = a receipt failed: tampered, wrong key, or a deleted or reordered line
+# Exit 2 = could not verify: unreadable file, malformed line, or no key
 ```
+
+Always pass `--key`. Each receipt carries a `public_key` field, and without
+`--key` the verifier checks the signature against that embedded key, so a
+receipt signed with any key passes.
 
 The plugin's slash commands do the same inside Claude Code. `/verify-receipt`
 takes one receipt in its own file, e.g., from
@@ -168,31 +182,24 @@ takes one receipt in its own file, e.g., from
 /audit-chain --last 20
 ```
 
+`npx` downloads the verifier on first use. Run
+`npm install --no-save @veritasacta/verify@0.10.26` in the project before you
+go offline.
+
 ## Receipt Format
 
-Each receipt is one line of `./receipts/receipts.jsonl`. See
-[`references/receipt-format.md`](references/receipt-format.md) for a sample.
+Each receipt is one line of `./receipts/receipts.jsonl`, holding the tool name,
+a SHA-256 of the tool input, and a hash link to the previous line. See
+[`references/receipt-format.md`](references/receipt-format.md).
 
-- **Ed25519** signatures (RFC 8032) over all fields but `signature`
-- **JCS canonicalization** (RFC 8785) before signing
-- **No public key** in the receipt, so pass it with `--key`
-- **No link to the previous receipt**, so a deleted line goes undetected
+## Threat Model
 
-## Why This Matters
-
-| Before                                | After                                                    |
-| ------------------------------------- | -------------------------------------------------------- |
-| "Trust me, the agent only read files" | Cryptographically provable: every Read logged and signed |
-| "The log shows it happened"           | The receipt proves it happened, and no one can edit it   |
-| "You'd have to audit our system"      | Anyone can verify every receipt offline                  |
-| "Logs might be different by now"      | Ed25519 signatures lock the record at signing time       |
-
-## Standards
-
-- **Ed25519** — RFC 8032 (digital signatures)
-- **JCS** — RFC 8785 (deterministic JSON canonicalization)
-- **Cedar** — AWS's open authorization policy language
-- **IETF draft** — [draft-farley-acta-signed-receipts](https://datatracker.ietf.org/doc/draft-farley-acta-signed-receipts/)
+A receipt that verifies shows that someone holding the key signed it, that it
+was not changed, and that no line between the first and last was deleted. It
+does not show that the file is complete at the end, what the tool returned, or
+that the agent did not sign receipts itself after reading the key. Read
+[`references/threat-model.md`](references/threat-model.md) before relying on
+receipts as evidence.
 
 ## Related
 
@@ -200,4 +207,3 @@ Each receipt is one line of `./receipts/receipts.jsonl`. See
 - **Verify CLI**: [@veritasacta/verify](https://www.npmjs.com/package/@veritasacta/verify)
 - **Source**: [github.com/ScopeBlind/scopeblind-gateway](https://github.com/ScopeBlind/scopeblind-gateway)
 - **Protocol**: [veritasacta.com](https://veritasacta.com)
-- **Integrations**: Microsoft Agent Governance Toolkit (PR #667), AWS cedar-policy/cedar-for-agents (PR #64)

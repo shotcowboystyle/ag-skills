@@ -29,23 +29,26 @@ test/
 ./run-tests.sh
 ```
 
-Requires `node` (>= 18), `npx`, and `python3`. Fetches `protect-mcp` and
-`@veritasacta/verify` from npm on first run. Runs twelve tests:
+Requires `node` (>= 18), `npx`, and `python3`. Fetches `protect-mcp@0.31.1`
+and `@veritasacta/verify@0.10.26` from npm on first run. Runs `npx` from a temp
+directory, because npm refuses to run inside a repository whose `package.json`
+pins another package manager in `devEngines`.
 
 | # | Scenario | Expected exit |
 |---|----------|----------------|
-| 1 | `PreToolUse` on `Read`                         | 0 (permit)  |
-| 2 | `PreToolUse` on `Bash git status`              | 0 (permit)  |
-| 3 | `PreToolUse` on `Bash rm -rf /`                | 2 (forbid)  |
-| 4 | `PreToolUse` on `Write`                        | 2 (forbid)  |
-| 5 | `PostToolUse` signing produces a receipt file  | 0 (success) |
-| 6 | Produced receipt conforms to the schema        | 0 (valid)   |
-| 7 | `@veritasacta/verify` accepts the receipt      | 0 (valid)   |
-| 8 | Tampered receipt is rejected                   | 1 (tampered)|
-| 9 | `hooks.json` PreToolUse on `Read`, payload on stdin  | 0 (permit)  |
-| 10 | `hooks.json` PreToolUse on `Write`, payload on stdin | 2 (forbid)  |
-| 11 | `hooks.json` PostToolUse, payload on stdin           | receipt written |
-| 12 | `hooks.json` PreToolUse when `npx` cannot run       | 2 (forbid)  |
+| 1-2 | `evaluate` on `Read`, `Bash git status`         | 0 (permit)  |
+| 3-4 | `evaluate` on `Bash rm -rf /`, `Write`          | 2 (forbid)  |
+| 5 | `sign` appends three receipts                     | 0 (success) |
+| 6 | Receipt has the schema's fields, a chain link, and the input hash | 0 (valid) |
+| 7 | `@veritasacta/verify` accepts the receipt         | 0 (valid)   |
+| 8 | Tampered receipt is rejected                      | 1 (tampered)|
+| 9 | `--replay-chain` accepts the intact chain          | 0 (valid)   |
+| 10 | `--replay-chain` rejects a deleted middle line    | 1 (chain break) |
+| 11-12 | `hooks.json` PreToolUse on `Read` / `Write`, payload on stdin | 0 / 2 |
+| 13 | `hooks.json` PostToolUse, payload on stdin         | receipt written |
+| 14 | `hooks.json` PreToolUse when `npx` cannot run      | 2 (forbid)  |
+| 15-16 | Missing policy, default / `PROTECT_MCP_FAIL_CLOSED=1` | 0 / 2 |
+| 17 | The starter policy in `SKILL.md` against secret reads and protected writes | 0 / 2 per case |
 
 Test 8 is the critical regression guard: flipping the `decision` field in a
 signed receipt must invalidate the Ed25519 signature, so `@veritasacta/verify`
@@ -69,6 +72,11 @@ sandboxed or offline CI.
   [`draft-farley-acta-signed-receipts`](https://datatracker.ietf.org/doc/draft-farley-acta-signed-receipts/).
 - **Signature integrity:** `@veritasacta/verify` validates authentic
   receipts and rejects tampered ones, with the documented exit codes.
+- **Chain integrity:** a deleted middle line breaks the chain. A line cut
+  from the end does not, and no test claims otherwise.
+- **Starter policy:** the policy users copy from `SKILL.md` blocks reads of
+  the key, `.env*` and `~/.ssh`, and writes to the policy, key, receipts and
+  `.claude/`.
 - **End-to-end integration:** the plugin's two hooks compose into a
   working allow/deny + sign + verify pipeline.
 

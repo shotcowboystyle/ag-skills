@@ -6,38 +6,47 @@ Cedar policy enforcement + Ed25519 signed receipts for every Claude Code tool ca
 [![Downloads](https://img.shields.io/npm/dm/protect-mcp)](https://www.npmjs.com/package/protect-mcp)
 [![License](https://img.shields.io/badge/license-MIT-blue)](../../LICENSE)
 
-The first Claude Code plugin that enforces declarative authorization policies
-and produces cryptographically verifiable audit trails. Every tool call is
-evaluated against a Cedar policy, every tool call that runs gets an
-Ed25519-signed receipt, and every receipt is verifiable offline by anyone
-with the public key.
+Every Claude Code tool call is evaluated against a Cedar policy before it
+runs, and every call that runs gets an Ed25519-signed receipt that can be
+verified offline with your public key.
+
+**Claude Code only.** Enforcement and signing run in Claude Code's
+`PreToolUse` and `PostToolUse` hooks. Other coding tools get the skill, agents,
+and commands, which can write policies and verify receipts, but nothing there
+evaluates a policy or signs a receipt.
 
 ## What You Get
 
-- **Cedar policy enforcement** — Block tool calls that violate your rules before they execute. Cedar is AWS's open authorization engine, formally verified.
-- **Ed25519 signed receipts**: every tool call that runs produces a tamper-evident receipt, signed with RFC 8032 Ed25519 over RFC 8785 JCS canonical bytes.
-- **Receipts file**: receipts are appended to `./receipts/receipts.jsonl`. A modified receipt fails verification, but receipts carry no link to the previous receipt, so a deleted line goes undetected.
-- **Offline verification**: `npx @veritasacta/verify@0.9.2 --replay-chain` with the public key needs no vendor lookup or account. `npx` downloads the verifier on first use, so run `npm install --no-save @veritasacta/verify@0.9.2` in the project before you go offline.
+- **Cedar policy enforcement**: block tool calls that violate your rules before they execute. A call runs only when at least one `permit` matches and no `forbid` matches.
+- **Ed25519 signed receipts**: every tool call that runs gets a receipt holding the tool name and a SHA-256 of its input, signed over the RFC 8785 JCS canonical payload.
+- **Chained receipts file**: receipts are appended to `./receipts/receipts.jsonl`, each linked to the previous one by hash, so a modified, deleted, or reordered line fails verification. Lines cut from the end of the file are not detected.
+- **Offline verification**: `npx @veritasacta/verify@0.10.26 --replay-chain` with your public key needs no vendor lookup or account. `npx` downloads the verifier on first use, so run `npm install --no-save @veritasacta/verify@0.10.26` in the project before you go offline.
+
+Receipts are evidence against later tampering by someone without the key. They
+are not proof against the agent itself: the hook and the agent run as the same
+OS user. See the threat model in
+[`skills/protect-mcp-setup/references/threat-model.md`](skills/protect-mcp-setup/references/threat-model.md).
 
 ## Quick Start
 
 ```bash
-# 1. Install this plugin
+# 1. Install this plugin. This registers the hooks.
 claude plugin marketplace add shotcowboystyle/ag-skills
 claude plugin install protect-mcp@claude-code-workflows
 
-# 2. Create a Cedar policy file at ./protect.cedar
-#    (see skills/protect-mcp-setup/SKILL.md for examples)
+# 2. Create ./protect.cedar from the starter policy in
+#    skills/protect-mcp-setup/SKILL.md. With no policy file every call is
+#    allowed; set PROTECT_MCP_FAIL_CLOSED=1 to deny instead.
 
-# 3. Create the signing key once (protect-mcp 0.7.4 sign does not create it).
-#    Installing the plugin already registers the hooks. An existing key is
-#    never replaced. To rotate it, archive the key and receipts.jsonl first.
+# 3. Create the signing key once. An existing key is never replaced. To rotate
+#    it, archive the key and receipts.jsonl first.
 if [ ! -e ./protect-mcp.key ]; then
-  d=$(mktemp -d) && npx protect-mcp@0.7.4 init --dir "$d" && mv "$d/keys/gateway.json" ./protect-mcp.key
+  d=$(mktemp -d) && npx protect-mcp@0.31.1 init --dir "$d" && mv "$d/keys/gateway.json" ./protect-mcp.key
 fi
-echo "/protect-mcp.key" >> .gitignore
+chmod 600 ./protect-mcp.key
+grep -qxF '/protect-mcp.key' .gitignore 2>/dev/null || echo '/protect-mcp.key' >> .gitignore
 
-# 4. Run Claude Code normally — every tool call is now policy-evaluated
+# 4. Run Claude Code normally. Every tool call is now policy-evaluated
 #    and produces a signed receipt in ./receipts/
 ```
 
@@ -84,68 +93,24 @@ plugins/protect-mcp/
 ┌─────────────────────────────────────────────┐
 │  PostToolUse hook → Ed25519 signed receipt  │
 │                                             │
-│  Receipt fields (v2 envelope):              │
-│    - payload.tool, payload.decision         │
-│    - payload.request_id, issued_at, kid     │
-│    - signature over every other field       │
-│    - no public key, no link to the          │
-│      previous receipt                       │
+│  Receipt payload fields:                    │
+│    - tool_name, decision, request_id        │
+│    - payload_digest.input_hash (SHA-256)    │
+│    - previousReceiptHash (chain link)       │
+│    - public_key, issued_at                  │
+│  signature over the whole payload           │
 │                                             │
 │  Appended to ./receipts/receipts.jsonl      │
 └─────────────────────────────────────────────┘
 ```
 
-## Example Cedar Policy
+## Cedar Policy
 
-```cedar
-// Allow read-only tools. One rule can cover several tools: leave `resource`
-// open in the scope and compare it in `when`.
-permit (
-    principal,
-    action == Action::"MCP::Tool::call",
-    resource
-) when {
-    resource == Tool::"Read" || resource == Tool::"Glob" || resource == Tool::"Grep"
-};
-
-// Writes and edits only inside the project. Claude Code passes absolute
-// paths, so match your project's path, not "./*". `like` matches the raw
-// string, so it is not a path containment check: the forbid rejects `..`.
-permit (
-    principal,
-    action == Action::"MCP::Tool::call",
-    resource
-) when {
-    (resource == Tool::"Write" || resource == Tool::"Edit") &&
-    context has input && context.input has file_path &&
-    context.input.file_path like "/path/to/project/*"
-};
-
-forbid (
-    principal,
-    action == Action::"MCP::Tool::call",
-    resource
-) when {
-    (resource == Tool::"Write" || resource == Tool::"Edit") &&
-    context has input && context.input has file_path &&
-    (context.input.file_path like "*/../*" || context.input.file_path like "*/..")
-};
-
-// Never allow destructive shell commands. Substring patterns also catch
-// `cd x && rm -rf y`, but matching shell commands as strings is best-effort:
-// a determined rewording can still get through.
-forbid (
-    principal,
-    action == Action::"MCP::Tool::call",
-    resource == Tool::"Bash"
-) when {
-    context has input && context.input has command &&
-    (context.input.command like "*rm -rf*" ||
-     context.input.command like "*dd if=*" ||
-     context.input.command like "*mkfs*" ||
-     context.input.command like "*shred*")
-};
-```
+The starter policy in
+[`skills/protect-mcp-setup/SKILL.md`](skills/protect-mcp-setup/SKILL.md#cedar-policy-file)
+allows read-only tools and a few read-only shell commands, forbids reading the
+signing key, `.env*` and `~/.ssh`, and forbids writes to the policy, the key,
+the receipts and `.claude/`. `test/run-tests.sh` checks it.
 
 Ask the `policy-enforcer` agent to help you author policies for your
 project's threat model.
@@ -157,14 +122,14 @@ value from `./protect-mcp.key`:
 
 ```bash
 PUB=$(node -p 'JSON.parse(require("fs").readFileSync("./protect-mcp.key")).publicKey')
-npx @veritasacta/verify@0.9.2 --replay-chain ./receipts/receipts.jsonl --key "$PUB"
-# Exit 0 = every receipt verified
-# Exit 1 = a receipt failed (tampered, wrong key, or malformed line)
-# Exit 2 = the file could not be read
+npx @veritasacta/verify@0.10.26 --replay-chain ./receipts/receipts.jsonl --key "$PUB"
+# Exit 0 = every signature and chain link verified
+# Exit 1 = a receipt failed: tampered, wrong key, or a deleted or reordered line
+# Exit 2 = could not verify: unreadable file, malformed line, or no key
 ```
 
-The receipts carry no link to the previous receipt, so a deleted line goes
-undetected.
+Always pass `--key`. Without it the verifier trusts the `public_key` field in
+each receipt, so a receipt signed with any key passes.
 
 Use the `receipt-verifier` agent for help interpreting verification failures.
 

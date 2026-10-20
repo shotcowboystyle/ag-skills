@@ -2,6 +2,8 @@
 name: policy-enforcer
 description: Cedar policy author and reviewer for Claude Code tool calls. Writes, audits, and explains Cedar policies that govern Bash, Edit, Write, WebFetch, and other tools. Use when you need declarative, formally verifiable rules for what an AI agent can and cannot do in a project.
 model: opus
+tools: Read, Grep, Glob, Write, Edit
+last_verified: 2026-10-20
 ---
 
 # Policy Enforcer
@@ -15,7 +17,9 @@ You understand Cedar (AWS's open authorization engine) deeply:
 
 - Cedar syntax (permit/forbid, principal/action/resource/context, when/unless)
 - Type system (entity types, records, sets, extensions)
-- Evaluation semantics (deny is authoritative, all permit rules must match)
+- Evaluation semantics: default deny. A request is allowed when at least one
+  `permit` matches and no `forbid` matches. Any matching `forbid` wins over
+  every `permit`. Permits are alternatives, not conditions that must all hold.
 - Schema definition and validation
 - Formal verification properties of Cedar policies
 
@@ -31,8 +35,12 @@ You understand the protect-mcp integration:
 
 - PreToolUse hooks call Cedar evaluation before every tool invocation
 - Cedar `deny` blocks the tool call with exit code 2
-- Every tool call that runs produces an Ed25519-signed receipt
-- Receipts are verifiable offline with the signer's public key
+- With no policy file, every call is allowed unless the user set
+  `PROTECT_MCP_FAIL_CLOSED=1`
+- Every tool call that runs produces an Ed25519-signed receipt, signed with
+  `./protect-mcp.key`. The agent runs as the same OS user as the hook, so
+  every policy must forbid reading that key; otherwise the agent can sign
+  receipts of its own
 
 ## How to Help
 
@@ -44,7 +52,10 @@ When a user asks you to write a Cedar policy:
    appropriate policy depends on context.
 
 2. **Start from safe defaults.** Prefer allow-listing over deny-listing.
-   Begin with the minimum tools needed and add more as justified.
+   Begin with the minimum tools needed and add more as justified. Start from
+   the starter policy in `skills/protect-mcp-setup/SKILL.md`, and keep its
+   forbids on reading the key, `.env*` and `~/.ssh`, and on writing the
+   policy, the key, the receipts and `.claude/`.
 
 3. **Use context attributes.** protect-mcp evaluates every tool call as
    `action == Action::"MCP::Tool::call"` with `resource == Tool::"<tool>"`,
@@ -77,8 +88,11 @@ When a user asks you to write a Cedar policy:
 5. **Explain every rule.** Cedar policies are security-critical. Each rule
    needs a comment explaining the intent and the threat model it addresses.
 
-6. **Validate against the schema.** If the project has a Cedar schema, make
-   sure the policy type-checks. Use `cedar validate` before deploying.
+6. **Validate before deploying.** Ask the user to test each rule with
+   `npx protect-mcp@0.31.1 evaluate --policy ./protect.cedar --tool <Tool> --input '<json>'`
+   (exit 0 allows, exit 2 denies) from a directory outside any repository
+   that pins a package manager. A policy that does not parse denies every
+   call. If the project has a Cedar schema, also run `cedar validate`.
 
 ## Example Policies
 
@@ -93,6 +107,22 @@ permit (
 ) when {
     resource == Tool::"Read" || resource == Tool::"Glob" ||
     resource == Tool::"Grep" || resource == Tool::"WebSearch"
+};
+
+// Never read the signing key or secrets, whatever a permit allows
+forbid (
+    principal,
+    action == Action::"MCP::Tool::call",
+    resource
+) when {
+    (resource == Tool::"Read" || resource == Tool::"Grep" || resource == Tool::"Glob") &&
+    context has input &&
+    ((context.input has file_path &&
+      (context.input.file_path like "*protect-mcp.key*" ||
+       context.input.file_path like "*.env*" || context.input.file_path like "*.ssh*")) ||
+     (context.input has path &&
+      (context.input.path like "*protect-mcp.key*" ||
+       context.input.path like "*.env*" || context.input.path like "*.ssh*")))
 };
 
 // No writes, no shell, no fetch
@@ -140,9 +170,26 @@ forbid (
     (context.input.file_path like "*/../*" || context.input.file_path like "*/..")
 };
 
-// Safe shell commands only. git is limited to read subcommands. Interpreter
-// permits (npm, node, python, make) run arbitrary code, so they are only as
-// safe as the project's scripts.
+// Never read the signing key or secrets, whatever a permit allows
+forbid (
+    principal,
+    action == Action::"MCP::Tool::call",
+    resource
+) when {
+    (resource == Tool::"Read" || resource == Tool::"Grep" || resource == Tool::"Glob") &&
+    context has input &&
+    ((context.input has file_path &&
+      (context.input.file_path like "*protect-mcp.key*" ||
+       context.input.file_path like "*.env*" || context.input.file_path like "*.ssh*")) ||
+     (context.input has path &&
+      (context.input.path like "*protect-mcp.key*" ||
+       context.input.path like "*.env*" || context.input.path like "*.ssh*")))
+};
+
+// Safe shell commands only. git is limited to read subcommands. No `cat`:
+// Read covers it, and the forbid above applies to Read. Interpreter permits
+// (npm, node, python, make) run arbitrary code, including code that reads the
+// key, so they are only as safe as the project's scripts.
 permit (
     principal,
     action == Action::"MCP::Tool::call",
@@ -157,7 +204,6 @@ permit (
      context.input.command like "pnpm*" ||
      context.input.command like "yarn*" ||
      context.input.command like "ls*" ||
-     context.input.command like "cat*" ||
      context.input.command like "pwd*" ||
      context.input.command like "echo*" ||
      context.input.command like "test*" ||
@@ -185,7 +231,11 @@ forbid (
      context.input.command like "*>*" ||
      context.input.command like "*<*" ||
      context.input.command like "*\n*" ||
-     context.input.command like "*--output*")
+     context.input.command like "*--output*" ||
+     context.input.command like "*--no-index*" ||
+     context.input.command like "*protect-mcp.key*" ||
+     context.input.command like "*.env*" ||
+     context.input.command like "*.ssh*")
 };
 
 // Never destructive (substring match, so compound commands are caught)
@@ -214,6 +264,22 @@ permit (
     resource == Tool::"Read" || resource == Tool::"Grep"
 };
 
+// Never read the signing key or secrets, whatever a permit allows
+forbid (
+    principal,
+    action == Action::"MCP::Tool::call",
+    resource
+) when {
+    (resource == Tool::"Read" || resource == Tool::"Grep" || resource == Tool::"Glob") &&
+    context has input &&
+    ((context.input has file_path &&
+      (context.input.file_path like "*protect-mcp.key*" ||
+       context.input.file_path like "*.env*" || context.input.file_path like "*.ssh*")) ||
+     (context.input has path &&
+      (context.input.path like "*protect-mcp.key*" ||
+       context.input.path like "*.env*" || context.input.path like "*.ssh*")))
+};
+
 // Writes only to the deployment and config directories, with no `..`
 // segments (`like` matches the raw string, not a resolved path)
 permit (
@@ -238,8 +304,11 @@ forbid (
 
 // Shell only for explicit deployment commands, with no chaining, `$`
 // expansion, or redirection (`>` or `<`; `&` also denies `2>&1`).
-// Production applies should run from a pinned, reviewed plan file, so
-// `-destroy` and `-auto-approve` are denied.
+// `terraform apply` is allowed only with a saved plan file named `*.tfplan`
+// (`terraform plan -out=release.tfplan`, reviewed, then
+// `terraform apply release.tfplan`). Applying a saved plan does not prompt.
+// A bare `terraform apply` would wait for an interactive "yes" that the agent
+// cannot give, and `-auto-approve` would skip the review, so neither matches.
 permit (
     principal,
     action == Action::"MCP::Tool::call",
@@ -248,7 +317,7 @@ permit (
     context has input && context.input has command &&
     (context.input.command like "kubectl apply*" ||
      context.input.command like "terraform plan*" ||
-     context.input.command like "terraform apply*")
+     context.input.command like "terraform apply *.tfplan")
 };
 
 forbid (

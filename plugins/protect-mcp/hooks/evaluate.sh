@@ -8,7 +8,11 @@ set -uo pipefail
 
 POLICY="${PROTECT_MCP_POLICY:-./protect.cedar}"
 if [ ! -f "$POLICY" ]; then
-  echo "protect-mcp: no policy file at $POLICY, so every tool call is allowed. Create it or set PROTECT_MCP_POLICY to enforce." >&2
+  if [ "${PROTECT_MCP_FAIL_CLOSED:-0}" = 1 ]; then
+    echo "protect-mcp: no policy file at $POLICY, denying (PROTECT_MCP_FAIL_CLOSED=1)." >&2
+    exit 2
+  fi
+  echo "protect-mcp: no policy file at $POLICY, so every tool call is allowed. Create it, or set PROTECT_MCP_FAIL_CLOSED=1 to deny instead." >&2
   exit 0
 fi
 

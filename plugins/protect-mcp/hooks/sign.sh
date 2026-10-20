@@ -1,20 +1,12 @@
 #!/usr/bin/env bash
 # PostToolUse hook for protect-mcp.
 #
-# Reads the tool name from the stdin payload and appends a signed receipt.
-# protect-mcp 0.7.4's sign command records only the tool name, so the input and
-# output are not passed. PostToolUse hooks never block the tool call.
+# Passes the stdin payload to protect-mcp, which signs a receipt holding the
+# tool name and a SHA-256 of the tool input, linked to the previous receipt by
+# hash, and appends it to receipts.jsonl. PostToolUse hooks never block the
+# tool call.
 set -uo pipefail
 
-tool=$(node -e '
-let s = "";
-process.stdin.on("data", d => { s += d; }).on("end", () => {
-  let j = {};
-  try { j = JSON.parse(s); } catch {}
-  process.stdout.write(j.tool_name || "");
-});
-')
-
-exec npx protect-mcp@0.7.4 sign --tool "${tool:-unknown}" \
+exec npx protect-mcp@0.31.1 sign \
   --receipts "${PROTECT_MCP_RECEIPTS:-./receipts/}" \
   --key "${PROTECT_MCP_KEY:-./protect-mcp.key}"
