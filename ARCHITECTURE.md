@@ -4,7 +4,7 @@ Top-level architectural map for agents, skills, and commands shared across seven
 
 ## Invariants
 
-1. **Single source of truth.** All agent / skill / command authoring happens under `plugins/<name>/`. Generated harness-specific artifacts (`.codex/skills/`, `.codex/agents/`, `.opencode/`, `.copilot/`, `.antigravity/`, `.pi/`) are produced by adapters and gitignored. The exception: small native-install registries (`.agents/plugins/marketplace.json`, `plugins/*/.codex-plugin/plugin.json`, `.cursor-plugin/`, `.cursor/rules/`) are committed — they only point at the source `plugins/`, so the invariant holds. Never hand-edit generated files.
+1. **Single source of truth.** All agent / skill / command authoring happens under `plugins/<name>/`. Generated harness-specific artifacts (`.codex/skills/`, `.codex/agents/`, `.opencode/`, `.copilot/`, `.antigravity/`, `.pi/`) are produced by adapters and gitignored. The exception: small native-install registries (`.agents/plugins/marketplace.json`, `plugins/*/.codex-plugin/plugin.json`, `.cursor-plugin/`, `.cursor/rules/`) are committed — they only point at the source `plugins/`, so the invariant holds. Shared agents are the other exception: one source in `shared/agents/<stem>.md` is copied into `plugins/<p>/agents/<stem>.md` for each plugin it lists, and the copies are committed so Claude Code, which reads `plugins/` directly, sees them. Never hand-edit generated files.
 
 2. **One canonical context file.** `AGENTS.md` at repo root is the only context file authored directly. Claude Code reads `CLAUDE.md`, a symlink to `AGENTS.md`. Codex, Cursor, OpenCode, Antigravity CLI (`agy`), GitHub Copilot, and Pi read `AGENTS.md` natively.
 
