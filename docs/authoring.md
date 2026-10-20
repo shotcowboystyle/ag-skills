@@ -255,6 +255,33 @@ command `subagent_type` references to match.
 CI runs `tools/check_agent_name_collisions.py --fail-on-duplicates` to keep the source
 tree collision-free.
 
+### Share one agent across plugins
+
+When the same agent ships in several plugins, keep one source in `shared/agents/<stem>.md`
+instead of copying it. Leave out `name:` and list the plugins in `plugins:`:
+
+```yaml
+---
+plugins: [agent-orchestration, context-management]
+description: Elite AI context engineering specialist...
+model: inherit
+---
+```
+
+`make generate-all` (and `make generate`) runs `tools/shared_agents.py`, which writes
+`plugins/<plugin>/agents/<stem>.md` for each listed plugin with
+`name: <plugin>-<stem>` and a comment pointing back at the source. Commit those copies:
+Claude Code reads `plugins/` directly, and every other harness generates from them.
+
+- **Edit** the shared source, never a copy, then run `make generate-all`.
+- **Add a plugin** by appending it to `plugins:`. **Drop one** by removing it; the next run
+  deletes that copy.
+- **Move an existing duplicate** by deleting the per-plugin copies first. The script
+  refuses to overwrite an agent file it did not write.
+
+CI fails when a copy drifts from its source: `make test` runs
+`tools/shared_agents.py --check`, and the generate job fails on any uncommitted diff.
+
 ### Treat `$ARGUMENTS` as data
 
 Claude Code substitutes `$ARGUMENTS` textually wherever it appears in a command, and commands

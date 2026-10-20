@@ -20,7 +20,7 @@ UV_TOOLS := uv run $(EVAL_PROJECT) python
 # ruff and ty config lives. ty skips tools/yt-design-extractor/ because that tool
 # imports optional OCR dependencies installed only by `make install-ocr`.
 RUFF_PATHS := ../../tools/ src/plugin_eval/
-TY_PATHS := ../../tools/adapters/ ../../tools/generate.py ../../tools/validate_generated.py ../../tools/doc_gardener.py ../../tools/install_opencode.py ../../tools/install_copilot.py ../../tools/install_antigravity.py ../../tools/install_pi.py ../../tools/check_agent_name_collisions.py ../../tools/tests/ src/plugin_eval/
+TY_PATHS := ../../tools/adapters/ ../../tools/generate.py ../../tools/validate_generated.py ../../tools/doc_gardener.py ../../tools/install_opencode.py ../../tools/install_copilot.py ../../tools/install_antigravity.py ../../tools/install_pi.py ../../tools/check_agent_name_collisions.py ../../tools/shared_agents.py ../../tools/tests/ src/plugin_eval/
 
 .PHONY: help install install-ocr install-easyocr deps check run run-full run-ocr run-transcript clean generate generate-all clean-generated install-opencode uninstall-opencode install-copilot uninstall-copilot install-antigravity uninstall-antigravity install-pi uninstall-pi validate garden lint format test smoke-test eval-snapshot
 
@@ -179,6 +179,7 @@ ifndef HARNESS
 	@echo "  make generate HARNESS=codex PLUGIN=python-development   # one plugin"
 	@exit 1
 endif
+	$(UV_TOOLS) tools/shared_agents.py
 ifdef PLUGIN
 	$(UV_TOOLS) $(GENERATE) --harness '$(HARNESS)' --plugin '$(PLUGIN)'
 else
@@ -186,6 +187,7 @@ else
 endif
 
 generate-all:
+	$(UV_TOOLS) tools/shared_agents.py
 	@for h in $(HARNESSES); do \
 		echo "--- $$h ---"; \
 		$(UV_TOOLS) $(GENERATE) --harness $$h --all --prune || exit 1; \

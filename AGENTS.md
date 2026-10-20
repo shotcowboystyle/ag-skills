@@ -53,7 +53,7 @@ make generate HARNESS=pi           # .pi/{skills,prompts,agents}/
 make generate-all                  # every harness
 ```
 
-Small native-install registries are committed for tools that support that route. See the installation commands in [docs/harnesses.md](docs/harnesses.md). The transformed skill and agent trees under `.codex/`, `.opencode/`, `.copilot/`, `.antigravity/` and `.pi/` stay gitignored and are rebuilt locally. Under `.pi/` the generator owns only `skills/`, `prompts/` and `agents/`, because Pi reads its own project config from the same directory. Run `make generate-all` before committing source changes. It also prunes artifacts whose source was removed, and CI fails on drift. Source files live only under `plugins/`. Never hand-edit generated files.
+Small native-install registries are committed for tools that support that route. See the installation commands in [docs/harnesses.md](docs/harnesses.md). The transformed skill and agent trees under `.codex/`, `.opencode/`, `.copilot/`, `.antigravity/` and `.pi/` stay gitignored and are rebuilt locally. Under `.pi/` the generator owns only `skills/`, `prompts/` and `agents/`, because Pi reads its own project config from the same directory. Run `make generate-all` before committing source changes. It also prunes artifacts whose source was removed, and CI fails on drift. Source files live only under `plugins/`, plus shared agents under `shared/agents/` that `make generate-all` copies into each listing plugin (see [docs/authoring.md](docs/authoring.md#share-one-agent-across-plugins)). Never hand-edit generated files.
 
 ## Skills (cross-harness)
 
