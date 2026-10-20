@@ -47,7 +47,7 @@ Add or merge the following PreToolUse hook configuration:
         "hooks": [
           {
             "type": "command",
-            "command": "if grep -qE '\"command\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*(--no-(ver|g)|commit([^\"\\\\]|\\\\.)*([[:space:]]|\\\\[tn])-[a-zA-Z]*n)'; then echo 'BLOCKED: --no-verify and --no-gpg-sign flags are not allowed. Run the commit without bypass flags so that pre-commit hooks execute properly.' >&2; exit 2; fi"
+            "command": "if grep -qE '\"command\"[[:space:]]*:[[:space:]]*\"(([^\"\\\\]|\\\\.)*([[:space:]/(;&|]|\\\\[tn]))?git([[:space:]]|\\\\t)(([^\"\\\\;&|]|\\\\[^n])*([[:space:]]|\\\\t))?((commit|push|merge|rebase|pull|am|cherry-pick|revert)([[:space:]]|\\\\t)(([^\"\\\\;&|]|\\\\[^n])*([[:space:]]|\\\\t))?--no-(ver(i[a-z]*)?|g[a-z-]*)([[:space:]=;&|)\"]|\\\\)|commit([[:space:]]|\\\\t)(([^\"\\\\;&|]|\\\\[^n])*([[:space:]]|\\\\t))?-[a-zA-Z]*n)'; then echo 'BLOCKED: --no-verify and --no-gpg-sign flags are not allowed. Run the commit without bypass flags so that pre-commit hooks execute properly.' >&2; exit 2; fi"
           }
         ]
       }
@@ -57,7 +57,10 @@ Add or merge the following PreToolUse hook configuration:
 ```
 
 If a settings file already exists:
+- Back it up first: `cp <file> <file>.bak.$(date +%Y%m%d%H%M%S)`
+- Never rewrite the file from scratch; parse it, change it, and write it back
 - Preserve all existing configuration
+- Replace an earlier block-no-verify hook (its command contains `BLOCKED: --no-verify`) instead of adding a second one
 - Merge the new hook into the existing `hooks.PreToolUse` array
 - Do not overwrite existing hooks
 
