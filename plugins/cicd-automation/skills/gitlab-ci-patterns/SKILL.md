@@ -1,54 +1,50 @@
 ---
 name: gitlab-ci-patterns
 description: Build GitLab CI/CD pipelines with multi-stage workflows, caching, and distributed runners for scalable automation. Use when implementing GitLab CI/CD, optimizing pipeline performance, or setting up automated testing and deployment.
+last_verified: 2026-10-20
 ---
 
 # GitLab CI Patterns
 
-Comprehensive GitLab CI/CD pipeline patterns for automated testing, building, and deployment.
+Pipeline patterns for building, testing, scanning and deploying with GitLab CI/CD.
 
-## Purpose
+## Rules that keep examples runnable
 
-Create efficient GitLab CI pipelines with proper stage organization, caching, and deployment strategies.
+1. **Use `rules:`**, not `only:`/`except:` (deprecated, and they can't be mixed with `rules:`).
+2. **Override tool-image entrypoints.** `hashicorp/terraform`, `aquasec/trivy` and
+   similar images set `ENTRYPOINT` to the tool, so the runner's shell script fails. Add
+   `entrypoint: [""]`.
+3. **Keep `before_script` inside a template.** A top-level `before_script` runs in every
+   job, including ones that use a different image.
+4. **Secrets never reach the command line.** Use `--password-stdin`, masked and protected
+   variables, and `id_tokens` (JWT) for Vault or cloud auth. Cluster access goes through
+   the GitLab agent for Kubernetes, not a stored token.
+5. **Scans that must block don't set `allow_failure: true`.**
+6. Confirm with the user before adding jobs that deploy or run `terraform apply`.
 
-## When to Use
-
-- Automate GitLab-based CI/CD
-- Implement multi-stage pipelines
-- Configure GitLab Runners
-- Deploy to Kubernetes from GitLab
-- Implement GitOps workflows
-
-## Basic Pipeline Structure
+## Basic pipeline
 
 ```yaml
-stages:
-  - build
-  - test
-  - deploy
-
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: "/certs"
+stages: [build, test, deploy]
 
 build:
   stage: build
-  image: node:20
+  image: node:24
   script:
     - npm ci
     - npm run build
-  artifacts:
-    paths:
-      - dist/
-    expire_in: 1 hour
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
+    key: { files: [package-lock.json] }
+    paths: [.npm/]
+  variables:
+    npm_config_cache: .npm
+  artifacts:
+    paths: [dist/]
+    expire_in: 1 hour
 
 test:
   stage: test
-  image: node:20
+  image: node:24
   script:
     - npm ci
     - npm run lint
@@ -62,176 +58,164 @@ test:
 
 deploy:
   stage: deploy
-  image: bitnami/kubectl:1.31
+  image:
+    name: alpine/k8s:1.37.1 # bitnami/kubectl left the free catalog
+    entrypoint: [""]
   script:
+    - kubectl config use-context my-group/my-agent-project:production
     - kubectl apply -f k8s/
-    - kubectl rollout status deployment/my-app
-  only:
-    - main
+    - kubectl rollout status deployment/my-app --timeout=5m
   environment:
     name: production
     url: https://app.example.com
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 ```
 
-## Docker Build and Push
+`kubectl config use-context <agent-project-path>:<agent-name>` works once a GitLab agent
+for Kubernetes is installed in the cluster and authorizes this project. The runner gets
+a short-lived kubeconfig; no cluster token is stored in CI variables.
+
+## Docker build and push
 
 ```yaml
-build-docker:
+build-image:
   stage: build
-  image: docker:24
-  services:
-    - docker:24-dind
+  image: docker:29
+  services: [docker:29-dind]
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
   before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - printf '%s' "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
   script:
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
-    - docker build -t $CI_REGISTRY_IMAGE:latest .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-    - docker push $CI_REGISTRY_IMAGE:latest
-  only:
-    - main
-    - tags
+    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
 ```
 
-## Multi-Environment Deployment
-
-Set `KUBE_CA_CERT_FILE` as a GitLab file variable containing the cluster CA certificate,
-and provide `KUBE_TOKEN` through a protected, masked CI variable. The file variable
-contains a path that kubectl uses to verify the API server certificate. Protect both
-`develop` and `main` so the deployment jobs can read the protected token.
+## Multi-environment deployment
 
 ```yaml
-.deploy_template: &deploy_template
-  image: bitnami/kubectl:1.31
+.deploy:
+  stage: deploy
+  image:
+    name: alpine/k8s:1.37.1
+    entrypoint: [""]
   before_script:
-    - kubectl config set-cluster k8s --server="$KUBE_URL" --certificate-authority="$KUBE_CA_CERT_FILE" --embed-certs=true
-    - kubectl config set-credentials admin --token="$KUBE_TOKEN"
-    - kubectl config set-context default --cluster=k8s --user=admin
-    - kubectl config use-context default
+    - kubectl config use-context "my-group/my-agent-project:$KUBE_AGENT"
+  script:
+    - kubectl apply -f k8s/ -n "$CI_ENVIRONMENT_NAME"
+    - kubectl rollout status deployment/my-app -n "$CI_ENVIRONMENT_NAME" --timeout=5m
 
 deploy:staging:
-  <<: *deploy_template
-  stage: deploy
-  script:
-    - kubectl apply -f k8s/ -n staging
-    - kubectl rollout status deployment/my-app -n staging
-  environment:
-    name: staging
-    url: https://staging.example.com
-  only:
-    - develop
+  extends: .deploy
+  variables: { KUBE_AGENT: staging }
+  environment: { name: staging, url: https://staging.example.com }
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
 
 deploy:production:
-  <<: *deploy_template
-  stage: deploy
-  script:
-    - kubectl apply -f k8s/ -n production
-    - kubectl rollout status deployment/my-app -n production
-  environment:
-    name: production
-    url: https://app.example.com
-  when: manual
-  only:
-    - main
+  extends: .deploy
+  variables: { KUBE_AGENT: production }
+  environment: { name: production, url: https://app.example.com }
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
 ```
 
-## Terraform Pipeline
+Mark `production` as a protected environment so only allowed users can run the job.
+
+## Terraform pipeline
 
 ```yaml
-stages:
-  - validate
-  - plan
-  - apply
+stages: [validate, plan, apply]
 
 variables:
   TF_ROOT: ${CI_PROJECT_DIR}/terraform
-  TF_VERSION: "1.6.0"
 
-before_script:
-  - cd ${TF_ROOT}
-  - terraform --version
+.terraform:
+  image:
+    name: hashicorp/terraform:1.16
+    entrypoint: [""]
+  before_script:
+    - cd "$TF_ROOT"
+    - terraform init -input=false
 
 validate:
+  extends: .terraform
   stage: validate
-  image: hashicorp/terraform:${TF_VERSION}
+  before_script:
+    - cd "$TF_ROOT"
+    - terraform init -backend=false -input=false
   script:
-    - terraform init -backend=false
-    - terraform validate
     - terraform fmt -check
+    - terraform validate
 
 plan:
+  extends: .terraform
   stage: plan
-  image: hashicorp/terraform:${TF_VERSION}
   script:
-    - terraform init
-    - terraform plan -out=tfplan
+    - terraform plan -input=false -out=tfplan
   artifacts:
-    paths:
-      - ${TF_ROOT}/tfplan
+    paths: [terraform/tfplan]
+    access: developer # the plan file can hold sensitive values
     expire_in: 1 day
 
 apply:
+  extends: .terraform
   stage: apply
-  image: hashicorp/terraform:${TF_VERSION}
+  needs: [plan]
   script:
-    - terraform init
-    - terraform apply -auto-approve tfplan
-  dependencies:
-    - plan
-  when: manual
-  only:
-    - main
+    - terraform apply -input=false tfplan
+  environment: { name: production }
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
 ```
 
-## Security Scanning
+## Security scanning (blocking)
 
 ```yaml
 include:
-  - template: Security/SAST.gitlab-ci.yml
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
-  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
 
-trivy-scan:
+trivy-image:
   stage: test
-  image: aquasec/trivy:0.58.0
+  needs: [build-image]
+  image:
+    name: aquasec/trivy:0.76.0
+    entrypoint: [""]
+  variables:
+    TRIVY_USERNAME: $CI_REGISTRY_USER
+    TRIVY_PASSWORD: $CI_REGISTRY_PASSWORD
   script:
-    - trivy image --exit-code 1 --severity HIGH,CRITICAL $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-  allow_failure: true
+    - trivy image --exit-code 1 --severity HIGH,CRITICAL "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
 ```
 
-## Caching Strategies
+`--exit-code 1` fails the job on a finding; adding `allow_failure: true` would turn that
+back into a warning. For TruffleHog, see `secrets-management`.
+
+## Caching
 
 ```yaml
-# Cache node_modules
 build:
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
-    policy: pull-push
+    - key: { files: [package-lock.json] } # changes only when deps change
+      paths: [.npm/]
+      policy: pull-push
 
-# Global cache
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - .cache/
-    - vendor/
-
-# Separate cache per job
-job1:
+lint:
   cache:
-    key: job1-cache
-    paths:
-      - build/
-
-job2:
-  cache:
-    key: job2-cache
-    paths:
-      - dist/
+    - key: { files: [package-lock.json] }
+      paths: [.npm/]
+      policy: pull # read-only; don't re-upload
 ```
 
-## Dynamic Child Pipelines
+## Dynamic child pipelines
 
 ```yaml
 generate-pipeline:
@@ -239,8 +223,7 @@ generate-pipeline:
   script:
     - python generate_pipeline.py > child-pipeline.yml
   artifacts:
-    paths:
-      - child-pipeline.yml
+    paths: [child-pipeline.yml]
 
 trigger-child:
   stage: deploy
@@ -250,20 +233,6 @@ trigger-child:
         job: generate-pipeline
     strategy: depend
 ```
-
-
-## Best Practices
-
-1. **Use specific image tags** (node:20, not node:latest)
-2. **Cache dependencies** appropriately
-3. **Use artifacts** for build outputs
-4. **Implement manual gates** for production
-5. **Use environments** for deployment tracking
-6. **Enable merge request pipelines**
-7. **Use pipeline schedules** for recurring jobs
-8. **Implement security scanning**
-9. **Use CI/CD variables** for secrets
-10. **Monitor pipeline performance**
 
 ## Related Skills
 

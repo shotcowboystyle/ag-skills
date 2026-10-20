@@ -1,82 +1,76 @@
 ---
 name: github-actions-templates
 description: Create production-ready GitHub Actions workflows for automated testing, building, and deploying applications. Use when setting up CI/CD with GitHub Actions, automating development workflows, or creating reusable workflow templates.
+last_verified: 2026-10-20
 ---
 
 # GitHub Actions Templates
 
-Production-ready GitHub Actions workflow patterns for testing, building, and deploying applications.
+Workflow patterns for testing, building, scanning and deploying.
 
-## Purpose
+## Baseline for every workflow
 
-Create efficient, secure GitHub Actions workflows for continuous integration and deployment across various tech stacks.
+1. **`permissions: contents: read` at the top**, then grant more per job.
+2. **Pin actions to a full commit SHA** with the version in a comment. Tags can be moved:
+   in March 2026 an attacker force-pushed 76 `trivy-action` tags to malware
+   (GHSA-69fq-xp46-6x23). Let Dependabot or Renovate bump the SHAs.
+3. **Cloud auth uses OIDC** (`id-token: write` + a role), never stored access keys.
+4. **Production deploys run in an `environment:`** with required reviewers and branch rules.
+5. **Supported runtimes only**: Node 22/24, Python 3.12+. Check
+   [endoflife.date](https://endoflife.date) before adding a version.
+6. Confirm with the user before adding a workflow that deploys or pushes.
 
-## When to Use
+Resolve a SHA: `gh api repos/OWNER/REPO/commits/TAG --jq .sha`.
 
-- Automate testing and deployment
-- Build Docker images and push to registries
-- Deploy to Kubernetes clusters
-- Run security scans
-- Implement matrix builds for multiple environments
-
-## Common Workflow Patterns
-
-### Pattern 1: Test Workflow
+## Test
 
 ```yaml
 name: Test
-
 on:
-  push:
-    branches: [main, develop]
+  push: { branches: [main] }
   pull_request:
-    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      id-token: write # Codecov OIDC upload, no token secret
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
-
+        node-version: [22, 24]
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run linter
-        run: npm run lint
-
-      - name: Run tests
-        run: npm test
-
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           files: ./coverage/lcov.info
+          use_oidc: true
 ```
 
-### Pattern 2: Build and Push Docker Image
+Python matrix: `python-version: ["3.12", "3.13", "3.14"]` with
+`actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0`.
+
+## Build and push an image
 
 ```yaml
-name: Build and Push
-
+name: Build
 on:
   push:
     branches: [main]
     tags: ["v*"]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -84,32 +78,24 @@ jobs:
     permissions:
       contents: read
       packages: write
-
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Log in to Container Registry
-        uses: docker/login-action@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
+      - id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ghcr.io/${{ github.repository }}
           tags: |
             type=ref,event=branch
-            type=ref,event=pr
             type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-
-      - name: Build and push
-        uses: docker/build-push-action@v5
+            type=sha
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
-          context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -117,203 +103,113 @@ jobs:
           cache-to: type=gha,mode=max
 ```
 
-### Pattern 3: Deploy to Kubernetes
+## Deploy to EKS (OIDC + environment)
 
 ```yaml
-name: Deploy to Kubernetes
-
+name: Deploy
 on:
-  push:
-    branches: [main]
+  push: { branches: [main] }
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+permissions:
+  contents: read
 
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2
-
-      - name: Update kubeconfig
-        run: |
-          aws eks update-kubeconfig --name production-cluster --region us-west-2
-
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f k8s/
-          kubectl rollout status deployment/my-app -n production
-          kubectl get services -n production
-
-      - name: Verify deployment
-        run: |
-          kubectl get pods -n production
-          kubectl describe deployment my-app -n production
-```
-
-### Pattern 4: Matrix Build
-
-```yaml
-name: Matrix Build
-
-on: [push, pull_request]
-
-jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run tests
-        run: pytest
-```
-
-## Workflow Best Practices
-
-1. **Use specific action versions** (@v4, not @latest)
-2. **Cache dependencies** to speed up builds
-3. **Use secrets** for sensitive data
-4. **Implement status checks** on PRs
-5. **Use matrix builds** for multi-version testing
-6. **Set appropriate permissions**
-7. **Use reusable workflows** for common patterns
-8. **Implement approval gates** for production
-9. **Add notification steps** for failures
-10. **Use self-hosted runners** for sensitive workloads
-
-## Reusable Workflows
-
-```yaml
-# .github/workflows/reusable-test.yml
-name: Reusable Test Workflow
-
-on:
-  workflow_call:
-    inputs:
-      node-version:
-        required: true
-        type: string
-    secrets:
-      NPM_TOKEN:
-        required: true
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ inputs.node-version }}
-      - run: npm ci
-      - run: npm test
-```
-
-**Use reusable workflow:**
-
-```yaml
-jobs:
-  call-test:
-    uses: ./.github/workflows/reusable-test.yml
-    with:
-      node-version: "20.x"
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-```
-
-## Security Scanning
-
-```yaml
-name: Security Scan
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  security:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: "fs"
-          scan-ref: "."
-          format: "sarif"
-          output: "trivy-results.sarif"
-
-      - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: "trivy-results.sarif"
-
-      - name: Run Snyk Security Scan
-        uses: snyk/actions/node@0.4.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-```
-
-## Deployment with Approvals
-
-```yaml
-name: Deploy to Production
-
-on:
-  push:
-    tags: ["v*"]
+concurrency: { group: deploy-production, cancel-in-progress: false }
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment:
-      name: production
+      name: production # required reviewers + allowed branches set in repo settings
       url: https://app.example.com
-
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy application
-        run: |
-          echo "Deploying to production..."
-          # Deployment commands here
-
-      - name: Notify Slack
-        if: success()
-        uses: slackapi/slack-github-action@v1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
-          payload: |
-            {
-              "text": "Deployment to production completed successfully!"
-            }
+          role-to-assume: arn:aws:iam::123456789012:role/gha-deploy-prod
+          aws-region: us-west-2
+      - run: aws eks update-kubeconfig --name production-cluster --region us-west-2
+      - run: |
+          kubectl apply -f k8s/
+          kubectl rollout status deployment/my-app -n production --timeout=5m
 ```
 
+Pin the role's trust policy `sub` to `repo:my-org/my-repo:environment:production`, so
+only this environment can assume it.
+
+## Reusable workflow
+
+```yaml
+# .github/workflows/reusable-test.yml
+on:
+  workflow_call:
+    inputs:
+      node-version: { required: true, type: string }
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with: { node-version: "${{ inputs.node-version }}" }
+      - run: npm ci && npm test
+```
+
+Caller: `uses: ./.github/workflows/reusable-test.yml` with `with: { node-version: "24" }`.
+Pass secrets by name, not `secrets: inherit`.
+
+## Security scanning (blocking)
+
+```yaml
+name: Security
+on:
+  push: { branches: [main] }
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          severity: HIGH,CRITICAL
+          exit-code: "1" # fail the job on a finding
+          format: sarif
+          output: trivy.sarif
+      - if: always() # upload even when the scan failed
+        uses: github/codeql-action/upload-sarif@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with: { sarif_file: trivy.sarif }
+```
+
+`snyk/actions/node@9adf32b1121593767fc3c057af55b55db032dc04 # v1.0.0` fails on any
+vulnerability by default (`args: --severity-threshold=high` to narrow). Secret scanning
+is in `secrets-management`.
+
+## Notify after deploy
+
+```yaml
+- if: success()
+  uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
+  with:
+    webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+    webhook-type: incoming-webhook
+    payload: |
+      text: "Deployed ${{ github.sha }} to production"
+```
 
 ## Related Skills
 
