@@ -1,7 +1,7 @@
 {
   "name": "protect-mcp",
-  "version": "0.1.5",
-  "description": "Cedar policy enforcement + Ed25519 signed receipts for every Claude Code tool call. First cryptographic governance plugin \u2014 receipts independently verifiable offline.",
+  "version": "0.2.0",
+  "description": "Cedar policy enforcement + Ed25519 signed, hash-chained receipts for every Claude Code tool call. Claude Code only: it runs in PreToolUse and PostToolUse hooks.",
   "author": {
     "name": "Tom Farley",
     "email": "tommy@scopeblind.com"

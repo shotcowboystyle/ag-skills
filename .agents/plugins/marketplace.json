@@ -497,7 +497,7 @@
     },
     {
       "name": "protect-mcp",
-      "description": "Cedar policy enforcement + Ed25519 signed receipts for every Claude Code tool call. First cryptographic governance plugin \u2014 receipts independently verifiable offline.",
+      "description": "Cedar policy enforcement + Ed25519 signed, hash-chained receipts for every Claude Code tool call. Claude Code only: it runs in PreToolUse and PostToolUse hooks.",
       "source": {
         "source": "local",
         "path": "./plugins/protect-mcp"

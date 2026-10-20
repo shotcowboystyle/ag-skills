@@ -1,80 +1,43 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://veritasacta.com/schemas/receipt-v2.json",
-  "title": "Veritas Acta Decision Receipt (v2 envelope)",
-  "description": "Expected shape of a protect-mcp@0.7.4 receipt. Mirrors draft-farley-acta-signed-receipts; the decision facts live in payload, signed as a unit.",
+  "$id": "https://veritasacta.com/schemas/receipt-protect-mcp-0.31.json",
+  "title": "protect-mcp decision receipt",
+  "description": "Expected shape of a protect-mcp@0.31.1 receipt. Mirrors draft-farley-acta-signed-receipts-03; the signature covers the JCS-canonical payload.",
   "type": "object",
-  "required": [
-    "v",
-    "type",
-    "algorithm",
-    "kid",
-    "issuer",
-    "issued_at",
-    "payload",
-    "signature"
-  ],
+  "required": ["payload", "signature"],
   "properties": {
-    "v": {
-      "type": "integer",
-      "const": 2
-    },
-    "type": {
-      "type": "string",
-      "enum": [
-        "decision_receipt",
-        "gateway_restraint"
-      ]
-    },
-    "algorithm": {
-      "type": "string",
-      "const": "ed25519"
-    },
-    "kid": {
-      "type": "string"
-    },
-    "issuer": {
-      "type": "string"
-    },
-    "issued_at": {
-      "type": "string",
-      "format": "date-time"
-    },
     "payload": {
       "type": "object",
-      "required": [
-        "tool",
-        "decision"
-      ],
+      "required": ["type", "tool_name", "decision", "request_id", "issued_at", "public_key", "spec"],
       "properties": {
-        "tool": {
-          "type": "string"
-        },
-        "decision": {
-          "type": "string",
-          "enum": [
-            "allow",
-            "deny"
-          ]
-        },
-        "reason_code": {
-          "type": "string"
-        },
-        "policy_digest": {
-          "type": "string"
-        },
-        "request_id": {
-          "type": "string"
-        },
-        "spec": {
-          "type": "string"
+        "type": { "type": "string", "const": "protectmcp:decision" },
+        "tool_name": { "type": "string" },
+        "decision": { "type": "string", "enum": ["allow", "deny"] },
+        "request_id": { "type": "string" },
+        "issued_at": { "type": "string", "format": "date-time" },
+        "public_key": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "spec": { "type": "string" },
+        "previousReceiptHash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "payload_digest": {
+          "type": "object",
+          "required": ["input_hash", "input_size", "canonical"],
+          "properties": {
+            "input_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "input_size": { "type": "integer" },
+            "canonical": { "type": "string", "const": "jcs" }
+          }
         }
       },
       "additionalProperties": true
     },
     "signature": {
-      "type": "string",
-      "minLength": 32
+      "type": "object",
+      "required": ["alg", "kid", "sig"],
+      "properties": {
+        "alg": { "type": "string", "const": "EdDSA" },
+        "kid": { "type": "string" },
+        "sig": { "type": "string", "pattern": "^[0-9a-f]{128}$" }
+      }
     }
   },
   "additionalProperties": true
