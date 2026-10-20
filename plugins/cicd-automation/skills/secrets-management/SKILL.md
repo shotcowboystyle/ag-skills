@@ -1,276 +1,183 @@
 ---
 name: secrets-management
 description: Implement secure secrets management for CI/CD pipelines using Vault, AWS Secrets Manager, or native platform solutions. Use when handling sensitive credentials, rotating secrets, or securing CI/CD environments.
+last_verified: 2026-10-20
 ---
 
 # Secrets Management
 
-Secure secrets management practices for CI/CD pipelines using Vault, AWS Secrets Manager, and other tools.
+Keep secrets out of Git, out of logs and out of long-lived CI credentials.
 
-## Purpose
+## Rules
 
-Implement secure secrets management in CI/CD pipelines without hardcoding sensitive information.
+1. **CI authenticates with OIDC/JWT**, never a stored Vault token or AWS access key.
+   The runner gets a short-lived identity token; the secret store trusts the issuer.
+2. **Never print a secret.** No `echo $SECRET`, no `set -x` around secret use. Pass it
+   to the process that needs it through the environment of that one step.
+3. **Scanners must block.** A scan that exits 0 on a finding is decoration.
+4. **Keep secrets out of IaC state.** Let the provider manage the value, or use
+   write-only arguments.
+5. **Scope per environment** and rotate. Confirm with the user before changing a
+   production secret, Vault policy or IAM trust policy.
 
-## When to Use
+## HashiCorp Vault
 
-- Store API keys and credentials
-- Manage database passwords
-- Handle TLS certificates
-- Rotate secrets automatically
-- Implement least-privilege access
-
-## Secrets Management Tools
-
-### HashiCorp Vault
-
-- Centralized secrets management
-- Dynamic secrets generation
-- Secret rotation
-- Audit logging
-- Fine-grained access control
-
-### AWS Secrets Manager
-
-- AWS-native solution
-- Automatic rotation
-- Integration with RDS
-- CloudFormation support
-
-### Azure Key Vault
-
-- Azure-native solution
-- HSM-backed keys
-- Certificate management
-- RBAC integration
-
-### Google Secret Manager
-
-- GCP-native solution
-- Versioning
-- IAM integration
-
-## HashiCorp Vault Integration
-
-### Setup Vault
+### Trust GitHub Actions OIDC
 
 ```bash
-# Start Vault dev server
-vault server -dev
+vault auth enable jwt
+vault write auth/jwt/config \
+  oidc_discovery_url="https://token.actions.githubusercontent.com" \
+  bound_issuer="https://token.actions.githubusercontent.com"
 
-# Set environment
-export VAULT_ADDR='http://127.0.0.1:8200'
-export VAULT_TOKEN='root'
-
-# Enable secrets engine
-vault secrets enable -path=secret kv-v2
-
-# Store secret
-vault kv put secret/database/config username=admin password=secret
+vault write auth/jwt/role/deploy-prod - <<'EOF'
+{
+  "role_type": "jwt",
+  "user_claim": "repository",
+  "bound_audiences": ["https://github.com/my-org"],
+  "bound_claims": { "repository": "my-org/my-repo", "environment": "production" },
+  "token_policies": ["deploy-prod"],
+  "token_ttl": "10m"
+}
+EOF
 ```
 
-### GitHub Actions with Vault
+For GitLab, use a second mount with `oidc_discovery_url="https://gitlab.com"` and bind
+`project_path` and `ref_protected: "true"`.
+
+### GitHub Actions
 
 ```yaml
-name: Deploy with Vault Secrets
-
-on: [push]
+permissions:
+  contents: read
+  id-token: write # mint the OIDC token
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: production
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Import Secrets from Vault
-        uses: hashicorp/vault-action@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: hashicorp/vault-action@892a26828f195e65540a40b4768ae4571f51ebfc # v4.0.0
         with:
-          url: https://vault.example.com:8200
-          token: ${{ secrets.VAULT_TOKEN }}
+          url: https://vault.example.com
+          method: jwt
+          role: deploy-prod
+          jwtGithubAudience: https://github.com/my-org
           secrets: |
-            secret/data/database username | DB_USERNAME ;
             secret/data/database password | DB_PASSWORD ;
             secret/data/api key | API_KEY
-
-      - name: Use secrets
-        run: |
-          echo "Connecting to database as $DB_USERNAME"
-          # Use $DB_PASSWORD, $API_KEY
+      - run: ./deploy.sh # reads $DB_PASSWORD and $API_KEY; the action masks them
 ```
 
-### GitLab CI with Vault
+### GitLab CI
 
 ```yaml
 deploy:
-  image: vault:1.17
-  before_script:
-    - export VAULT_ADDR=https://vault.example.com:8200
-    - export VAULT_TOKEN=$VAULT_TOKEN
-    - apk add curl jq
+  image:
+    name: hashicorp/vault:2.2
+    entrypoint: [""] # the image entrypoint runs `vault`, not the job script
+  id_tokens:
+    VAULT_ID_TOKEN:
+      aud: https://vault.example.com
+  variables:
+    VAULT_ADDR: https://vault.example.com
   script:
-    - |
-      DB_PASSWORD=$(vault kv get -field=password secret/database/config)
-      API_KEY=$(vault kv get -field=key secret/api/credentials)
-      echo "Deploying with secrets..."
-      # Use $DB_PASSWORD, $API_KEY
+    - export VAULT_TOKEN="$(vault write -field=token auth/jwt/login role=deploy-prod jwt="$VAULT_ID_TOKEN")"
+    - export DB_PASSWORD="$(vault kv get -mount=secret -field=password database/config)"
+    - ./deploy.sh
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 ```
+
+GitLab Premium can replace the script with the `secrets:` keyword plus `id_tokens`.
 
 ## AWS Secrets Manager
 
-### Store Secret
+### Store a secret
 
 ```bash
-aws secretsmanager create-secret \
-  --name production/database/password \
-  --secret-string "super-secret-password"
+# From a file, so the value never lands in shell history
+aws secretsmanager create-secret --name production/api-key \
+  --secret-string file://api-key.json
 ```
 
-### Retrieve in GitHub Actions
+### GitHub Actions (OIDC role)
 
 ```yaml
-- name: Configure AWS credentials
-  uses: aws-actions/configure-aws-credentials@v4
-  with:
-    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    aws-region: us-west-2
+permissions:
+  contents: read
+  id-token: write
 
-- name: Get secret from AWS
-  run: |
-    SECRET=$(aws secretsmanager get-secret-value \
-      --secret-id production/database/password \
-      --query SecretString \
-      --output text)
-    echo "::add-mask::$SECRET"
-    echo "DB_PASSWORD=$SECRET" >> $GITHUB_ENV
-
-- name: Use secret
-  run: |
-    # Use $DB_PASSWORD
-    ./deploy.sh
+steps:
+  - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+    with:
+      role-to-assume: arn:aws:iam::123456789012:role/gha-deploy-prod
+      aws-region: us-west-2
+  - name: Deploy
+    run: |
+      API_KEY="$(aws secretsmanager get-secret-value --secret-id production/api-key \
+        --query SecretString --output text)" ./deploy.sh
 ```
 
-### Terraform with AWS Secrets Manager
+The IAM role's trust policy must pin `token.actions.githubusercontent.com:sub` to the
+repo and environment (`repo:my-org/my-repo:environment:production`).
+
+### Terraform: keep the password out of state
 
 ```hcl
-data "aws_secretsmanager_secret_version" "db_password" {
-  secret_id = "production/database/password"
-}
-
 resource "aws_db_instance" "main" {
-  allocated_storage    = 100
-  engine              = "postgres"
-  instance_class      = "db.t3.large"
-  username            = "admin"
-  password            = jsondecode(data.aws_secretsmanager_secret_version.db_password.secret_string)["password"]
+  allocated_storage           = 100
+  engine                      = "postgres"
+  instance_class              = "db.t3.large"
+  username                    = "app_admin"
+  manage_master_user_password = true # RDS creates, stores and rotates it in Secrets Manager
 }
 ```
 
-## GitHub Secrets
+Reading `aws_secretsmanager_secret_version` into a resource argument writes the plaintext
+to state. For resources without a managed option, use a write-only argument such as
+`password_wo` (Terraform 1.11+).
 
-### Organization/Repository Secrets
+## Rotation
 
-```yaml
-- name: Use GitHub secret
-  env:
-    API_KEY: ${{ secrets.API_KEY }}
-    DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  run: |
-    # Secrets are injected as env vars — never print them to logs
-    ./deploy.sh
-```
-
-### Environment Secrets
-
-```yaml
-deploy:
-  runs-on: ubuntu-latest
-  environment: production
-  steps:
-    - name: Deploy
-      env:
-        PROD_API_KEY: ${{ secrets.PROD_API_KEY }}
-      run: |
-        # Secret injected as env var — never print to logs
-        ./deploy.sh
-```
-
-## GitLab CI/CD Variables
-
-### Project Variables
-
-```yaml
-deploy:
-  script:
-    - echo "Deploying with $API_KEY"
-    - echo "Database: $DATABASE_URL"
-```
-
-### Protected and Masked Variables
-
-- Protected: Only available in protected branches
-- Masked: Hidden in job logs
-- File type: Stored as file
-
-## Best Practices
-
-1. **Never commit secrets** to Git
-2. **Use different secrets** per environment
-3. **Rotate secrets regularly**
-4. **Implement least-privilege access**
-5. **Enable audit logging**
-6. **Use secret scanning** (GitGuardian, TruffleHog)
-7. **Mask secrets in logs**
-8. **Encrypt secrets at rest**
-9. **Use short-lived tokens** when possible
-10. **Document secret requirements**
-
-## Secret Rotation
-
-### Automated Rotation with AWS
+Prefer managed rotation (RDS, Redshift, DocumentDB). A custom rotation Lambda must
+implement all four steps; Secrets Manager calls it once per step with the same token.
 
 ```python
 import boto3
-import json
+
+sm = boto3.client("secretsmanager")
 
 def lambda_handler(event, context):
-    client = boto3.client('secretsmanager')
-
-    # Get current secret
-    response = client.get_secret_value(SecretId='my-secret')
-    current_secret = json.loads(response['SecretString'])
-
-    # Generate new password
-    new_password = generate_strong_password()
-
-    # Update database password
-    update_database_password(new_password)
-
-    # Update secret
-    client.put_secret_value(
-        SecretId='my-secret',
-        SecretString=json.dumps({
-            'username': current_secret['username'],
-            'password': new_password
-        })
-    )
-
-    return {'statusCode': 200}
+    arn, token, step = event["SecretId"], event["ClientRequestToken"], event["Step"]
+    if step == "createSecret":
+        try:
+            sm.get_secret_value(SecretId=arn, VersionId=token, VersionStage="AWSPENDING")
+        except sm.exceptions.ResourceNotFoundException:
+            new = sm.get_random_password(PasswordLength=32, ExcludePunctuation=True)
+            sm.put_secret_value(SecretId=arn, ClientRequestToken=token,
+                                SecretString=new["RandomPassword"],
+                                VersionStages=["AWSPENDING"])
+    elif step == "setSecret":
+        set_password_in_target(arn, token)   # apply AWSPENDING to the database/API
+    elif step == "testSecret":
+        test_login_with_pending(arn, token)  # raise on failure; rotation stops
+    elif step == "finishSecret":
+        meta = sm.describe_secret(SecretId=arn)
+        current = next(v for v, s in meta["VersionIdsToStages"].items() if "AWSCURRENT" in s)
+        if current != token:
+            sm.update_secret_version_stage(SecretId=arn, VersionStage="AWSCURRENT",
+                                           MoveToVersionId=token,
+                                           RemoveFromVersionId=current)
+    else:
+        raise ValueError(f"unknown step {step}")
 ```
 
-### Manual Rotation Process
-
-1. Generate new secret
-2. Update secret in secret store
-3. Update applications to use new secret
-4. Verify functionality
-5. Revoke old secret
-
-## External Secrets Operator
-
-### Kubernetes Integration
+## Kubernetes: External Secrets Operator
 
 ```yaml
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: SecretStore
 metadata:
   name: vault-backend
@@ -278,69 +185,65 @@ metadata:
 spec:
   provider:
     vault:
-      server: "https://vault.example.com:8200"
-      path: "secret"
-      version: "v2"
+      server: https://vault.example.com
+      path: secret
+      version: v2
       auth:
         kubernetes:
-          mountPath: "kubernetes"
-          role: "production"
-
+          mountPath: kubernetes
+          role: production
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: database-credentials
   namespace: production
 spec:
   refreshInterval: 1h
-  secretStoreRef:
-    name: vault-backend
-    kind: SecretStore
-  target:
-    name: database-credentials
-    creationPolicy: Owner
+  secretStoreRef: { name: vault-backend, kind: SecretStore }
+  target: { name: database-credentials }
   data:
-    - secretKey: username
-      remoteRef:
-        key: database/config
-        property: username
     - secretKey: password
-      remoteRef:
-        key: database/config
-        property: password
+      remoteRef: { key: database/config, property: password }
 ```
 
-## Secret Scanning
+`v1beta1` is deprecated; use `external-secrets.io/v1`.
 
-### Pre-commit Hook
+## Secret scanning
 
-```bash
-#!/bin/bash
-# .git/hooks/pre-commit
+TruffleHog exits 0 on findings unless you pass `--fail` (then it exits 183).
 
-# Check for secrets with TruffleHog
-docker run --rm -v "$(pwd):/repo" \
-  trufflesecurity/trufflehog:3.88 \
-  filesystem --directory=/repo
+### Pre-commit hook
 
-if [ $? -ne 0 ]; then
-  echo "❌ Secret detected! Commit blocked."
-  exit 1
-fi
+```sh
+#!/bin/sh
+# .git/hooks/pre-commit: scans staged changes; a non-zero exit blocks the commit
+exec docker run --rm -i -v "$(pwd):/workdir" trufflesecurity/trufflehog:3.99.3 \
+  git file:///workdir --since-commit HEAD --results=verified,unknown --fail
 ```
 
-### CI/CD Secret Scanning
+### CI
 
 ```yaml
+# GitLab
 secret-scan:
-  stage: security
-  image: trufflesecurity/trufflehog:3.88
+  stage: test
+  image:
+    name: trufflesecurity/trufflehog:3.99.3
+    entrypoint: [""]
+  variables:
+    GIT_DEPTH: 0
   script:
-    - trufflehog filesystem .
-  allow_failure: false
+    - trufflehog git "file://$CI_PROJECT_DIR" --results=verified,unknown --fail
 ```
 
+```yaml
+# GitHub Actions
+- uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+  with: { fetch-depth: 0 }
+- uses: trufflesecurity/trufflehog@e63326d6545de8f425d93ce24078c6e68d83f70e # v3.99.3
+  with: { extra_args: --results=verified,unknown } # the action adds --fail
+```
 
 ## Related Skills
 
