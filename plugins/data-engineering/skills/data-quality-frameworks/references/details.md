@@ -1,229 +1,224 @@
-# data-quality-frameworks — detailed patterns and worked examples
+# data-quality-frameworks: detailed patterns and worked examples
 
-## Patterns
+The examples below were run against Great Expectations 1.24, dbt Core 1.12 with dbt-duckdb
+and dbt_utils 1.4, and datacontract-cli 1.2 (ODCS v3.2.0).
 
-### Pattern 1: Great Expectations Suite
+## Pattern 1: Great Expectations 1.x on a warehouse table
 
-```python
-# expectations/orders_suite.py
-import great_expectations as gx
-from great_expectations.core import ExpectationSuite
-from great_expectations.core.expectation_configuration import ExpectationConfiguration
+GX 1.x keeps its configuration in Python and saves it under `gx/`. A YAML checkpoint file or
+`great_expectations init` belongs to 0.x and does nothing in 1.x. The building blocks are:
 
-def build_orders_suite() -> ExpectationSuite:
-    """Build comprehensive orders expectation suite"""
+- **Data source and asset**: where the data lives (`add_postgres`, `add_snowflake`,
+  `add_databricks_sql`, `add_pandas`, ...).
+- **Batch definition**: which rows to validate (the whole table, or a daily or monthly
+  partition).
+- **Expectation suite**: the checks.
+- **Validation definition**: one batch definition paired with one suite.
+- **Checkpoint**: one or more validation definitions, plus the actions that run afterwards.
 
-    suite = ExpectationSuite(expectation_suite_name="orders_suite")
+Run the setup once and commit `gx/`, except `gx/uncommitted/`.
 
-    # Schema expectations
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_table_columns_to_match_set",
-        kwargs={
-            "column_set": ["order_id", "customer_id", "amount", "status", "created_at"],
-            "exact_match": False  # Allow additional columns
-        }
-    ))
-
-    # Primary key
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_column_values_to_not_be_null",
-        kwargs={"column": "order_id"}
-    ))
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_column_values_to_be_unique",
-        kwargs={"column": "order_id"}
-    ))
-
-    # Foreign key
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_column_values_to_not_be_null",
-        kwargs={"column": "customer_id"}
-    ))
-
-    # Categorical values
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_column_values_to_be_in_set",
-        kwargs={
-            "column": "status",
-            "value_set": ["pending", "processing", "shipped", "delivered", "cancelled"]
-        }
-    ))
-
-    # Numeric ranges
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_column_values_to_be_between",
-        kwargs={
-            "column": "amount",
-            "min_value": 0,
-            "max_value": 100000,
-            "strict_min": True  # amount > 0
-        }
-    ))
-
-    # Date validity
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_column_values_to_be_dateutil_parseable",
-        kwargs={"column": "created_at"}
-    ))
-
-    # Freshness - data should be recent
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_column_max_to_be_between",
-        kwargs={
-            "column": "created_at",
-            "min_value": {"$PARAMETER": "now - timedelta(days=1)"},
-            "max_value": {"$PARAMETER": "now"}
-        }
-    ))
-
-    # Row count sanity
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_table_row_count_to_be_between",
-        kwargs={
-            "min_value": 1000,  # Expect at least 1000 rows
-            "max_value": 10000000
-        }
-    ))
-
-    # Statistical expectations
-    suite.add_expectation(ExpectationConfiguration(
-        expectation_type="expect_column_mean_to_be_between",
-        kwargs={
-            "column": "amount",
-            "min_value": 50,
-            "max_value": 500
-        }
-    ))
-
-    return suite
-```
-
-### Pattern 2: Great Expectations Checkpoint
-
-```yaml
-# great_expectations/checkpoints/orders_checkpoint.yml
-name: orders_checkpoint
-config_version: 1.0
-class_name: Checkpoint
-run_name_template: "%Y%m%d-%H%M%S-orders-validation"
-
-validations:
-  - batch_request:
-      datasource_name: warehouse
-      data_connector_name: default_inferred_data_connector_name
-      data_asset_name: orders
-      data_connector_query:
-        index: -1 # Latest batch
-    expectation_suite_name: orders_suite
-
-action_list:
-  - name: store_validation_result
-    action:
-      class_name: StoreValidationResultAction
-
-  - name: store_evaluation_parameters
-    action:
-      class_name: StoreEvaluationParametersAction
-
-  - name: update_data_docs
-    action:
-      class_name: UpdateDataDocsAction
-
-  # Slack notification on failure
-  - name: send_slack_notification
-    action:
-      class_name: SlackNotificationAction
-      slack_webhook: ${SLACK_WEBHOOK}
-      notify_on: failure
-      renderer:
-        module_name: great_expectations.render.renderer.slack_renderer
-        class_name: SlackRenderer
+```bash
+pip install "great_expectations[postgresql]>=1,<2"   # or [snowflake], [databricks], ...
 ```
 
 ```python
-# Run checkpoint
+# setup_gx.py: run once; stores the configuration under ./gx/
 import great_expectations as gx
+import great_expectations.expectations as gxe
 
-context = gx.get_context()
-result = context.run_checkpoint(checkpoint_name="orders_checkpoint")
+context = gx.get_context(mode="file")
 
-if not result.success:
-    failed_expectations = [
-        r for r in result.run_results.values()
-        if not r.success
-    ]
-    raise ValueError(f"Data quality check failed: {failed_expectations}")
+# "${VAR}" is read from the environment when the data source connects
+orders = context.data_sources.add_postgres(
+    "warehouse", connection_string="${WAREHOUSE_URL}"
+).add_table_asset(name="orders", table_name="orders", schema_name="core")
+batch_definition = orders.add_batch_definition_whole_table("full_table")
+
+suite = context.suites.add(gx.ExpectationSuite(name="orders_suite"))
+for expectation in [
+    # Schema
+    gxe.ExpectTableColumnsToMatchSet(
+        column_set=["order_id", "customer_id", "amount", "status", "created_at"],
+        exact_match=False,  # allow extra columns
+    ),
+    # Primary and foreign keys
+    gxe.ExpectColumnValuesToNotBeNull(column="order_id"),
+    gxe.ExpectColumnValuesToBeUnique(column="order_id"),
+    gxe.ExpectColumnValuesToNotBeNull(column="customer_id"),
+    # Validity
+    gxe.ExpectColumnValuesToBeInSet(
+        column="status",
+        value_set=["pending", "processing", "shipped", "delivered", "cancelled"],
+    ),
+    gxe.ExpectColumnValuesToBeBetween(
+        column="amount", min_value=0, max_value=100_000, strict_min=True
+    ),
+    # Freshness: the caller passes the floor at run time
+    gxe.ExpectColumnMaxToBeBetween(
+        column="created_at", min_value={"$PARAMETER": "freshness_floor"}
+    ),
+    # Volume and distribution: take the bounds from history, not guesses
+    gxe.ExpectTableRowCountToBeBetween(min_value=1_000),
+    gxe.ExpectColumnMeanToBeBetween(column="amount", min_value=50, max_value=500),
+]:
+    suite.add_expectation(expectation)
+
+validation_definition = context.validation_definitions.add(
+    gx.ValidationDefinition(name="orders_full", data=batch_definition, suite=suite)
+)
+
+context.checkpoints.add(
+    gx.Checkpoint(
+        name="orders_checkpoint",
+        validation_definitions=[validation_definition],
+        actions=[
+            gx.checkpoint.UpdateDataDocsAction(name="update_data_docs"),
+            gx.checkpoint.SlackNotificationAction(
+                name="slack_on_failure",
+                slack_webhook="${SLACK_WEBHOOK}",
+                notify_on="failure",
+                show_failed_expectations=True,
+            ),
+        ],
+        result_format={"result_format": "SUMMARY"},
+    )
+)
 ```
 
-### Pattern 3: dbt Data Tests
+To validate more tables in the same run, add one validation definition per table to the
+checkpoint's `validation_definitions`. To change a check later, edit the suite and save it
+with `suite.save()`. Calling `context.suites.add` again with the same name raises an error.
+
+## Pattern 2: Run the checkpoint as a pipeline gate
+
+```python
+# run_gx.py: run on every load; exits non-zero when a check fails
+import sys
+from datetime import datetime, timedelta
+
+import great_expectations as gx
+
+context = gx.get_context(mode="file")
+result = context.checkpoints.get("orders_checkpoint").run(
+    expectation_parameters={"freshness_floor": datetime.now() - timedelta(days=1)}
+)
+
+for validation in result.run_results.values():
+    for r in validation.results:
+        if not r.success:
+            observed = r.result.get("observed_value", r.result.get("unexpected_count"))
+            print(f"FAILED {validation.suite_name} {r.expectation_config.type}: {observed}")
+
+sys.exit(0 if result.success else 1)
+```
+
+Call it from the orchestrator or CI step that runs after the load, and stop downstream tasks
+when it exits non-zero. `validation.statistics` gives counts of evaluated and failed
+expectations for a summary line. Use the same timezone for `freshness_floor` as the column
+stores.
+
+For a dataframe batch, pass the frame at run time with
+`checkpoint.run(batch_parameters={"dataframe": df})`.
+
+## Pattern 3: dbt data tests
+
+The syntax is for dbt Core 1.10 or later: tests go under `data_tests:`, and test inputs go
+under `arguments:`. Before 1.10, drop the `arguments:` level and put its keys directly under
+the test name. Install dbt_utils through `packages.yml` and `dbt deps`.
 
 ```yaml
-# models/marts/core/_core__models.yml
-version: 2
-
+# models/marts/_marts__models.yml
 models:
   - name: fct_orders
     description: Order fact table
-    tests:
+    config:
+      materialized: table
+      contract:
+        enforced: true
+    data_tests:
       # Table-level tests
+      - row_count_in_range: # custom generic test, Pattern 4
+          arguments:
+            min_count: 1000
+            max_count: 10000000
       - dbt_utils.recency:
-          datepart: day
-          field: created_at
-          interval: 1
-      - dbt_utils.at_least_one
+          arguments:
+            datepart: day
+            field: created_at
+            interval: 1
       - dbt_utils.expression_is_true:
-          expression: "total_amount >= 0"
+          arguments:
+            expression: "total_amount >= 0"
 
     columns:
       - name: order_id
         description: Primary key
-        tests:
+        data_type: bigint
+        constraints:
+          - type: not_null
+          - type: primary_key
+        data_tests:
           - unique
           - not_null
 
       - name: customer_id
         description: Foreign key to dim_customers
-        tests:
-          - not_null
+        data_type: bigint
+        constraints:
+          - type: not_null
+        data_tests:
           - relationships:
-              to: ref('dim_customers')
-              field: customer_id
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
 
       - name: order_status
-        tests:
+        data_type: varchar
+        data_tests:
           - accepted_values:
-              values:
-                ["pending", "processing", "shipped", "delivered", "cancelled"]
+              arguments:
+                values: ["pending", "processing", "shipped", "delivered", "cancelled"]
 
       - name: total_amount
-        tests:
+        data_type: numeric(12,2)
+        data_tests:
           - not_null
-          - dbt_utils.expression_is_true:
-              expression: ">= 0"
 
       - name: created_at
-        tests:
+        data_type: timestamp
+        data_tests:
           - not_null
+          # On a column, the column name is put in front of the expression
           - dbt_utils.expression_is_true:
-              expression: "<= current_timestamp"
+              arguments:
+                expression: "<= current_timestamp"
 
   - name: dim_customers
     columns:
       - name: customer_id
-        tests:
+        data_tests:
           - unique
           - not_null
 
       - name: email
-        tests:
+        data_tests:
           - unique
           - not_null
-          # Custom regex test
+          # A rough shape check that runs on every warehouse; regex syntax differs
           - dbt_utils.expression_is_true:
-              expression: "email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$'"
+              arguments:
+                expression: "like '%_@_%._%'"
+              config:
+                severity: warn
 ```
 
-### Pattern 4: Custom dbt Tests
+Run `dbt build` so each model's tests run right after it builds and failures skip the
+models downstream.
+
+## Pattern 4: Custom dbt tests
+
+A generic test is a query that returns the failing rows. It passes when it returns none.
 
 ```sql
 -- tests/generic/test_row_count_in_range.sql
@@ -238,215 +233,103 @@ from row_count
 where cnt < {{ min_count }} or cnt > {{ max_count }}
 
 {% endtest %}
-
--- Usage in schema.yml:
--- tests:
---   - row_count_in_range:
---       min_count: 1000
---       max_count: 10000000
 ```
 
-```sql
--- tests/generic/test_sequential_values.sql
-{% test sequential_values(model, column_name, interval=1) %}
-
-with lagged as (
-    select
-        {{ column_name }},
-        lag({{ column_name }}) over (order by {{ column_name }}) as prev_value
-    from {{ model }}
-)
-
-select *
-from lagged
-where {{ column_name }} - prev_value != {{ interval }}
-  and prev_value is not null
-
-{% endtest %}
-```
+A singular test is a one-off business rule saved as a file under `tests/`:
 
 ```sql
 -- tests/singular/assert_orders_customers_match.sql
--- Singular test: specific business rule
-
-with orders_customers as (
-    select distinct customer_id from {{ ref('fct_orders') }}
-),
-
-dim_customers as (
-    select customer_id from {{ ref('dim_customers') }}
-),
-
-orphaned_orders as (
-    select o.customer_id
-    from orders_customers o
-    left join dim_customers c using (customer_id)
-    where c.customer_id is null
-)
-
-select * from orphaned_orders
--- Test passes if this returns 0 rows
+-- Passes when it returns 0 rows
+select o.customer_id
+from {{ ref('fct_orders') }} o
+left join {{ ref('dim_customers') }} c using (customer_id)
+where c.customer_id is null
 ```
 
-### Pattern 5: Data Contracts
+Check dbt_utils before writing your own test. It already ships `sequential_values`,
+`unique_combination_of_columns`, `not_null_proportion`, `accepted_range` and
+`equal_rowcount`.
+
+## Pattern 5: Data contracts (ODCS)
+
+The Open Data Contract Standard (ODCS, Linux Foundation / Bitol) is the contract format that
+`datacontract-cli` reads and writes. The producer owns the contract. Consumers review changes
+to it, the way they would review changes to an API.
 
 ```yaml
-# contracts/orders_contract.yaml
-apiVersion: datacontract.com/v1.0.0
+# contracts/orders.odcs.yaml
+apiVersion: v3.2.0
 kind: DataContract
-metadata:
-  name: orders
-  version: 1.0.0
-  owner: data-platform-team
-  contact: data-team@company.com
+id: orders
+name: Orders
+version: 1.0.0
+status: active
 
-info:
-  title: Orders Data Contract
-  description: Contract for order event data from the ecommerce platform
-  purpose: Analytics, reporting, and ML features
+description:
+  purpose: Analytics, reporting and ML features
+  usage: Internal analytics only
+  limitations: customer_id is PII and must not reach downstream marts
+
+team:
+  name: data-platform-team
 
 servers:
-  production:
+  - server: production
     type: snowflake
-    account: company.us-east-1
+    account: company-us-east-1
     database: ANALYTICS
     schema: CORE
 
-terms:
-  usage: Internal analytics only
-  limitations: PII must not be exposed in downstream marts
-  billing: Charged per query TB scanned
-
 schema:
-  type: object
-  properties:
-    order_id:
-      type: string
-      format: uuid
-      description: Unique order identifier
-      required: true
-      unique: true
-      pii: false
+  - name: orders
+    physicalType: table
+    properties:
+      - name: order_id
+        logicalType: string
+        required: true
+        unique: true
+        primaryKey: true
+      - name: customer_id
+        logicalType: string
+        required: true
+        classification: restricted
+      - name: total_amount
+        logicalType: number
+        logicalTypeOptions:
+          minimum: 0
+          maximum: 100000
+        description: Order total in USD
+      - name: status
+        logicalType: string
+        quality:
+          - metric: invalidValues
+            arguments:
+              validValues: [pending, processing, shipped, delivered, cancelled]
+            mustBe: 0
+      - name: created_at
+        logicalType: timestamp
+        required: true
+    quality:
+      - metric: rowCount
+        mustBeGreaterThan: 0
 
-    customer_id:
-      type: string
-      format: uuid
-      description: Customer identifier
-      required: true
-      pii: true
-      piiClassification: indirect
-
-    total_amount:
-      type: number
-      minimum: 0
-      maximum: 100000
-      description: Order total in USD
-
-    created_at:
-      type: string
-      format: date-time
-      description: Order creation timestamp
-      required: true
-
-    status:
-      type: string
-      enum: [pending, processing, shipped, delivered, cancelled]
-      description: Current order status
-
-quality:
-  type: SodaCL
-  specification:
-    checks for orders:
-      - row_count > 0
-      - missing_count(order_id) = 0
-      - duplicate_count(order_id) = 0
-      - invalid_count(status) = 0:
-          valid values: [pending, processing, shipped, delivered, cancelled]
-      - freshness(created_at) < 24h
-
-sla:
-  availability: 99.9%
-  freshness: 1 hour
-  latency: 5 minutes
+slaProperties:
+  - property: freshness
+    value: 1
+    unit: h
+    element: orders.created_at
+  - property: availability
+    value: 99.9%
 ```
 
-### Pattern 6: Automated Quality Pipeline
+```bash
+pip install "datacontract-cli[snowflake]"   # extras per server type: [postgres], [databricks], [duckdb], ...
+datacontract lint contracts/orders.odcs.yaml                          # schema validity
+datacontract test contracts/orders.odcs.yaml --server production      # run the checks against live data
+datacontract breaking contracts/orders.v1.yaml contracts/orders.odcs.yaml    # flag changes that break consumers
+```
 
-```python
-# quality_pipeline.py
-from dataclasses import dataclass
-from typing import List, Dict, Any
-import great_expectations as gx
-from datetime import datetime
-
-@dataclass
-class QualityResult:
-    table: str
-    passed: bool
-    total_expectations: int
-    failed_expectations: int
-    details: List[Dict[str, Any]]
-    timestamp: datetime
-
-class DataQualityPipeline:
-    """Orchestrate data quality checks across tables"""
-
-    def __init__(self, context: gx.DataContext):
-        self.context = context
-        self.results: List[QualityResult] = []
-
-    def validate_table(self, table: str, suite: str) -> QualityResult:
-        """Validate a single table against expectation suite"""
-
-        checkpoint_config = {
-            "name": f"{table}_validation",
-            "config_version": 1.0,
-            "class_name": "Checkpoint",
-            "validations": [{
-                "batch_request": {
-                    "datasource_name": "warehouse",
-                    "data_asset_name": table,
-                },
-                "expectation_suite_name": suite,
-            }],
-        }
-
-        result = self.context.run_checkpoint(**checkpoint_config)
-
-        # Parse results
-        validation_result = list(result.run_results.values())[0]
-        results = validation_result.results
-
-        failed = [r for r in results if not r.success]
-
-        return QualityResult(
-            table=table,
-            passed=result.success,
-            total_expectations=len(results),
-            failed_expectations=len(failed),
-            details=[{
-                "expectation": r.expectation_config.expectation_type,
-                "success": r.success,
-                "observed_value": r.result.get("observed_value"),
-            } for r in results],
-            timestamp=datetime.now()
-        )
-
-    def run_all(self, tables: Dict[str, str]) -> Dict[str, QualityResult]:
-        """Run validation for all tables"""
-        results = {}
-
-        for table, suite in tables.items():
-            print(f"Validating {table}...")
-            results[table] = self.validate_table(table, suite)
-
-        return results
-
-    def generate_report(self, results: Dict[str, QualityResult]) -> str:
-        """Generate quality report"""
-        report = ["# Data Quality Report", f"Generated: {datetime.now()}", ""]
-
-        total_passed = sum(1 for r in results.values() if r.passed)
-        total_tables = len(results)
-
-        report.append(f"
+`datacontract test` builds checks from `required`, `unique`, the `logicalTypeOptions` bounds,
+the `quality` rules and the freshness SLA, and exits non-zero on failure, so it can gate CI.
+It reads warehouse credentials from environment variables such as
+`DATACONTRACT_SNOWFLAKE_USERNAME`. Never write them into the contract.
