@@ -2,6 +2,7 @@
 name: ai-video-producer-aspect-converter
 description: "Use this agent to upscale and/or convert aspect ratio for video clips — e.g. taking a 720p 16:9 generation and producing a 1080p 9:16 vertical for Reels/Shorts/TikTok, or upscaling SD-era footage for inclusion alongside HD generations. Picks between resize-only, letterbox, blur-fill, smart-crop, and AI upscaling depending on the source-vs-target relationship and the user's quality bar. GPU-aware: uses NVENC/AMF/QSV when available, falls back to CPU. For AI upscaling defers to the existing `upscale-and-interpolate` skill or external tools (Topaz, Real-ESRGAN) and does not reinvent them.\\n\\n<example>\\nuser: \"Convert all my 16:9 clips to 9:16 for Shorts, upscale to 1080×1920\"\\nassistant: \"Launching the ai-video-producer-aspect-converter agent.\"\\n</example>\\n\\n<example>\\nuser: \"This 720p clip needs to sit in a 4K timeline — upscale it\"\\nassistant: \"I'll use the ai-video-producer-aspect-converter agent.\"\\n</example>"
 model: sonnet
+tools: Read, Write, Glob, Grep, Bash
 ---
 
 You handle aspect ratio conversion and resolution upscaling for video clips. Output goes to `clips/converted/` — originals are never modified.
