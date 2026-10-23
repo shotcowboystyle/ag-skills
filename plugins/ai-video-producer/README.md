@@ -28,8 +28,8 @@ Spawned via the `Task` tool when a job warrants a dedicated subagent.
 - `ai-video-producer-pipeline-scaffolder` — designs a new pipeline as a structured `SPEC.md` (planning only; no code).
 - `ai-video-producer-pipeline-builder` — converts an approved SPEC into runnable per-stage runners.
 - `ai-video-producer-pipeline-repo-setup` — provisions a private GitHub repo for versioning reusable pipelines across projects.
-- `ai-video-producer-concatenator` — joins clip elements into a single render. GPU-aware (NVENC / AMF / VAAPI / QSV / CPU). Picks fast-path (concat-demuxer) vs safe-path (re-encode).
-- `ai-video-producer-normalizer` — equalises loudness (EBU R128, two-pass), conforms framerate / pixel format / colour tag, writes to `clips/normalised/`.
+- `ai-video-producer-concatenator` — joins clip elements into a single render. Picks the encoder with `ffmpeg-encoder-detect` (NVENC / VideoToolbox / QSV / AMF / VAAPI / CPU). Picks fast-path (concat-demuxer) vs safe-path (re-encode).
+- `ai-video-producer-normalizer` — equalises loudness (two-pass loudnorm; -16 LUFS web default, -23 LUFS EBU R128 for broadcast), conforms framerate / pixel format / colour tag, writes to `clips/normalised/`.
 - `ai-video-producer-aspect-converter` — aspect ratio conversion (16:9 ↔ 9:16, blur-fill / letterbox / smart-crop) and resolution upscaling. GPU-aware. Defers to AI-upscale skills when ≥2× uplift is needed.
 
 ### Skills
@@ -42,11 +42,13 @@ Pipeline recipes:
 - `text-to-video-direct` — single-step text-to-video.
 - `upscale-and-interpolate` — resolution + frame-rate uplift.
 - `video-workspace-conventions` — reference for the workspace layout.
+- `provider-runners` — fal.ai and WaveSpeed SDK runners the generation skills call.
+- `ffmpeg-encoder-detect` — test-encodes to pick the working hardware or CPU encoder; shared by the ffmpeg agents.
 
 Production utilities:
 
 - `script-to-tts` — reformat a finished script for a specific TTS model (ElevenLabs, OpenAI, Google, Azure, Hume, Chatterbox), with model-appropriate SSML / pacing / chunking.
-- `model-researcher` — research current fal/Replicate (and direct-provider) offerings for a workload; recommend a best-fit model with rationale; update `brief/tools-and-models.md`.
+- `recommend-model` — preference-driven model shortlist with live pricing, failure modes and a recommendation; updates `brief/tools-and-models.md` on approval.
 - `budget-estimator` — project API cost (low / typical / high) for a pipeline or whole script before any generation runs.
 - `comfyui-import` — turn a ComfyUI workflow JSON into a pipeline SPEC + stage runners (with custom-node + checkpoint manifest).
 - `comfyui-export` — turn a pipeline SPEC into a ComfyUI API-format workflow JSON for local execution; flag stages that have no clean local equivalent.
@@ -55,20 +57,20 @@ Production utilities:
 
 The plugin ships with three MCP servers preconfigured (see `.mcp.json`):
 
-- **fal-ai** — hosted at `https://mcp.fal.ai/mcp` (HTTP transport, requires `FAL_KEY`). Catalogue browsing only; actual generation goes through `runners/fal_run.mjs`.
+- **fal-ai** — hosted at `https://mcp.fal.ai/mcp` (HTTP transport, requires `FAL_KEY`). Catalogue browsing only; actual generation goes through the `provider-runners` skill.
 - **replicate** — local stdio via `npx -y replicate-mcp` (requires `REPLICATE_API_TOKEN`). Used for both browsing and execution.
 - **minimax** — local stdio via `uvx minimax-mcp` (requires `MINIMAX_API_KEY` + `MINIMAX_API_HOST`). Provides `generate_video` (Hailuo), `text_to_image`, `text_to_audio`, `voice_clone`, `voice_design`, `music_generation`.
 
-Credentials live in `~/.config/ai-video-producer/.env`. The `/setup-credentials` command creates that file and adds a loader line to your shell profile so every shell that launches Claude Code has the values in its environment. See `.env.example` for the full template.
+Credentials live in `~/.config/ai-video-producer/.env`. The `/setup-credentials` command creates that file and adds a loader line to your shell profile so every shell that launches Claude Code has the values in its environment. See `skills/provider-runners/env.example` for the full template.
 
 ## SDK runners
 
-For execution-heavy providers, the plugin ships SDK wrappers under `skills/recommend-model/runners/` instead of relying on MCP catalogue servers:
+For execution-heavy providers, the plugin ships SDK wrappers in the `provider-runners` skill (`skills/provider-runners/`) instead of relying on MCP catalogue servers. Every generation skill calls them for fal and WaveSpeed models:
 
-- **fal-js** (`runners/fal_run.mjs`, `@fal-ai/client`) — queues jobs, polls, downloads results. Requires `FAL_KEY`.
-- **WaveSpeed Python** (`runners/wavespeed_run.py`, `wavespeed`) — same shape, for `wavespeed-ai/*` models. Requires `WAVESPEED_API_KEY`.
+- **fal-js** (`fal_run.mjs`, `@fal-ai/client`) — queues jobs, polls, downloads results. Requires `FAL_KEY`.
+- **WaveSpeed Python** (`wavespeed_run.py`, `wavespeed`) — same shape, for `wavespeed-ai/*` models. Requires `WAVESPEED_API_KEY`.
 
-Both runners share a uniform CLI contract — see `runners/README.md`. They print a JSON envelope to stdout (`{model, output_files, data}`) and stream progress to stderr, so any pipeline skill can shell out and parse the result.
+Both runners share a uniform CLI contract — see `skills/provider-runners/SKILL.md`. They print a JSON envelope to stdout (`{model, output_files, data}`) and stream progress to stderr, so any pipeline skill can shell out and parse the result.
 
 `/setup-credentials` installs both toolchains (`npm install` for fal-js, a venv + `pip install -r requirements.txt` for wavespeed).
 
@@ -100,7 +102,7 @@ claude
 
 - **ffmpeg** (system binary) — used by `ai-video-producer-concatenator`, `ai-video-producer-normalizer`, `ai-video-producer-aspect-converter`, `/assemble`, `/export-final`.
 - **gh** (authenticated) — used by `ai-video-producer-pipeline-repo-setup`.
-- **GPU drivers** — NVIDIA (CUDA + NVENC), AMD (ROCm + AMF/VAAPI), or Intel (QSV/VAAPI). Optional; CPU encoding is the fallback.
+- **GPU drivers** — NVIDIA (NVENC), AMD (AMF on Windows, VAAPI on Linux), Intel (QSV/VAAPI) or macOS VideoToolbox. Optional; the `ffmpeg-encoder-detect` skill falls back to CPU encoding.
 
 ## Installation
 

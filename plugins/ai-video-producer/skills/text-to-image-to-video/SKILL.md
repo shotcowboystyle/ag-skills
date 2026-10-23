@@ -22,10 +22,10 @@ Two-stage chain. Stage 1 produces a still you can iterate on cheaply; stage 2 an
 ## Steps
 
 1. **Compose image prompt.** Combine the shot's visual seed + character seed prompt + style/vibe from `brief/creative-brief.md`. Show it to the user before generating.
-2. **Generate still.** Call the configured text-to-image model (typically via Fal or Replicate MCP). Save to `generation/text-to-image/NN-shortname-vN.png`. Save prompt + model + seed to `generation/prompts/NN-shortname-vN.md`. Append to `logs/production-log.md`.
+2. **Generate still.** Call the configured text-to-image model. Run it through the provider that hosts the model: fal.ai and WaveSpeed models via the `provider-runners` skill (pass `--output` with the target folder); Replicate and MiniMax via their MCP servers. Save to `generation/text-to-image/NN-shortname-vN.png`. Save prompt + model + seed to `generation/prompts/NN-shortname-vN.md`. Append to `logs/production-log.md`.
 3. **Iterate on still.** Show the image. If the user wants to refine, loop on step 2 with an incremented `vN`. Don't proceed until the user approves a still.
 4. **Compose motion prompt.** Describe the motion — camera move, subject action, duration. Pull duration from the shot brief.
-5. **Animate.** Call the configured image-to-video model with the approved still as input. Save to `generation/image-to-video/NN-shortname-vN.mp4`. Save the motion prompt and parameters to `generation/prompts/NN-shortname-vN-motion.md`. Log it.
+5. **Animate.** Call the configured image-to-video model with the approved still as input, the same way. Save to `generation/image-to-video/NN-shortname-vN.mp4`. Save the motion prompt and parameters to `generation/prompts/NN-shortname-vN-motion.md`. Log it.
 6. **Surface result.** Show the clip. Offer: accept (copy to `clips/raw/` and suggest `/promote-take`), retry motion, or go back to step 2 (new still).
 
 ## Common gotchas
