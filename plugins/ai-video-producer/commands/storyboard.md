@@ -13,7 +13,7 @@ Produce a shot list. For each shot:
 - **Visual** — one-sentence description of what's on screen.
 - **Audio** — VO line, dialogue, SFX, music cue.
 - **Generation approach** — which modality (text-to-image-to-video, text-to-video direct, stock + edit, etc.) and which model from `brief/tools-and-models.md`.
-- **Pipeline** — name of the file in `pipelines/` to invoke (or "custom").
+- **Pipeline** — name of the pipeline directory in `pipelines/` to invoke (or "custom").
 
 Write the table to `timeline/shot-list.md`.
 

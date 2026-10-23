@@ -13,12 +13,14 @@ Set up the current working directory as an AI video production workspace.
 ```
 brief/
 characters/
-scripts/{drafts,final,storyboards}/
+scripts/{drafts,final,storyboards,tts}/
 assets/{reference-images,voices,voice-clones,sfx,music,source-media,fonts,luts,overlays}/
 generation/{text-to-image,image-to-image,image-to-video,text-to-video,voice,lip-sync,upscale,prompts}/
-clips/{raw,selected,edited,b-roll}/
+clips/{raw,selected,edited,b-roll,normalised,converted}/
 pipelines/
 timeline/
+budgets/
+research/
 output/{drafts,proofs,final}/
 exports/{thumbnails,captions,subtitles}/
 logs/
@@ -28,7 +30,12 @@ Drop a `.gitkeep` in every leaf directory so the structure survives commits.
 
 3. Write a project-level `AGENTS.md` to the workspace root that documents the lifecycle, folder conventions, and slash commands. Use the `video-workspace-conventions` skill from this plugin as the source of truth — read its `SKILL.md` and adapt the content into the project AGENTS.md. Also write a one-line `CLAUDE.md` containing `@AGENTS.md`, so Claude Code reads the same file every other tool reads.
 
-4. Seed `pipelines/` with starter pipeline files by copying the bundled examples from this plugin's skills (text-to-image-to-video, voice-to-lip-sync, text-to-video-direct, upscale-and-interpolate). Each lands as `pipelines/<name>.md` so the user can edit per-project without touching the plugin.
+4. Seed `pipelines/` with starter pipelines from this plugin's skills (text-to-image-to-video, voice-to-lip-sync, text-to-video-direct, upscale-and-interpolate), using the pipeline layout from `video-workspace-conventions`. For each skill, create `pipelines/<name>/` with:
+   - `run.md` — the skill's Inputs and Steps sections, copied verbatim.
+   - `SPEC.md` — Purpose (from the skill's description and "When to use"), Stages (one per model call in the steps), and an empty Open questions section.
+   - `runs/.gitkeep`.
+
+   The user can edit these per project without touching the plugin.
 
 5. Initialise git if not already a repo, add a sensible `.gitignore` (exclude large generated media if the user prefers — ask).
 

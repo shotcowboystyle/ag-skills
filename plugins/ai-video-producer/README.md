@@ -14,7 +14,7 @@ This is a **state-aware lifecycle** plugin — it operates inside a per-project 
 - `/define-character` — add a recurring character/subject sheet.
 - `/draft-script` — produce a script draft from the brief.
 - `/storyboard` — break the locked script into a numbered shot list with per-shot briefs.
-- `/run-pipeline <name> <shot#>` — execute a predefined pipeline for a shot.
+- `/run-pipeline <name> <shot#> [--dry-run]` — execute (or dry-run) a pipeline from `pipelines/<name>/` for a shot.
 - `/log-take <path>` — record a generated artefact's prompt, model, parameters, and cost.
 - `/promote-take <path>` — copy a raw take into `clips/selected/` with rationale.
 - `/assemble` — propose an ffmpeg edit plan to concatenate clips into a rough cut.
