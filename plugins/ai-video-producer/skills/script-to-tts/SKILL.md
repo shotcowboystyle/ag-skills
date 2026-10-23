@@ -10,14 +10,15 @@ You take a finished script and produce per-model, per-line TTS input files.
 ## Inputs
 
 - `scripts/final/script.md` (or a draft path the user passes).
-- Target model — ask if not stated. Common: `elevenlabs`, `openai-tts`, `google-tts`, `azure-tts`, `hume`, `chatterbox`.
+- Target model — ask if not stated. Common: `elevenlabs-v3`, `elevenlabs-v2`, `openai-tts`, `google-tts`, `azure-tts`, `hume`, `chatterbox`.
 - Voice ID / preset, if known. Pull from `brief/tools-and-models.md` if listed.
 
 ## Per-model behaviour
 
 | Model | Format | Notable conventions |
 |-------|--------|---------------------|
-| ElevenLabs | plain text + inline `<break time="500ms"/>` | Keep chunks ≤ 5000 chars per request. Don't over-use breaks — the v3 models pace naturally. |
+| ElevenLabs v3 | plain text + audio tags (`[pause]`, `[short pause]`, `[long pause]`, `[whispers]`, …) | No SSML: `<break>` tags are not supported and get read or ignored. Use audio tags sparingly, plus punctuation. Check the current character limit for the model. |
+| ElevenLabs Multilingual v2 / Flash v2.5 | plain text + inline `<break time="0.5s"/>` | Breaks up to 3 s. Too many in one request makes delivery unstable. Audio tags are v3-only. |
 | OpenAI TTS | plain text | No SSML. Use punctuation for pacing. ≤ 4096 chars per request. |
 | Google Cloud TTS | SSML | Full SSML supported: `<break>`, `<emphasis>`, `<prosody rate="…" pitch="…">`. |
 | Azure (neural) | SSML with `<voice>` + `mstts:express-as` styles | Style + degree work for some voices; check voice's supported styles. |
@@ -36,7 +37,7 @@ You take a finished script and produce per-model, per-line TTS input files.
 5. Save:
    - SSML models: `scripts/tts/<model>/<NN>-<slug>.ssml`
    - Plain models: `scripts/tts/<model>/<NN>-<slug>.txt`
-6. Emit a `scripts/tts/<model>/INDEX.md` listing each file, character count, estimated duration (chars × ~14ms for typical speech rate), and the voice ID to use.
+6. Emit a `scripts/tts/<model>/INDEX.md` listing each file, character count, estimated duration (words ÷ ~150 words per minute, a typical narration rate; adjust after the first take), and the voice ID to use.
 
 ## Discipline
 

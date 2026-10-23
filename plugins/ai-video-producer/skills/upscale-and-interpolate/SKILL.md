@@ -27,7 +27,7 @@ Post-processing for clips that need higher resolution or frame rate than the gen
 ## Steps
 
 1. **Confirm target.** Read brief; state current vs target resolution and fps.
-2. **Upscale.** Call configured upscaler. Save to `generation/upscale/NN-shortname-vN-up.mp4`. Log it.
+2. **Upscale.** Call configured upscaler. Hosted models run through their provider: fal.ai and WaveSpeed models via the `provider-runners` skill (pass `--output` with the target folder); Replicate and MiniMax via their MCP servers. Local tools (Topaz, Real-ESRGAN CLI) run directly. Save to `generation/upscale/NN-shortname-vN-up.mp4`. Log it.
 3. **Interpolate** (if fps target > source fps). Call interpolation model on the upscaled output. Save to `generation/upscale/NN-shortname-vN-up-interp.mp4`. Log it.
 4. **QC.** Show before/after comparison if possible. Watch for: temporal artefacts, ghosting on fast motion, oversharpening haloes.
 5. **Promote.** Copy approved final to `clips/edited/NN-shortname-final.mp4`.

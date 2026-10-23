@@ -26,7 +26,7 @@ For each shot, for each pipeline stage:
   - Voice: ×1.5
   - Lip-sync: ×1.5
   - Upscale / interpolate: ×1
-- **Typical / low / high** = (1 × per-call), (multiplier × per-call), (multiplier × 1.5 × per-call).
+- **Low / typical / high** = (1 × per-call), (multiplier × per-call), (multiplier × 1.5 × per-call). Low assumes every shot lands first take.
 
 If `logs/production-log.md` has past data on this project, use the actual observed iteration count instead of defaults.
 

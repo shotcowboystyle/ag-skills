@@ -26,7 +26,7 @@ Single model call from a text prompt to a clip. No intermediate still.
 ## Steps
 
 1. **Compose prompt.** Combine visual seed + motion description + style/vibe. Show to user.
-2. **Generate.** Call the configured text-to-video model. Save to `generation/text-to-video/NN-shortname-vN.mp4`. Save prompt + model + parameters to `generation/prompts/NN-shortname-vN.md`. Log it.
+2. **Generate.** Call the configured text-to-video model. Run it through the provider that hosts the model: fal.ai and WaveSpeed models via the `provider-runners` skill (pass `--output` with the target folder); Replicate and MiniMax via their MCP servers. Save to `generation/text-to-video/NN-shortname-vN.mp4`. Save prompt + model + parameters to `generation/prompts/NN-shortname-vN.md`. Log it.
 3. **Surface.** Show clip. Offer retry, accept, or switch to text-to-image-to-video for tighter control.
 4. **Accept.** Copy to `clips/raw/` and suggest `/promote-take`.
 
