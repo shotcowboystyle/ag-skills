@@ -1,24 +1,73 @@
 ---
 name: changelog-automation
-description: Automate changelog generation from commits, PRs, and releases following Keep a Changelog format. Use when setting up release workflows, generating release notes, or standardizing commit conventions.
+description: Draft changelogs and release notes from Conventional Commits with release-please or git-cliff, in Keep a Changelog format, for a person to edit before release. Use when setting up release workflows, generating release notes, or standardizing commit conventions.
+last_verified: 2026-10-27
 ---
 
 # Changelog Automation
 
-Patterns and tools for automating changelog generation, release notes, and version management following industry standards.
+Turn commit history into a draft changelog and release notes. A tool writes the draft; a
+person edits it before anything is tagged or published. Commit messages are written for
+reviewers, changelogs for users, so the draft always needs a human pass.
 
 ## When to Use This Skill
 
-- Setting up automated changelog generation
-- Implementing Conventional Commits
-- Creating release note workflows
-- Standardizing commit message formats
-- Generating GitHub/GitLab release notes
-- Managing semantic versioning
+- Setting up changelog or release-note generation for a repository
+- Adopting Conventional Commits and enforcing them in CI
+- Replacing `standard-version`, which is deprecated and no longer maintained
+- Writing the release notes for one release
 
-## Core Concepts
+## Procedure
 
-### 1. Keep a Changelog Format
+1. **Read what exists.** Check for `CHANGELOG.md`, `cliff.toml`, `release-please-config.json`,
+   `.versionrc*`, `commitlint.config.*`, and how tags are named (`git tag --sort=-v:refname |
+   head`). Keep the existing tag format and changelog layout unless asked to change them.
+2. **Enforce the commit format.** Add commitlint with `@commitlint/config-conventional`.
+   Run it in CI on the PR title (squash merges) or on every PR commit (merge commits). A
+   local hook alone is skipped by `--no-verify`.
+3. **Pick one generator.**
+   - **release-please** when the repo is on GitHub and you want a release PR that bumps
+     the version and updates `CHANGELOG.md`. The PR is the draft: edit it, then merge.
+   - **git-cliff** for any host, for a Keep a Changelog layout, or when you want full
+     control of the template. It writes the draft to a file you edit and commit.
+   - If the project uses `standard-version`, migrate to one of these. Map each
+     `.versionrc` type/section pair to `changelog-sections` (release-please) or
+     `commit_parsers` (git-cliff).
+4. **Generate a draft, never a release.** Configure GitHub releases as drafts
+   (`"draft": true` for release-please; `gh release create --draft` with git-cliff).
+5. **Edit the draft.** Rewrite entries for users: say what changed for them, merge
+   duplicate entries, drop internal noise, and add an upgrade note for each breaking change.
+   Read the commits the generator skipped (non-conventional ones) for anything that matters.
+6. **Ask before publishing.** Show the final changelog diff, the version and the tag.
+   Confirm with the user before committing the changelog, creating the tag, pushing, or
+   publishing a release.
+7. **Stop when** the commit check runs in CI, one draft has been generated from real
+   history, and a person has reviewed it. Report the tool chosen, the files added, the CI
+   job names, the next version the tool computed, and anything the user must still do
+   (for example, create a token or enable squash merges).
+
+## Commit Types and Changelog Sections
+
+Conventional Commits: `<type>[optional scope][!]: <description>`, then an optional body
+and footers. `!` or a `BREAKING CHANGE:` footer marks a breaking change.
+
+| Type       | Keep a Changelog section | Version bump (1.0.0 and later) |
+| ---------- | ------------------------ | ------------------------------ |
+| `feat`     | Added                    | minor                          |
+| `fix`      | Fixed                    | patch                          |
+| `perf`     | Changed                  | patch                          |
+| `refactor` | Changed (or hidden)      | none                           |
+| `revert`   | Removed / Fixed          | depends on reverted commit     |
+| `docs`, `style`, `test`, `chore`, `ci`, `build` | hidden | none            |
+| any type with `!` or `BREAKING CHANGE:` | add an upgrade note | major       |
+
+Before 1.0.0, release-please bumps minor for breaking changes only if
+`bump-minor-pre-major` is set. Check the computed version rather than assuming it.
+
+Keep a Changelog adds `Deprecated` and `Security`, which no commit type maps to. Fill
+those by hand while editing the draft.
+
+## Keep a Changelog Shape
 
 ```markdown
 # Changelog
@@ -28,92 +77,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Detailed patterns and worked examples
+## [Unreleased]
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+## [1.2.0] - 2026-01-15
 
-## Summary
+### Added
 
-This release introduces dark mode support and improves checkout performance
-by 40%. It also includes important security updates.
+- Profile avatars.
 
-## Highlights
+### Changed
 
-### 🌙 Dark Mode
+- **Breaking:** `GET /users/:id` returns `userId` instead of `id`. Update API clients.
 
-Users can now switch to dark mode from settings. The preference is
-automatically saved and synced across devices.
+### Fixed
 
-### ⚡ Performance
+- Login no longer times out after 30 seconds of inactivity (#123).
 
-- Checkout flow is 40% faster
-- Reduced bundle size by 15%
-
-## Breaking Changes
-
-None in this release.
-
-## Upgrade Guide
-
-No special steps required. Standard deployment process applies.
-
-## Known Issues
-
-- Dark mode may flicker on initial load (fix scheduled for v2.1.1)
-
-## Dependencies Updated
-
-| Package | From    | To      | Reason                   |
-| ------- | ------- | ------- | ------------------------ |
-| react   | 18.2.0  | 18.3.0  | Performance improvements |
-| lodash  | 4.17.20 | 4.17.21 | Security patch           |
+[Unreleased]: https://github.com/OWNER/REPO/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/OWNER/REPO/compare/v1.1.0...v1.2.0
 ```
 
-## Commit Message Examples
+release-please writes its own heading style (`## [1.2.0](compare-link) (date)`), not this
+exact layout. Use git-cliff when the Keep a Changelog layout itself is required.
 
-```bash
-# Feature with scope
-feat(auth): add OAuth2 support for Google login
+## Rules
 
-# Bug fix with issue reference
-fix(checkout): resolve race condition in payment processing
+- Generated text is a draft. Never publish it unedited.
+- One logical change per commit, so each changelog entry maps to one commit.
+- Never tag, push, or publish a release without the user's confirmation.
+- Pin CI actions to a commit SHA and give the release job only the permissions it needs.
 
-Closes #123
+## References
 
-# Breaking change
-feat(api)!: change user endpoint response format
+Read `references/details.md` when you need:
 
-BREAKING CHANGE: The user endpoint now returns `userId` instead of `id`.
-Migration guide: Update all API consumers to use the new field name.
-
-# Multiple paragraphs
-fix(database): handle connection timeouts gracefully
-
-Previously, connection timeouts would cause the entire request to fail
-without retry. This change implements exponential backoff with up to
-3 retries before failing.
-
-The timeout threshold has been increased from 5s to 10s based on p99
-latency analysis.
-
-Fixes #456
-Reviewed-by: @alice
-```
-
-## Best Practices
-
-### Do's
-
-- **Follow Conventional Commits** - Enables automation
-- **Write clear messages** - Future you will thank you
-- **Reference issues** - Link commits to tickets
-- **Use scopes consistently** - Define team conventions
-- **Automate releases** - Reduce manual errors
-
-### Don'ts
-
-- **Don't mix changes** - One logical change per commit
-- **Don't skip validation** - Use commitlint
-- **Don't manual edit** - Generated changelogs only
-- **Don't forget breaking changes** - Mark with `!` or footer
-- **Don't ignore CI** - Validate commits in pipeline
+- commitlint and husky setup, and the CI job that lints PR titles or commits
+- release-please workflow, config and manifest, and how to correct release notes
+- git-cliff `cliff.toml`, local commands, and a CI job that makes a draft release
+- migrating from `standard-version`
+- commit message and release-notes examples

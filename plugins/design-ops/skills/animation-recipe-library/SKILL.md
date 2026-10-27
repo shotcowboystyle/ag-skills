@@ -134,7 +134,6 @@ const springMaterial = { type: "spring", stiffness: 250, damping: 25, mass: 1 };
 The reduced-motion floor, which every recipe assumes is already in the sheet:
 
 ```css
-```css
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -143,7 +142,6 @@ The reduced-motion floor, which every recipe assumes is already in the sheet:
     scroll-behavior: auto !important;
   }
 }
-```
 ```
 
 ## Index

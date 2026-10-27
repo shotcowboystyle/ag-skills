@@ -23,15 +23,25 @@ cannot re-architect a flow after it ships without breaking people's habits.
   work. The other four fifths are empty, loading, error and partial.
 - **Density is a decision, not a consequence.** Pick a tier and hold it.
 
-## Constants
+## Procedure
 
-Every screen ships all five. A screen specified only in its ideal state is not
-specified.
+1. **List the screens.** Name each one by its type from the Index below, then
+   read its entry in `references/screen-type-catalog.md`.
+2. **Connect them.** For each user goal, pick the matching flow from
+   `references/user-flow-catalog.md` and draw it with the notation at the end
+   of that file. Give every step a way back and a way out.
+3. **Specify the states.** Every screen gets the five core states, plus the
+   extended ones that apply. Run the checklist below per screen.
+4. **Pick a density tier** per screen and hold it across the flow.
+5. **Check the transitions** between screens against the platform conventions in
+   `references/transitions-and-platform-conventions.md`.
 
+## Screen states
 
-Every screen passes through states. Model them explicitly to ensure all states are designed.
+Every screen ships all five core states. A screen specified only in its ideal
+state is not specified.
 
-### 6.1 The Five Core States
+### The five core states
 
 ```
 [Initial] -> [Loading] -> [Loaded / Populated]
@@ -49,7 +59,7 @@ Every screen passes through states. Model them explicitly to ensure all states a
 4. **Empty**: Data request succeeded but returned zero items. Show empty state illustration + CTA.
 5. **Error**: Data request failed. Show error message + retry button. Distinguish between network error, server error, and permission error.
 
-### 6.2 Extended States
+### Extended states
 
 - **Refreshing**: Pulling to refresh or background sync. Show inline indicator without replacing content.
 - **Partial Load**: Some data loaded, more available. Infinite scroll loading indicator at bottom.
@@ -57,7 +67,7 @@ Every screen passes through states. Model them explicitly to ensure all states a
 - **Offline**: No network connection. Show cached data with offline banner. Queue actions for sync.
 - **Permission Required**: User has not granted necessary permission (location, camera, contacts). Show explanation + request button.
 
-### 6.3 State Design Checklist
+### State checklist
 
 For every screen, verify you have designed:
 - [ ] Loading state (skeleton or spinner)
@@ -68,12 +78,9 @@ For every screen, verify you have designed:
 - [ ] Offline state (if applicable)
 - [ ] Permission request state (if applicable)
 
----
+## Information density
 
-## Section 7: Information Density Levels
-
-
-### 7.1 Three Density Tiers
+### Three density tiers
 
 | Tier | Description | Target Elements per Viewport | Example Screen Types |
 |------|-------------|------|------|
@@ -81,22 +88,18 @@ For every screen, verify you have designed:
 | **Medium** | Balanced. Content-rich but not overwhelming. Scrolling expected. | 6-12 | Profile, detail, settings, blog/article, checkout, contact |
 | **High** | Data-dense. Power users. Scanning and filtering essential. | 12-25+ | Dashboard, analytics, file manager, data table, calendar, comparison |
 
-### 7.2 Density Adjustments by Platform
+### Density by platform
 
 - **Mobile**: Reduce density by 30-40% vs desktop. Stack columns. Collapse secondary info behind taps.
 - **Tablet**: Intermediate density. Use split views to maintain context without overwhelming.
 - **Desktop**: Highest density acceptable. Multi-column layouts, sidebars, persistent panels.
 
-### 7.3 Density Controls for Users
+### Density controls for users
 
 - **Comfortable / Cozy / Compact**: Gmail-style density toggle. Adjusts row height and spacing.
 - **Card / List / Table**: View mode toggle. Cards are lowest density, tables are highest.
 - **Show/Hide Columns**: Let users configure which columns appear in data tables.
 - **Collapse Panels**: Resizable and collapsible sidebars for user-controlled density.
-
----
-
-## Section 8: Platform-Specific Screen Conventions
 
 ## Index
 
@@ -124,49 +127,6 @@ Content Creation
 **UI elements (120+)** across navigation, input, feedback, overlay and layout --
 `references/ui-element-deep-dive.md`.
 
-
-When documenting or communicating user flows, use these standardized conventions.
-
-### 3.1 Node Types
-- **Start / End**: Rounded rectangle (pill shape). Green for start, red for end.
-- **Screen / Page**: Rectangle. Contains screen name. Color-coded by section.
-- **Decision**: Diamond. Contains yes/no or conditional question.
-- **Action**: Rectangle with rounded corners. User or system action.
-- **Sub-flow**: Rectangle with double border. Links to separate flow diagram.
-- **Wait / Delay**: Hourglass or clock icon. Async step (email verification, processing).
-
-### 3.2 Path Types
-- **Happy Path**: Solid green arrows. The primary expected journey.
-- **Error Path**: Dashed red arrows. What happens when things fail.
-- **Alternative Path**: Dotted blue arrows. Valid but less common routes.
-- **Escape Hatch**: Gray arrows. Exit points (cancel, back, close).
-
-### 3.3 Entry Points
-- **Direct URL**: Globe icon. User arrives via typed URL or link.
-- **Deep Link**: Chain icon. From push notification, email, or external app.
-- **Navigation**: Menu icon. From in-app navigation.
-- **System Trigger**: Gear icon. Automated redirect (session expire, maintenance).
-
-### 3.4 Edge Case Annotations
-- **Conditional**: Annotate arrows with conditions (e.g., "if cart > $50").
-- **Frequency**: Label paths with expected traffic percentage (e.g., "80% of users").
-- **Data Dependencies**: Note when a step requires data from a previous step.
-- **Timeout**: Note time limits (e.g., "OTP expires in 10 min").
-
----
-
-## Section 4: UI Element Pattern Catalog (120+ Elements)
-
-## Reference architecture
-
-| File | Covers | Lines |
-|---|---|---|
-| `references/screen-type-catalog.md` | 32 screen types, fully specified | 1731 |
-| `references/ui-element-deep-dive.md` | 120+ elements, 26 in depth | 1259 |
-| `references/user-flow-catalog.md` | 22 flows step by step | 1116 |
-| `references/inspiration-reference-guide.md` | where to look for precedent | 228 |
-| `references/transitions-and-platform-conventions.md` | push, modal, tab, deep link; iOS/Android/web | 84 |
-
 ## What every reference file contains
 
 1. Purpose -- the one job this screen or flow does
@@ -182,7 +142,8 @@ For **deciding which screens a product needs** and the full specification of
 each: read `references/screen-type-catalog.md`.
 
 For **the sequence connecting them** -- entry points, steps, decision points,
-exits and error branches: read `references/user-flow-catalog.md`.
+exits and error branches: read `references/user-flow-catalog.md`, which
+ends with the flow diagram notation.
 
 For **a specific element** -- navigation, input, feedback, overlay or layout:
 read `references/ui-element-deep-dive.md`.
