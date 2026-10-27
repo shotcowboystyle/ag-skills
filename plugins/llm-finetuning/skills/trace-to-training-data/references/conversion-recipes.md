@@ -10,7 +10,7 @@ rejection-sampling loop with reward-threshold
 selection, and the goldens-holdout check that
 must run before any converted row merges into a
 training set. Input records match
-`eval-harness-first`'s `runs/<run-id>/results.json`
+`eval-harness-first`'s `results.json` record
 shape; output records match `dataset-curation`'s
 Format Selection table exactly — field names are
 copied, not paraphrased. No base-model names
@@ -20,7 +20,7 @@ appear below; where a model matters, load it from
 
 ## 1. Graded Trace to SFT Example
 
-Input — one row from `runs/<run-id>/results.json`,
+Input — one row from `runs/<date>-<slug>/results.json`,
 a single-turn trace that passed with a reward
 above the batch's top-fraction threshold:
 

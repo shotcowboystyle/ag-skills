@@ -41,8 +41,9 @@ specific workloads (see Workload Overrides).
   FP8 hardware support. **GPTQ is superseded
   for new deployments** — don't reach for it
   on a fresh export; AWQ has better accuracy
-  retention at the same bit width and wider
-  current tooling support.
+  retention at the same bit width. Build AWQ
+  with `llm-compressor` — AutoAWQ is archived
+  and unmaintained.
 - **GGUF with Q4_K_M quantization, built from
   an imatrix, is the edge/llama.cpp format.**
   Use it for local or CPU-adjacent
@@ -149,12 +150,13 @@ work":**
    settings — greedy decoding (temperature 0)
    and a fixed seed, persisted and reused
    between the pre- and post-export runs, not
-   just nominally identical config. **For a
-   lossless export, byte match is the gate —
-   any diff is a bug.** For a **lossy**
-   (quantized) export, byte match is expected
-   to fail; the gate is task-grader verdict
-   agreement instead — see
+   just nominally identical config. **The
+   gate is task-grader verdict agreement.**
+   Byte match is the gate only for a lossless
+   export run in the same runtime on both
+   sides; across runtimes (transformers before,
+   vLLM or llama.cpp after) kernel differences
+   flip greedy tokens even at bf16. See
    `references/export-commands.md`'s
    Smoke-Test Script Skeleton.
 

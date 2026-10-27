@@ -82,9 +82,10 @@ trustworthy if an earlier one was skipped.
    catalog.** Base-model naming lives in exactly one
    place in this plugin — `finetuning-method-selection`'s
    model catalog reference. Reason in size classes; pull
-   any specific model name from that catalog, and check
-   its "last verified" freshness before trusting the
-   row. When the catalog's per-row Notes column and
+   any specific model name from that catalog, and apply
+   its staleness rule (over 90 days since "last
+   verified": refresh first, or name a size class only)
+   before trusting a row. When the catalog's per-row Notes column and
    `lora-qlora-recipes`'s LoRA vs QLoRA vs Full FT table
    seem to disagree on method, the recipe table governs —
    the catalog states size-class feasibility, not a

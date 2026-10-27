@@ -43,7 +43,7 @@ prompt: |
      stop and report that this run directory has no checkpoint to
      gate.
   2. Confirm `eval/` exists (goldens.jsonl, graders/, drift-suite.yaml,
-     and `eval/baseline-<model>.json`) — if it's missing or
+     `eval/baseline-<model>.json`, and `eval/baseline-<model>-results.json`) — if it's missing or
      incomplete, stop and report that rather than gating against
      nothing.
   3. Compute the current goldens fingerprint —
@@ -63,7 +63,9 @@ prompt: |
        check against `eval/goldens.jsonl`.
      - Stage 2 — capability drift: re-run the identical harness plus
        frozen drift suite used for the baseline — not a looser or
-       expanded one — diff against `eval/baseline-<model>.json`, and
+       expanded one — write `$ARGUMENTS/results.json` (overwriting any
+       prior one), pair it item by item with
+       `eval/baseline-<model>-results.json`, and
        apply the drift budget by pointer to `checkpoint-promotion`'s
        Drift Budget table.
      - Stage 3 — paired arena vs. base model, position-randomized

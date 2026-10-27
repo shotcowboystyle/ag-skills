@@ -240,10 +240,10 @@ domain_adjacent:
   filter: "tag == 'drift-suite'"
   n_items_range: [200, 500]
 
-drift_budget:
-  noise_tolerance_pts: 1
-  rerun_seed_variation_pts: [2, 5]
-  hard_fail_threshold_pts: 5   # >5pt drop is a hard fail regardless of task-metric gains
+drift_budget:                  # d = baseline - checkpoint, in pts
+  noise_tolerance_pts: 1       # d <= 1: noise; 1 < d <= 5: rerun with seed variation
+  hard_fail_threshold_pts: 5   # d > 5 is a hard fail regardless of task-metric gains
+  ci: paired                   # PASS also needs the paired 95% CI upper bound <= 5
 ```
 
 **Minimum viable drift suite for a small/dogfood run:** the
@@ -252,8 +252,8 @@ drift_budget:
 runs and can be hours of wall-clock at greedy single-stream
 decode on modest hardware. Scope down deliberately rather than
 silently truncating — pick n per benchmark using
-`checkpoint-promotion`'s item-count-from-budget rule (95% CI
-half-width comfortably under half the hard-fail threshold), and
+`checkpoint-promotion`'s paired-difference sizing rule (n=200
+floor; more when many items flip verdict), and
 document the scoped-down suite inline in `drift-suite.yaml`
 (a comment naming the budget it was sized against). The
 `domain_adjacent` block itself is **optional when the golden

@@ -91,12 +91,12 @@ and every downstream skill assume this phase already ran.
 
 **Phase 0 output** — the `eval/` directory contract from
 `eval-harness-first` (`goldens.jsonl`, `graders/`, `drift-suite.yaml`,
-`baseline-<model>.json`), plus the first `runs/<run-id>/results.json`
-produced by running the harness (canonical location per
-`eval-harness-first`'s Directory Contract — never under `eval/runs/`,
-including for this Phase 0 baseline run). Every per-trace record in
-`results.json` — Phase 0's baseline run and every later Phase 5
-re-run alike — carries exactly this shape, since
+`baseline-<model>.json`), plus the base model's per-item records at
+`eval/baseline-<model>-results.json` (canonical locations per
+`eval-harness-first`'s Directory Contract — never under `eval/runs/`).
+Every per-trace record — the Phase 0 baseline file and every later
+Phase 5 `runs/<date>-<slug>/results.json` alike — carries exactly this
+shape, one record per golden and drift-suite item, since
 `trace-to-training-data` reads this file directly and cannot convert
 a record missing any of these fields. **`messages` MUST include the
 full exchange — the assistant's completion, not just the user
@@ -143,8 +143,9 @@ applying its budget both belong to stage 2, not two separate stages.)
 2. **Stage 2 — Capability drift.** Re-run the identical harness plus
    the frozen drift suite on the checkpoint — the same `eval/` this
    role built in Phase 0, not a looser or expanded one — and write a
-   fresh `runs/<run-id>/results.json` in the schema above. Diff
-   drift-suite results against `baseline-<model>.json` per benchmark,
+   fresh `runs/<date>-<slug>/results.json` (the training run's own
+   directory) in the schema above. Pair each drift-suite item with
+   its record in `eval/baseline-<model>-results.json` by `task_id`,
    then apply `checkpoint-promotion`'s Drift Budget table **by
    pointer, not by number** — cite the table rather than restating
    its thresholds, and treat its hard-fail row as absolute regardless

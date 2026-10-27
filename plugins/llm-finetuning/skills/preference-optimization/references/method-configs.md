@@ -1,4 +1,4 @@
-Last verified: 2026-07-13
+Last verified: 2026-10-27
 
 # Preference Optimization Method Configs
 
@@ -14,6 +14,15 @@ TRL API conventions (`processing_class`, not
 in `lora-qlora-recipes`'s
 [`references/unsloth-trl-mapping.md`](../../lora-qlora-recipes/references/unsloth-trl-mapping.md).
 
+**Learning rates are per adapter type.** The
+`learning_rate` in each plain-TRL block below is the
+full-fine-tune value. A LoRA or QLoRA adapter (the
+Unsloth wrapper, or any `peft_config`) runs about
+10x higher. Take the value from the LoRA column of
+`lora-qlora-recipes`'s
+[`references/hyperparameters.md`](../../lora-qlora-recipes/references/hyperparameters.md)
+Post-SFT Methods table, not from these blocks.
+
 ## DPO — the Default
 
 ```python
@@ -22,7 +31,7 @@ from trl import DPOConfig, DPOTrainer
 dpo_args = DPOConfig(
     output_dir="./outputs-dpo",
     beta=0.1,                     # settled default
-    learning_rate=7e-7,           # 5e-7-1e-6 range — lower than SFT LR
+    learning_rate=7e-7,           # full FT: 5e-7-1e-6; LoRA: 5e-6-1e-5
     num_train_epochs=2,           # 1-2 epochs, not more
     per_device_train_batch_size=4,
     gradient_accumulation_steps=4,
@@ -62,7 +71,9 @@ model, tokenizer = FastLanguageModel.from_pretrained(
     load_in_4bit=True,
 )
 model = FastLanguageModel.get_peft_model(model, r=32, lora_alpha=64)
-# DPOConfig/DPOTrainer usage is unchanged from the plain-TRL block above
+# Same DPOConfig/DPOTrainer as above, except the LR: this is an adapter,
+# so use the LoRA value (5e-6-1e-5), not the full-FT 7e-7
+dpo_args.learning_rate = 5e-6
 ```
 
 ## ORPO — Memory-Bound / No SFT Checkpoint
@@ -73,7 +84,7 @@ from trl.experimental.orpo import ORPOConfig, ORPOTrainer
 orpo_args = ORPOConfig(
     output_dir="./outputs-orpo",
     beta=0.1,                     # λ in the ORPO odds-ratio term, ≈0.1
-    learning_rate=2e-5,           # 8e-6-5e-5 range
+    learning_rate=2e-5,           # full FT: 8e-6-5e-5; LoRA: 8e-5-2e-4
     num_train_epochs=2,
     per_device_train_batch_size=4,
     gradient_accumulation_steps=4,
@@ -106,7 +117,7 @@ from trl import KTOConfig, KTOTrainer
 kto_args = KTOConfig(
     output_dir="./outputs-kto",
     beta=0.1,
-    learning_rate=5e-7,           # same range as DPO
+    learning_rate=5e-7,           # same split as DPO; LoRA: 5e-6-1e-5
     num_train_epochs=1,
     per_device_train_batch_size=4,
     gradient_accumulation_steps=4,
@@ -144,7 +155,7 @@ trusting it:
 | Hyperparameter | Sweep range |
 |---|---|
 | Effective batch size | 128 (fixed) |
-| Learning rate | 3e-7 – 1e-6 |
+| Learning rate | 3e-7 – 1e-6 full FT; 3e-6 – 1e-5 LoRA |
 | β | 2.0 – 2.5 |
 | γ/β (target reward margin) | 0 – 1 |
 
@@ -158,7 +169,7 @@ simpo_args = CPOConfig(
     beta=2.25,                    # sweep 2.0-2.5
     cpo_alpha=0.0,                # 0 disables the CPO NLL term for pure SimPO
     simpo_gamma=0.5,               # gamma/beta sweep point, 0-1
-    learning_rate=5e-7,            # sweep 3e-7-1e-6
+    learning_rate=5e-7,            # full FT sweep 3e-7-1e-6; LoRA 3e-6-1e-5
     num_train_epochs=1,
     per_device_train_batch_size=4,
     gradient_accumulation_steps=32,   # 4 * 32 = 128 effective batch
@@ -199,8 +210,7 @@ the SFT stage previously nailed).
 Remediation order:
 
 1. Drop the learning rate toward the low end of
-   the method's range in `SKILL.md`'s Method
-   Selection table — this fixes the majority of
+   the method's range for its adapter type — this fixes the majority of
    cases.
 2. Reduce epochs (1 instead of 2) if the low-LR
    run still forgets.

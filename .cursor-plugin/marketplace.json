@@ -566,7 +566,7 @@
     {
       "name": "llm-finetuning",
       "source": "./plugins/llm-finetuning",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Eval-gated LLM fine-tuning lifecycle: LoRA/QLoRA SFT, preference optimization (DPO/ORPO/KTO), GRPO/RLVR, vision SFT, and quantized export \u2014 Unsloth-first with TRL fallback, no eval harness means no fine-tune",
       "author": {
         "name": "Curtis Blanton",

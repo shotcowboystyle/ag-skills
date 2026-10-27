@@ -122,6 +122,7 @@ runs/<date>-<slug>/
 │   ├── config.yaml
 │   ├── train.py
 │   └── logs/
+├── results.json          # written by the eval engineer at Phase 5
 ├── promotion-report.md
 ├── export/
 └── roadbook.md

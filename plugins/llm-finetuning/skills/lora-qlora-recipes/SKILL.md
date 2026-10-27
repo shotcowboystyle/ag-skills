@@ -57,8 +57,11 @@ Mode below, not a valid optimization.
   rank — derive it from rank every time.
 - **LoRA learning rate ≈ 10x the equivalent
   full-fine-tune LR.** For QLoRA specifically,
-  **2e-4** is the standard starting point. Full
-  hyperparameter tables and worked examples:
+  **2e-4** is the standard starting point. The rule
+  carries over to DPO, ORPO, SimPO, KTO and GRPO
+  adapters. Full hyperparameter tables, the
+  per-adapter-type table for those methods, and
+  worked examples:
   `references/hyperparameters.md`.
 
 ### Rank by Task
