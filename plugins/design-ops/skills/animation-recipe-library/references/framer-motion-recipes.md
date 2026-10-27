@@ -9,14 +9,13 @@ Requires: `framer-motion` v11+
 ## Spring Presets
 
 ```tsx
+// Base presets — same names and values as interaction-motion-design's base scale.
+// Extended springs: easing-and-spring-catalog.md.
 export const springs = {
-  gentle:  { type: "spring", stiffness: 120, damping: 14, mass: 1 },
-  bouncy:  { type: "spring", stiffness: 180, damping: 12, mass: 1 },
-  snappy:  { type: "spring", stiffness: 300, damping: 20, mass: 0.8 },
-  wobbly:  { type: "spring", stiffness: 150, damping: 8, mass: 1 },
-  stiff:   { type: "spring", stiffness: 400, damping: 30, mass: 1 },
-  slow:    { type: "spring", stiffness: 80, damping: 20, mass: 1.2 },
-  ios:     { type: "spring", stiffness: 200, damping: 22, mass: 1 },
+  snappy:  { type: "spring", stiffness: 400, damping: 30, mass: 1 },
+  default: { type: "spring", stiffness: 300, damping: 25, mass: 1 },
+  gentle:  { type: "spring", stiffness: 200, damping: 25, mass: 1 },
+  bouncy:  { type: "spring", stiffness: 300, damping: 10, mass: 1 },
 } as const;
 ```
 
@@ -69,7 +68,7 @@ export const ScaleIn = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
-    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+    transition={{ type: "spring", stiffness: 300, damping: 25 }}
   >
     {children}
   </motion.div>
@@ -82,7 +81,7 @@ export const BounceIn = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.3 }}
     animate={{ opacity: 1, scale: 1 }}
-    transition={{ type: "spring", stiffness: 180, damping: 12 }}
+    transition={{ type: "spring", stiffness: 300, damping: 10 }}
   >
     {children}
   </motion.div>
@@ -121,7 +120,7 @@ export const RotateIn = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0, rotate: -180, scale: 0.5 }}
     animate={{ opacity: 1, rotate: 0, scale: 1 }}
-    transition={{ type: "spring", stiffness: 200, damping: 15 }}
+    transition={{ type: "spring", stiffness: 300, damping: 10 }}
   >
     {children}
   </motion.div>
@@ -171,7 +170,7 @@ export const StaggerGrid = ({ items }: { items: React.ReactNode[] }) => (
           hidden: { opacity: 0, y: 24, scale: 0.95 },
           visible: { opacity: 1, y: 0, scale: 1 },
         }}
-        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        transition={{ type: "spring", stiffness: 200, damping: 25 }}
       >
         {item}
       </motion.div>
@@ -312,7 +311,7 @@ export const Button = ({ children, onClick }: { children: React.ReactNode; onCli
   <motion.button
     whileHover={{ y: -1, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
     whileTap={{ scale: 0.96 }}
-    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+    transition={{ type: "spring", stiffness: 400, damping: 30 }}
     onClick={onClick}
   >
     {children}
@@ -327,7 +326,7 @@ export const Toggle = ({ isOn, onToggle }: { isOn: boolean; onToggle: () => void
     background: isOn ? "#3b82f6" : "#e2e8f0", border: "none", cursor: "pointer" }}>
     <motion.div
       animate={{ x: isOn ? 20 : 0 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
       style={{ width: 24, height: 24, borderRadius: 12, background: "white" }}
     />
   </button>
@@ -368,7 +367,7 @@ export const NotificationBadge = ({ count }: { count: number }) => (
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         exit={{ scale: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+        transition={{ type: "spring", stiffness: 300, damping: 10 }}
         style={{ background: "#ef4444", color: "white", borderRadius: "50%",
           width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12 }}
       >
@@ -618,7 +617,7 @@ export const BottomSheet = ({ isOpen, onClose, children }: {
           initial={{ y: "100%" }}
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
           drag="y" dragConstraints={{ top: 0 }} dragElastic={0.2}
           onDragEnd={(_, info) => { if (info.offset.y > 100) onClose(); }}
           style={{ position: "fixed", bottom: 0, left: 0, right: 0,
@@ -648,7 +647,7 @@ export const Drawer = ({ isOpen, onClose, children, side = "left" }: {
           initial={{ x: side === "left" ? "-100%" : "100%" }}
           animate={{ x: 0 }}
           exit={{ x: side === "left" ? "-100%" : "100%" }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
           style={{ position: "fixed", top: 0, bottom: 0, [side]: 0, width: 320,
             background: "white", padding: 24 }}
         >

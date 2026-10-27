@@ -515,3 +515,159 @@
 **UI Application**: Apply to every major screen. The 5-second answers should match your design intent. If you intended the CTA to be primary, users should mention it first.
 **Common Violation**: Designs that require study to understand. If users need more than 5 seconds to parse the page structure, they'll leave.
 **Fix**: Run the 5-second test with 3-5 people. If the answers don't match your intent, increase the visual weight of the intended focal point and decrease everything else.
+
+---
+
+## Rule Digest (One-Line Form)
+
+A compact one-line version of the canon, grouped differently from the detailed rules above. Numbering here is independent of the detailed rules.
+
+### Layout Rules (1-15)
+
+**Rule 1: The 8px Grid** — All spacing and sizing should be multiples of 8px (4px for small adjustments). Source: Material Design. This creates mathematical harmony and consistent rhythm across every element.
+
+**Rule 2: Alignment Creates Relationship** — Elements that share an alignment axis are perceived as related. Every element must align to something. Random placement destroys coherence. Source: Muller-Brockmann, Grid Systems.
+
+**Rule 3: Proximity Groups Content** — Related items should be close together; unrelated items should be far apart. The space between elements communicates their relationship. Source: Gestalt principles.
+
+**Rule 4: Whitespace Is Not Empty** — Whitespace is an active design element, not leftover space. It creates breathing room, improves comprehension, and signals premium quality. Cheap designs cram; premium designs breathe. Source: Jan Tschichold.
+
+**Rule 5: Rule of Thirds** — Divide the viewport into a 3x3 grid. Place key elements at intersection points for dynamic, asymmetric compositions that feel natural. Source: Classical composition.
+
+**Rule 6: Golden Ratio (1:1.618)** — Use phi to determine proportional relationships between content areas, sidebars, and imagery. Apply to container aspect ratios, not as a rigid grid. Source: Classical mathematics.
+
+**Rule 7: Content Width Limits** — Body text should never exceed 65-75 characters per line (measure). Wide text is hard to read. Use max-width constraints. Source: Robert Bringhurst, Elements of Typographic Style.
+
+**Rule 8: Visual Hierarchy Through Size** — The most important element should be the largest. Create at least 3 distinct size levels to establish clear hierarchy. Source: Refactoring UI.
+
+**Rule 9: Consistent Gutters** — Column gutters should be consistent throughout a layout. Standard gutters: 16px (compact), 24px (comfortable), 32px (spacious). Source: Grid Systems.
+
+**Rule 10: Edge-to-Edge Avoidance** — Content should never touch the edges of its container. Minimum internal padding: 16px mobile, 24px tablet, 32px desktop. Source: Apple HIG.
+
+**Rule 11: Z-Pattern for Landing Pages** — Users scan landing pages in a Z pattern: top-left logo, top-right nav, diagonal to middle content, bottom-left to bottom-right CTA. Design for this flow. Source: Eye-tracking research.
+
+**Rule 12: F-Pattern for Content Pages** — Users scan content pages in an F pattern: strong first line, decreasing engagement with each subsequent line. Front-load important content. Source: Nielsen Norman Group.
+
+**Rule 13: Above-the-Fold Priority** — The most critical content and primary CTA must be visible without scrolling. This does not mean everything above the fold — it means the right things above the fold. Source: NNG research.
+
+**Rule 14: Responsive Reflow, Not Rescale** — Layouts should reflow at breakpoints, not simply shrink. A 3-column desktop layout becomes 1-column on mobile with content reordered by priority. Source: Ethan Marcotte, Responsive Web Design.
+
+**Rule 15: Container-Based Design** — Design from the inside out. Let content determine container size, not arbitrary widths. Use CSS container queries for component-level responsiveness. Source: Modern CSS methodology.
+
+### Typography Rules (16-30)
+
+**Rule 16: Two Typefaces Maximum** — Use at most two typeface families: one for headings, one for body. Three is a crowd. One used masterfully is often enough. Source: Vignelli Canon.
+
+**Rule 17: Type Scale Ratios** — Use a mathematical ratio to generate font sizes: 1.125 (Major Second), 1.200 (Minor Third), 1.250 (Major Third), 1.333 (Perfect Fourth), 1.414 (Augmented Fourth), 1.500 (Perfect Fifth). Source: Modular Scale (Tim Brown).
+
+**Rule 18: Body Text 16-18px** — Body text on screens should be 16-18px minimum. 14px is acceptable only for secondary text. Anything below 12px is unreadable for most users. Source: WCAG, Refactoring UI.
+
+**Rule 19: Line Height = Font Size x 1.4-1.6** — Body text needs 140-160% line height for comfortable reading. Headings need tighter line height (110-130%) because they are larger. Source: Bringhurst.
+
+**Rule 20: Heading Contrast Ratio** — The largest heading should be at least 3x the body text size. If body is 16px, H1 should be at least 48px. This creates unmistakable hierarchy. Source: Refactoring UI.
+
+**Rule 21: Font Weight as Hierarchy** — Use font weight (400, 500, 600, 700) to create hierarchy within the same size. Bold labels, regular values. Semibold headings, regular body. Source: Thinking with Type (Lupton).
+
+**Rule 22: Tracking Adjustments** — Large text (>24px) benefits from tighter letter-spacing (-0.01em to -0.03em). Small text (<12px) benefits from looser letter-spacing (+0.01em to +0.02em). Source: Typography best practices.
+
+**Rule 23: Paragraph Spacing > Line Spacing** — Space between paragraphs should be greater than space between lines within a paragraph. Typically paragraph-gap = line-height x 1.5-2. Source: Tschichold.
+
+**Rule 24: Left-Align Body Text** — Body text should be left-aligned (LTR languages). Centered text is acceptable only for short headings and labels. Justified text creates rivers of whitespace on screen. Source: Bringhurst.
+
+**Rule 25: Semantic Font Sizing** — Name your type scale semantically (display, heading, title, body, label, caption) not by size (large, medium, small). This decouples meaning from implementation. Source: Design Systems methodology.
+
+**Rule 26: Variable Font Optimization** — Use variable fonts to reduce HTTP requests and enable fine-grained weight/width control. Subset fonts to only the character sets needed. Source: Web performance best practices.
+
+**Rule 27: Optical Sizing** — Enable optical sizing in variable fonts (font-optical-sizing: auto) so small text gets slightly wider strokes and larger x-height. Source: Typography science.
+
+**Rule 28: System Font Stacks First** — Start with system font stacks (-apple-system, BlinkMacSystemFont, Segoe UI, Roboto) for performance. Only add custom fonts when brand requires it. Source: Performance-first design.
+
+**Rule 29: Type Pairing by Contrast** — Pair typefaces that contrast in classification: serif heading + sans-serif body, geometric display + humanist body. Never pair two similar typefaces. Source: Lupton.
+
+**Rule 30: Fluid Typography** — Use clamp() for font sizes that scale smoothly between breakpoints: font-size: clamp(1rem, 0.5rem + 1.5vw, 1.25rem). No sudden jumps at breakpoints. Source: Modern CSS.
+
+### Color Rules (31-45)
+
+**Rule 31: 60-30-10 Rule** — 60% dominant color (background), 30% secondary color (surfaces, cards), 10% accent color (CTAs, active states). This creates visual balance. Source: Interior design, applied to UI.
+
+**Rule 32: Maximum 5 Colors** — A UI color palette should have: 1 primary brand color, 1 secondary brand color, 1 accent/CTA color, 1 neutral gray scale, plus semantic colors (success, warning, error, info). Source: Refactoring UI.
+
+**Rule 33: Contrast Minimums (APCA)** — Body text: Lc 60+ on backgrounds. Large text (24px+): Lc 45+. Non-text elements: Lc 30+. Use APCA (Accessible Perceptual Contrast Algorithm) over WCAG 2.x AA ratios for perceptually accurate contrast. Source: WCAG 3.0 draft.
+
+**Rule 34: Color Meaning Consistency** — Red = error/destructive. Green = success/positive. Yellow/amber = warning/caution. Blue = info/neutral action. Never violate these conventions. Source: Universal Principles of Design.
+
+**Rule 35: Hue Shift in Shades** — When creating color shades, shift hue slightly: darker shades shift toward blue/purple, lighter tints shift toward yellow/orange. Pure saturation/lightness changes look lifeless. Source: Color science.
+
+**Rule 36: oklch for Perceptual Uniformity** — Use oklch() color space for palette generation. Unlike HSL, oklch is perceptually uniform: equal numeric changes produce equal perceived changes. Source: CSS Color Level 4.
+
+**Rule 37: Dark Mode Is Not Inverted Light Mode** — Dark mode requires: reduced contrast (not pure white on pure black), desaturated colors (lower chroma), elevated surfaces lighter than background, careful shadow replacement with border/elevation. Source: Material Design 3.
+
+**Rule 38: Semantic Color Tokens** — Define colors semantically (--color-surface-primary, --color-text-secondary, --color-border-default) not by value (--gray-200, --blue-500). Semantic tokens make dark mode and theming trivial. Source: Design Systems methodology.
+
+**Rule 39: Color Harmony Algorithms** — Complementary (opposite on wheel) for vibrant contrast. Analogous (adjacent) for harmonious, calm palettes. Triadic (120-degree apart) for balanced variety. Split-complementary for softer contrast than direct complementary. Source: Itten, Art of Color.
+
+**Rule 40: Colorblind-Safe Palettes** — Never rely on color alone to convey information. Always pair color with shape, icon, or text. Test palettes for deuteranopia (red-green, 8% of men), protanopia, and tritanopia. Source: WCAG 1.4.1.
+
+**Rule 41: Brand Color = One Hero Color** — A brand should be instantly recognized by one color. Stripe purple. Spotify green. Figma purple-orange. Vercel black. The hero color appears in CTAs, accents, and key moments — not everywhere. Source: Brand design principles.
+
+**Rule 42: Surface Elevation Through Color** — In flat design, elevation is communicated through subtle background color shifts rather than drop shadows. Each layer slightly lighter (light mode) or lighter (dark mode) than the one below. Source: Material Design.
+
+**Rule 43: Gradient Restraint** — Gradients work best between analogous hues (blue to teal, orange to pink). Avoid gradients between complementary colors (green to red = mud). Subtle gradients (5-15% shift) are safer than dramatic ones. Source: Color theory.
+
+**Rule 44: Temperature for Mood** — Warm colors (reds, oranges, yellows) create energy and urgency. Cool colors (blues, greens, purples) create calm and trust. Most SaaS products default to cool palettes for trust. Source: Color psychology.
+
+**Rule 45: Gray Is Not Neutral** — Pure gray (#808080) looks dead on screen. Tint your grays: warm grays (add red/yellow) feel friendly; cool grays (add blue) feel professional; green-tinted grays feel technical. Source: Refactoring UI.
+
+### Composition Rules (46-60)
+
+**Rule 46: Visual Weight Distribution** — Every element has visual weight: large > small, dark > light, textured > flat, isolated > grouped. Balance visual weight across the composition, not necessarily symmetrically. Source: Classical composition.
+
+**Rule 47: Asymmetric Balance** — Asymmetric layouts feel more dynamic than symmetric ones. Balance a large element on one side with multiple smaller elements on the other. Source: Muller-Brockmann.
+
+**Rule 48: Rhythm Through Repetition** — Repeat visual elements at consistent intervals to create rhythm: card grids, list items, icon rows. Rhythm makes scanning predictable and comfortable. Source: Gestalt principles.
+
+**Rule 49: Focal Point First** — Every screen needs one clear focal point — the element users should engage with first. If you cannot point to the focal point instantly, the composition is unfocused. Source: Composition fundamentals.
+
+**Rule 50: Progressive Disclosure in Layout** — Do not show everything at once. Layer information: summary visible, details on demand. This applies to visual density too — not every element needs equal visual weight on first view. Source: Norman, Design of Everyday Things.
+
+**Rule 51: Negative Space as Design Element** — Negative space (whitespace) is not wasted space. It directs attention, creates grouping, and communicates premium quality. Apple uses noticeably more whitespace than competitors. Source: Swiss design tradition.
+
+**Rule 52: Card-Based Composition** — Cards create natural content grouping, consistent scanning patterns, and responsive reflow. Card designs work across all viewports. Use consistent card anatomy: media, header, body, actions. Source: Material Design.
+
+**Rule 53: Density Modes** — Design three density modes: Compact (32px row height, 4px gaps), Comfortable (48px row height, 8px gaps), Spacious (64px row height, 16px gaps). Let users choose. Source: Google Workspace patterns.
+
+**Rule 54: Anchor Elements** — Large visual anchors (hero images, prominent headings, illustrations) give the eye a place to rest and orient. Without anchors, interfaces feel like undifferentiated data tables. Source: Editorial design.
+
+**Rule 55: Vertical Rhythm** — Maintain a consistent baseline grid. All text, images, cards, and containers should align to the baseline rhythm. This creates invisible order that users feel as "polished." Source: Grid Systems.
+
+**Rule 56: Contrast of Scale** — Place very large elements next to very small elements for dramatic visual interest. A 72px heading next to 14px body text. A full-bleed image next to a small caption. Moderate sizes everywhere = boredom. Source: Paula Scher technique.
+
+**Rule 57: Directional Flow** — Design for the eye's natural reading direction. In LTR layouts, action flows left-to-right, top-to-bottom. Place primary actions where the eye naturally finishes. Source: Eye-tracking research.
+
+**Rule 58: Break the Grid Intentionally** — After establishing a rigid grid, break it once for emphasis. A full-bleed image in a contained layout. An oversized pull quote breaking the column. The break only works if the grid is consistent everywhere else. Source: Editorial design.
+
+**Rule 59: Content-First Composition** — Design with real content, not lorem ipsum. Real content reveals hierarchy problems, length edge cases, and visual imbalance that placeholder text hides. Source: Designing with Data.
+
+**Rule 60: Layered Depth** — Create depth through overlapping elements, background/midground/foreground layers, and subtle parallax. Flat design does not mean flat depth. Even 2D interfaces benefit from perceived layers. Source: Interaction design.
+
+### Detail Rules (61-70)
+
+**Rule 61: Border Radius Consistency** — Choose one border-radius system and apply it everywhere. Common systems: 4px (sharp), 8px (standard), 12px (friendly), 16px (rounded), 9999px (pill). Mix no more than 2 values. Source: Design system practice.
+
+**Rule 62: Shadow Consistency** — Define a shadow elevation scale (sm, md, lg, xl) and use it consistently. Each level should feel like a natural step. Colored shadows (tinted with the surface color) feel more natural than pure black shadows. Source: Material Design.
+
+**Rule 63: Icon Consistency** — All icons in a product must share: stroke weight, corner style (rounded vs. sharp), grid size, optical sizing, and fill behavior (outline vs. filled). Mixing icon sets is the fastest way to look amateur. Source: Icon design systems.
+
+**Rule 64: Spacing Rhythm** — Use a spacing scale based on your base unit: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128. Never use arbitrary values like 13px or 37px. Consistent spacing creates unconscious order. Source: Design token methodology.
+
+**Rule 65: Interaction State Completeness** — Every interactive element needs 6 states: default, hover, active/pressed, focus (keyboard), disabled, loading. Missing states make products feel unfinished. Source: Component design best practices.
+
+**Rule 66: Pixel-Perfect Alignment** — At 1x resolution, elements should align to whole pixels. At 2x, align to 0.5px. Subpixel misalignment causes blurry borders and text. Source: Front-end craft.
+
+**Rule 67: Optical Alignment Over Mathematical** — Sometimes mathematically centered elements look visually off-center. Play/triangle icons need to shift right ~2px. Text in buttons may need 1px vertical offset. Trust your eyes over the numbers. Source: Typography tradition.
+
+**Rule 68: Touch Target Minimums** — Interactive elements: minimum 44x44px (Apple), 48x48dp (Material). This is the touch target, not the visual size — the tappable area can extend beyond the visible element. Source: WCAG 2.5.5, Apple HIG.
+
+**Rule 69: Loading State Craft** — Skeleton screens over spinners. Skeleton shapes should match content shapes. Animate with a subtle shimmer (left-to-right pulse). Never show empty containers. Source: UX best practices.
+
+**Rule 70: Transition Consistency** — All transitions should use the same easing curve and base duration (150-300ms). Entrances: ease-out. Exits: ease-in. Transform > opacity > color. Never transition layout properties (width, height). Source: Material Motion.

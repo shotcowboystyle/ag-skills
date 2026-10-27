@@ -447,3 +447,125 @@ Before any AI-generated asset enters production, verify:
 - [ ] Video set to not autoplay (or autoplay muted with controls available)
 - [ ] Total page weight with all assets is within performance budget
 - [ ] CDN delivery configured for production assets
+
+
+---
+
+## Appendix: Post-Processing, Ethics, Cost Optimization
+
+Moved verbatim from the `ai-design-generation` SKILL.md.
+
+### 9. Asset Post-Processing
+
+#### Upscaling
+
+AI outputs often need resolution increases for production use:
+
+- **Real-ESRGAN** — Best general-purpose upscaler, 4x without significant artifacts
+- **Topaz Gigapixel** — Commercial, best for photographic content
+- **Waifu2x** — Best for illustrated/anime-style content
+- **Fal.ai upscale models** — Accessible via the same MCP server, no separate tool needed
+
+**When to Upscale:**
+
+- Source is below target resolution (e.g., 1024px generated, need 2880px for Retina)
+- Generating at lower resolution was faster/cheaper and upscaling is acceptable quality
+
+#### Background Removal
+
+For assets that need transparency:
+
+- **remove.bg API** — Best automated option for photographs
+- **Recraft V3** — Can generate with transparent backgrounds directly (SVG)
+- **Fal.ai background removal models** — Accessible via MCP
+- Manual: Use Figma or image editor for complex cases
+
+#### SVG Tracing
+
+Convert raster icons/illustrations to true vector:
+
+- **Recraft V3** — Generate as vector from the start (preferred)
+- **Vectorizer.ai** — AI-powered raster-to-vector conversion
+- **Potrace** — Open-source, good for simple shapes
+- Manual: Redraw in Figma using raster as reference (highest quality)
+
+#### Color Correction
+
+AI models do not guarantee exact color values. Post-process to match brand:
+
+- Extract the dominant palette from generated output
+- Map each color to nearest brand color
+- Apply correction globally (Figma color adjustment, CSS filters, or image editor)
+- Verify contrast ratios remain WCAG AA compliant after correction
+
+### 11. Ethical Considerations
+
+#### Attribution
+
+- AI-generated assets should be disclosed to clients when they form a significant part of deliverables
+- Internal team use (concept exploration, wireframing) typically does not require disclosure
+- Portfolio use: clearly label AI-generated vs. hand-crafted work
+- Commercial use: verify the generation tool's license permits commercial usage of outputs
+
+#### Bias in Generated Designs
+
+AI models inherit biases from training data. Watch for:
+
+- **Representation bias:** Generated people may skew toward certain demographics. Actively prompt for diversity.
+- **Cultural bias:** "Modern design" defaults to Western/Silicon Valley aesthetics. Specify cultural context explicitly.
+- **Accessibility bias:** Generated designs rarely meet WCAG standards by default. Always audit.
+- **Gender/age bias:** Stock-photo-like generations default to narrow demographic ranges. Be explicit.
+
+**Mitigation Strategies:**
+
+- Include demographic diversity in prompts when generating imagery with people
+- Cross-reference with the `cross-cultural-i18n-ux` skill for cultural appropriateness
+- Run accessibility checks on all generated designs using the `accessibility-inclusive-design` skill
+- Build diverse representation requirements into your generation brief
+
+#### Client Disclosure
+
+Recommended disclosure framework:
+
+- **Concept phase:** No disclosure needed — AI is one of many exploration tools
+- **Design phase:** Disclose if AI generation forms the basis of presented designs
+- **Production phase:** Disclose if final shipped assets are AI-generated (not just AI-assisted)
+- **Always disclose** if the client's contract or industry regulations require it
+
+---
+
+### 12. Cost Optimization
+
+#### When to Use Which Model
+
+| Need                   | Cheapest Option | Best Quality Option | Recommended  |
+| ---------------------- | --------------- | ------------------- | ------------ |
+| UI mockup screenshot   | Stitch          | Stitch              | Stitch       |
+| Product icon (SVG)     | Recraft V3      | Recraft V3          | Recraft V3   |
+| Hero photograph        | FLUX Schnell    | FLUX Pro / Imagen 4 | FLUX Pro     |
+| Editorial illustration | DALL-E 3        | Midjourney          | Midjourney   |
+| Background pattern     | FLUX Schnell    | FLUX Pro            | FLUX Schnell |
+| Video clip             | Pika            | Veo 3.1             | Veo 3.1      |
+| Concept exploration    | FLUX Schnell    | FLUX Pro            | FLUX Schnell |
+| Client presentation    | FLUX Pro        | Midjourney          | FLUX Pro     |
+
+#### Batch Strategies
+
+- **Generate at low resolution first**, then upscale only the selected outputs
+- **Use fast models for exploration** (FLUX Schnell, DALL-E 3), premium models for finals
+- **Cache successful prompts** — save prompts that produced good results for reuse on similar projects
+- **Reuse style anchors** — generate one high-quality reference, then use it to guide cheaper subsequent generations
+- **Bundle similar requests** — generate icon sets in one session rather than one-at-a-time over days
+
+#### Cost Per Asset Estimates
+
+| Asset Type             | Low Estimate | High Estimate | Typical |
+| ---------------------- | ------------ | ------------- | ------- |
+| UI screen mockup       | $0.02        | $0.15         | $0.05   |
+| Icon (SVG)             | $0.01        | $0.05         | $0.02   |
+| Hero image             | $0.03        | $0.20         | $0.08   |
+| Illustration           | $0.03        | $0.20         | $0.10   |
+| Video clip (5s)        | $0.10        | $1.00         | $0.30   |
+| Full page (5 sections) | $0.10        | $0.50         | $0.25   |
+
+_Costs vary by model, resolution, and number of iterations. Estimates assume 2-3 generation rounds per final asset._

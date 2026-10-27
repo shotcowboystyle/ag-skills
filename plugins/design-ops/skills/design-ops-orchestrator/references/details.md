@@ -25,11 +25,10 @@ findings are opinions, and opinions don't survive a prioritization meeting.
 ### Fix — AI-generated UI that runs but looks wrong
 
 1. `ui-pattern-intelligence` — detect the slop patterns and name them
-2. `visual-design-mastery` — score it and cite the canonical rules it breaks
-3. `ui-visual-design-system` — replace arbitrary values with a system
-4. `component-patterns-code` — rewrite it properly
-5. `accessibility-inclusive-design` — the states and labels the generator skipped
-6. `micro-copy-intelligence` — replace placeholder and robotic strings
+2. `visual-design-mastery` — score it, cite the rules it breaks, and replace arbitrary values with a system
+3. `component-patterns-code` — rewrite it properly
+4. `accessibility-inclusive-design` — the states and labels the generator skipped
+5. `micro-copy-intelligence` — replace placeholder and robotic strings
 
 **Depth:** `color-palette-library`, `typography-pairing-recipes`,
 `shadow-elevation-density`, `animation-recipe-library`.
@@ -44,7 +43,7 @@ generator skipped now exists. Report the before/after score delta.
 3. `sector-style-intelligence` — what credible looks like in this category; then
    `reference-intelligence` — what award-level looks like right now, sourced and captured
 4. `screen-flow-patterns` — which screens exist and what connects them
-5. `ui-visual-design-system` — type, color, hierarchy, spacing
+5. `visual-design-mastery` — type, color, hierarchy, spacing
 6. `interaction-motion-design` — how it moves and responds
 7. `performance-states-patterns` — empty, loading, error, offline, success
 8. `accessibility-inclusive-design` — before it's built, not after
@@ -61,7 +60,7 @@ happy path is a mockup, not a design.
 ### Implement — building the real thing
 
 1. `design-systems-architecture` — which tokens and components already exist
-2. `ui-visual-design-system` — visual spec for anything new
+2. `visual-design-mastery` — visual spec for anything new
 3. `component-patterns-code` — production code, full state matrix, ARIA
 4. `micro-copy-intelligence` — every component ships strings; robotic labels are
    the loudest slop tell and the cheapest thing to fix
@@ -117,8 +116,8 @@ the one Design Ops exists to fix, so the gate is the point of the pipeline.
 5. `component-patterns-code` — reference implementations
 6. `figma-design-tool-workflows` — keep design and code in sync
 
-**Depth:** `shadow-elevation-density`, `ui-visual-design-system`,
-`visual-design-mastery`, `platform-visual-standards`.
+**Depth:** `shadow-elevation-density`, `visual-design-mastery`,
+`platform-visual-standards`.
 **Gate:** tokens are a single source of truth in W3C DTCG format, one change
 propagates everywhere without hand-editing, and every component consumes a
 semantic alias rather than a primitive directly.
@@ -157,7 +156,7 @@ a liability.
 1. `cross-cultural-i18n-ux` — RTL, CJK, expansion, locale formats, color meaning
 2. `typography-pairing-recipes` — CJK, Arabic, and Cyrillic coverage is a font
    problem before it is a layout problem
-3. `ui-visual-design-system` — logical properties, flexible containers
+3. `visual-design-mastery` — logical properties, flexible containers
 4. `accessibility-inclusive-design` — language attributes, reading order
 
 **Depth:** `responsive-block-patterns`, `micro-copy-intelligence`.
@@ -167,7 +166,7 @@ a liability.
 ### AI Surface — designing an AI or agent feature
 
 1. `agentic-ai-generative-ux` — agent patterns, confidence, guardrails
-2. `ai-spatial-voice-ux` — conversational, voice, multimodal patterns
+2. `ai-spatial-voice-ux` — voice and multimodal patterns (conversational dialogue lives in `agentic-ai-generative-ux`)
 3. `micro-copy-intelligence` — an agent's trustworthiness is almost entirely its
    strings
 4. `ux-ethics-content-strategy` — consent, control, accountability

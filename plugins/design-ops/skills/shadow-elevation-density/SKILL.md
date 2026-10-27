@@ -149,8 +149,8 @@ and on low-end Android; always ship a solid-color fallback behind an
 
 ## Cross-References
 
-- `ui-visual-design-system` — where elevation sits in the wider visual language
+- `visual-design-mastery` — where elevation sits in the wider visual language
 - `platform-visual-standards` — iOS and Material 3 have their own elevation models
-- `animation-recipe-library` — the easing tokens shadow transitions use
+- `interaction-motion-design` — the base easing and duration tokens shadow transitions use
 - `design-systems-architecture` — how these tokens fit the three-tier model
 - `figma-design-tool-workflows` — setting these up as Figma effect styles

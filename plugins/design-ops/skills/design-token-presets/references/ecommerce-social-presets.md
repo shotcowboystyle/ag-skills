@@ -157,7 +157,7 @@ Editorial typography, restrained palette, generous whitespace. Every pixel commu
   --ease-out:      cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in:       cubic-bezier(0.64, 0, 0.78, 0);
   --ease-in-out:   cubic-bezier(0.45, 0, 0.55, 1);
-  --ease-elegant:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   /* --- Breakpoints --- */
   --bp-sm:  640px;
@@ -420,7 +420,7 @@ Friendly, warm, accessible. High color contrast for trust. Rounded forms for app
   --ease-out:    cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in:     cubic-bezier(0.5, 0, 0.75, 0);
   --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
-  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* --- Breakpoints --- */
   --bp-sm:  640px;
@@ -676,7 +676,7 @@ High contrast, bold typography, editorial layout energy. Oversized type, dramati
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in:     cubic-bezier(0.55, 0.055, 0.675, 0.19);
   --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
-  --ease-snap:   cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.2, 0, 0, 1);
 
   /* --- Breakpoints --- */
   --bp-sm:  640px;
@@ -932,7 +932,7 @@ Content-forward, minimal chrome. The UI disappears so user content shines. Thin 
   --ease-out:    cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in:     cubic-bezier(0.5, 0, 0.75, 0);
   --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
-  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* --- Breakpoints --- */
   --bp-sm:  640px;

@@ -241,7 +241,7 @@ When benchmarking, draw knowledge from:
 
 - `design-critique-case-studies` skill for teardown methodology and product deep-dives
 - `nng-ux-heuristics` skill for consistent evaluation criteria
-- `ui-visual-design-system` skill for visual polish assessment
+- `visual-design-mastery` skill for visual polish assessment
 - `accessibility-inclusive-design` skill for accessibility scoring against WCAG 2.2
 - `ux-metrics-measurement` skill for quantitative benchmarking and industry baselines
 - `mobile-ux-design` skill for platform convention evaluation (iOS HIG, Material 3)

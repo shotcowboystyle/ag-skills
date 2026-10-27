@@ -482,7 +482,7 @@ Before shipping, verify:
 
 When generating dark mode, draw from:
 
-- `ui-visual-design-system` skill for color theory and perceptual principles
+- `visual-design-mastery` skill for color theory and perceptual principles
 - `color-palette-library` skill for oklch dark mode mapping
 - `shadow-elevation-density` skill for elevation hierarchy and dark mode shadow replacement
 - `accessibility-inclusive-design` skill for dark mode contrast verification

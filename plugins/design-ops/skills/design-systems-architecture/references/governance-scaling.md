@@ -719,3 +719,38 @@ Sparkbox research demonstrates that higher design system maturity correlates dir
 8. Curate ruthlessly. Resist bloat. Enforce performance budgets. Support internationalization from day one. Plan for legacy compatibility without sacrificing modern ergonomics.
 9. Invest in DesignOps as operational infrastructure — both Team Ops (people/process) and Product Ops (tools/systems).
 10. Measure and communicate design system ROI quarterly using the formula: [(TE + QE + SE + SCE) - (IC + MC)] / (IC + MC) × 100%.
+
+## Governance Quick Reference
+
+### Contribution Model
+
+**Centralized:** Core team owns and builds all components
+- Pros: High consistency, quality control
+- Cons: Bottleneck, slow to address product-specific needs
+- Best for: Small-medium organizations, early system maturity
+
+**Federated:** Product teams contribute with core team review
+- Pros: Faster growth, diverse input, shared ownership
+- Cons: Consistency risk, review overhead
+- Best for: Large organizations, mature systems
+
+**Hybrid (recommended):** Core team owns primitives and governance; product teams contribute domain-specific patterns
+- Core components (Button, Input, Card): centrally owned
+- Domain components (DataGrid, FileUploader): contributed by domain teams, reviewed by core
+
+### Change Management Process
+
+1. **Proposal:** RFC (Request for Comment) with use case, design, and API proposal
+2. **Review:** Design review + code review + accessibility review
+3. **Build:** Implementation with full test coverage
+4. **Document:** Usage guidelines, migration guide if breaking
+5. **Release:** Semantic versioning, changelog, migration support
+
+### Versioning Strategy
+
+- Follow **Semantic Versioning (SemVer):** MAJOR.MINOR.PATCH
+- **MAJOR:** Breaking changes to component API or visual appearance
+- **MINOR:** New components, new props, backward-compatible enhancements
+- **PATCH:** Bug fixes, accessibility improvements, documentation updates
+- **Deprecation:** Mark deprecated with console warnings; maintain for 2 major versions
+- **Changelogs:** Automated from conventional commits; include migration guidance

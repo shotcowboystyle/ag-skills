@@ -80,3 +80,59 @@ Design implications: build quality scoring into the generation pipeline, show qu
 - Google PAIR: People + AI Guidebook
 - Microsoft HAX Toolkit: Guidelines for Human-AI Interaction
 - EU AI Act: Regulation (EU) 2024/1689
+
+## AI Fatigue and "AI Slop"
+
+NNG Group's State of UX 2026 report identifies AI fatigue as a critical concern. Users are increasingly resistant to unnecessary AI features, low-quality AI-generated content, and forced AI interactions. Avoid:
+
+- Adding AI to features that work well without it.
+- Replacing deterministic, reliable workflows with probabilistic AI alternatives.
+- Generating content where human-authored content would be more trustworthy.
+- Forcing AI interaction when direct manipulation is faster.
+- Displaying "AI-powered" badges as marketing rather than functional indicators.
+
+---
+
+## Copilot Patterns (Embedded AI in Tools)
+
+Keyboard accept/reject conventions (Tab, Esc, word-level accept, cycling) live in `agentic-multi-agent-patterns.md` (GitHub Copilot Patterns) and `ai-safety-trust-guardrails.md` (Keyboard Navigation for Copilot Patterns).
+
+### Inline Suggestion Timing and Display
+
+**Trigger conditions** must be carefully calibrated. Generate suggestions after a meaningful pause in typing (300-600ms), at natural code or text boundaries (end of a line, after a punctuation mark), or when the user explicitly invokes suggestions via a keyboard shortcut. Never trigger suggestions during active typing or mid-word, as this breaks flow and trains users to ignore the feature.
+
+**Display suggestions** as ghost text in a muted color that is clearly distinguishable from user-authored content but still legible. For multi-line suggestions, show the first 2-3 lines inline and indicate additional content with a subtle "more" indicator. Position the suggestion at the cursor location, maintaining the document's existing formatting and indentation.
+
+Show a **confidence indicator** alongside each suggestion: a small dot or bar that conveys the model's certainty. High-confidence suggestions can be displayed more prominently; low-confidence suggestions should be more subdued or require explicit invocation.
+
+### AI Sidebar Panel
+
+Design contextual AI assistance panels that complement the user's primary workflow without competing for attention.
+
+Position the sidebar to the right of the main content area with a default width of 320-400px. Make it collapsible to an icon-only rail and resizable by dragging the edge. Maintain sidebar state across sessions so users do not need to reconfigure it each time they open the application.
+
+Populate the sidebar **contextually**: when the user selects code, show explanation, refactoring suggestions, and documentation links. When the user highlights text, offer rewriting, summarization, and translation. When the user is on a settings page, provide guidance on configuration options. The sidebar's content should update automatically as the user's focus changes, with a brief delay to avoid distracting rapid updates.
+
+Include a **chat input** at the bottom of the sidebar for ad-hoc questions about the current context. Responses appear in the sidebar's scrollable area. Support referencing the current selection, current file, or current project as implicit context without requiring the user to copy-paste.
+
+### AI-Powered Search and Command Palette
+
+Integrate AI understanding into search and command interfaces to bridge the gap between user intent and system capabilities.
+
+Enhance the **command palette** (Cmd/Ctrl+K pattern) with natural language understanding. When a user types "make the header bigger," interpret this as an intent to modify font size or heading level and present the relevant commands with their keyboard shortcuts. Show the AI's interpretation of the query alongside traditional fuzzy-matched command results so users can learn the canonical command names over time.
+
+Implement **semantic search** across project files, documentation, and settings. Go beyond keyword matching to understand queries like "where do we handle authentication errors" and return relevant code locations, configuration files, and documentation sections ranked by relevance. Display search results with AI-generated summaries explaining why each result is relevant to the query.
+
+### Smart Autocomplete with Confidence Indicators
+
+Extend traditional autocomplete with AI-powered predictions that go beyond simple prefix matching.
+
+Display autocomplete suggestions in a dropdown with each item showing: the suggested completion, a brief explanation of why it is suggested, and a confidence bar. Group suggestions by source: "From your recent usage," "From project conventions," "AI-predicted." Allow users to configure the balance between conservative (high-confidence only) and aggressive (more suggestions, lower threshold) autocomplete behavior.
+
+### AI-Driven Form Filling and Data Extraction
+
+Design patterns for AI that automatically populates form fields from unstructured input.
+
+Provide a **paste-and-parse** zone where users can paste or drop unstructured text (an email, a receipt, a business card photo) and the AI extracts structured data into form fields. Show the extraction results with field-level confidence indicators: green for high confidence, yellow for uncertain, red for fields that could not be extracted. Allow one-click correction on any field by clicking the confidence indicator to see alternatives.
+
+Implement **progressive extraction** that updates in real-time as the user provides additional unstructured input. Maintain a visual mapping between source text and extracted fields so users can verify accuracy by tracing from the form field back to the source material.

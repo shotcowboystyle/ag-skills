@@ -296,7 +296,7 @@ iOS 26 introduces system-wide tinting based on wallpaper and app icon:
 
 - System colors (blue, red, green, etc.) shift hue slightly to match the dominant wallpaper tone
 - App-specific tint color can be set via the asset catalog
-- Liquid Glass materials use dynamic tinting
+- Liquid Glass material tinting: see `platform-visual-standards` (its `ios-26-liquid-glass.md` reference)
 
 ### Implementing Dynamic Color in CSS
 
@@ -442,3 +442,146 @@ Brief reference — see `sector-style-intelligence` for full sector analysis.
 4. **Identify** unnamed/one-off colors (each should map to a token)
 5. **Test** dark mode (screenshot comparison)
 6. **Score** using the Color dimension of the Visual Scoring Framework
+
+---
+
+## Brand Color Systems and Dark Mode Strategy
+
+### Brand Color Systems
+
+A complete brand color system includes: primary (hero + scale), secondary (complementary + scale), accent (for moments of delight), neutrals (warm or cool tinted), semantic (success, warning, error, info), surface (layered backgrounds for elevation), and interactive (hover, active, focus, disabled modifications of primary).
+
+### Dark Mode Color Strategy
+
+Dark mode is a parallel color system, not an inversion. Key principles:
+- Background: not pure black (#000). Use dark gray (oklch 0.15-0.20 with brand hue tint).
+- Surfaces: each elevation layer gets +2-3% lightness. Background < Card < Modal < Tooltip.
+- Text: not pure white. Use off-white (oklch 0.93-0.95) for body, slightly brighter (0.97) for headings.
+- Colors: reduce chroma by 15-25% from light mode values. Saturated colors vibrate on dark backgrounds.
+- Shadows: nearly invisible in dark mode. Replace with subtle borders or increased background lightness for elevation.
+
+## Palette Refinement
+
+**Algorithmic Approaches**
+
+1. **Lightness ramp method**: Fix hue and chroma, vary lightness in equal OKLCH steps. Produces consistent tonal scales.
+2. **Chroma curve method**: Increase chroma toward mid-tones, decrease at extremes (lights and darks). Mimics natural color behavior and prevents neon artifacts at mid-range.
+3. **Hue rotation method**: Apply slight hue shifts across the lightness ramp (e.g., blue shifts toward purple in dark tones, toward cyan in light tones). Creates richer, more natural-feeling palettes.
+
+**Hand-Tuning**
+
+After algorithmic generation, adjust by eye:
+
+- Ensure the darkest step (900) works as text on white and the lightest step (100) works as a background.
+- Verify mid-range steps (400-600) meet WCAG AA contrast against both white and dark surfaces.
+- Check that adjacent steps are distinguishable from each other; merge any steps that appear identical.
+
+Generate 9-11 steps per color for maximum flexibility. At minimum, produce 5 steps: lightest background, light, mid, dark, darkest text.
+
+**Brand color integrity**: Never modify the exact brand color value for primary usage (logos, brand marks). Adjust derived UI colors (hover states, backgrounds, borders) freely within the generated scale.
+
+## Color for Data Visualization
+
+**Sequential Palettes**
+
+Use a single-hue lightness ramp for ordered data (low-to-high). Ensure at least 3:1 contrast ratio between adjacent stops when the palette encodes fewer than 7 values.
+
+**Diverging Palettes**
+
+Use two hues (one warm, one cool) diverging from a neutral midpoint. Ensure the two endpoints are distinguishable under all forms of color vision deficiency — pair blue-orange or purple-green rather than red-green.
+
+**Categorical Palettes**
+
+Assign colors that are maximally distinguishable in hue and lightness. Limit categorical palettes to 8-10 colors maximum; beyond that, use patterns, shapes, or labels.
+
+- Test categorical palettes with a color blindness simulator (Sim Daltonism, Coblis).
+- Ensure every category is identifiable by a non-color cue (shape, pattern, label, position).
+
+## Cultural Color Associations
+
+Color meaning varies by culture. Account for this in products serving international audiences.
+
+| Color | Western | East Asian | Middle Eastern | South Asian |
+|-------|---------|------------|----------------|-------------|
+| Red | Danger, passion, urgency | Luck, prosperity, celebration | Danger, caution | Purity (in marriage), fertility |
+| White | Purity, cleanliness | Mourning, death | Purity, peace | Mourning (in some contexts) |
+| Green | Nature, growth, money | Youth, fertility | Islam, paradise, prosperity | Fertility, happiness |
+| Yellow | Caution, warmth | Royalty, sacred | Happiness, prosperity | Sacred, auspicious |
+| Black | Elegance, mourning | Power, mystery | Mourning, evil | Evil, negativity |
+
+Do not rely on color alone to convey meaning. Always pair color with text labels, icons, or patterns so the message persists regardless of cultural interpretation.
+
+## Dark Mode Elevation by Lightness
+
+An alternative to surface tinting: step OKLCH lightness per elevation level.
+
+| Elevation | OKLCH Lightness | Use |
+|-----------|----------------|-----|
+| Base (dp 0) | 0.15 | App background |
+| Surface (dp 1) | 0.18 | Cards, sheets |
+| Raised (dp 4) | 0.21 | App bars, menus |
+| Overlay (dp 8) | 0.24 | Dialogs, modals |
+| Top (dp 16) | 0.27 | Popovers, tooltips |
+
+**Brand Color in Dark Contexts**
+
+If the brand color is dark (low lightness), use a lighter tint (300-400 step) as the primary interactive color in dark mode. Never place a dark brand color on a dark surface where contrast falls below 3:1.
+
+## CSS Color Functions
+
+**`color-mix()`**
+
+Blend two colors in any color space:
+
+```css
+/* 30% white mixed into the brand color in OKLCH space */
+--brand-light: color-mix(in oklch, var(--brand) 70%, white);
+
+/* 50/50 blend for a hover midpoint */
+--hover: color-mix(in oklch, var(--primary), var(--secondary));
+```
+
+Always specify `in oklch` for perceptually uniform mixing.
+
+**`oklch()` Function**
+
+```css
+--color: oklch(0.65 0.2 250);
+--color-alpha: oklch(0.65 0.2 250 / 0.5);
+```
+
+**Relative Color Syntax**
+
+Derive new colors from existing ones by modifying individual channels:
+
+```css
+--primary: oklch(0.55 0.2 250);
+/* Lighten by adding 0.2 to lightness */
+--primary-light: oklch(from var(--primary) calc(l + 0.2) c h);
+/* Desaturate by halving chroma */
+--primary-muted: oklch(from var(--primary) l calc(c / 2) h);
+/* Shift hue by 30 degrees */
+--secondary: oklch(from var(--primary) l c calc(h + 30));
+```
+
+Relative color syntax eliminates the need for pre-generated palette steps in many cases, enabling dynamic theme generation with minimal tokens.
+
+## Typography and Color as One System
+
+### Hierarchy Through Combined Systems
+
+Build visual hierarchy using both type scale and color simultaneously:
+
+- **Primary content**: Largest appropriate type step + highest contrast text color (`text.primary`).
+- **Secondary content**: One step smaller + reduced contrast (`text.secondary` or reduced opacity).
+- **Tertiary/metadata**: Smallest type step + lowest contrast (`text.tertiary`), minimum 4.5:1 against background.
+
+### Testing Typography and Color as a System
+
+- Generate a type specimen page showing every heading level, body variant, and caption with the full color palette applied.
+- Test the specimen page under simulated color vision deficiency.
+- Validate every text-on-background combination against WCAG AA at minimum.
+- Review the specimen on macOS, Windows, iOS, and Android for rendering consistency.
+- Print the specimen (or view in grayscale) to verify hierarchy is maintained without color.
+
+Treat typography and color as interdependent systems. Changes to one always affect the other. Audit both simultaneously during design reviews and accessibility testing.

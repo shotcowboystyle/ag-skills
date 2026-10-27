@@ -1,4 +1,29 @@
-# Component Patterns Reference
+# Component API and Composition Patterns
+
+Framework-agnostic API design plus the React composition patterns behind the
+cookbook components. Vue and Svelte equivalents are in `vue-svelte-patterns.md`.
+
+## Component API Design
+
+```tsx
+interface ButtonProps {
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
+  isLoading?: boolean;
+  isDisabled?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+```
+
+**Principles**:
+
+- Use semantic prop names (`isLoading` vs `loading`)
+- Provide sensible defaults
+- Support composition via `children`
+- Allow style overrides via `className` or `style`
 
 ## Compound Components Deep Dive
 
@@ -374,6 +399,9 @@ function Card({ children, header, footer, media }: CardProps) {
 
 Allow parent components to access the underlying DOM node.
 
+In React 19, function components accept `ref` as a regular prop, so `forwardRef`
+is optional there; `useImperativeHandle` works the same either way.
+
 ```tsx
 import { forwardRef, useRef, useImperativeHandle } from "react";
 
@@ -435,3 +463,21 @@ function Form() {
   );
 }
 ```
+
+## Best Practices
+
+1. **Single Responsibility**: Each component does one thing well
+2. **Prop Drilling Prevention**: Use context for deeply nested data
+3. **Accessible by Default**: Include ARIA attributes, keyboard support
+4. **Controlled vs Uncontrolled**: Support both patterns when appropriate
+5. **Forward Refs**: Allow parent access to DOM nodes
+6. **Memoization**: Use `React.memo`, `useMemo` for expensive renders
+7. **Error Boundaries**: Wrap components that may fail
+
+## Common Issues
+
+- **Prop Explosion**: Too many props - consider composition instead
+- **Style Conflicts**: Use scoped styles or CSS Modules
+- **Re-render Cascades**: Profile with React DevTools, memo appropriately
+- **Accessibility Gaps**: Test with screen readers and keyboard navigation
+- **Bundle Size**: Tree-shake unused component variants

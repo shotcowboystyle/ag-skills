@@ -8,7 +8,7 @@ allowed-tools: Read, Grep, Glob
 
 ## Overview
 
-Design Ops holds 46 skills and 39 commands. Most real requests need three to six skills
+Design Ops holds 47 skills and 39 commands. Most real requests need three to six skills
 in a particular order, and running them in the wrong order wastes work — you
 cannot critique a flow before you know who it is for, and you cannot set metrics
 before you know what good looks like.

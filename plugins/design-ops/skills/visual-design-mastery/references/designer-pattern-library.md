@@ -593,3 +593,218 @@
 3. **Pattern Mixing**: Combine patterns from different designers — e.g., Vignelli's grid discipline + Stripe's gradient craft + Linear's density.
 4. **Anti-Pattern Detection**: If a UI violates patterns from ALL listed designers, it's almost certainly a problem.
 5. **Sector Matching**: Map sector norms to designer archetypes — e.g., fintech → Rams (trust, reduction), social → Walsh (energy, color), dev tools → Andersson (density, speed).
+
+---
+
+## Style DNA Quick Index
+
+One-paragraph style DNA per designer or team, including several not profiled above (Saul Bass, Paul Rand, Teenage Engineering, Nothing, and others). Numbering is independent of the profiles above.
+
+Each entry captures the designer's **style DNA**: their signature visual patterns, philosophy, and techniques you can learn from and reference.
+
+### Modernist Pioneers
+
+**1. Dieter Rams** — Functionalist Minimalism
+- Philosophy: "Less, but better" (Weniger, aber besser). Good design is as little design as possible.
+- Style DNA: Neutral color palettes (white, gray, black with one accent). Extreme restraint. Mathematical proportions. Every element justified by function. No ornamentation.
+- Teach: Reduction as a design method. Remove until it breaks, then add one thing back.
+
+**2. Massimo Vignelli** — Typographic Rationalism
+- Philosophy: "The life of a designer is a life of fight against the ugliness."
+- Style DNA: Limited typeface palette (Helvetica, Bodoni, Century, Futura, Times — he used only 5). Strict grids. Bold use of scale contrast. Black, white, red. Information hierarchy through size alone.
+- Teach: Typographic discipline. Constraint breeds creativity. The grid is liberation, not prison.
+
+**3. Paul Rand** — Playful Modernism
+- Philosophy: "Design is the silent ambassador of your brand."
+- Style DNA: Geometric abstraction. Bold primary colors. Wit and playfulness within rigorous structure. Logos as ideas, not illustrations. Asymmetric balance.
+- Teach: Concept-driven design. The idea comes first; the form follows.
+
+**4. Josef Muller-Brockmann** — Swiss Grid Master
+- Philosophy: The grid system is an aid, not a guarantee. It permits a number of possible uses.
+- Style DNA: Mathematical grid systems. Objective typography. Photographic imagery over illustration. Asymmetric layouts with harmonic proportions. Akzidenz-Grotesk and Univers.
+- Teach: The grid as a thinking tool. Modular design before we called it that.
+
+**5. Jan Tschichold** — Typographic Perfectionist
+- Philosophy: Evolved from radical New Typography to classical perfection.
+- Style DNA: Exquisite typographic detail. Perfect letterspacing. Classical proportions. Penguin book covers as information design. Centered and asymmetric mastery.
+- Teach: Micro-typography. The difference between good and great lives in the details.
+
+**6. Saul Bass** — Motion + Identity Pioneer
+- Philosophy: Design is thinking made visual.
+- Style DNA: Bold geometric shapes. High contrast. Kinetic energy even in static work. Paper cut-out aesthetic. Film title sequences as design medium. Orange, black, white.
+- Teach: Movement in static design. How to create energy through form.
+
+### Contemporary Icons
+
+**7. Paula Scher** — Typographic Expressionism
+- Philosophy: "It's through mistakes that you actually can grow."
+- Style DNA: Type as image. Explosive scale. Environmental graphics. Maps as visual systems. Eclectic yet controlled. Public Theater identity as landmark.
+- Teach: Breaking typographic rules with purpose. Type as the primary visual element.
+
+**8. Jessica Walsh** — Bold Maximalism
+- Philosophy: Fearless color and concept.
+- Style DNA: Saturated color. Provocative concepts. 3D mixed with 2D. Handcrafted elements alongside digital precision. Pop culture fluency. Emotional directness.
+- Teach: Confidence in color. The power of a strong concept over safe execution.
+
+**9. Tobias van Schneider** — Dark Mode Elegance
+- Philosophy: "Design is not just what it looks like. Design is how it works."
+- Style DNA: Dark interfaces. Neon accents on deep backgrounds. Monospace typography. Developer-friendly aesthetics. Semplice portfolio platform. Premium minimalism.
+- Teach: Dark mode as a first-class design direction. Craft in developer tools.
+
+**10. Mike (Creative Mints)** — Illustrative Warmth
+- Philosophy: Warmth and craft in digital interfaces.
+- Style DNA: Soft gradients. Warm color palettes. Rounded forms. Detailed illustrations integrated into UI. Friendly without being childish. Premium casual.
+- Teach: How illustration style affects perceived product personality.
+
+**11. Dann Petty** — Silicon Valley Polish
+- Philosophy: Pixel-perfect craft at startup speed.
+- Style DNA: Clean SaaS layouts. Perfect spacing. Subtle gradients. San Francisco Pro. Card-based designs. Startup landing page mastery.
+- Teach: The SaaS visual language. How to make B2B products feel premium.
+
+**12. Claudio Guglieri** — Systematic Craft
+- Philosophy: Design systems as living organisms.
+- Style DNA: Microsoft Fluent Design contributor. Systematic thinking. Elevation and depth. Component-level perfection. Type + space as primary tools.
+- Teach: Systems thinking applied to visual design. Consistency at scale.
+
+### Product Design Teams
+
+**13. Stripe Design Team** — Developer-Facing Elegance
+- Style DNA: Gradient meshes. Animated hero sections. Premium whitespace. Technical content made beautiful. Dark mode with vibrant accents. Custom illustrations. The gold standard for developer marketing.
+- Teach: How to make technical products feel aspirational.
+
+**14. Linear Design Team** — Opinionated Minimalism
+- Style DNA: Ultra-dark UI. Purple-blue accent spectrum. JetBrains Mono. Keyboard-first. Motion as meaning. No visual noise. "Boring" done perfectly. Changelog as design showcase.
+- Teach: Opinionated defaults. The power of saying no to features and visual elements.
+
+**15. Vercel Design Team** — Monochrome Sophistication
+- Style DNA: Black and white with electric blue accents. Geist font family. Code as visual element. Terminal-inspired layouts. Extreme whitespace. Performance as aesthetic.
+- Teach: The beauty of constraint. Monochrome palettes done right.
+
+**16. Notion Design Team** — Warm Neutrality
+- Style DNA: Off-white backgrounds. Soft grays. Friendly serif (Noto Serif). Emoji as visual punctuation. Block-based visual rhythm. Content-first. Playful illustrations.
+- Teach: How neutral palettes create focus. Content as the hero.
+
+**17. Apple HIG Team** — Platform Perfection
+- Style DNA: SF Pro. Vibrancy and translucency. Depth through blur. Precise touch targets. Consistent radius curves. System-level coherence across hardware and software.
+- Teach: Platform conventions as design language. Consistency as trust.
+
+**18. Airbnb Design** — Inclusive Warmth
+- Style DNA: Cereal typeface. Rausch pink. Photography-forward. Generous padding. Rounded corners. Warmth through imagery and color. Accessibility by default.
+- Teach: How visual design creates emotional connection. Photography as UI.
+
+**19. Spotify Design** — Bold + Data
+- Style DNA: Duotone imagery. Bold typography at scale. Dark mode primary. Vibrant gradients from album art. Circular Std. Data-driven personalization as visual element.
+- Teach: Dynamic visual systems that respond to content.
+
+**20. Figma Design** — Tool as Canvas
+- Style DNA: Playful but professional. Purple brand. Cursor multiplayer metaphor. Community-centric. Illustrations with personality. Variable font exploration.
+- Teach: How tool design reflects user identity.
+
+**21. Arc Browser Design** — Post-Browser Aesthetic
+- Style DNA: Sidebar-first navigation. Customizable color theming. Boosts as visual identity. Spatial organization. macOS-native feel with web content.
+- Teach: How to reimagine established interaction paradigms visually.
+
+**22. Raycast Design** — Command-Line Beauty
+- Style DNA: Floating panels. Subtle blur. Quick actions. Monospace meets sans-serif. macOS integration. Extensions as visual citizens. Speed as aesthetic.
+- Teach: Beauty in utility software. Performance and polish are not opposites.
+
+**23. Framer Design** — Design-to-Code Bridge
+- Style DNA: Fluid animations. Component variants as visual stories. Dark canvas. Interactive prototypes as marketing. Publish-ready visual quality.
+- Teach: Motion as design language. Interactive design as communication.
+
+**24. Pitch Design** — Presentation Reinvented
+- Style DNA: Templates as opinionated visual systems. Collaborative cursors. Smart layout. Type-forward. European design sensibility.
+- Teach: How constraints (slide format) drive visual creativity.
+
+### Studios + Agencies
+
+**25. Pentagram** — Multi-Disciplinary Mastery
+- Style DNA: No house style — each partner brings distinct vision. Michael Bierut (typographic wit), Natasha Jen (critical design), Eddie Opara (digital systems), Abbott Miller (editorial).
+- Teach: Range as strength. Every project demands its own visual language.
+
+**26. Collins** — Brand as Experience
+- Style DNA: Bold conceptual work. Twitch rebrand (glitch aesthetic). Dropbox rebrand (illustration-forward). Strategic provocation. Color as meaning.
+- Teach: How visual identity tells brand stories. Brave color choices.
+
+**27. Character SF** — Digital Product Craft
+- Style DNA: Clean product interfaces. Systematic design. Dropbox Paper, Google Fi. Warm but precise. Details that delight.
+- Teach: Product-level visual craft. The details users feel but cannot name.
+
+**28. Instrument** — Portland Precision
+- Style DNA: Nike, Google, Sonos work. Photography-forward. Editorial layouts in digital context. Clean grids with editorial energy.
+- Teach: Editorial design principles applied to digital products.
+
+**29. Fantasy Interactive** — Interactive Innovation
+- Style DNA: Award-winning interactions. Bold animations. Immersive scrolling. Visual storytelling through motion. Technical ambition.
+- Teach: Pushing visual boundaries while maintaining usability.
+
+### Hardware-Informed Design
+
+**30. Teenage Engineering** — Playful Industrial
+- Style DNA: Orange. Modular hardware. Brutalist typography. Deliberate imperfection. Joy in interaction. Product as toy, toy as tool. OP-1 as design icon.
+- Teach: How physical product design sensibility translates to digital.
+
+**31. Nothing Design** — Transparent Futurism
+- Style DNA: Dot-matrix typography. Glyph interface. Transparent materials. Red and white on black. Anti-skeuomorphism. Raw materials visible.
+- Teach: Visual identity through radical constraint.
+
+**32. Rabbit Design** — Ambient Computing Aesthetic
+- Style DNA: R1 bright orange. Minimal screen real estate. Voice-first visual language. Chunky hardware. Friendly form factor.
+- Teach: Designing for screen-minimal experiences.
+
+**33. Humane Design** — Screenless Projection
+- Style DNA: Laser projection as display. Gesture-based interaction. Pin form factor. AI-first visual language. Minimal chrome.
+- Teach: Visual design when there is almost no visual surface.
+
+### Motion + Animation Studios
+
+**34. Lottie/Rive Animation Style** — Motion as Component
+- Style DNA: JSON-based animations. Micro-interactions as design system primitives. State machines. Performance-optimized motion. Illustrations that move.
+- Teach: Animation as a first-class design element, not afterthought.
+
+**35. IDEO** — Human-Centered Design Origin
+- Style DNA: Research-informed visual solutions. Prototyping culture. Sketch quality valued over polish in process. Final deliverables are refined but never precious.
+- Teach: The design process that creates visual solutions, not just visual solutions.
+
+**36. Frog Design** — Strategic Design
+- Style DNA: Hartmut Esslinger's "form follows emotion." Sony Trinitron lineage. Strategic design for complex systems. Enterprise made humane.
+- Teach: Emotional design at enterprise scale. Making complex systems visually approachable.
+
+---
+
+## Visual Trends 2025-2026
+
+### Currently Ascending
+
+- **Glassmorphism 2.0**: Apple's Liquid Glass. For materials, variants and usage rules see `platform-visual-standards` (its `ios-26-liquid-glass.md` reference).
+- **oklch color systems**: Perceptually uniform color spaces replacing HSL. CSS native oklch() adoption. Color palettes that look right mathematically.
+- **Variable font expressiveness**: Weight, width, and optical size animated. Custom axes for brand expression. Single font file, infinite variations.
+- **Bento grid layouts**: Apple-inspired mosaic grids for feature showcases. Unequal cells creating visual interest. Content-first grid sizing.
+- **AI-generated custom illustration**: Recraft V3, Midjourney v6 creating on-brand illustration systems. AI as design tool, not replacement.
+- **Dark mode as default**: Developer tools, creative tools, and increasingly consumer products ship dark-first.
+- **Spatial design tokens**: Designs that adapt to spatial computing (visionOS) with depth, parallax, and environment awareness.
+- **Micro-interaction storytelling**: Rive and Lottie animations that respond to user state, not just user action.
+- **Monochrome + one accent**: Vercel-inspired palette reduction. Black/white/gray + single electric accent color.
+- **Container queries**: Component-level responsive design replacing viewport-based breakpoints.
+
+### Currently Fading
+
+- **Neumorphism**: Soft embossed surfaces proved inaccessible and visually monotonous. Dead by 2024.
+- **Gradients everywhere**: The 2020-2022 gradient explosion has settled. Gradients are now used surgically, not universally.
+- **Illustration-heavy onboarding**: Full-screen illustrated onboarding flows replaced by progressive disclosure and inline guidance.
+- **Cluttered dashboards**: The "more data = more value" mentality is being replaced by focused, task-based interfaces.
+- **Thin fonts for body text**: The ultra-light weight trend (font-weight: 200-300 for body) is fading as readability wins.
+- **Parallax scrolling excess**: Subtle parallax remains; dramatic scroll-jacking is considered hostile.
+
+### Timeless (Always Relevant)
+
+- Strong typographic hierarchy.
+- Consistent spacing systems.
+- Intentional color restraint.
+- Clear visual hierarchy.
+- Content-first design.
+- Accessibility as foundation.
+- Whitespace as active design element.
+- Grid-based layouts.
+- Meaningful motion (not decorative).
+- Design systems and componentization.

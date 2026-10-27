@@ -599,3 +599,91 @@ Measure whether users' trust in the AI matches its actual reliability. Survey us
 - Microsoft Copilot Responsible AI Design Framework
 - WCAG 2.2 Guidelines — Accessibility Requirements for Conversational Interfaces
 - Google Gemini UX Research: Streaming Response Patterns and Multi-Modal Conversation Design
+
+## Prompt Engineering UX
+
+Six augmentation patterns from UX research for helping users write better prompts:
+
+1. **Style galleries:** Visual examples of outputs organized by style. User selects a reference output instead of describing in words.
+2. **Prompt rewrite:** System improves the user's prompt automatically and shows the enhanced version for approval.
+3. **Targeted rewrite:** System identifies the weak part of a prompt and suggests a specific improvement.
+4. **Related prompts:** After a result, suggest follow-up prompts that refine or extend the output.
+5. **Prompt builders:** Structured forms that construct prompts from discrete inputs (tone, length, audience, format).
+6. **Parametrization:** Sliders and controls that adjust generation parameters visually (creativity, length, formality).
+
+---
+
+## Chat Thread, Context, and Persona Management
+
+### Collaborative Threads
+
+For **collaborative threads**, support multiple users contributing to the same conversation. Display user avatars alongside messages, maintain a shared context, and provide conflict resolution when two users submit prompts simultaneously. Implement @-mention syntax to direct specific questions to specific participants or to instruct the AI to focus on a particular user's input.
+
+### Context Drawer
+
+Implement a **context drawer** or panel that lists everything currently in the AI's working memory: uploaded documents, pasted code, referenced URLs, system instructions, and conversation history. Allow users to remove individual items from context, reorder their priority, or pin critical items that should never be evicted during automatic compression.
+
+For **file and document context**, show clear indicators of which portions of attached documents the AI has processed. If a document exceeds context limits, communicate which pages or sections are included and which are truncated. Offer selective inclusion controls so users can specify the most relevant sections.
+
+### Streaming Structured Content and Resumption
+
+For **structured content** like tables, lists, and mathematical expressions, use a two-phase render: display raw text during streaming, then reflow into the formatted representation once the structural element is complete. Provide a brief, smooth transition animation between raw and formatted states so users understand the transformation.
+
+Allow **response interruption**: display a prominent "Stop generating" button during streaming. When triggered, keep all content generated so far and append a subtle indicator that the response was truncated by the user. Allow resumption with a "Continue generating" action.
+
+### Multi-Turn Topic Management
+
+Design conversation flows that maintain coherent context across many turns while supporting natural topic transitions.
+
+Implement **automatic topic detection** that segments long conversations into semantic sections. Display topic headers or dividers between distinct subjects so users can navigate conversation history by topic rather than scrolling through a monolithic thread. Allow collapsing of resolved topics to reduce visual clutter.
+
+Support **explicit context injection** where users can reference earlier messages ("as I mentioned in my third message"), attached files ("based on the CSV I uploaded"), or external knowledge ("according to the documentation at [URL]"). Parse these references and visually link them to the source material so the AI's contextual understanding is transparent.
+
+Handle **topic switching** gracefully. When a user abruptly changes subject, the AI interface should acknowledge the transition rather than conflating the new topic with the previous one. Offer to compartmentalize the new topic into a separate branch or explicitly carry forward only relevant context from the prior discussion.
+
+Provide **conversation summaries** at configurable intervals. After every N turns or when the context window reaches a threshold, generate and display a collapsible summary of the conversation so far. Allow users to edit these summaries to correct misunderstandings before they propagate through subsequent context.
+
+### System Prompts and Persona Selection UI
+
+Expose system prompt configuration as a first-class feature for power users while keeping it invisible to casual users.
+
+Design a **persona selector** that presents curated AI personalities or specialized modes as cards or chips at the start of a conversation. Each persona card should display: a name, a brief description of the persona's expertise and communication style, recommended use cases, and any capability differences. Examples: "Code Reviewer" (technical, precise, references best practices), "Creative Writer" (imaginative, expressive, exploratory), "Data Analyst" (quantitative, visualization-oriented, methodical).
+
+For **custom system prompts**, provide a dedicated editor with syntax highlighting for template variables, character count relative to context budget, and a "Test" button that generates a sample response so users can evaluate the persona before committing. Store custom personas in a library with tagging, search, and sharing capabilities.
+
+Display the **active persona** prominently in the conversation header. Allow mid-conversation persona switching with a clear indicator in the message thread showing where the switch occurred. Warn users that switching personas may alter the AI's interpretation of earlier context.
+
+### Conversation Sharing and Retention
+
+For **sharing**, generate shareable links with configurable permissions: view-only, view-and-branch (recipients can fork the conversation), or full collaborative access. Support exporting conversations to markdown, PDF, or JSON formats. When sharing, allow redaction of specific messages or attachments that contain sensitive information.
+
+Implement **archival and deletion** with clear data retention policies. Show users exactly what data is stored, for how long, and whether it is used for model training. Provide bulk operations for managing conversation history at scale.
+
+## Model and Service Status
+
+### Model Identification
+
+Display the **model name and version** in a consistent location: the conversation header, a status bar, or a subtle label on each response. When the model changes mid-conversation (due to fallback, load balancing, or user selection), mark the transition clearly in the conversation thread.
+
+Provide a **model info** tooltip or panel that describes the model's capabilities, training data cutoff date, known limitations, and any safety filters active in the current configuration. Keep this information accessible but not intrusive.
+
+### Rate Limiting and Quota Communication
+
+Display **usage dashboards** showing current consumption against limits: requests made, tokens used, time until reset. Provide real-time estimates of token cost before sending long prompts or large file attachments. Warn users when they are approaching limits with enough lead time to adjust their behavior.
+
+When a **rate limit is hit**, provide specific information: how long until the limit resets, whether upgrading their plan would increase limits, and what they can do in the meantime. Never show a generic error message when the cause is a known quota limitation.
+
+### Model Fallback Strategies
+
+Implement **automatic fallback** with clear disclosure: "The primary model is currently unavailable. This response was generated by [fallback model], which may differ in quality or capabilities." Display the fallback notice prominently enough that users notice it but not so alarmingly that it undermines confidence in the response.
+
+Allow users to **queue requests** for the primary model if they prefer to wait rather than accept fallback output. Show estimated wait times and allow cancellation with fallback at any point during the wait.
+
+## AI Settings and Prompt Reuse
+
+- Prompt history and favorites for reuse
+- Structured input modes (forms, guided wizards) alongside free-text
+- Tone/style preferences (formal, casual, concise, detailed)
+- Output format preferences (bullet points, paragraphs, tables)
+- Domain/role context setting (act as expert in X)
+- Safety and content filter controls with clear explanations

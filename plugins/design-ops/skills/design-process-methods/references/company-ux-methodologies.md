@@ -822,3 +822,51 @@ Validate (5 min): /vibe-check + /include — quality gate
 ```
 
 **The pattern across all speed runs**: Define the problem → Build with constraints → Test before shipping. The methodology just shapes how you do each step.
+
+
+---
+
+## Summary Table and Quick Selection Guide
+
+Eight leading companies have each adapted design thinking into their own process. Each emphasizes different strengths. Choose based on your context.
+
+| Company               | Methodology                | Best For                        | Duration     | Key Innovation                                      |
+| --------------------- | -------------------------- | ------------------------------- | ------------ | --------------------------------------------------- |
+| **IDEO**              | Human-Centered Design      | Complex, ambiguous problems     | Weeks-months | Radical empathy, multidisciplinary teams            |
+| **UK Design Council** | Double Diamond             | Structured diverge/converge     | Days-weeks   | Discover-Define-Develop-Deliver framework           |
+| **Google Ventures**   | Design Sprint              | Time-critical product decisions | 5 days       | Compressed prototype-and-test cycle                 |
+| **IBM**               | Enterprise Design Thinking | Large organization alignment    | Ongoing      | Hills, Playbacks, Sponsor Users at enterprise scale |
+| **Lean UX**           | Build-Measure-Learn        | Startup/hypothesis-driven       | Continuous   | MVP-first, data-driven iteration                    |
+| **Spotify**           | Design Thinking + Squads   | Autonomous team design          | Continuous   | Squad autonomy with design system alignment         |
+| **Microsoft**         | Inclusive Design           | Accessibility-first             | Ongoing      | "Solve for one, extend to many"                     |
+| **Vercel/Figma**      | Design Engineer Workflow   | Design-to-code speed            | Hours-days   | Designer-developer convergence, MCP integration     |
+
+### Quick Selection Guide
+
+```
+Are you...
+
+Solo developer / vibe coding?
+  → Lean UX + Vercel/Figma workflow
+  → Focus: hypothesis, quick prototype, test with Design Ops audits
+
+Small team (2-5)?
+  → Google Sprint (compressed) or Double Diamond
+  → Focus: structured diverge/converge, time-boxed decisions
+
+Large organization?
+  → IBM Enterprise Design Thinking
+  → Focus: alignment across teams, stakeholder playbacks
+
+Building for accessibility?
+  → Microsoft Inclusive Design
+  → Focus: "solve for one, extend to many"
+
+Complex/ambiguous problem space?
+  → IDEO Human-Centered Design
+  → Focus: deep empathy, field research, radical solutions
+
+Continuous product iteration?
+  → Spotify model + Lean UX
+  → Focus: squad autonomy, continuous experimentation
+```

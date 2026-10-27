@@ -298,12 +298,7 @@ Handle the following RAG-specific failure modes with dedicated UI patterns:
 
 ### Apple Liquid Glass (iOS 26)
 
-Apple's Liquid Glass design language introduced in iOS 26 uses translucent materials, depth layering, and fluid responsive animations. Apply these principles to AI interfaces:
-
-- **Translucency:** Render AI response containers with the Liquid Glass material so underlying content shows through, maintaining spatial context. Use `Material.ultraThinMaterial` or the new `.liquidGlass` modifier.
-- **Depth:** Layer AI suggestions above the primary content using elevation and parallax. Generative UI panels should feel as though they float above the workspace.
-- **Fluid responsiveness:** Animate transitions between AI states (loading, streaming, complete) with spring-based physics. Avoid hard cuts.
-- **Dynamic materials:** Adapt the material tint to the underlying content color so the glass effect always feels integrated rather than overlaid.
+Liquid Glass materials, APIs (`.glassEffect()`), and layering rules are owned by the `platform-visual-standards` skill (its iOS 26 Liquid Glass reference). For AI surfaces, the AI-specific point is to animate state changes (loading, streaming, complete) with spring-based motion instead of hard cuts.
 
 ### Apple Intelligence Framework
 
@@ -505,8 +500,79 @@ Apply WCAG 2.2 AA as the minimum standard for all generated multimodal content. 
 | Constrain generation | Never allow unconstrained AI output to reach the DOM. Route all generated UI through a validated component registry. |
 | Design for outcomes | Specify what the user needs to accomplish, not the specific layout. Let the AI adapt presentation to context. |
 | Cite everything | In RAG interfaces, link every claim to its source. Make verification effortless. |
-| Respect platform conventions | Follow Apple Liquid Glass, Gemini visual language, or OpenAI SDK patterns for the target platform. |
+| Respect platform conventions | Follow Apple Liquid Glass (see `platform-visual-standards`), Gemini visual language, or OpenAI SDK patterns for the target platform. |
 | Fallback gracefully | Every generative UI path must have a deterministic fallback that preserves functionality. |
 | Stream progressively | Render content as it arrives. Reserve layout space to prevent content shifting. |
 | Guarantee accessibility | Validate contrast, semantics, keyboard access, and screen reader compatibility for every generated component. |
 | Support iteration | Image generation, prompt refinement, and generative UI all benefit from undo, history, and branching. |
+
+## Generative UI Paradigm
+
+Generative UI (GenUI) dynamically creates interface elements based on context rather than rendering pre-designed layouts. Research on generative interfaces for language models (arXiv:2508.19227) reports human evaluators preferring generative interfaces over conversational ones by margins reaching 72% on information-dense and exploratory tasks.
+
+### Three UI Paradigms
+
+1. **Conversational UI:** Text-based interaction. Best for simple queries, open-ended exploration, and ambiguous tasks.
+2. **Instructed UI:** Pre-designed components triggered by AI. Best for structured tasks with known interaction patterns.
+3. **Generative UI:** AI generates UI components on-the-fly. Best for complex, variable tasks where pre-designed layouts cannot anticipate all cases.
+
+### Outcome-Oriented Design (NNG)
+
+Design for outcomes, not layouts. Instead of designing a fixed screen for "flight booking," design outcome specifications: "The user needs to evaluate and select a flight." The AI generates the optimal interface for that outcome given the current context, device, user preferences, and data.
+
+### Design System Integration
+
+Generative UI must produce interfaces that are on-brand and consistent. Constrain generation to your design system's components, tokens, and patterns. The AI composes from your component library — it does not invent new visual elements from scratch. This ensures accessibility, brand consistency, and production quality.
+
+## RAG and Knowledge Interface Patterns
+
+Retrieval-Augmented Generation (RAG) interfaces surface AI-generated content grounded in retrieved source documents. These require specific UX patterns for trust and verification.
+
+### Citation Design
+
+- Inline citations with numbered references linking to source documents.
+- Source panel showing retrieved documents with relevance indicators.
+- Highlight the specific passage in the source that supports each claim.
+- Show confidence level per claim where the system can estimate it.
+
+### Knowledge Freshness
+
+- Display the date range of source documents. "Based on documents from Jan 2024 - Feb 2026."
+- Flag when sources may be outdated for time-sensitive information.
+- Allow users to request re-retrieval with updated sources.
+
+---
+
+## Intent-Driven Generative UI
+
+### AI-Generated Forms Based on User Intent
+
+Design systems where the AI constructs form interfaces dynamically based on what the user describes wanting to accomplish.
+
+When a user expresses an intent ("I need to submit a bug report" or "Help me plan a trip"), generate a contextually appropriate form with relevant fields, sensible defaults, and inline guidance. Show the form generation process briefly (a skeleton loading state) to establish that the AI is constructing something custom rather than presenting a static template.
+
+Allow **iterative form refinement**: the user can request additional fields ("also ask about priority"), field modifications ("make the date field a range picker"), or simplification ("remove the optional fields") through natural language. The form updates in place with smooth animations that help users track what changed.
+
+### Dynamic Dashboard Creation from Natural Language
+
+Enable users to describe the data view they need and have the AI construct an appropriate visualization dashboard.
+
+Parse natural language queries like "show me sales by region over the last quarter with a trend line" into structured visualization specifications. Present the generated dashboard with a brief annotation explaining the AI's interpretation: data source, chart type selection rationale, and any assumptions made. Provide inline controls to adjust every aspect: change chart types, modify date ranges, add or remove metrics, and alter groupings.
+
+Support **dashboard evolution** where users iteratively refine through conversation: "break this down by product category," "add a comparison to last year," "highlight anything that's down more than 10%." Each modification applies incrementally, preserving the user's previous customizations.
+
+### Personalized Interface Adaptation
+
+Design AI systems that adapt the interface to individual usage patterns over time.
+
+Track **interaction patterns** to identify frequently used features, common workflows, and underutilized capabilities. Use this data to suggest interface customizations: reordering menu items, surfacing shortcuts for common actions, or collapsing rarely used sections. Always present adaptations as suggestions that users can accept, reject, or modify rather than silently reorganizing the interface.
+
+Implement **progressive disclosure** driven by usage maturity: new users see a simplified interface with guidance, and as the system detects increasing proficiency, it surfaces more advanced features and reduces hand-holding. Always maintain easy access to the full feature set regardless of the system's assessment of user proficiency.
+
+### Content Summarization and Expansion Controls
+
+Provide universal controls for adjusting AI-generated content density.
+
+Implement a **detail slider** or discrete level selector (Summary / Standard / Detailed / Comprehensive) that adjusts the verbosity of AI-generated content across the interface. Apply this control consistently: in chat responses, in generated documents, in dashboard annotations, and in help text. Maintain the same semantic content across levels, varying only the depth and elaboration.
+
+For individual content blocks, provide inline **expand/collapse** controls that request more detail on a specific section without regenerating the entire response. Track which sections users expand most frequently and adjust default detail levels accordingly.

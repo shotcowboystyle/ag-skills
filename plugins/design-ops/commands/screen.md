@@ -1053,7 +1053,6 @@ When building screens, draw patterns and best practices from:
 - `performance-states-patterns` — Skeleton screens, optimistic UI, error boundaries, loading strategies, offline-first
 - `mobile-ux-design` — iOS 26 Liquid Glass, safe area insets, Material 3 adaptive patterns
 - `desktop-app-design` — Desktop-density layouts, keyboard navigation, multi-panel architectures
-- `ui-visual-design-system` — Design token architecture, color systems, typography scales
 - `accessibility-inclusive-design` — ARIA patterns, focus management, screen reader considerations
 - `sector-style-intelligence` — Sector-specific conventions, trust signals, density norms
 - `cognitive-psychology-ux` — Fitts's Law, Hick's Law, Miller's Law, Von Restorff, Peak-End Rule

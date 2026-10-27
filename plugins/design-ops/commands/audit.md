@@ -893,8 +893,7 @@ When running the audit, draw knowledge from these skills:
 - `nng-ux-heuristics` — Heuristic evaluation methodology, severity rating framework
 - `cognitive-psychology-ux` — Laws of UX, Gestalt, cognitive load, mental models, biases
 - `ux-ethics-content-strategy` — Dark pattern taxonomy, ethical design, content strategy, tone
-- `ai-spatial-voice-ux` — AI transparency, trust patterns
-- `agentic-ai-generative-ux` — AI safety guardrails, generative UI ethics
+- `agentic-ai-generative-ux` — AI transparency and trust patterns, safety guardrails, generative UI ethics
 - `platform-visual-standards` — Responsive standards per device type, platform conventions
 - `accessibility-inclusive-design` — Inclusive language, WCAG compliance, universal design
 - `cross-cultural-i18n-ux` — i18n readiness, cultural sensitivity

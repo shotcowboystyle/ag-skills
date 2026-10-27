@@ -640,7 +640,7 @@ function announceChartStructure(chart) {
 ### 8.3 Implementation Pattern
 
 ```html
-<svg role="img" aria-label="Bar chart of revenue by region">
+<svg role="group" aria-label="Bar chart of revenue by region">
   <g role="list" aria-label="Data bars">
     <rect role="listitem"
           tabindex="0"
@@ -656,6 +656,8 @@ function announceChartStructure(chart) {
   </g>
 </svg>
 ```
+
+Use `role="group"` (not `role="img"`) on an interactive chart: `img` makes its children presentational, so focusable bars inside it lose their names.
 
 **Roving tabindex:** Only the currently focused element has `tabindex="0"`. All others have `tabindex="-1"`. Arrow keys move `tabindex="0"` to the next element.
 

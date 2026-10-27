@@ -490,7 +490,6 @@ When analyzing and transforming, draw knowledge from:
 - `nng-ux-heuristics` — Heuristic violations for component and interaction evaluation
 - `accessibility-inclusive-design` — WCAG 2.2 compliance for accessibility scoring and fixes
 - `cognitive-psychology-ux` — Fitts's Law, Gestalt principles, Von Restorff Effect
-- `ui-visual-design-system` — Color theory, type scales, visual hierarchy principles
 - `design-systems-architecture` — Token architecture, naming conventions, semantic layers
 - `component-patterns-code` — Production component patterns for state coverage
 - `performance-states-patterns` — Loading, error, empty, skeleton state patterns

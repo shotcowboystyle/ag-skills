@@ -122,7 +122,7 @@ zones, and how icons take colour across themes: read
 
 ## Cross-References
 
-- `ui-visual-design-system` -- where iconography sits in the visual language
+- `visual-design-mastery` -- where iconography sits in the visual language
 - `platform-visual-standards` -- SF Symbols and Material Symbols in their native context
 - `animation-recipe-library` -- the easing tokens animated icons use
 - `accessibility-inclusive-design` -- the full decorative-vs-meaningful story

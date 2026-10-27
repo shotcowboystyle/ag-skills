@@ -789,7 +789,6 @@ Merge the family stack, the modular scale, line heights and letter-spacing into
 When generating typography systems, draw knowledge from:
 
 - `typography-pairing-recipes` skill for 100+ validated font pairings and pairing principles
-- `ui-visual-design-system` skill for typographic hierarchy, scale theory, and visual rhythm
 - `visual-design-mastery` skill for canonical typography rules and visual scoring
 - `platform-visual-standards` skill for iOS 26, Material 3, and modern CSS typography norms
 - `mobile-ux-design` skill for mobile-specific type sizing and touch target requirements

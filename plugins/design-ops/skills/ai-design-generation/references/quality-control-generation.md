@@ -388,3 +388,55 @@ If all items pass: **APPROVED FOR PRODUCTION** — proceed to /ship for code con
 If 1-3 items fail: **CONDITIONAL APPROVAL** — fix the failing items during implementation.
 
 If 4+ items fail: **NOT APPROVED** — iterate on the design or switch to manual implementation.
+
+
+---
+
+## Appendix: Artifact Detection, Consistency, Brand Compliance Scoring
+
+Moved verbatim from the `ai-design-generation` SKILL.md.
+
+### 8. Quality Control
+
+#### AI Artifact Detection
+
+AI-generated designs contain telltale artifacts that must be caught before production use:
+
+- **Text garbling:** Fake or misspelled text in generated UI screenshots. Always replace with real copy.
+- **Inconsistent spacing:** AI may vary padding/margin subtly between similar elements. Normalize in post.
+- **Phantom UI elements:** Buttons that lead nowhere, icons that mean nothing. Verify every element has purpose.
+- **Style drift:** Across multiple generations, subtle style inconsistencies accumulate. Compare side by side.
+- **Anatomical errors:** In illustrations with people, check hands, fingers, eyes, proportions.
+- **Brand contamination:** Models may inject elements from training data (wrong logos, competitor patterns).
+- **Resolution artifacts:** Soft edges, aliasing, blurry text at small sizes. Regenerate or upscale.
+
+#### Consistency Checking
+
+For multi-screen or multi-asset projects, run a consistency audit:
+
+**Cross-Screen Consistency Checklist:**
+
+- [ ] Same typography scale across all screens
+- [ ] Identical color usage for same-meaning elements
+- [ ] Consistent spacing rhythm (base unit and multiples)
+- [ ] Matching border-radius on same-level components
+- [ ] Unified shadow/elevation system
+- [ ] Same icon style and weight throughout
+- [ ] Consistent navigation placement and behavior
+- [ ] Matching state treatments (hover, active, disabled)
+
+#### Brand Compliance Scoring
+
+Score generated designs against brand requirements on a 0-10 scale:
+
+| Dimension            | 0-3 (Fail)        | 4-6 (Partial)               | 7-10 (Pass)             |
+| -------------------- | ----------------- | --------------------------- | ----------------------- |
+| Color accuracy       | Wrong palette     | Approximate colors          | Exact brand colors      |
+| Typography           | Wrong fonts       | Right family, wrong weights | Exact type system       |
+| Spacing              | Inconsistent      | Mostly consistent           | Matches grid system     |
+| Tone/mood            | Off-brand         | Close but not quite         | Nails brand personality |
+| Component fidelity   | Unrecognizable    | Similar structure           | Matches design system   |
+| Content quality      | Placeholder lorem | Generic realistic           | Brand-voice copy        |
+| Platform correctness | Wrong OS patterns | Mixed platform cues         | Native platform feel    |
+
+**Minimum viable score for production use: 7+ average across all dimensions.**

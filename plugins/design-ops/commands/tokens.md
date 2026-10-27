@@ -783,7 +783,7 @@ Tier 1 is raw values. Tier 2 assigns meaning. Tier 3 binds to components. Themes
 When generating tokens, draw from:
 
 - `design-systems-architecture` skill for W3C DTCG specification and token architecture
-- `ui-visual-design-system` skill for color theory and typography systems
+- `visual-design-mastery` skill for color theory and typography systems
 - `design-token-presets` skill for industry-specific preset token systems
 - `color-palette-library` skill for curated palettes with oklch values and APCA scores
 - `typography-pairing-recipes` skill for font pairings and type scale recipes

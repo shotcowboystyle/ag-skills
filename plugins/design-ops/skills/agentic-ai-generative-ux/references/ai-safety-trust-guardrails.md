@@ -605,7 +605,7 @@ Agents that execute multi-step plans require specialized oversight patterns that
 
 ## Cross-References
 
-- For foundational AI interface patterns (chat, copilot, streaming), reference `ai-spatial-voice-ux/references/ai-native-interface-patterns.md`.
+- For chat and copilot interface patterns, see `conversational-ai-dialogue-patterns.md` and `ai-interface-archetypes.md`.
 - For dark pattern avoidance and ethical design foundations, reference `ux-ethics-content-strategy/references/dark-pattern-avoidance.md`.
 - For WCAG compliance and ARIA pattern details, reference `accessibility-inclusive-design/references/wcag-aria-patterns.md`.
 - For design token systems that support confidence color coding, reference `design-systems-architecture/references/design-token-implementation.md`.
@@ -622,3 +622,77 @@ Agents that execute multi-step plans require specialized oversight patterns that
 - ACM CHI 2025: Trust Calibration in Human-AI Interaction
 - Gartner: Predicts 2026 — AI Trust, Risk, and Security Management
 - NIST AI Risk Management Framework (AI RMF 1.0)
+
+## AI Literacy Design
+
+Users have wildly varying mental models of AI capabilities. Design for progressive AI literacy.
+
+### Literacy Levels
+
+- **Novice:** Thinks AI is either magic or useless. Needs guardrails, simple explanations, and limited autonomy.
+- **Intermediate:** Understands AI strengths and weaknesses. Ready for more autonomy with transparent reasoning.
+- **Expert:** Understands prompting, model limitations, and wants maximum control. Provide advanced settings, prompt editing, and model selection.
+
+Design systems that serve all three levels simultaneously through progressive disclosure of AI controls.
+
+---
+
+## Transparency, Reliance, and Privacy Patterns
+
+### Confidence Scope
+
+Display confidence at the **appropriate scope**: per-response for chat interfaces, per-field for form extraction, per-suggestion for autocomplete, per-step for agent actions. Avoid showing a single overall confidence score when the response contains multiple claims with varying certainty.
+
+### Source-Type Distinction
+
+Distinguish between **source types**: direct quotes from retrieved documents, paraphrased information from training data, synthesized conclusions drawn from multiple sources, and the model's own reasoning without specific sources. Use different visual treatments for each type so users understand the epistemic basis of each claim.
+
+### Reasoning Disclosure Defaults
+
+Implement a **chain-of-thought disclosure** that shows the AI's step-by-step reasoning in a collapsible section. Default to collapsed for routine responses and expanded for high-stakes decisions, complex analyses, or when the AI's conclusion is surprising. Format reasoning steps as a numbered list with clear logical connections between steps.
+
+### Limitations Disclosure
+
+Proactively communicate what the AI cannot do, does not know, and should not be relied upon for.
+
+Display **capability boundaries** at appropriate moments: when a user asks about events after the training cutoff, when the query requires real-time data the model does not have access to, when the task involves domains with known model weaknesses, or when the requested output type is not well-supported. Frame limitations as specific and actionable ("I don't have access to real-time stock prices; here's where you can find that") rather than vague disclaimers.
+
+### Tiered Degradation
+
+Implement **tiered degradation**: first, switch to a cached or smaller local model that can handle basic requests; second, fall back to traditional non-AI functionality (rule-based autocomplete, keyword search, manual form filling); third, display a clear status message with estimated recovery time and manual alternatives.
+
+Cache **recent AI outputs** locally so that previously generated content remains accessible even during outages. For generative features, maintain a library of templates and pre-generated content that can substitute for real-time AI generation.
+
+### Progressive Autonomy Levels
+
+Design systems where AI gradually earns broader authority through demonstrated competence.
+
+Start new users or new task types in **supervised mode** with frequent approval gates. As the AI demonstrates accuracy and the user develops comfort, offer to reduce supervision for task categories where the AI has a strong track record. Display the AI's historical performance for each task type when proposing autonomy increases.
+
+Implement **autonomy levels** as a per-task-type setting: Level 1 (suggest only), Level 2 (act with confirmation), Level 3 (act and notify), Level 4 (act silently). Track and display the criteria for advancing levels: number of successful completions, error rate, user satisfaction ratings.
+
+Never **auto-promote** autonomy levels without explicit user consent. Present promotions as recommendations with supporting evidence, and allow users to demote at any time without penalty or friction.
+
+### Verification Badges and Feedback Impact
+
+Implement **verification badges** for AI outputs that have been confirmed by external sources, approved by human reviewers, or validated by automated testing. Distinguish clearly between unverified AI output and output that has passed one or more verification gates.
+
+Show users the **impact of their feedback**: "Based on your corrections, we've improved suggestions for [category] by [metric]." This closes the feedback loop and motivates continued participation.
+
+### Retrospective Confidence
+
+Provide an "AI suggested this 3 minutes ago" indicator when a user manually arrives at the same conclusion the AI had already suggested, building retrospective confidence.
+
+### Diverse Perspective Prompts
+
+Implement **diverse perspective prompts** for subjective content: after generating an opinion-laden or culturally situated response, offer to "Show alternative perspectives" that present the topic from different cultural, demographic, or ideological viewpoints.
+
+### On-Device Processing Indicators
+
+Support **on-device AI processing** where feasible and label features that operate entirely locally. Display a clear "cloud" or "on-device" indicator on every AI feature so users always know whether their data leaves their device.
+
+### Default-On Features and Opt-Out
+
+For features that are **enabled by default** (because they are core to the product's value proposition), provide a prominent, persistent opt-out mechanism in the feature's UI, not buried in settings. Display a first-run notice explaining the feature's AI-powered nature and how to disable it.
+
+Respect **opt-out comprehensively**: when a user disables an AI feature, stop all associated data processing immediately, provide a non-AI alternative workflow, and do not repeatedly prompt the user to re-enable the feature. Limit re-engagement prompts to major updates that materially change the feature's capabilities or privacy characteristics.

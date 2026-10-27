@@ -94,7 +94,9 @@ Map global tokens to semantic roles:
 
 ### Layer 3: Platform-Specific Overrides
 
-Each platform overrides semantic tokens where its conventions differ:
+Each platform overrides semantic tokens where its conventions differ.
+
+> The `motion.curve` values below are **platform-native springs** (SwiftUI `spring(response:dampingFraction:)` on iOS; the Material 3 Expressive default spatial spring, stiffness 380 / damping ratio 0.8, on Android). They are not the product's base motion scale; for base durations and easings see `interaction-motion-design` (its `animation-timing-curves.md` reference).
 
 ```json
 {
@@ -112,7 +114,7 @@ Each platform overrides semantic tokens where its conventions differ:
     "radius.lg": 16,
     "size.touch-target-min": 48,
     "spacing.margin-screen": 16,
-    "motion.curve": "spring(stiffness: 400, damping: 20)"
+    "motion.curve": "spring(stiffness: 380, dampingRatio: 0.8)"
   },
   "web": {
     "font.family-primary": "Inter Variable, system-ui, sans-serif",
@@ -264,7 +266,7 @@ Animation behavior must change across platforms:
 - **System font for chrome**: SF Pro (iOS), Roboto (Android), system-ui (web)
 - **Touch target sizes**: 44pt (iOS), 48dp (Android), 60pt (visionOS), 76dp (automotive)
 - **Corner radius values**: continuous/squircle (iOS), circular (Android), CSS (web)
-- **Motion curves**: spring specs differ between iOS and Android
+- **Motion curves**: platform-native spring specs differ between iOS (response + damping fraction) and Android (stiffness + damping ratio); see `ios-26-liquid-glass.md` and `material-3-expressive.md`
 - **Color system integration**: Dynamic Color (Android), system accent (iOS), CSS custom properties (web)
 - **Sheet/modal behavior**: iOS half-sheet vs. Android bottom sheet vs. web dialog
 - **Back navigation**: swipe-back (iOS), predictive back (Android), browser back (web)
@@ -403,3 +405,144 @@ Making components so abstract they lose platform meaning. A "dialog" component t
 
 ### Single-Breakpoint Responsive
 Using only phone and desktop breakpoints. Tablet, foldable, and large-screen phone experiences are distinct — they need dedicated attention, not just a scaled-up phone layout.
+
+---
+
+## Quick Specifications: Device Matrix and Tokens
+
+### Device Matrix
+
+| Device | Screen Range | Input | Viewing Distance | Primary Context |
+|--------|-------------|-------|-------------------|----------------|
+| Phone | 320-430pt width | Touch | 30cm (handheld) | Mobile, one-handed |
+| Tablet | 744-1024pt width | Touch + Pencil | 40-50cm (lap/table) | Lean-back, productivity |
+| Desktop | 1024-2560pt width | Mouse + keyboard | 50-70cm (desk) | Focused work |
+| Watch | 162-205px width | Crown + tap | 25-30cm (wrist) | Glanceable |
+| TV | 1920-3840px width | D-pad + voice | 2-4 meters (couch) | Lean-back entertainment |
+| Car | 800-1920px width | Touch + voice | 50-70cm (dash) | Distracted, safety-critical |
+| XR Headset | Virtual canvas | Eye + hand | 1-3m (virtual) | Immersive |
+| Foldable | 320-886pt width | Touch | 30-40cm (handheld) | Dual-mode |
+| E-Ink | 758-1872px width | Touch (slow) | 30cm (handheld) | Reading, low-power |
+
+### Shared Design Tokens
+
+A cross-platform design system defines tokens at three levels:
+
+1. **Global tokens** — Platform-agnostic values: brand colors (oklch), font scale ratios, spacing multipliers, border-radius scale
+2. **Alias tokens** — Semantic mappings: `color-surface`, `color-on-surface`, `spacing-md`, `radius-card`. Same name everywhere, different values per platform.
+3. **Component tokens** — Platform-specific overrides: `button-height` is 44pt on iOS, 48dp on Android, 36px on web, 72px on TV.
+
+### Platform-Specific Adaptations
+
+| Pattern | iOS | Android | Web | Watch | TV |
+|---------|-----|---------|-----|-------|-----|
+| Primary nav | Bottom tab bar (floating) | Bottom nav bar | Top nav or sidebar | Page-based scroll | Top rail + sidebar |
+| Back navigation | Swipe from left edge | System back button/gesture | Browser back or breadcrumb | Swipe right | Back button on remote |
+| Selection | Checkmark | Checkbox | Checkbox | Tap highlight | Focus + select |
+| Destructive action | Swipe-to-delete | Long-press menu | Button with confirmation | Force Touch menu | Focus + hold |
+| Search | Pull-down search bar | Top app bar search | Search field in header | Scribble or voice | Voice or on-screen keyboard |
+
+### Responsive Breakpoints by Device
+
+| Breakpoint | Width | Target |
+|-----------|-------|--------|
+| xs | 0-319pt | Small watch |
+| sm | 320-430pt | Phone |
+| md | 431-743pt | Large phone / foldable inner |
+| lg | 744-1023pt | Tablet |
+| xl | 1024-1365pt | Small desktop / tablet landscape |
+| 2xl | 1366-1920pt | Standard desktop |
+| 3xl | 1921pt+ | Large desktop / TV |
+
+### Foldable-Specific Considerations
+
+- **Outer screen** — Treat as phone (320-430pt). Show condensed single-column layout.
+- **Inner screen (unfolded)** — Treat as small tablet (744-886pt). Show two-pane layout.
+- **Fold-aware layout** — Content should not cross the fold hinge. Place the layout seam on the hinge, creating a natural two-pane boundary.
+- **Continuity** — When the user unfolds the device, the app must seamlessly transition from the outer layout to the inner layout without losing state or scroll position.
+
+### E-Ink Considerations
+
+- **No animation** — E-ink refresh is 200-500ms. Animations appear as ghostly smears. Use instant state changes.
+- **High contrast** — E-ink displays have lower contrast ratios than LCD/OLED. Use pure black on pure white. Avoid grays below #333333 or above #CCCCCC.
+- **No color dependency** — Most e-ink displays are grayscale. Never encode meaning in color alone.
+- **Large text** — Minimum 14pt body text. E-ink pixel density is typically 212-300 PPI (lower than phones at 400-600 PPI).
+- **Minimal chrome** — Every pixel of UI chrome is a pixel not showing content. On a reading device, content is everything.
+
+---
+
+## Platform Detection Patterns
+
+### When to Adapt vs When to Unify
+
+**Adapt to the platform** when:
+- The OS provides a native control that users expect (e.g., iOS date picker, Android bottom sheet)
+- Navigation patterns differ fundamentally (tab bar vs navigation drawer)
+- System gestures conflict with custom gestures (iOS swipe-back, Android system back)
+- Accessibility APIs differ (VoiceOver vs TalkBack rotor patterns)
+- Legal requirements differ by platform (NHTSA for automotive, WCAG for web)
+
+**Unify across platforms** when:
+- Brand identity requires visual consistency (color palette, typography, iconography)
+- The interaction is domain-specific and has no platform equivalent (e.g., a custom chart interaction)
+- Users frequently switch between platforms and expect continuity (e.g., Figma on web vs desktop app)
+- The cost of maintaining platform-specific implementations exceeds the UX benefit
+
+### User Expectations Per Platform
+
+| Platform | Users Expect | Users Reject |
+|----------|-------------|-------------|
+| iOS | Smooth 60fps, system gestures respected, Liquid Glass materials, SF Symbols | Android-style hamburger menus, Material FABs, system font overrides |
+| Android | Material components, Dynamic Color, predictable back behavior | iOS-style non-standard back navigation, tab bars without labels |
+| Web | Fast load times, keyboard accessibility, URL-based state, responsive | Native app idioms forced onto web (e.g., mobile tab bar on desktop) |
+| Watch | Instant information, minimal interaction, complications | Full-screen forms, long text, complex navigation hierarchies |
+| TV | Focus-visible at all times, large text, card grids | Tiny text, hover-dependent interactions, touch assumptions |
+| Car | Voice-first, huge touch targets, zero cognitive load | Text-heavy displays, small buttons, multi-step flows |
+| XR | Spatial depth, gaze responsiveness, comfortable ergonomics | Flat 2D panels with no spatial awareness, tiny targets |
+
+---
+
+## Design Token Mapping Across Platforms
+
+### CSS Custom Properties to SwiftUI Environment to Compose Theme
+
+| Semantic Role | CSS Custom Property | SwiftUI | Compose (M3) |
+|--------------|--------------------|---------|----|
+| Primary color | `--color-primary` | `Color.accentColor` | `MaterialTheme.colorScheme.primary` |
+| Surface | `--color-surface` | `Color(.systemBackground)` | `MaterialTheme.colorScheme.surface` |
+| On-surface text | `--color-on-surface` | `Color(.label)` | `MaterialTheme.colorScheme.onSurface` |
+| Error | `--color-error` | `Color(.systemRed)` | `MaterialTheme.colorScheme.error` |
+| Border radius (sm) | `--radius-sm: 8px` | `.clipShape(RoundedRectangle(cornerRadius: 8))` | `shape = RoundedCornerShape(8.dp)` |
+| Border radius (lg) | `--radius-lg: 16px` | `.clipShape(RoundedRectangle(cornerRadius: 16))` | `shape = RoundedCornerShape(16.dp)` |
+| Spacing unit | `--space-md: 16px` | `.padding(16)` | `Modifier.padding(16.dp)` |
+| Elevation (low) | `box-shadow: 0 1px 3px` | `.shadow(radius: 2)` | `tonalElevation = 1.dp` |
+| Elevation (high) | `box-shadow: 0 8px 24px` | `.shadow(radius: 8)` | `tonalElevation = 4.dp` |
+| Body font | `font-family: var(--font-body)` | `.font(.body)` | `MaterialTheme.typography.bodyLarge` |
+| Title font | `font-family: var(--font-title)` | `.font(.title)` | `MaterialTheme.typography.titleLarge` |
+| Caption font | `font-family: var(--font-caption)` | `.font(.caption)` | `MaterialTheme.typography.labelSmall` |
+
+### Token Translation Strategy
+
+1. **Define once in a neutral format** — Use JSON or YAML as the source of truth (e.g., Style Dictionary, Tokens Studio)
+2. **Transform per platform** — Generate CSS custom properties, SwiftUI extensions, and Compose theme objects from the same source
+3. **Override at the platform layer** — iOS gets `thinMaterial` for surface, Android gets tonal elevation, web gets `backdrop-filter: blur()`
+4. **Test with a visual diff** — Render the same screen on all three platforms and compare. Token mapping is correct when the screens feel like siblings, not clones.
+
+### Token File Structure
+
+```
+tokens/
+  global/
+    color.json        # oklch values, brand palette
+    spacing.json      # 4px base unit scale
+    typography.json    # font scale ratios
+    radius.json       # border-radius scale
+  platform/
+    ios.json          # SwiftUI overrides, Liquid Glass materials
+    android.json      # M3 overrides, Dynamic Color hooks
+    web.json          # CSS custom property names, rem conversions
+    watch.json        # Compact sizing overrides
+    tv.json           # 10-foot UI sizing overrides
+    car.json          # Large touch target overrides
+    xr.json           # Spatial depth tokens
+```

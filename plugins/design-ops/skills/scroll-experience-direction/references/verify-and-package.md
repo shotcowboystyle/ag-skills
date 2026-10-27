@@ -141,3 +141,14 @@ before re-capturing. A fix that cannot show its "before" frame is unproven.
     result per registry row, the curve and the feel diff, the grade against the board, what
     was generated (with credits), what was verified, what was not (real phone), and the
     local URL.
+
+## Scripts
+
+Resolve the plugin root once, the same way `/inspo` does:
+
+```bash
+DESIGN_OPS="${DESIGN_OPS:-$(dirname "$(dirname "$(find . ~/.claude ~/.codex ~/.agents ~/.config/opencode ~/.copilot ~/.gemini ~/.pi -path '*reference-intelligence/scripts/capture.mjs' -print -quit 2>/dev/null)")")}"
+KIE="${KIE:-$(find . ~/.claude ~/.codex ~/.agents ~/.config/opencode ~/.copilot ~/.gemini ~/.pi -path '*scroll-experience-direction/scripts/kie.mjs' -print -quit 2>/dev/null)}"
+node "$KIE" probe                                   # key + credit balance
+node "$DESIGN_OPS/scripts/capture.mjs" http://localhost:5173 --frames --out .design-ops/scroll/verify
+```

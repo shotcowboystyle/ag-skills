@@ -1067,7 +1067,6 @@ places is how the two files drift apart.
 When generating style directions, draw sector knowledge and design system patterns from:
 
 - `sector-style-intelligence` skill for sector-specific color, typography, and motion conventions
-- `ui-visual-design-system` skill for color theory, typography scales, visual hierarchy
 - `visual-design-mastery` skill for canonical design rules and visual scoring
 - `design-systems-architecture` skill for token architecture and naming conventions
 - `interaction-motion-design` skill for animation curves, spring physics, duration guidelines

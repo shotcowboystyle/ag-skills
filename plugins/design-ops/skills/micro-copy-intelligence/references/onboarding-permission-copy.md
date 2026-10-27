@@ -37,6 +37,13 @@ Every onboarding screen should have:
 | 6 | "Welcome aboard" | "You're joining [X] teams who already use [App] to [benefit]." | Set up your account | Explore first | Social proof illustration |
 | 7 | "Let's get you set up" | "A few quick steps to personalize your experience." | Continue | Skip for now | Setup progress illustration |
 
+### Value Proposition (Pre-Signup or Trial)
+
+- **Headline**: State the outcome, not the feature. "Ship projects on time" not "Project management tool."
+- **Subhead**: One sentence expanding on the headline. "Plan, track, and collaborate with your team in a single workspace."
+- **Social proof**: "Trusted by 50,000 teams" or "4.8 stars on the App Store."
+- **CTA**: "Start free trial" (primary) / "See how it works" (secondary, links to demo)
+
 ### Returning User (After Update)
 
 | # | Headline | Body | Primary CTA | Secondary CTA | Visual |

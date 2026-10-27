@@ -556,7 +556,7 @@ When remixing designs, draw principles and patterns from:
 - `component-patterns-code` skill — production-ready implementation patterns in React, SwiftUI, and CSS
 - `interaction-motion-design` skill — animation improvements, micro-interactions, transition design, haptic feedback
 - `accessibility-inclusive-design` skill — WCAG 2.2 compliance, ARIA patterns, keyboard navigation, screen reader support
-- `ui-visual-design-system` skill — visual hierarchy, spacing systems, typography scale, color systems
+- `visual-design-mastery` skill — visual hierarchy, spacing systems, typography scale, color systems
 - `performance-states-patterns` skill — loading, error, empty, skeleton, optimistic update patterns
 - `micro-copy-intelligence` skill — button labels, error messages, empty state copy, tooltip text
 - `form-design-encyclopedia` skill — form layout, input types, validation patterns, error recovery

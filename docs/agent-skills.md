@@ -230,7 +230,7 @@ Skills provide domain guidance that coding agents can load when relevant. Each s
 | **tailwind-design-system**     | Create design systems with Tailwind CSS and component libraries |
 | **react-native-architecture**  | Architect React Native apps with navigation and native modules  |
 
-### UI Design (9 skills)
+### UI Design (8 skills)
 
 | Skill                         | Description                                                         |
 | ----------------------------- | ------------------------------------------------------------------- |
@@ -240,7 +240,6 @@ Skills provide domain guidance that coding agents can load when relevant. Each s
 | **mobile-ios-design**         | Design iOS apps following Human Interface Guidelines                |
 | **mobile-android-design**     | Design Android apps following Material Design 3 guidelines          |
 | **react-native-design**       | Cross-platform design patterns for React Native applications        |
-| **web-component-design**      | Build accessible, reusable web components with Shadow DOM           |
 | **interaction-design**        | Create micro-interactions, animations, and gesture-based interfaces |
 | **visual-design-foundations** | Apply typography, color theory, spacing, and visual hierarchy       |
 

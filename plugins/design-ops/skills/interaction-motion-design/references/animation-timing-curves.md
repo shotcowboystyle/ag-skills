@@ -1,5 +1,48 @@
 # Animation Timing, Easing, and Physics-Based Motion
 
+## Base Motion Scale (canonical)
+
+This is the single source of truth for base motion tokens across design-ops.
+`animation-recipe-library` writes its recipes against these names, and
+`design-token-presets` sector presets tune durations (and some curves) on top
+of them under the same names. Platform springs (Material 3 Expressive, iOS)
+live in `platform-visual-standards`.
+
+```css
+:root {
+  /* Easing */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);          /* entrances: fast start, long settle (expo-out) */
+  --ease-in:     cubic-bezier(0.55, 0.055, 0.675, 0.19); /* exits: accelerate away (cubic-in) */
+  --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);         /* on-screen moves between states (expo-in-out) */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);      /* single overshoot; CSS stand-in for spring-default */
+
+  /* Duration */
+  --duration-instant:  50ms;   /* hover color, cursor, ripple start */
+  --duration-fast:     150ms;  /* press feedback, toggle, focus ring, tooltip */
+  --duration-normal:   250ms;  /* dropdown, dialog, card expand */
+  --duration-moderate: 300ms;  /* panel slide, toast, standard view change */
+  --duration-slow:     400ms;  /* modal with backdrop, page transition */
+  --duration-slower:   600ms;  /* complex reflow, onboarding, celebration (rare) */
+}
+```
+
+Spring presets (mass 1; damping ratio = damping / (2 * sqrt(stiffness * mass));
+settle time ≈ 4 / (ratio * sqrt(stiffness)) to within 2%):
+
+| Preset | Stiffness | Damping | Mass | Ratio | Settle | Use |
+|---|---|---|---|---|---|---|
+| `spring-snappy` | 400 | 30 | 1 | 0.75 | ~0.27s | toggles, switches, presses, small controls |
+| `spring-default` | 300 | 25 | 1 | 0.72 | ~0.32s | general UI: panels, layout, drag release, modals |
+| `spring-gentle` | 200 | 25 | 1 | 0.88 | ~0.32s | large surfaces, sheets, shared-element/layout morphs; no visible overshoot |
+| `spring-bouncy` | 300 | 10 | 1 | 0.29 | ~0.8s | celebrations, likes, playful confirmations; use sparingly |
+
+Rules: entrances use `--ease-out`, exits `--ease-in` and run 20-40% shorter
+than the matching entrance, on-screen moves use `--ease-in-out`. Prefer a
+spring for anything the user directly manipulates (it keeps release velocity);
+prefer a bezier when timing must be predictable. Linear only for progress and
+continuous rotation.
+
+
 ## CSS Animation and Transition Fundamentals
 
 ### Transition Properties
@@ -43,7 +86,7 @@ Use `@keyframes` when animation requires more than two states, must loop, or mus
 }
 
 .element {
-  animation: slide-in-up 400ms cubic-bezier(0.0, 0.0, 0.2, 1) both;
+  animation: slide-in-up 400ms var(--ease-out) both;
 }
 ```
 
@@ -209,29 +252,18 @@ Spring-based animations model the physics of a damped harmonic oscillator. Three
 
 ### Standard Spring Configurations
 
-#### Natural Spring
-```
-stiffness: 170, damping: 26, mass: 1
-```
-Produces a natural, organic motion with a small amount of settle oscillation. Suitable for general-purpose UI transitions, modal presentations, and element repositioning. Approximates the iOS default spring behavior. Duration equivalent: roughly 500–600ms to visual rest.
+The named presets are the four in **Base Motion Scale** above
+(`spring-snappy` 400/30, `spring-default` 300/25, `spring-gentle` 200/25,
+`spring-bouncy` 300/10, all mass 1). Use those names and values; tune a
+one-off only when a preset measurably feels wrong for the element.
 
-#### Bouncy Spring
-```
-stiffness: 300, damping: 10, mass: 1
-```
-Produces pronounced oscillation with 3–5 visible bounces before settling. Suitable for playful interfaces, gamification elements, achievement celebrations, and attention-grabbing notifications. Use sparingly — excessive bounce frustrates users on repeated interactions. Duration equivalent: roughly 800–1000ms to visual rest.
+### Spring Advantages Over Duration-Based Animation
 
-#### Stiff Spring
-```
-stiffness: 400, damping: 30, mass: 1
-```
-Produces fast, decisive motion with minimal overshoot. Settles almost immediately with at most one small oscillation. Suitable for responsive controls, toggles, switches, dropdown menus, and any interaction requiring instant feedback. Duration equivalent: roughly 250–350ms to visual rest.
+Spring physics offer structural advantages that duration-based curves cannot match:
 
-#### Gentle Spring
-```
-stiffness: 100, damping: 20, mass: 1
-```
-Produces slow, graceful motion with a soft settle. Suitable for background elements, parallax layers, ambient decorative motion, and slow reveals. Duration equivalent: roughly 700–900ms to visual rest.
+- **Inherent interruptibility.** A spring animation can be interrupted at any point, and a new spring animation inherits the current velocity. This produces smooth, natural response when users change their mind mid-gesture. Duration-based curves must be manually cancelled and restarted, often producing visual discontinuities.
+- **Velocity preservation.** When a dragged element is released, its release velocity feeds directly into the spring animation. This creates a seamless transition from direct manipulation to animated settle. Duration-based animations ignore release velocity entirely, producing a jarring disconnect between the gesture and the resulting animation.
+- **Natural feel.** Springs model real physical behavior. Humans have deep intuitive understanding of how physical springs move. Duration-based curves, by contrast, are mathematical abstractions that require careful tuning to avoid feeling mechanical.
 
 ### Spring Animation Implementation
 
@@ -240,20 +272,20 @@ Produces slow, graceful motion with a soft settle. Suitable for background eleme
 ```jsx
 import { motion } from "framer-motion";
 
-// Natural spring
+// spring-default
 <motion.div
   animate={{ x: 100 }}
-  transition={{ type: "spring", stiffness: 170, damping: 26, mass: 1 }}
+  transition={{ type: "spring", stiffness: 300, damping: 25, mass: 1 }}
 />
 
-// Bouncy spring
+// spring-bouncy
 <motion.div
   animate={{ scale: 1 }}
   initial={{ scale: 0 }}
   transition={{ type: "spring", stiffness: 300, damping: 10, mass: 1 }}
 />
 
-// Stiff spring (useful for quick snaps)
+// spring-snappy (quick snaps)
 <motion.div
   animate={{ rotate: 180 }}
   transition={{ type: "spring", stiffness: 400, damping: 30, mass: 1 }}
@@ -262,7 +294,7 @@ import { motion } from "framer-motion";
 // Spring with velocity (for gesture-driven animations)
 <motion.div
   drag="x"
-  dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
+  dragTransition={{ bounceStiffness: 300, bounceDamping: 25 }}
 />
 ```
 
@@ -274,10 +306,10 @@ import { useSpring, animated } from "@react-spring/web";
 const [styles, api] = useSpring(() => ({
   from: { opacity: 0, y: 40 },
   to: { opacity: 1, y: 0 },
-  config: { tension: 170, friction: 26, mass: 1 },
+  config: { tension: 300, friction: 25, mass: 1 }, // spring-default
 }));
 
-// Presets available:
+// React Spring's built-in presets (library defaults, not the base scale):
 // config.default  — { tension: 170, friction: 26 }
 // config.gentle   — { tension: 120, friction: 14 }
 // config.wobbly   — { tension: 180, friction: 12 }
@@ -321,7 +353,7 @@ val animatedOffset by animateFloatAsState(
     targetValue = if (expanded) 200f else 0f,
     animationSpec = spring(
         dampingRatio = Spring.DampingRatioMediumBouncy,  // 0.5
-        stiffness = Spring.StiffnessMedium               // 400
+        stiffness = Spring.StiffnessMediumLow            // 400
     )
 )
 
@@ -344,7 +376,7 @@ val animatedOffset by animateFloatAsState(
 While CSS does not natively support spring physics as of early 2026, approximate spring curves using the `linear()` easing function by sampling the spring curve at regular intervals:
 
 ```css
-/* Approximation of natural spring (stiffness 170, damping 26) */
+/* Sampled from a stiffness 170 / damping 26 spring (React Spring default) */
 /* Generated by sampling the spring curve at 20 points */
 .spring-natural {
   transition: transform 600ms linear(
@@ -371,6 +403,17 @@ Match duration to the perceptual weight of the change. Small, frequent interacti
 **Element size-based scaling:** Small elements (icons, toggles, checkboxes) should animate in 100–200ms. Medium elements (cards, dropdowns, modals) should animate in 200–400ms. Full-screen or page-level changes should animate in 300–600ms.
 
 **Importance-based adjustment:** Critical feedback (error indication, success confirmation) should be fast: 100–200ms. Transitional motion (page changes, layout shifts) can be moderate: 200–400ms. Decorative or ambient motion can be slower: 400–1000ms.
+
+### Duration Bands
+
+```
+Instant:          0ms       — Hover state color changes, cursor changes
+Micro:           100-150ms  — Button press feedback, checkbox toggle, ripple
+Small:           150-250ms  — Tooltip appear/dismiss, dropdown open, fade
+Medium:          250-400ms  — Panel slide, card expand, page transition
+Large:           400-600ms  — Complex layout reflow, modal open with backdrop
+Extra Large:     600-1000ms — Onboarding sequences, celebratory moments (rare)
+```
 
 ### Quick Reference Duration Table
 
@@ -403,7 +446,7 @@ When revealing a group of elements (a list of cards, a grid of thumbnails, a men
 .stagger-item {
   opacity: 0;
   transform: translateY(12px);
-  animation: fade-in-up 300ms cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+  animation: fade-in-up 300ms var(--ease-out) forwards;
 }
 
 .stagger-item:nth-child(1) { animation-delay: 0ms; }
@@ -509,7 +552,7 @@ element.animate(
   ],
   {
     duration: 300,
-    easing: "cubic-bezier(0.0, 0.0, 0.2, 1)",
+    easing: "cubic-bezier(0.16, 1, 0.3, 1)", // --ease-out (WAAPI cannot read var())
     fill: "forwards",
   }
 );
@@ -652,7 +695,7 @@ Use Chrome DevTools Performance panel:
 }
 
 .slide-in-bottom {
-  animation: slide-in-bottom 300ms cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+  animation: slide-in-bottom 300ms var(--ease-out) forwards;
 }
 ```
 
@@ -671,7 +714,7 @@ Use Chrome DevTools Performance panel:
 }
 
 .scale-in {
-  animation: scale-in 250ms cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+  animation: scale-in 250ms var(--ease-out) forwards;
 }
 ```
 
@@ -959,61 +1002,9 @@ This approach produces consistent animation speed regardless of whether the disp
 
 ---
 
-## M3 Expressive Spring Motion & iOS 26 Liquid Glass Animation
+## Platform Springs (M3 Expressive, iOS 26 Liquid Glass)
 
-### M3 Expressive Spring Specifications
-
-Material 3 Expressive (2025-2026) introduces a formal spring motion system that replaces duration-based curves as the default animation model. The specification defines four named spring configurations, each tuned for a distinct interaction character:
-
-| Spring Name | Stiffness | Damping Ratio | Character | Use Case |
-|---|---|---|---|---|
-| **Responsive** | 1500 | 1.0 | Critically damped, no overshoot, immediate | Toggles, switches, pressed states, micro-interactions |
-| **Expressive** | 380 | 0.7 | Slight overshoot, organic settle | Navigation transitions, FAB morphing, layout changes (system default) |
-| **Gentle** | 200 | 0.85 | Slow, soft arrival, minimal overshoot | Parallax layers, background shifts, ambient motion |
-| **Bouncy** | 500 | 0.5 | Pronounced oscillation, playful | Celebrations, achievements, attention-seeking elements |
-
-The **Expressive** spring (380/0.7) is the system default, used for navigation bar indicator animation, bottom sheet presentation, and component transitions. It produces approximately one visible overshoot cycle before settling, giving motion a lively but controlled feel.
-
-### Spring Advantages Over Duration-Based Animation
-
-Spring physics offer structural advantages that duration-based curves cannot match:
-
-- **Inherent interruptibility.** A spring animation can be interrupted at any point, and a new spring animation inherits the current velocity. This produces smooth, natural response when users change their mind mid-gesture. Duration-based curves must be manually cancelled and restarted, often producing visual discontinuities.
-- **Velocity preservation.** When a dragged element is released, its release velocity feeds directly into the spring animation. This creates a seamless transition from direct manipulation to animated settle. Duration-based animations ignore release velocity entirely, producing a jarring disconnect between the gesture and the resulting animation.
-- **Natural feel.** Springs model real physical behavior. Humans have deep intuitive understanding of how physical springs move. Duration-based curves, by contrast, are mathematical abstractions that require careful tuning to avoid feeling mechanical.
-
-### iOS 26 Liquid Glass Animation
-
-iOS 26's Liquid Glass introduces a new category of animation: material response. The glass material is not static — it responds dynamically to content and interaction:
-
-- **Refraction shifts.** As content scrolls or moves beneath a glass surface, the refraction pattern updates in real time, creating a subtle optical distortion that reinforces the glass metaphor. This is GPU-composited and does not require developer intervention for standard navigation chrome.
-- **Parallax depth.** Glass surfaces at different depth layers exhibit parallax motion relative to each other. When the device tilts (using accelerometer data) or when content scrolls, foreground glass elements shift slightly relative to background glass, creating a convincing spatial hierarchy.
-- **Translucency transitions.** Glass surfaces can transition between levels of translucency — from nearly transparent to frosted — based on scroll position, content density, or explicit state changes. This replaces the abrupt show/hide pattern for navigation bars with a gradual materialization effect.
-
-### Compose Spring Implementation
-
-In Jetpack Compose, apply the M3 Expressive spring system using the `spring()` animation specification:
-
-```kotlin
-// M3 Expressive default
-val offset by animateFloatAsState(
-    targetValue = targetOffset,
-    animationSpec = spring(
-        dampingRatio = 0.7f,
-        stiffness = 380f
-    )
-)
-
-// Responsive (for toggles and micro-interactions)
-animationSpec = spring(dampingRatio = 1.0f, stiffness = 1500f)
-
-// Gentle (for background and ambient motion)
-animationSpec = spring(dampingRatio = 0.85f, stiffness = 200f)
-
-// Bouncy (for celebrations)
-animationSpec = spring(dampingRatio = 0.5f, stiffness = 500f)
-```
-
-The `dampingRatio` controls overshoot behavior (1.0 = critically damped, below 1.0 = underdamped with oscillation), while `stiffness` controls the speed of the animation (higher values = faster motion).
-
-> For the complete platform-level treatment including SwiftUI `.glassEffect()` animation parameters, cross-platform spring bridging strategies, and reduced-motion fallbacks for spring and glass animations, see `ios26-liquid-glass-material3-expressive.md`.
+Platform spring tokens and Liquid Glass material motion are owned by
+`platform-visual-standards`: read its `material-3-expressive.md`
+and `ios-26-liquid-glass.md`. Use them when matching a native
+platform; use the base presets above for web and cross-platform UI.

@@ -1,6 +1,6 @@
 ---
 name: color-palette-library
-description: 180+ ready-made color palettes with contrast scores, plus OKLCH palette generation, dark-mode luminance mapping, semantic color architecture, and data-viz scales. Use when picking or generating a specific palette. For color theory and hierarchy craft, use ui-visual-design-system.
+description: 180+ ready-made color palettes with contrast scores, plus OKLCH palette generation, dark-mode luminance mapping, semantic color architecture, and data-viz scales. Use when picking or generating a specific palette. For color theory and hierarchy craft, use visual-design-mastery.
 allowed-tools: Read, Grep, Glob
 ---
 

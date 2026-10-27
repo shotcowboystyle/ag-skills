@@ -1,7 +1,9 @@
 # Shadow Animation
 
 Animating elevation: what to transition, what it costs, and the
-compositor-friendly alternatives to animating box-shadow directly.
+compositor-friendly alternatives to animating box-shadow directly. Easing
+tokens are the base motion scale owned by `interaction-motion-design`
+(`animation-timing-curves.md`).
 
 
 ### Hover Lift
@@ -10,8 +12,8 @@ The most common elevation change. Card rises from Level 1 to Level 2 on hover.
 ```css
 .card {
   box-shadow: var(--shadow-1);
-  transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
-              transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 200ms var(--ease-in-out),
+              transform 200ms var(--ease-in-out);
 }
 
 .card:hover {
@@ -27,8 +29,8 @@ Element compresses — drops from current elevation toward surface.
 .card:active {
   box-shadow: var(--shadow-1);
   transform: translateY(0px) scale(0.98);
-  transition: box-shadow 100ms cubic-bezier(0.4, 0, 0.2, 1),
-              transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 100ms var(--ease-in-out),
+              transform 100ms var(--ease-in-out);
 }
 ```
 
@@ -38,23 +40,23 @@ Element lifts dramatically when grabbed, then settles on drop.
 ```css
 .draggable {
   box-shadow: var(--shadow-1);
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1),
-              transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 300ms var(--ease-in-out),
+              transform 300ms var(--ease-in-out);
 }
 
 .draggable.is-dragging {
   box-shadow: var(--shadow-4-drag);
   transform: scale(1.03) rotate(1deg);
-  transition: box-shadow 150ms cubic-bezier(0, 0, 0.2, 1),
-              transform 150ms cubic-bezier(0, 0, 0.2, 1);
+  transition: box-shadow 150ms var(--ease-out),
+              transform 150ms var(--ease-out);
   z-index: 9999;
 }
 
 .draggable.is-dropping {
   box-shadow: var(--shadow-1);
   transform: scale(1) rotate(0deg);
-  transition: box-shadow 400ms cubic-bezier(0.4, 0, 0.2, 1),
-              transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: box-shadow 400ms var(--ease-in-out),
+              transform 400ms var(--ease-in-out);
 }
 ```
 

@@ -185,3 +185,341 @@ When multiple MCP servers are available, coordinate them for richer output:
 4. Adjust prompt to target weak dimensions
 5. Regenerate v2
 6. Repeat until quality gate is passed (max 3 iterations)
+
+
+---
+
+## Appendix: MCP Integration, Stitch, Image and Video Tools
+
+Moved verbatim from the `ai-design-generation` SKILL.md.
+
+### 2. MCP Integration Overview
+
+#### How the agent connects to design generation tools
+
+The agent communicates with design generation services through MCP (Model Context Protocol) servers. Each MCP server wraps an external API and exposes it as a set of tools the agent can invoke directly within a conversation.
+
+**The Architecture:**
+
+```
+User Request → Agent (Design Ops skill) → MCP Server → External API → Generated Asset
+                      ↓                                        ↓
+              Prompt Engineering                         Raw Output
+              Quality Scoring                            Post-Processing
+              Iteration Direction                        Final Delivery
+```
+
+**Key Benefits of MCP Integration:**
+
+- Claude can generate designs mid-conversation without the user leaving the terminal
+- Prompt construction is automated using Design Ops' design intelligence
+- Results can be evaluated, iterated, and refined in a continuous loop
+- Multiple tools can be chained in a single pipeline (e.g., Stitch for layout, Fal.ai for hero image, Recraft for icons)
+
+#### MCP Server Configuration
+
+All MCP servers are configured in your coding tool's MCP settings. Each server requires an API key for its respective service. For example: project `.mcp.json` (Claude Code, Cursor), `~/.codex/config.toml` (Codex), `opencode.json` (OpenCode).
+
+**Example configuration** (servers checked against each publisher's docs; see `mcp-design-tools.md`):
+
+```bash
+claude mcp add --transport http figma https://mcp.figma.com/mcp           # Figma, OAuth
+claude mcp add --transport http --scope user fal https://mcp.fal.ai/mcp-relay  # fal, OAuth
+```
+
+```json
+{
+  "mcpServers": {
+    "recraft": {
+      "command": "npx",
+      "args": ["-y", "@recraft-ai/mcp-recraft-server"],
+      "env": { "RECRAFT_API_KEY": "<key>" }
+    },
+    "replicate": {
+      "command": "npx",
+      "args": ["-y", "replicate-mcp"],
+      "env": { "REPLICATE_API_TOKEN": "<token>" }
+    }
+  }
+}
+```
+
+#### Supported MCP Servers (All Optional)
+
+| Server    | What It Does                                         | Connect                                         | Auth              |
+| --------- | ---------------------------------------------------- | ----------------------------------------------- | ----------------- |
+| Stitch    | UI screens and flows from text or an image           | Google's MCP route (see Stitch docs) or the web | Google account    |
+| fal       | FLUX, Imagen, Recraft, Veo and more through one API  | `https://mcp.fal.ai/mcp-relay`                  | OAuth             |
+| Recraft   | Raster and SVG generation, vectorize, cut-outs       | `npx -y @recraft-ai/mcp-recraft-server`         | Recraft API key   |
+| Replicate | Public and fine-tuned open models                    | `npx -y replicate-mcp`                          | Replicate token   |
+| Figma     | Read specs/variables/screenshots; write to files     | `https://mcp.figma.com/mcp` or desktop `:3845`  | OAuth / Dev Mode  |
+
+OpenAI image models have no official MCP server; call the Images API directly or hand the user the prompt.
+
+This skill enhances Design Ops when MCP servers are available but does NOT require them. Without MCP servers, Design Ops provides detailed specifications and prompts that users can use manually with any generation tool.
+
+---
+
+### 3. Stitch MCP — UI Generation
+
+#### Capabilities
+
+Stitch is purpose-built for generating UI screens from natural language descriptions. Unlike general image models, Stitch understands UI primitives: navigation bars, cards, forms, data tables, modals, sidebars. Its output is structured, layouted, and component-aware.
+
+**What Stitch Generates Well:**
+
+- Full page layouts (dashboards, settings, profiles, feeds)
+- Component compositions (card grids, form sections, navigation)
+- Responsive variations (desktop, tablet, mobile)
+- Light and dark mode variants
+- Platform-specific UIs (iOS, Android, web)
+
+**What Stitch Does NOT Do Well:**
+
+- Photorealistic imagery (use Fal.ai or DALL-E for hero images)
+- Custom illustrations (use Recraft or Midjourney)
+- Animated prototypes (use Veo or Runway for motion)
+- Pixel-perfect production code (use component-patterns-code skill for code)
+
+#### Prompt Patterns for Stitch
+
+**Layout Generation Pattern:**
+
+```
+Generate a [platform] [screen type] with:
+- Navigation: [nav style + items]
+- Layout: [grid/stack/split description]
+- Content: [specific data to show]
+- Style: [visual direction — reference product or design tokens]
+- State: [default/loading/empty/error]
+```
+
+**Component Generation Pattern:**
+
+```
+Generate a [component name] component that:
+- Contains: [child elements]
+- Shows: [specific data]
+- Supports: [interactions — hover, selected, disabled]
+- Follows: [design system reference]
+```
+
+**Full Page Generation Pattern:**
+
+```
+Generate a complete [product type] [page name]:
+- Header: [logo + nav items + user menu]
+- Hero: [headline + subtext + CTA + visual]
+- Section 1: [feature grid — 3 columns, icon + title + description]
+- Section 2: [testimonials — carousel or grid]
+- Section 3: [pricing — 3 tier cards with highlighted recommended]
+- Footer: [links + social + newsletter signup]
+Style: [reference product], [color palette], [typography]
+```
+
+#### Iteration Workflow with Stitch
+
+**Round 1 — Broad Exploration:** Generate 3-4 variations with different layout approaches. Use general descriptions. Goal: find the right structural direction.
+
+**Round 2 — Refinement:** Take the best layout and add specificity. Add exact content, adjust spacing descriptions, specify component variants. Goal: nail the composition.
+
+**Round 3 — Polish:** Fine-tune typography descriptions, color references, spacing, and state variants. Generate light and dark modes. Goal: production-adjacent fidelity.
+
+**Round 4 — Variants:** Generate the same screen for different breakpoints, different data states (empty, loading, error, populated), and edge cases (long text, missing images). Goal: completeness.
+
+---
+
+### 4. Image Generation Tools
+
+#### Fal.ai — The Multi-Model Platform
+
+fal provides access to a large model catalogue through a single API, making it the most versatile generation platform available. Key models for design work:
+
+**FLUX Pro / FLUX.1 Dev:**
+
+- Best for: High-fidelity UI mockup screenshots, product photography, realistic renders
+- Strengths: Exceptional text rendering in images, photorealistic quality, fast generation
+- Resolution: Up to 2048x2048, supports custom aspect ratios
+- Prompt style: Descriptive, natural language, responds well to camera/lighting terminology
+- Use case: Hero images, product shots, lifestyle imagery for landing pages
+
+**FLUX Schnell:**
+
+- Best for: Rapid iteration, concept exploration, batch generation
+- Strengths: much faster and cheaper than FLUX Pro, good quality for drafts
+- Use case: Quick visual explorations before committing to high-fidelity generation
+
+**Imagen 4 (via Fal):**
+
+- Best for: Photorealistic imagery with precise prompt adherence
+- Strengths: Superior text rendering, excellent at following complex compositional prompts
+- Use case: Marketing materials, product mockups, banner images
+
+**Configuration for UI Asset Generation:**
+
+```
+Model: flux-pro (high fidelity) or flux-schnell (speed)
+Resolution: Match target — 1440x900 for desktop hero, 390x844 for mobile, 1200x630 for OG image
+Steps: 28-50 for Pro, 4 for Schnell
+Guidance: 3.5-7.5 (higher = more prompt adherence, lower = more creative latitude)
+```
+
+#### Recraft V3 — Vector and Icon Generation
+
+Recraft V3 is the only AI model capable of generating true SVG/vector output. This makes it indispensable for icon generation, logo exploration, and scalable illustrations.
+
+**Vector Generation Capabilities:**
+
+- SVG output — real vector paths, not rasterized images saved as SVG
+- Consistent style across batch generations
+- Icon sets with unified weight, style, and grid alignment
+- Illustration styles: flat, line art, isometric, hand-drawn, geometric
+
+**Icon Generation Best Practices:**
+
+```
+Prompt structure: "[icon subject] icon, [style], [weight], [grid], [color]"
+Example: "Shopping cart icon, line style, 2px stroke, 24x24 grid, single color #1A1A2E"
+Batch: Generate full sets by varying only the subject while keeping style tokens identical
+```
+
+**Illustration Style Presets:**
+
+- **Corporate flat:** "flat vector illustration, geometric shapes, limited palette, no outlines, modern SaaS style"
+- **Line art:** "continuous line illustration, single stroke weight, minimal detail, elegant, editorial"
+- **Isometric:** "isometric 3D illustration, flat shading, consistent 30-degree angle, pastel palette"
+- **Hand-drawn:** "hand-drawn sketch illustration, imperfect lines, warm, approachable, ink on paper feel"
+
+**Brand Consistency Technique:**
+To maintain brand consistency across multiple Recraft generations, anchor every prompt with the same style suffix:
+
+```
+Style anchor: ", [brand] style, [primary color] and [secondary color] palette, [illustration style], [line weight], consistent with previous generations"
+```
+
+#### Midjourney — High-Impact Visuals
+
+Midjourney excels at generating visually striking imagery for hero sections, editorial illustrations, and marketing materials. It is not ideal for precise UI generation but unmatched for visual impact.
+
+**Prompt Structure for UI/UX Work:**
+
+```
+[Subject description] --ar [aspect ratio] --style [raw/aesthetic] --stylize [0-1000] --v 6.1
+```
+
+**Key Parameters:**
+
+- `--ar 16:9` — Desktop hero images
+- `--ar 9:16` — Mobile hero images, app store screenshots
+- `--ar 1:1` — Avatars, thumbnails, social media
+- `--ar 3:2` — Blog post headers, card images
+- `--style raw` — More literal prompt interpretation, better for specific UI needs
+- `--stylize 50-150` — Lower values for more control, higher for more artistic flair
+- `--no text, UI elements, buttons` — Negative prompts to avoid unwanted elements
+
+**Best Use Cases in Design:**
+
+- Hero section background imagery
+- Editorial and blog illustrations
+- Conceptual mood board imagery
+- Abstract background patterns and textures
+- Product lifestyle photography concepts
+- Marketing campaign visuals
+
+**Prompt Examples for Common Design Needs:**
+
+```
+Hero image: "Abstract gradient mesh, deep navy transitioning to electric violet, subtle grain texture, premium SaaS aesthetic --ar 16:9 --style raw --stylize 100"
+
+Illustration: "Isometric workspace with laptop, coffee cup, and plant, soft pastel palette, minimal geometric style --ar 3:2 --stylize 200"
+
+Background: "Subtle topographic line pattern, light grey on white, barely visible, clean minimal texture --ar 16:9 --style raw --stylize 50 --no color"
+```
+
+#### DALL-E 3 — Concept Art and Exploration
+
+DALL-E 3 (via OpenAI) has strong prompt comprehension and excels at conceptual exploration, but produces softer, more painterly results than FLUX or Midjourney.
+
+**Strengths:**
+
+- Excellent text comprehension — understands complex, multi-part prompts
+- Good at conceptual and metaphorical imagery
+- Reliable text rendering within images
+- Accessible via direct API (no Discord, no queue)
+- Integrated editing capabilities (inpainting, outpainting)
+
+**Limitations for UI Work:**
+
+- Output tends toward illustrated/painterly rather than photorealistic
+- Less control over exact style compared to Midjourney
+- Resolution limited to 1024x1024, 1024x1792, or 1792x1024
+- Cannot match the precision of Stitch for UI layouts
+- No vector output capability
+
+**Best Use Cases:**
+
+- Early concept exploration (before committing to a style direction)
+- Metaphorical illustrations for blog posts and marketing
+- Placeholder imagery during wireframing
+- Quick visual brainstorming during design workshops
+- Social media graphics and promotional imagery
+
+---
+
+### 5. Video Generation
+
+#### Veo 3.1 (Google, via Fal.ai)
+
+Veo 3.1 generates high-quality video clips from text prompts, useful for prototype animations, product demos, and marketing content.
+
+**Design Applications:**
+
+- Animated hero sections (looping background videos)
+- Product walkthrough animations
+- Micro-interaction previews at scale
+- Social media video ads and promotional clips
+- App store preview videos (conceptual)
+
+**Prompt Pattern:**
+
+```
+"Smooth UI animation showing [interaction]: [starting state] transitions to [ending state],
+[platform] design style, [duration] seconds, [camera movement], clean background, 60fps"
+```
+
+#### Runway Gen-3 Alpha
+
+Runway specializes in creative video generation with strong artistic control.
+
+**Best For:**
+
+- Stylized product videos with artistic flair
+- Brand videos with specific mood and aesthetic
+- Motion graphics concepts
+- Cinematic product reveals
+
+**Key Features:**
+
+- Image-to-video (animate a static mockup)
+- Motion brush (control where movement happens)
+- Style reference (maintain visual consistency)
+
+#### Pika
+
+Pika focuses on quick, accessible video generation with simple controls.
+
+**Best For:**
+
+- Rapid prototype animation concepts
+- Simple motion mockups for client presentations
+- Social media short-form content
+- Quick iteration on animation direction
+
+**When to Use Which Video Tool:**
+
+| Need                        | Tool         | Why                         |
+| --------------------------- | ------------ | --------------------------- |
+| Photorealistic product demo | Veo 3.1      | Best realism, longest clips |
+| Artistic brand video        | Runway Gen-3 | Best creative control       |
+| Quick motion concept        | Pika         | Fastest, simplest           |
+| UI animation reference      | Veo 3.1      | Understands UI context      |

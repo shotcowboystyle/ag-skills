@@ -18,6 +18,18 @@ iOS 26 represents the largest visual redesign since iOS 7. The motivation is spa
 
 Apple provides four material thickness tiers that control how much background content bleeds through the glass surface. Each tier is designed for specific use cases.
 
+> Note: the SwiftUI `Material` tiers below (`.ultraThinMaterial` ... `.thickMaterial`, plus `.ultraThickMaterial`) are the pre-iOS 26 blur materials and remain available. Liquid Glass itself is applied with `.glassEffect()` (variants `.regular` and `.clear`) and is what system bars use on iOS 26. Use the tiers for custom backgrounds and as the fallback on iOS 25 and earlier.
+
+Approximate rendering values (unverified — not published by Apple; use only as a starting point for mockups):
+
+| Material | Background Blur Radius | Saturation Boost | Use Case |
+|----------|----------------------|------------------|----------|
+| `ultraThinMaterial` | 8pt | 1.2x | Full-screen ambient overlays |
+| `thinMaterial` | 16pt | 1.4x | Popovers, menus |
+| `regularMaterial` | 24pt | 1.6x | Sheets, bars on older iOS |
+| `thickMaterial` | 40pt | 1.8x | Alerts, critical modals |
+| `ultraThickMaterial` | 64pt | 2.0x | Focused input contexts |
+
 ### Ultra-Thin Material
 - **Blur radius**: Minimal — background is mostly visible
 - **Use case**: Full-screen overlays where context must remain visible (e.g., Control Center background)
@@ -435,7 +447,9 @@ NavigationSplitView {
 
 ### Animation Curves
 
-iOS 26 uses spring-based animations exclusively for interactive elements:
+> These are **iOS platform-native SwiftUI spring values** (response + damping fraction). They are not the product's base motion scale; for base durations and easings see `interaction-motion-design` (its `animation-timing-curves.md` reference).
+
+iOS 26 uses spring-based animations for interactive elements:
 
 ```swift
 // Default spring (recommended for most transitions)
@@ -536,3 +550,169 @@ StandBy activates when iPhone is on a charger in landscape orientation:
 - High contrast, large numerals
 - Minimal information density
 - Red-compatible colors for night mode
+
+---
+
+## Optical Properties
+
+- **Translucency with refraction** — not just blur: edges refract more than the center, like a curved pane, producing a subtle lens distortion at the periphery.
+- **Dynamic tinting** — samples color from the content beneath in real time (cool over blue photos, warm over sunsets), desaturated and biased toward the accent color.
+- **Specular highlights** — a simulated light source highlights edges and top surfaces and responds to device motion (gyroscope), giving parallax-like glints.
+- **Depth layering** — bars, floating cards, and sheets sit on separate depth planes; deeper layers show stronger effects. This replaces the drop-shadow elevation model.
+- **Edge treatment** — thin, semi-transparent luminous borders define where one glass surface ends and another begins.
+
+Design-time approximations used in mockups (unverified, not Apple-published): a 1pt top-edge specular line at white 10-15% opacity (5-8% in Dark Mode, with a faint bottom inner shadow); accent tint at 5-15% of the material, 20-30% for a selected indicator. Custom tint colors must be contrast-checked against both light and dark backgrounds.
+
+## Glass vs Solid
+
+| Context | Recommendation | Reason |
+|---------|---------------|--------|
+| Chrome (bars, toolbars) | Glass | Users expect to see content continuity |
+| Cards in scrollable lists | Solid | Glass-on-glass creates visual noise and rendering cost |
+| Full-screen content (video, photo) | Solid or ultra-thin | Content is the focus, glass distracts |
+| Modals and sheets | Glass | Maintains spatial context |
+| Text-heavy reading views | Solid | Glass behind paragraphs of text reduces readability |
+| Data-heavy views (tables, dashboards) | Solid | Glass noise degrades scanability |
+| Text input editing area | Solid | The field container can be glass; the editing area needs a stable background |
+| Accessibility-critical (medical, financial, emergency) content | Solid | Glass only for non-critical chrome |
+| Floating controls over media or maps | Glass with a visible border | Glass alone weakens the tap affordance |
+
+## Floating Tab Bar (iOS 26)
+
+- Floats above content as a capsule rather than an edge-pinned rectangle; 5 items maximum, overflow to "More"
+- **Scrolling down** — can minimize to a compact form showing the selected tab (`.tabBarMinimizeBehavior(.onScrollDown)`), reducing content occlusion
+- **Scrolling up / tap** — re-expands with a spring
+- **Hidden** — dismissed during immersive content (video, full-screen maps)
+- Selected state: filled SF Symbol variant + tint; minimum 44pt tap target per item
+- SF Symbols on glass: prefer Medium weight and Medium scale for legibility
+- Mockup dimensions (unverified, not Apple-published): about 49pt tall compact / 56pt regular, floating about 8pt above the bottom safe area, 24pt icons, 10pt medium labels
+
+### Navigation Bar
+
+- 44pt standard, about 96pt with a large title; large title SF Pro Display 34pt bold, inline title SF Pro Text 17pt semibold
+- Large-to-inline title transition is a continuous scroll-driven interpolation, not a snap
+- Back button: `chevron.backward` + previous title, 17pt, accent color
+
+SF Symbols effects available on glass: bounce, pulse, variable color, scale, appear, disappear, replace, wiggle, rotate, breathe. Placed on glass, symbols adopt the vibrancy level of their label style automatically.
+
+## System Adoption
+
+Built against the iOS 26 SDK, these adopt Liquid Glass with no code changes: navigation bars (large titles collapse into an inline glass bar on scroll), tab bars, bottom toolbars and keyboard accessories, iPad sidebars, segmented controls (selected segment as a brighter glass pill), search bars in navigation bars, and menus/popovers.
+
+## Liquid Glass APIs
+
+```swift
+// Standard glass on a custom view; .clear is the lighter, less-tinted variant
+VStack(alignment: .leading, spacing: 8) {
+    Text("Now Playing").font(.headline)
+    Text("Artist — Track Title").font(.subheadline).foregroundStyle(.secondary)
+}
+.padding()
+.glassEffect(.regular)
+
+// Group neighboring glass shapes so they composite (and morph) together
+// instead of stacking blur upon blur
+GlassEffectContainer {
+    HStack {
+        Button("Edit") { }.glassEffect()
+        Button("Share") { }.glassEffect()
+    }
+}
+```
+
+UIKit: `UIGlassEffect` is a `UIVisualEffect` used with `UIVisualEffectView`. SwiftUI is the first-class API; UIKit support is the compatibility bridge.
+
+```swift
+let glassView = UIVisualEffectView(effect: UIGlassEffect())
+glassView.frame = containerView.bounds
+containerView.addSubview(glassView)
+```
+
+Interactive custom glass elements should carry a visible border to communicate tappability:
+
+```swift
+Button(action: action) {
+    Text(label).font(.body.weight(.semibold))
+        .padding(.horizontal, 20).padding(.vertical, 12)
+}
+.glassEffect(.regular)
+.overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.white.opacity(0.3), lineWidth: 1))
+```
+
+Use semantic foreground styles (`.primary`, `.secondary`, `.tertiary`) for text on glass — they get vibrancy automatically. Hardcoded `Color.white` / `Color.black` / hex values do not adapt and can become unreadable.
+
+### Fallback for iOS 25 and Earlier
+
+```swift
+.background {
+    if #available(iOS 26, *) {
+        Color.clear.glassEffect(.regular)
+    } else {
+        Rectangle().fill(.ultraThinMaterial)
+    }
+}
+```
+
+```swift
+func makeChromeBackground() -> UIView {
+    if #available(iOS 26, *) {
+        return UIVisualEffectView(effect: UIGlassEffect())
+    } else {
+        return UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
+    }
+}
+```
+
+`.ultraThinMaterial` / `.thinMaterial` are the closest approximation: translucent, but no refraction or dynamic tint.
+
+## Usability Concerns (NNGroup Critique)
+
+Nielsen Norman Group's iOS 26 analysis (nngroup.com) raised evidence-based concerns:
+
+- **Reduced contrast** — glass shifts lightness and hue with the background, so text can drop below WCAG AA (4.5:1 normal, 3:1 large) in cases like light text over a pale sky or dark text over a dark map. Vibrancy mitigates but does not guarantee compliance.
+- **Legibility** — even when ratios pass, moving, refracting content under text slows reading and raises cognitive load, especially for older and low-vision users and in bright sunlight.
+- **Touch target ambiguity** — soft luminous edges make the clickable area unclear and elements feel decorative rather than interactive.
+- **Flattened hierarchy** — when chrome and content are both translucent, users lose the opacity cues that separate controls from content.
+
+## Accessibility
+
+- **Reduce Transparency** — all glass must fall back to opaque. System controls do this automatically; custom glass must check the setting:
+
+```swift
+@Environment(\.accessibilityReduceTransparency) var reduceTransparency
+
+var body: some View {
+    content.background {
+        if reduceTransparency {
+            RoundedRectangle(cornerRadius: 12).fill(Color(.systemBackground))
+        } else {
+            Color.clear.glassEffect(.regular)
+        }
+    }
+}
+```
+
+UIKit: `UIAccessibility.isReduceTransparencyEnabled`. Keep the same spatial relationships and hierarchy in the opaque state.
+
+- **Increase Contrast** — glass becomes more opaque, borders more prominent, text heavier. Test with it on.
+- **Worst-case contrast testing** — screenshot glass text over the lightest and darkest content that can scroll beneath it and measure; do not assume vibrancy saves you.
+- **Borders on interactive glass** — semi-transparent white or system-color strokes on every tappable glass element.
+- **VoiceOver** — glass is purely visual; labels, traits, and actions are still required.
+
+## Migrating an Existing App to Liquid Glass
+
+1. Build against the iOS 26 SDK; system bars adopt glass automatically.
+2. Remove custom navigation/toolbar backgrounds (`UINavigationBarAppearance` images or colors); use the system default or `.glassEffect()`. Replace `UIBlurEffect` chrome with `UIGlassEffect` where appropriate.
+3. Grep for hardcoded text colors on chrome (`UIColor.white`, `Color.black`, `Color(hex:)`) and switch to `.label`, `.secondaryLabel`, `.foregroundStyle(.primary/.secondary)`.
+4. Add Reduce Transparency fallbacks to every custom glass view.
+5. Test Increase Contrast, the largest Dynamic Type sizes, and landscape.
+6. Profile on the oldest supported physical device — glass is composited by the GPU in real time and the Simulator does not reflect performance.
+
+**Testing checklist:**
+- Text on glass meets WCAG AA over light, dark, and varied content
+- Reduce Transparency: all glass falls back to opaque
+- Increase Contrast: borders and text weight increase
+- Dynamic Type at all sizes: glass chrome does not clip or obscure text
+- Landscape: glass surfaces resize and recomposite correctly
+- 60fps scrolling with glass navigation and tab bars on the oldest supported device
+- VoiceOver: correct labels, traits, and order on all glass elements

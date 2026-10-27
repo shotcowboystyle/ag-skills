@@ -700,7 +700,7 @@ Production-ready CSS animations. Copy-paste into any project. All recipes includ
 .scale-in { animation: scaleIn 200ms var(--spring-gentle) forwards; }
 ```
 ```tsx
-<motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", stiffness: 300, damping: 20 }} />
+<motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", stiffness: 300, damping: 25 }} />
 ```
 
 #### A7. expandIn
@@ -794,17 +794,17 @@ const TypeWriter = ({ text }: { text: string }) => {
 ```
 
 #### A12. rotateIn
-**Duration**: 300ms | **Easing**: ease-out-back | **Use**: Icons, badges, notification dots
+**Duration**: 300ms | **Easing**: ease-spring | **Use**: Icons, badges, notification dots
 ```css
 @keyframes rotateIn {
   from { opacity: 0; transform: rotate(-180deg) scale(0.5); }
   to { opacity: 1; transform: rotate(0deg) scale(1); }
 }
-.rotate-in { animation: rotateIn 300ms var(--ease-out-back) forwards; }
+.rotate-in { animation: rotateIn 300ms var(--ease-spring) forwards; }
 ```
 ```tsx
 <motion.div initial={{ opacity: 0, rotate: -180, scale: 0.5 }} animate={{ opacity: 1, rotate: 0, scale: 1 }}
-  transition={{ type: "spring", stiffness: 200, damping: 15 }} />
+  transition={{ type: "spring", stiffness: 300, damping: 10 }} />
 ```
 
 #### A13. bounceIn
@@ -820,7 +820,7 @@ const TypeWriter = ({ text }: { text: string }) => {
 ```
 ```tsx
 <motion.div initial={{ opacity: 0, scale: 0.3 }} animate={{ opacity: 1, scale: 1 }}
-  transition={{ type: "spring", stiffness: 180, damping: 12 }} />
+  transition={{ type: "spring", stiffness: 300, damping: 10 }} />
 ```
 
 #### A14. blurIn
@@ -872,13 +872,13 @@ const TypeWriter = ({ text }: { text: string }) => {
 ```
 
 #### A18. dropIn
-**Duration**: 350ms | **Easing**: ease-out-back | **Use**: Modals dropping from top
+**Duration**: 350ms | **Easing**: ease-spring | **Use**: Modals dropping from top
 ```css
 @keyframes dropIn {
   from { opacity: 0; transform: translateY(-40px) scale(0.95); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
-.drop-in { animation: dropIn 350ms var(--ease-out-back) forwards; }
+.drop-in { animation: dropIn 350ms var(--ease-spring) forwards; }
 ```
 
 #### A19. zoomIn
@@ -912,7 +912,7 @@ const TypeWriter = ({ text }: { text: string }) => {
 ```
 
 #### A22. swingIn
-**Duration**: 400ms | **Easing**: ease-out-back | **Use**: Notification bells, playful icons
+**Duration**: 400ms | **Easing**: ease-spring | **Use**: Notification bells, playful icons
 ```css
 @keyframes swingIn {
   0% { opacity: 0; transform: rotate(-30deg); transform-origin: top center; }

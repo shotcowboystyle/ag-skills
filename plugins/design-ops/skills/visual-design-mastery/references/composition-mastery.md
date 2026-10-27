@@ -833,3 +833,31 @@ Show essential first, expand for detail:
 6. **Density**: Is the density appropriate for the user and context? (If not: adjust spacing scale)
 7. **Responsive**: Does the layout reflow gracefully? (If not: implement responsive patterns above)
 8. **Whitespace**: Does removing 30% of the content make it look better? (If yes: the original was too dense)
+
+---
+
+## Composition Techniques
+
+### Asymmetric Balance
+
+Symmetric layouts feel stable but static. Asymmetric layouts feel dynamic and contemporary. Techniques:
+- Place a large image on the left (60% width) with text content on the right (40% width).
+- Offset headings from body text with a different left margin.
+- Use a sidebar that does not mirror the main content area.
+- Balance a heavy element with whitespace, not another heavy element.
+
+### Dynamic Layouts
+
+**Broken grid**: Elements that intentionally overlap grid lines. An image that spans from one column into the gutter. Text that overlaps an image edge. Use sparingly — one break per viewport.
+
+**Bento grid**: Unequal grid cells that create a mosaic pattern (Apple's feature pages). Mix 1x1, 2x1, 1x2, and 2x2 cells. Each cell contains one focused piece of content.
+
+**Editorial layout**: Magazine-inspired digital layouts. Pull quotes breaking the column. Full-bleed images. Caption text in the margin. Text wrapping around images.
+
+### Negative Space as Design Tool
+
+Negative space is not the absence of design — it is an active compositional tool.
+- **Micro negative space**: Padding within components. The space between an icon and its label.
+- **Macro negative space**: The margins around content blocks. The gap between sections. The empty area that lets a hero image breathe.
+- **Active negative space**: Deliberately placed emptiness that draws attention to adjacent content. Apple's product pages use massive whitespace to make each product feel precious.
+- **Trapped negative space**: Awkward gaps that occur unintentionally between elements. Always eliminate trapped negative space.

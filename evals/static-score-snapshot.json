@@ -841,92 +841,92 @@
   },
   "design-ops/accessibility-inclusive-design": {
     "badge": "silver",
-    "composite": 72.72727272727273,
-    "digest": "cceb70541f891f67f0364b25677a67a2c2dddccd20e9e1c6e5869f62afd54113",
-    "static_score": 0.717,
+    "composite": 71.2121212121212,
+    "digest": "aa7d4090895bff012d2a4395a4a0c4c4dc2bb05514c337cc395ddb272ae291f8",
+    "static_score": 0.703,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7999999999999999,
-      "progressive_disclosure": 0.75,
+      "progressive_disclosure": 0.65,
       "structural_completeness": 0.25,
       "token_efficiency": 1.0
     }
   },
   "design-ops/agentic-ai-generative-ux": {
     "badge": "bronze",
-    "composite": 69.69696969696969,
-    "digest": "155d9dab9f4d0ca4e69ab4c8a63f72c4fb5f11ec0e12971609f88a24589b24f8",
-    "static_score": 0.694,
+    "composite": 67.19696969696969,
+    "digest": "b0f3cc94009c9c4a45149eb5db2c249029e367d6b74376d81f77601fdc55e1b5",
+    "static_score": 0.6599999999999999,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.25,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.2,
       "token_efficiency": 1.0
     }
   },
   "design-ops/ai-design-generation": {
     "badge": "bronze",
-    "composite": 69.20216147488874,
-    "digest": "e4a6dcd76d1862c99ed553f6fcb60817fdd5de8c7f72da6b267cd2aa9e1064a6",
-    "static_score": 0.6911013986013985,
+    "composite": 64.39393939393939,
+    "digest": "e9e8617c58f70b4dca6bc35dafa64729ee9855e53838d92cbf72c7962e40c601",
+    "static_score": 0.6345,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.4,
-      "structural_completeness": 0.55,
-      "token_efficiency": 0.9622377622377623
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
     }
   },
   "design-ops/ai-spatial-voice-ux": {
-    "badge": "silver",
-    "composite": 79.54545454545455,
-    "digest": "8e2f2b8e09285f1407f6697699857d7401b0cb37707adcc94729395d7a83cc44",
-    "static_score": 0.7706999999999999,
+    "badge": "bronze",
+    "composite": 67.95454545454544,
+    "digest": "7b40023977b8a49c858d4f497fa4313e618e3579c954fea0b04232f8c6647769",
+    "static_score": 0.6675,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.71,
+      "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.95,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.25,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
       "token_efficiency": 1.0
     }
   },
   "design-ops/ambient-calm-zero-ui": {
     "badge": "bronze",
-    "composite": 66.66666666666666,
-    "digest": "b4ffddf86908797bc16118e51bbde3c60340eb1d1eddc71360c8388371905412",
-    "static_score": 0.6685,
+    "composite": 63.1060606060606,
+    "digest": "f7d1826a4f7b3f1b33e9fdc6d51f9331c4ac1aca7f5ab3f27ca7f7a2f403416a",
+    "static_score": 0.628,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.6499999999999999,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.25,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.3,
       "token_efficiency": 1.0
     }
   },
   "design-ops/animation-recipe-library": {
     "badge": "bronze",
-    "composite": 63.96901980700863,
-    "digest": "ab50aadb6cc828a2c903f535caf2bc64bc3fc704099b8d5d3007a72d6ca977c6",
-    "static_score": 0.6609932960893855,
+    "composite": 62.39393939393939,
+    "digest": "04238b43748850c841137902e90969626c6d8bedd5362f1152bf176b44fe62df",
+    "static_score": 0.6464,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.6,
-      "progressive_disclosure": 0.75,
+      "progressive_disclosure": 0.65,
       "structural_completeness": 0.6,
-      "token_efficiency": 0.9865921787709497
+      "token_efficiency": 0.98
     }
   },
   "design-ops/business-design-templates": {
@@ -945,24 +945,24 @@
     }
   },
   "design-ops/cognitive-psychology-ux": {
-    "badge": "silver",
-    "composite": 72.72727272727273,
-    "digest": "36ce09a60f1db7cb1447a85374be8dab50237c96d961d5ddb38e7e9a0a52a548",
-    "static_score": 0.7145,
+    "badge": "bronze",
+    "composite": 63.40909090909091,
+    "digest": "6a1e4b8091ada740df81403cae187a305de73aa3f5c695e86cfd6444f9ad3422",
+    "static_score": 0.633,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.25,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
       "token_efficiency": 1.0
     }
   },
   "design-ops/color-palette-library": {
     "badge": "bronze",
     "composite": 69.84848484848484,
-    "digest": "674a8a6c17984bbe24c6ffd58b638bb51e5e1dfa1238790a4cec73f5913a7d32",
+    "digest": "b54708e4b073d09516c05f2ef7cb5f87919340be993a54af04ead12202722411",
     "static_score": 0.6965,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -975,77 +975,77 @@
     }
   },
   "design-ops/component-patterns-code": {
-    "badge": "silver",
-    "composite": 78.17300916138126,
-    "digest": "79ddf7a5df8d5ba0759a89f802b219a5f45db5c5daf809e504a2d2d80b79b943",
-    "static_score": 0.7633627906976744,
+    "badge": "bronze",
+    "composite": 67.65151515151516,
+    "digest": "56c0306ce160f194315f04abcf34700ce278b999cc23c62dc924e5ae98a2c831",
+    "static_score": 0.6625,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.71,
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.75,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
       "structural_completeness": 0.30000000000000004,
-      "token_efficiency": 0.9906976744186047
+      "token_efficiency": 1.0
     }
   },
   "design-ops/conversion-optimization-patterns": {
-    "badge": "silver",
-    "composite": 73.16873773708306,
-    "digest": "c5c4595de9552b9d4780517397564dda265e786d34138bc12720ea13eebc4193",
-    "static_score": 0.7220705035971223,
+    "badge": "bronze",
+    "composite": 69.92424242424242,
+    "digest": "ee0f7ef6ee9e53218dc9040ca8b2e55fe30aadc83cb94c7eacd4365661339b62",
+    "static_score": 0.6817,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.85,
-      "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9985611510791367
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.3,
+      "token_efficiency": 1.0
     }
   },
   "design-ops/cross-cultural-i18n-ux": {
-    "badge": "silver",
-    "composite": 72.72727272727273,
-    "digest": "945d7afc74ed7d7ddcb73b3ebb661b379b0773c1e5bc75ea0387d7e4658dc64f",
-    "static_score": 0.7145,
+    "badge": "bronze",
+    "composite": 67.19696969696969,
+    "digest": "3d5a7d7369d3d17403ba60d852767c0338a310d0dc0d5e0114ef2d9f8b14c83b",
+    "static_score": 0.6525,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.25,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
       "token_efficiency": 1.0
     }
   },
   "design-ops/data-visualization-mastery": {
-    "badge": "silver",
-    "composite": 71.48218158372897,
-    "digest": "41ec6a2ed0d1d11044ac198e8a10f1495f33d4549cd87b7a139b9f1b9d20538b",
-    "static_score": 0.7339235976789168,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.7000000000000001,
-      "token_efficiency": 0.9713733075435202
-    }
-  },
-  "design-ops/design-critique-case-studies": {
-    "badge": "silver",
-    "composite": 71.96969696969695,
-    "digest": "c3696030541c996c39677aeba0bd1cbacd07e1ca243191341847469cd1b5f2e1",
-    "static_score": 0.6995,
+    "badge": "bronze",
+    "composite": 63.1060606060606,
+    "digest": "93440295e24405558e4b60c4961b4b4315ac5b098ad4cd8e4160f2d60346230a",
+    "static_score": 0.628,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.25,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.3,
+      "token_efficiency": 1.0
+    }
+  },
+  "design-ops/design-critique-case-studies": {
+    "badge": "bronze",
+    "composite": 63.33333333333332,
+    "digest": "500cbcb37e3a15f7a11ef44945be60342d501eec530a2bfa518de69bfa96c1ac",
+    "static_score": 0.633,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
       "token_efficiency": 1.0
     }
   },
@@ -1067,7 +1067,7 @@
   "design-ops/design-ops-orchestrator": {
     "badge": "bronze",
     "composite": 61.43939393939394,
-    "digest": "f5bb8ba45b713d6c7a7b64ea6dfda1f50c4690eddc3b3b502247997325812e51",
+    "digest": "a1c07888790aa6b721cf659ea0cb606e909feff1e833dd0b909ae373fef02625",
     "static_score": 0.6232,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1080,84 +1080,84 @@
     }
   },
   "design-ops/design-process-methods": {
-    "badge": "silver",
-    "composite": 77.65362604371893,
-    "digest": "246d1ae6f3a08d335d826eb9e328de4c9c7d2e0dcd8d0ee7a6465ca3861c89e7",
-    "static_score": 0.7667708978328174,
+    "badge": "bronze",
+    "composite": 66.5909090909091,
+    "digest": "2cf680ff4100f3cbb2b73bf4393fdd9b3bfb9b3f67aa4d06970a8db1dd8520ab",
+    "static_score": 0.66375,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.85,
-      "structural_completeness": 0.55,
-      "token_efficiency": 0.9752321981424148
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.975
     }
   },
   "design-ops/design-systems-architecture": {
     "badge": "silver",
-    "composite": 78.21133412042504,
-    "digest": "66f3321e407de36c2c38609c5d4523350d05fca0a8ffd25fef4f233c35e0cfb7",
-    "static_score": 0.7699922077922078,
+    "composite": 70.15151515151514,
+    "digest": "0fef9816e557709954ccf0d01a494e355f408627652fc666db257b8f22704a08",
+    "static_score": 0.6867,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.55,
-      "token_efficiency": 0.9532467532467532
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 1.0
     }
   },
   "design-ops/design-token-presets": {
     "badge": "silver",
-    "composite": 71.69777242624924,
-    "digest": "bba7ae9cae87ff9d4aef2630770a25428e3c1cd6be00b0c40eeba0168e1ac42e",
-    "static_score": 0.7168079470198675,
+    "composite": 71.20553359683794,
+    "digest": "e62a933018287fc25769ddc37f0792d616d0e17dbd50549b4402ab9a280e5533",
+    "static_score": 0.7064347826086956,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.5499999999999999,
-      "token_efficiency": 0.9867549668874173
+      "structural_completeness": 0.44999999999999996,
+      "token_efficiency": 0.9826086956521739
     }
   },
   "design-ops/desktop-app-design": {
-    "badge": "silver",
-    "composite": 70.45454545454545,
-    "digest": "edc7316bc1f77683c5301f172371298c80d3f3948dd2f027ddfc993cb1e12fa6",
-    "static_score": 0.6905,
+    "badge": "bronze",
+    "composite": 64.84848484848484,
+    "digest": "3a59c25da1446db8a97fcc6827729fd3e0b8e7f84bdd7c3a98e40211a735f22d",
+    "static_score": 0.6445,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.25,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
       "token_efficiency": 1.0
     }
   },
   "design-ops/figma-design-tool-workflows": {
-    "badge": "silver",
-    "composite": 74.01515151515152,
-    "digest": "52ae4dae2eff2e717935b91b3180db81f0524fd5d06eb57b7efebbc418b1defb",
-    "static_score": 0.7137,
+    "badge": "bronze",
+    "composite": 69.92424242424242,
+    "digest": "6b9d2409aa27e7ec52273c90b11f5de953047b4077c43fd72c77dcc32d75d36e",
+    "static_score": 0.6817,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.2,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.30000000000000004,
       "token_efficiency": 1.0
     }
   },
   "design-ops/form-design-encyclopedia": {
     "badge": "silver",
     "composite": 71.32034632034632,
-    "digest": "3a089f5d14a74a526c5c7b40b91c86c1f63aecd0a6768f714c5ee57e583c5a0e",
+    "digest": "51f40929a3aeb31e1496b8840a4080b6c549f8bc7bf532a132d121d7ebed6f89",
     "static_score": 0.7075714285714285,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1172,7 +1172,7 @@
   "design-ops/icon-illustration-systems": {
     "badge": "bronze",
     "composite": 69.60135333921743,
-    "digest": "c45a62577537253b04b1ea1dab774bbc30f29ce5f079d7146dea2be1ff22e1ba",
+    "digest": "710e92684d0a5c98aea31a5cbc360cc649c1a494d92c23e096214896efc4e641",
     "static_score": 0.6940533980582524,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1187,7 +1187,7 @@
   "design-ops/image-media-patterns": {
     "badge": "bronze",
     "composite": 63.740653286107815,
-    "digest": "6d7346b21032be6dcf9170290b3067f179518347d3b12c9bca987bb8a917f043",
+    "digest": "8e57e9bafe0cee679269c94ec5c92eee2c425c6fa3bb070207ce5615f9cefd5f",
     "static_score": 0.6425324675324675,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1200,48 +1200,48 @@
     }
   },
   "design-ops/interaction-motion-design": {
+    "badge": "bronze",
+    "composite": 68.01400076716531,
+    "digest": "511054a5006686e0b8084dc91e5ab23438934b683475b40ee4c06cf81e8c4fb0",
+    "static_score": 0.6790886075949367,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.9898734177215189
+    }
+  },
+  "design-ops/layout-block-intelligence": {
+    "badge": "bronze",
+    "composite": 67.8396871945259,
+    "digest": "eb1158508da23a5b4f7c41e13a3810cc65993c5967188e388ecc732e2b7850ba",
+    "static_score": 0.6746129032258065,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 0.9956989247311828
+    }
+  },
+  "design-ops/micro-copy-intelligence": {
     "badge": "silver",
-    "composite": 73.89393939393939,
-    "digest": "4084499625325d996890956fec37b3c24c79b188869cab4d1903bb98c4bbbd59",
-    "static_score": 0.7258,
+    "composite": 72.60366826156299,
+    "digest": "4c61961e72a5a933bf8d483e5b95734b7c9ae0dda646aa614c7bca25082a0ff6",
+    "static_score": 0.7140263157894736,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.4,
-      "token_efficiency": 0.97
-    }
-  },
-  "design-ops/layout-block-intelligence": {
-    "badge": "silver",
-    "composite": 71.80830039525692,
-    "digest": "950d89d5edf818e94af86bc1ff9763c57f8fe8573c030d26ee519e7d1b3a7103",
-    "static_score": 0.7206521739130435,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.6,
-      "token_efficiency": 0.9739130434782609
-    }
-  },
-  "design-ops/micro-copy-intelligence": {
-    "badge": "silver",
-    "composite": 77.43627867459642,
-    "digest": "794002847d53c0333835718b5b01a73e2bef3172acb9665326f5308383a1ae8b",
-    "static_score": 0.7618691588785046,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.85,
-      "structural_completeness": 0.49999999999999994,
-      "token_efficiency": 0.9763239875389408
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.9947368421052631
     }
   },
   "design-ops/mobile-android-design": {
@@ -1260,24 +1260,24 @@
     }
   },
   "design-ops/mobile-ux-design": {
-    "badge": "silver",
-    "composite": 74.01515151515152,
-    "digest": "6615ee896cea35b3d1915a38a4158cebe8893177a6f2a2c24ba7a394786590ac",
-    "static_score": 0.7235,
+    "badge": "bronze",
+    "composite": 67.65151515151516,
+    "digest": "013dde36cbf27612afa91faf294c9b5895d44e555a93b7a5075fe3173bb4ab2c",
+    "static_score": 0.6625,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.2,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.30000000000000004,
       "token_efficiency": 1.0
     }
   },
   "design-ops/navigation-pattern-encyclopedia": {
     "badge": "bronze",
     "composite": 63.28610783156237,
-    "digest": "bf83c463d1c3c6c740fdfa156602036b02321cc69d6d66ea07e85ca679e6fd1f",
+    "digest": "d05667fe0b9f2e0560c852b63902c5ba4b1fb0bdf1d86eccf194bb6f71c81763",
     "static_score": 0.6325324675324675,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1290,18 +1290,18 @@
     }
   },
   "design-ops/nng-ux-heuristics": {
-    "badge": "silver",
-    "composite": 71.02198455139632,
-    "digest": "0b578d50d9ddf241886b8dcfbe699574f647ad616c444ee925ba7297b4c71c48",
-    "static_score": 0.7036176470588235,
+    "badge": "bronze",
+    "composite": 64.62121212121212,
+    "digest": "ca4f80e14de4668e9a425f1c142bb47802e655459a92c90e48a1ae8dda10aab3",
+    "static_score": 0.6395,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.25,
-      "token_efficiency": 0.9790849673202614
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
     }
   },
   "design-ops/page-composition-engine": {
@@ -1320,33 +1320,33 @@
     }
   },
   "design-ops/performance-states-patterns": {
-    "badge": "silver",
-    "composite": 75.64185814185814,
-    "digest": "b9fc28148ed4a7a15ae5a68b173e83ca94cc94d05162ab64d5fa28aa6b95d9f3",
-    "static_score": 0.7483043956043957,
+    "badge": "bronze",
+    "composite": 68.80200308166408,
+    "digest": "4a6ee60888e4d911e0a7c93f7773fb4f2a7247b64e34b69254248f18c1627d72",
+    "static_score": 0.6795898305084745,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
+      "orchestration_wiring": 0.7999999999999999,
+      "progressive_disclosure": 0.35,
       "structural_completeness": 0.4,
-      "token_efficiency": 0.9956043956043956
+      "token_efficiency": 0.9932203389830508
     }
   },
   "design-ops/platform-visual-standards": {
     "badge": "bronze",
-    "composite": 68.61610431707676,
-    "digest": "52a9e4943cd88d5ec6f9011798c0e5d36fbc5af97f832255d42ccbaed9f2117e",
-    "static_score": 0.69974943273906,
+    "composite": 64.01515151515152,
+    "digest": "42b9e106e17080019c8b682332e21894d305fe940ac650d5f9446e0747e548e5",
+    "static_score": 0.6287,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.4,
-      "structural_completeness": 0.65,
-      "token_efficiency": 0.9727714748784441
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.25,
+      "token_efficiency": 1.0
     }
   },
   "design-ops/react-native-design": {
@@ -1366,9 +1366,9 @@
   },
   "design-ops/reference-intelligence": {
     "badge": "bronze",
-    "composite": 68.3927886459532,
-    "digest": "8de0662e694aa5b7d73f46dbebc0c8107d5fd9d6a909970906336e7b6b354e7b",
-    "static_score": 0.6882886075949367,
+    "composite": 68.39615668883961,
+    "digest": "f2d5f33b4579b7fef23d48846cce6ff2ca50ab593c98938c1c905c5b4ae13e4d",
+    "static_score": 0.6883219512195122,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.5599999999999999,
@@ -1376,7 +1376,7 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9898734177215189
+      "token_efficiency": 0.9902439024390244
     }
   },
   "design-ops/responsive-block-patterns": {
@@ -1397,7 +1397,7 @@
   "design-ops/screen-flow-patterns": {
     "badge": "silver",
     "composite": 71.27494456762749,
-    "digest": "b549aea68b48259da1f3f71d6c519820621d214da2437ba8a79549c432938052",
+    "digest": "9feea64a20bcf1f84062a6526be1d5de03c605e36e647378ddedd8c3bf1d4528",
     "static_score": 0.7071219512195122,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1411,38 +1411,38 @@
   },
   "design-ops/scroll-experience-direction": {
     "badge": "bronze",
-    "composite": 66.58636363636363,
-    "digest": "b3909b0466333352f348d78c499b0a8f39c00dabec6d912a6e87f29e7425fc0a",
-    "static_score": 0.666235,
+    "composite": 69.16666666666667,
+    "digest": "5f5de35eeecba3c4f51e910631e30569d6820b1f04e9d969c9ff7dfae8ca3dcc",
+    "static_score": 0.6815,
     "sub_scores": {
-      "ecosystem_coherence": 0.58,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.45,
+      "structural_completeness": 0.30000000000000004,
       "token_efficiency": 1.0
     }
   },
   "design-ops/sector-style-intelligence": {
     "badge": "bronze",
-    "composite": 67.60042283298098,
-    "digest": "52613725c3ffd267a93a291b956aea88554b4a1de50297cf8bb783dfcb3c2a9f",
-    "static_score": 0.6729441860465116,
+    "composite": 62.98525798525798,
+    "digest": "b9ad86522dfbac624a96740dd04bd023f369aaad85317b423ee4954807ccf9d3",
+    "static_score": 0.6302540540540541,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.65,
+      "progressive_disclosure": 0.35,
       "structural_completeness": 0.4,
-      "token_efficiency": 0.986046511627907
+      "token_efficiency": 0.9783783783783784
     }
   },
   "design-ops/shadow-elevation-density": {
     "badge": "silver",
     "composite": 73.60703812316716,
-    "digest": "08fbcf2a3247b424bd438224049482c03a365ef01a350b71f50039ec4582bace",
+    "digest": "bbecd80d43d5fa39c594bdc17bc7d2023ccaf75e69087d0eef9d5b9bae94c860",
     "static_score": 0.7269096774193549,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1456,9 +1456,9 @@
   },
   "design-ops/typography-pairing-recipes": {
     "badge": "silver",
-    "composite": 70.6961120640366,
-    "digest": "a9d2c0bd6d66a48b54567dac045b4893d65e43dfb31b5b87183e6dc53230aebf",
-    "static_score": 0.7151415094339623,
+    "composite": 70.6948051948052,
+    "digest": "ad20ca7768514b955d22eba7fc302ef86ad6b085794eb3106a3b425e0441b14e",
+    "static_score": 0.7151285714285714,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
@@ -1466,13 +1466,13 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.49999999999999994,
-      "token_efficiency": 0.9849056603773585
+      "token_efficiency": 0.9847619047619047
     }
   },
   "design-ops/ui-pattern-intelligence": {
     "badge": "bronze",
     "composite": 67.87878787878788,
-    "digest": "04b7f695f476b5158ce9ea08e312a887cb321c9cda7106473ebbe8ec8b72969f",
+    "digest": "0cc97b45fda33f0324010c3b9b71200dbd104e638e72ab9839e2ca1d54f75482",
     "static_score": 0.6749999999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1484,94 +1484,64 @@
       "token_efficiency": 1.0
     }
   },
-  "design-ops/ui-visual-design-system": {
-    "badge": "silver",
-    "composite": 75.52071346375145,
-    "digest": "6cfdeb39fb44ecb8f68df11f603a3ff7e714493d34da95abbbb6aedb81058bd1",
-    "static_score": 0.7496050632911393,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9822784810126582
-    }
-  },
   "design-ops/ux-ethics-content-strategy": {
-    "badge": "silver",
-    "composite": 72.72727272727273,
-    "digest": "c054814275f762238cb80d572fe5aa268561cc6d41bf4bf4540343fc512de19e",
-    "static_score": 0.717,
+    "badge": "bronze",
+    "composite": 66.36363636363636,
+    "digest": "c124e5d42e4f9baec150f5c4cee3c81d7fb6fa5b82095e36b66a987c91b8fb67",
+    "static_score": 0.6559999999999999,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7999999999999999,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.25,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
       "token_efficiency": 1.0
     }
   },
   "design-ops/ux-metrics-measurement": {
-    "badge": "silver",
-    "composite": 76.51515151515152,
-    "digest": "93dacfd70dfadbed751a44156c6b2a9d42f0f7972f2a327ee019414a4ed62f36",
-    "static_score": 0.7477,
+    "badge": "bronze",
+    "composite": 69.69696969696969,
+    "digest": "406e278233019d5e9d041bd8e354ca57bdd442f45e52c9bd1ef0d863dba4fd8c",
+    "static_score": 0.6767,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.75,
+      "progressive_disclosure": 0.35,
       "structural_completeness": 0.25,
       "token_efficiency": 1.0
     }
   },
   "design-ops/ux-research-methods": {
     "badge": "bronze",
-    "composite": 66.66666666666666,
-    "digest": "8232fa2571f12769d1d0493f3072092a0f959d79a9be723961b649bfe6e6c56e",
-    "static_score": 0.6709999999999999,
+    "composite": 64.84848484848484,
+    "digest": "f39b481d056dd89afc398c10a36de74038d104ab458a6d007b173572e35494a2",
+    "static_score": 0.6445,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.6,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.25,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
       "token_efficiency": 1.0
     }
   },
   "design-ops/visual-design-mastery": {
     "badge": "bronze",
-    "composite": 65.67772317772318,
-    "digest": "990e2b92033f5064ca9c98630692906d3227f83572ec3b24decf9c79198f0578",
-    "static_score": 0.6704594594594594,
+    "composite": 65.37878787878788,
+    "digest": "673bb1a4940cf0fdf2c89ba9f867b239669fe6ca9eb46eee3f163c1b25b82a4a",
+    "static_score": 0.6472,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.6,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.4,
-      "token_efficiency": 0.9828828828828828
-    }
-  },
-  "design-ops/web-component-design": {
-    "badge": "silver",
-    "composite": 77.14876033057851,
-    "digest": "7d7ef66ec90b241ea62e7fbc7b086e8e74010ddd9fef91912b35b1c84e354262",
-    "static_score": 0.7904727272727273,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
+      "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.8500000000000001,
-      "token_efficiency": 0.9363636363636364
+      "orchestration_wiring": 0.7,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
     }
   },
   "developer-essentials/auth-implementation-patterns": {

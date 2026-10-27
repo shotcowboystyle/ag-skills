@@ -6,11 +6,7 @@ allowed-tools: Read, Grep, Glob
 
 # Design Token Presets — 15 Ready-to-Deploy Token Systems
 
-## Philosophy
-
-Design tokens are the DNA of your UI. These presets are complete, production-ready token systems that you can deploy immediately and customize later. Each preset is opinionated by design — opinionated defaults ship faster than blank canvases.
-
-"The best design system is the one that's actually used. Ship an opinionated preset today, customize tomorrow."
+Complete token systems to deploy now and customize later. Each preset is opinionated by design — opinionated defaults ship faster than blank canvases.
 
 ## Token Architecture (3-Tier)
 
@@ -44,6 +40,8 @@ Map semantics to specific components — where the color IS USED.
 | Border Radius | 6-8 tokens | none through full |
 | Shadow | 5-6 tokens | sm through 2xl |
 | Motion | 8-10 tokens | Duration + easing |
+
+**Motion:** sector presets tune durations (and some curve values) on top of the base motion scale owned by `interaction-motion-design` (`animation-timing-curves.md`), using the same names: `--duration-{instant,fast,normal,moderate,slow,slower}` and `--ease-{out,in,in-out,spring}`. `--ease-spring` is each preset's accent curve; restrained sectors set it to a non-overshoot curve. Sector-only extras (`--ease-dramatic`, `--ease-playful`, `--ease-gentle`, `--duration-cinematic`) are additions, never renames.
 | Breakpoint | 5-7 tokens | xs through 2xl |
 | Z-index | 8-10 tokens | Layer scale |
 | Opacity | 5-6 tokens | Transparency scale |
@@ -84,76 +82,9 @@ All colors use **oklch** color space for perceptual uniformity:
 16. **"Playful"** — Bright colors, rounded, fun. For consumer apps
 17. **"Developer"** — Mono-forward, syntax colors, dark-first. For dev tools
 
-## Preset Structure (Example: "Linear")
+## Preset Structure
 
-```css
-/* Linear Preset — CSS Custom Properties */
-
-/* Primitives */
---color-gray-50: oklch(0.98 0.005 280);
---color-gray-100: oklch(0.95 0.005 280);
---color-gray-200: oklch(0.90 0.008 280);
---color-gray-300: oklch(0.82 0.010 280);
---color-gray-400: oklch(0.70 0.012 280);
---color-gray-500: oklch(0.55 0.015 280);
---color-gray-600: oklch(0.45 0.015 280);
---color-gray-700: oklch(0.35 0.012 280);
---color-gray-800: oklch(0.25 0.010 280);
---color-gray-900: oklch(0.18 0.008 280);
---color-gray-950: oklch(0.12 0.008 280);
-
---color-violet-500: oklch(0.55 0.20 290);
-
-/* Semantic — Light Mode */
---color-bg: var(--color-gray-50);
---color-surface: white;
---color-surface-raised: white;
---color-text-primary: var(--color-gray-900);
---color-text-secondary: var(--color-gray-500);
---color-primary: var(--color-violet-500);
---color-border: var(--color-gray-200);
-
-/* Semantic — Dark Mode */
---color-bg-dark: var(--color-gray-950);
---color-surface-dark: var(--color-gray-900);
---color-text-primary-dark: var(--color-gray-50);
-
-/* Typography */
---font-sans: 'Inter', system-ui, sans-serif;
---font-mono: 'JetBrains Mono', monospace;
---text-xs: 0.75rem; /* 12px */
---text-sm: 0.875rem; /* 14px */
---text-base: 1rem; /* 16px */
---text-lg: 1.125rem; /* 18px */
---text-xl: 1.25rem; /* 20px */
---text-2xl: 1.5rem; /* 24px */
---text-3xl: 1.875rem; /* 30px */
---text-4xl: 2.25rem; /* 36px */
-
-/* Spacing (base-4) */
---space-0: 0; --space-1: 4px; --space-2: 8px;
---space-3: 12px; --space-4: 16px; --space-5: 20px;
---space-6: 24px; --space-8: 32px; --space-10: 40px;
---space-12: 48px; --space-16: 64px; --space-20: 80px;
---space-24: 96px;
-
-/* Border Radius */
---radius-none: 0; --radius-sm: 4px; --radius-md: 8px;
---radius-lg: 12px; --radius-xl: 16px; --radius-full: 9999px;
-
-/* Shadow */
---shadow-sm: 0 1px 2px oklch(0 0 0 / 0.05);
---shadow-md: 0 4px 6px oklch(0 0 0 / 0.07);
---shadow-lg: 0 10px 15px oklch(0 0 0 / 0.1);
---shadow-xl: 0 20px 25px oklch(0 0 0 / 0.1);
-
-/* Motion */
---duration-instant: 50ms; --duration-fast: 150ms;
---duration-normal: 250ms; --duration-slow: 400ms;
---ease-out: cubic-bezier(0.16, 1, 0.3, 1);
---ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
---ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
-```
+Each preset is one CSS `:root {}` block (primitives, semantic light/dark, typography, spacing, radius, shadow, motion, breakpoints) plus a Tailwind v4 `@theme` block. The complete worked example is the Linear preset, section 1 of `references/saas-fintech-presets.md`.
 
 ## Customization Guide
 
@@ -173,7 +104,7 @@ All colors use **oklch** color space for perceptual uniformity:
 - Reduce surface lightness
 - Increase text lightness for contrast
 
-## Reference Files
+## Routing
 
 Detailed presets are available in the `references/` directory:
 - `saas-fintech-presets.md` — Linear, Stripe, Notion, Slack, Figma, Mercury, Robinhood presets (CSS `:root` + Tailwind v4 `@theme`)
@@ -186,5 +117,5 @@ Detailed presets are available in the `references/` directory:
 - **design-systems-architecture** — Token architecture deep-dive
 - **sector-style-intelligence** — Industry visual direction
 - **color-palette-library** — 180+ color palettes
-- **ui-visual-design-system** — Typography and spacing theory
-- **visual-design-mastery** — Complete visual scoring
+- **visual-design-mastery** — Typography and spacing theory, complete visual scoring
+- **interaction-motion-design** — Base motion scale (easing, duration, springs)

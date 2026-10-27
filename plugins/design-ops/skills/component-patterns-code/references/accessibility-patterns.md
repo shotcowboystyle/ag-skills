@@ -1,4 +1,6 @@
-# Accessibility Patterns Reference
+# Accessibility Patterns Reference (hand-rolled React)
+
+Library-free versions of the widgets in `react-component-cookbook.md`. Prefer the Radix-based cookbook versions; use these when you cannot add a primitives library or need to see what the library does for you. The ARIA spec for each widget is in the `accessibility-inclusive-design` skill (its WCAG and ARIA patterns reference).
 
 ## ARIA Patterns for Common Components
 
@@ -604,39 +606,7 @@ function useFocusTrap(containerRef: RefObject<HTMLElement>, isActive: boolean) {
 }
 ```
 
-## Color Contrast Utilities
+## Color Contrast
 
-```tsx
-// Check if colors meet WCAG requirements
-function getContrastRatio(fg: string, bg: string): number {
-  const getLuminance = (hex: string): number => {
-    const rgb = parseInt(hex.slice(1), 16);
-    const r = (rgb >> 16) & 0xff;
-    const g = (rgb >> 8) & 0xff;
-    const b = rgb & 0xff;
-
-    const [rs, gs, bs] = [r, g, b].map((c) => {
-      c = c / 255;
-      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    });
-
-    return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
-  };
-
-  const l1 = getLuminance(fg);
-  const l2 = getLuminance(bg);
-  const lighter = Math.max(l1, l2);
-  const darker = Math.min(l1, l2);
-
-  return (lighter + 0.05) / (darker + 0.05);
-}
-
-function meetsWCAG(
-  fg: string,
-  bg: string,
-  level: "AA" | "AAA" = "AA",
-): boolean {
-  const ratio = getContrastRatio(fg, bg);
-  return level === "AAA" ? ratio >= 7 : ratio >= 4.5;
-}
-```
+Contrast-ratio math and accessible palette generation live in the
+`color-palette-library` skill (its accessible palette generator reference).

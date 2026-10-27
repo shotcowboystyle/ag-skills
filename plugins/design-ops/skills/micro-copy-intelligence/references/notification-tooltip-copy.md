@@ -234,6 +234,32 @@
 | 127 | Form incomplete | "Fill in all required fields to continue" | 42 |
 | 128 | Processing | "Processing your previous request..." | 37 |
 
+### Tooltip Usage, Length, and Placement
+
+#### When to Use Tooltips
+
+- **Use tooltips for**: Icons without visible labels, abbreviated column headers, technical terms, form fields that benefit from additional context, disabled buttons (explain why it is disabled).
+- **Do not use tooltips for**: Essential information the user must see to complete the task (they are not discoverable on mobile), long-form help content (use a help panel or link instead), information that is already visible in surrounding text.
+
+#### Length Guidelines
+
+- **Tooltip**: 5-15 words. One sentence maximum. No periods unless there are multiple sentences (which there should not be).
+- **Helper text below form fields**: 10-25 words. One sentence. Example: "This is the email address your team will use to reach you."
+- **Inline help**: 15-40 words. Displayed in a callout or info box near the relevant element.
+
+#### Placement Rules
+
+- **Tooltips**: Display above the trigger element by default. Flip to below if near the top viewport edge. Never obscure the element being described.
+- **Helper text**: Always directly below the form field, between the input and the error message position. Use a lighter text color (but meeting 4.5:1 contrast ratio) to visually subordinate it to the input value.
+- **Info icons**: Place the info icon (circled "i") inline after the label text, not after the input field. The icon triggers the tooltip.
+
+#### Writing Guidelines
+
+- **Be specific**: "Your display name is visible to other team members" is better than "Enter your name."
+- **Explain constraints upfront**: "Must be between 3 and 30 characters" prevents trial-and-error.
+- **Use examples**: "Like 'Q4 Marketing Plan' or 'Website Redesign'" helps users understand the expected format.
+- **Avoid stating the obvious**: A tooltip on a "Save" button that says "Saves your changes" adds nothing. Only add tooltips that provide information the user would not already know.
+
 ---
 
 ## 5. Helper Text (Form Fields)
@@ -386,6 +412,39 @@
 | 207 | "Warming up the engines..." | 26 | First load |
 
 **Rule:** Fun loading messages are ONLY appropriate for casual/consumer products. Never use them for healthcare, fintech, enterprise, or any serious context.
+
+### Skeleton Text
+
+Skeleton screens replace content with gray placeholder shapes. No copy is needed — the shapes themselves communicate "content is loading." However, if skeletons persist beyond 2 seconds, add text.
+
+- **After 2 seconds**: "Loading your dashboard..."
+- **After 5 seconds**: "Still loading. This may take a moment."
+- **After 10 seconds**: "This is taking longer than expected. You can wait or try refreshing."
+
+### Progress Descriptions
+
+For multi-step processes, describe what is happening.
+
+- **File upload**: "Uploading report.pdf... 64% complete"
+- **Data processing**: "Analyzing 12,000 records... This usually takes about 30 seconds."
+- **Export**: "Preparing your export. We'll notify you when it's ready to download."
+- **Account setup**: "Setting up your workspace... Creating default channels... Almost done."
+
+### Estimated Time
+
+Show estimated time only when you can predict it accurately. An inaccurate estimate is worse than no estimate.
+
+- **Accurate estimate**: "Exporting 5,000 rows. About 10 seconds remaining."
+- **Uncertain duration**: "Processing your request. This may take a few minutes." (Do not say "2 minutes" if you are guessing.)
+
+### Humor Guidelines
+
+Humor in loading states can reduce frustration, but apply it carefully.
+
+- **When humor works**: Consumer apps with a playful brand, waits over 5 seconds where tension builds, contexts where the user chose to wait (e.g., generating a report they requested).
+- **When humor fails**: Enterprise or medical software, error-adjacent loading (will this fail?), repeat experiences (a joke is funny once, annoying the hundredth time).
+- **Examples that work**: "Crunching the numbers..." / "Waking up the servers..." / "Almost there. Putting the finishing touches on your report."
+- **Examples that fail**: "Hold on, we're not that fast!" / "Patience is a virtue!" (Condescending.) / "Wow, you have a lot of data!" (Implies blame.)
 
 ---
 

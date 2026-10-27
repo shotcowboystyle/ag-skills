@@ -124,7 +124,6 @@ chains, variable font technology, loading strategies, performance, and 2025
 format support: read `references/platform-font-stacks.md`.
 
 ## Cross-References
-- **ui-visual-design-system** — Typography system theory
-- **visual-design-mastery** — Typography scoring and mastery
+- **visual-design-mastery** — Typography system theory, scoring and mastery
 - **design-token-presets** — Typography tokens in presets
 - **platform-visual-standards** — Platform-specific font stacks

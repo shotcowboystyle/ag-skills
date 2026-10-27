@@ -617,3 +617,152 @@ Tone: [empathetic and helpful, not blame-placing. Guiding, not blocking.]
 [Design tokens block]
 [Platform and style]
 ```
+
+
+---
+
+## Appendix: Prompt Engineering for Design
+
+Moved verbatim from the `ai-design-generation` SKILL.md.
+
+#### Prompt Engineering as a Design Skill
+
+Writing effective generation prompts is a design discipline. It requires the same skills as writing a design brief: clarity about goals, specificity about constraints, awareness of audience, and taste in execution. The best prompters are experienced designers who understand what to ask for — not prompt template collectors.
+
+**Core Principles of Design Prompt Engineering:**
+
+- Specificity beats length — "16px Inter Medium, #1A1A2E on white, 8px radius card" beats "make it look modern and clean"
+- Reference real products — "Stripe dashboard density" communicates more than paragraphs of description
+- Constrain before you create — State what the design must NOT do (no gradients, no stock photos, no rounded avatars)
+- Layer your prompt — Style first, then layout, then content, then fine details
+- Include quality modifiers — "production-ready", "pixel-perfect", "4K render" shift models toward higher fidelity
+
+### 6. Prompt Engineering for Design
+
+#### UI Screenshot Prompts
+
+The most common generation task is producing high-fidelity UI screenshots for mockups, presentations, and client approvals. Structure prompts in layers:
+
+**Layer 1 — Style Foundation:**
+
+```
+"Modern SaaS dashboard, clean and minimal, Stripe/Linear aesthetic"
+```
+
+**Layer 2 — Layout Structure:**
+
+```
+"Left sidebar navigation (64px, dark), top header bar (56px, white),
+main content area with 3-column card grid"
+```
+
+**Layer 3 — Content Specifics:**
+
+```
+"Cards show: metric title, large number, sparkline chart, percentage change badge.
+Metrics: Revenue ($48,230, +12.3%), Users (12,847, +5.7%), Conversion (3.24%, -0.8%)"
+```
+
+**Layer 4 — Visual Details:**
+
+```
+"Inter font family, 14px body text, #1A1A2E text color, #F8F9FA background,
+8px border radius, subtle box shadows (0 1px 3px rgba(0,0,0,0.08)),
+16px grid spacing"
+```
+
+**Layer 5 — Quality Modifiers:**
+
+```
+"4K resolution, pixel-perfect, production-ready, Retina display,
+anti-aliased text, proper kerning"
+```
+
+**Complete Assembled Prompt:**
+Combine all layers into a single coherent prompt. The model processes the full context — layering ensures you do not forget critical details.
+
+#### Icon Generation Prompts
+
+Consistent icon sets require rigid prompt structure. Vary only the subject; keep everything else identical.
+
+**Template:**
+
+```
+"[Subject] icon, [style] style, [stroke weight] stroke, [size] grid,
+[corner radius] corners, [color/monochrome], [fill/outline],
+consistent with [reference set], centered, balanced negative space"
+```
+
+**Batch Generation Strategy:**
+
+1. Generate one "anchor" icon (the most complex subject in your set)
+2. Use that anchor as a style reference for all subsequent icons
+3. Generate in groups of 4-6 to maintain session consistency
+4. Review the full set together, regenerate outliers
+
+**Common Icon Sets for Products:**
+
+- Navigation: home, search, notifications, settings, profile, menu, back, close
+- Actions: add, edit, delete, share, download, upload, copy, paste
+- Status: success, warning, error, info, loading, empty, locked, unlocked
+- Commerce: cart, payment, shipping, receipt, refund, wishlist, coupon, gift
+
+#### Illustration Prompts
+
+Illustrations need style consistency across a product. Define a style system before generating.
+
+**Style System Definition:**
+
+```
+Style: [flat/line/isometric/3D/hand-drawn]
+Palette: [3-5 specific colors with hex values]
+Line weight: [none/thin/medium/bold + specific px]
+Shapes: [geometric/organic/mixed]
+Characters: [if applicable — style, proportions, features]
+Mood: [professional/playful/technical/warm/minimal]
+```
+
+**Apply the Style System to Every Prompt:**
+
+```
+"[Scene description], [style system reference],
+[specific palette colors], [line weight], [mood],
+consistent illustration style, flat vector, no gradients"
+```
+
+#### Landing Page Prompts — Section by Section
+
+Generate landing pages one section at a time for maximum control, then composite.
+
+**Hero Section:**
+
+```
+"Landing page hero section: bold headline '[Headline Text]' in [font],
+subheadline '[Subtext]', primary CTA button '[Button Text]' in [color],
+[visual element: product screenshot / illustration / abstract shape],
+[background treatment], above-the-fold, desktop 1440px width"
+```
+
+**Features Section:**
+
+```
+"Features grid section: 3 columns, each with [icon style] icon,
+feature title, 2-line description, [card/flat/bordered] treatment,
+[background color], consistent spacing, desktop 1440px width"
+```
+
+**Social Proof Section:**
+
+```
+"Testimonial section: [carousel/grid/single-quote] layout,
+customer photo, name, title, company logo, quote text,
+star rating, [card/minimal/bordered] treatment"
+```
+
+**Pricing Section:**
+
+```
+"Pricing comparison: [2/3/4] tier cards, highlighted recommended tier,
+plan name, price, billing period, feature list with check/x marks,
+CTA button per tier, [flat/elevated/bordered] card style"
+```
