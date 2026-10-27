@@ -12,51 +12,37 @@ Run the PluginEval quality evaluation on a plugin or skill directory.
 
 ## Process
 
-### Step 1: Run Static Analysis (Layer 1)
+### Step 1: Resolve the path
+
+Take the path and depth from `{argument}` (depth defaults to `standard`). Resolve the path
+to absolute before running anything, and stop if it does not exist:
 
 ```bash
-cd "${CLAUDE_PLUGIN_ROOT}"
-uv run plugin-eval score {argument} --depth quick --output json
+target="$(cd "<path>" && pwd)"
 ```
 
-Parse the JSON output to get `composite.score`, `composite.dimensions`, and `layers[0].anti_patterns`.
+### Step 2: Run the engine
 
-### Step 2: LLM Judge (Layer 2) — if NOT --depth quick
+The engine runs every layer for the depth, blends the layer scores, applies the
+anti-pattern penalty and assigns the badge. Do not recompute any of it:
 
-Dispatch the `eval-judge` agent with the skill path:
+```bash
+uv run --directory "${CLAUDE_PLUGIN_ROOT}" plugin-eval score "$target" \
+  --depth <depth> --output json
+```
 
-> Evaluate the skill at: {resolved_path}
-> Read the SKILL.md file and any references/ files, then score it on all 4 dimensions.
-> Return your scores as JSON.
+If stderr says the LLM judge could not measure dimensions, the composite came from the
+remaining layers. Report that and the fix (`uv sync --extra llm` in the plugin root, plus a
+configured model). Do not dispatch `eval-judge` to fill the gap.
 
-The judge returns scores for: triggering_accuracy, orchestration_fitness, output_quality, scope_calibration.
+### Step 3: Present Results
 
-### Step 3: Compute Final Score
-
-**If quick depth:** Report the Layer 1 results directly from the CLI output.
-
-**If standard depth:** Blend Layer 1 and Layer 2 scores.
-
-For each dimension, use these blend weights (Static:Judge):
-- triggering_accuracy: 0.375:0.625
-- orchestration_fitness: 0.125:0.875
-- output_quality: 0.0:1.0 (judge only)
-- scope_calibration: 0.353:0.647
-- progressive_disclosure: 1.0:0.0 (static only)
-- token_efficiency: 0.8:0.2
-- robustness: 0.0:1.0 (judge only)
-- structural_completeness: 0.9:0.1
-- code_template_quality: 0.3:0.7
-- ecosystem_coherence: 0.85:0.15
-
-Dimension weights: triggering(0.25), orchestration(0.20), output(0.15), scope(0.12), disclosure(0.10), efficiency(0.06), robustness(0.05), structural(0.03), code_quality(0.02), coherence(0.02)
-
-Final = sum(weight * blended_score) * 100 * anti_pattern_penalty
-
-### Step 4: Present Results
+Report only numbers from the JSON: `composite.score`, `composite.badge`,
+`composite.confidence_label`, `composite.anti_pattern_penalty`, `composite.dimensions`,
+each entry in `layers`, and each layer's `anti_patterns`.
 
 ```
-## Overall Score: {score}/100 {badge}
+## Overall Score: {composite.score}/100 {composite.badge}
 ## Layer Breakdown
 | Layer | Score |
 |-------|-------|
@@ -66,5 +52,3 @@ Final = sum(weight * blended_score) * 100 * anti_pattern_penalty
 ## Anti-Patterns Detected
 ## Recommendations
 ```
-
-Badge thresholds: Platinum(90+), Gold(80+), Silver(70+), Bronze(60+)
