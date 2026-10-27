@@ -57,7 +57,7 @@ Complete these decisions before implementing the view.
 | App-owned writing AI | Foundation Models adapter | Source revision, candidate review, commit, fallback |
 | Rich attachments | SwiftUI shell + UIKit/TextKit 2 adapter | TextKit lifecycle, selection, viewport, accessibility |
 | Custom visual annotation | TextAttribute/TextRenderer | Readability, semantics, reduced effects, performance |
-| Document editor | T166 DocumentGroup/FileDocument route + this editor | File, autosave, conflict, revision, device proof |
+| Document editor | DocumentGroup/FileDocument route + this editor | File, autosave, conflict, revision, device proof |
 
 ## 1. Establish the source of truth
 
@@ -374,7 +374,7 @@ output, or an app-owned workflow. Do not present one as the other.
 
 ## 11. Build a document adapter
 
-Connect the editor to the T166 document route:
+Connect the editor to the DocumentGroup document route:
 
 ~~~swift
 struct DocumentWritingAdapter: Sendable {

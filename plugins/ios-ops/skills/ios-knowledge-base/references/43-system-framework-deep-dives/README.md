@@ -20,7 +20,7 @@ These routes cover Apple system data, files, companion surfaces, and extensions.
 
 System integration is a contract with the OS and the person using it. Prefer the system surface, ask for access in context, share the minimum data, handle the process/lifecycle boundary, and prove the behavior on the actual target surface.
 
-## T058 route register
+## Route register
 
 | Route | API/target focus | Lifecycle/privacy focus | Proof boundary |
 | --- | --- | --- | --- |

@@ -254,27 +254,6 @@ completed the workflows. TestFlight distribution is stronger release evidence
 than a local debug run but is still not App Review approval or universal
 production proof.
 
-## 9. Handoff into the agentic engineering-team bundle
-
-The open-source skill bundle should route work through roles with explicit
-artifacts:
-
-| Role | Handoff artifact |
-| --- | --- |
-| architect | claim/evidence map, target matrix, risk and capability route |
-| native designer | state matrix, semantic UI contract, Liquid Glass fallback and accessibility tasks |
-| implementer | injected seams, fixture IDs, cancellation/recovery, source links |
-| test engineer | Swift Testing/XCTest targets, test plan, result bundle, exclusions |
-| AI evaluator | dataset/provenance, schema/grounding validators, quality score, human sample |
-| device/system verifier | named device/OS/settings, physical/system-surface run, logs/screenshots |
-| release auditor | archive/entitlement/privacy/version/TestFlight packet and open gaps |
-| source maintainer | official URL/API refresh, availability changes, SDK re-check |
-
-Each handoff must state what it proves and what it does not. The bundle can
-make an LLM more precise and coordinate a solo developer across these roles; it
-cannot guarantee Apple approval, hardware behavior, or production correctness
-without the corresponding evidence.
-
 ## Sources
 
 - [Swift Testing](https://developer.apple.com/documentation/testing)

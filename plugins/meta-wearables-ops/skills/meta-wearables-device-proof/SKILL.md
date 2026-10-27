@@ -114,8 +114,7 @@ claim.
 - [Target preflight reference](references/target-preflight.md)
 - [Redacted iOS target receipt runner](scripts/run_ios_target_preflight.py)
 - [Redacted Android target receipt runner](scripts/run_android_target_preflight.py)
-- [iOS device release proof](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/ios-device-release-proof/SKILL.md)
-- [iOS testing and release assurance](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/ios-testing-and-release-assurance/SKILL.md)
+- [iOS release proof (testing, device, release)](https://github.com/shotcowboystyle/ag-skills/blob/main/plugins/ios-ops/skills/ios-release-proof/SKILL.md)
 
 ## Sources
 

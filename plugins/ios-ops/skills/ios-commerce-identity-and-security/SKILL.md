@@ -1,7 +1,8 @@
 ---
 name: ios-commerce-identity-and-security
 description: Route, implement, or review iOS commerce, identity, secrets, local authentication, cryptography, app-integrity, and secure-network features. Use when a feature sells digital goods, accepts Apple Pay, adds Wallet passes, signs users in, protects credentials, gates a local action, or needs server-verified integrity.
-allowed-tools: Read, Grep, Glob
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash
+last_verified: 2026-08-19
 ---
 
 # iOS Commerce, Identity, and Security

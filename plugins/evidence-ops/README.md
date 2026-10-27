@@ -1,4 +1,4 @@
-[Part of the shotcowboystyle marketplace](https://github.com/shotcowboystyle/ai-plugins)
+[Part of the shotcowboystyle marketplace](../../README.md)
 
 ## Evidence Ops Plugin
 
@@ -8,7 +8,7 @@ Operational handling of digital evidence — capture, hash, inspect metadata, re
 an append-only custody log, anchor in time, package, verify, and replicate to storage
 that cannot silently rewrite it.
 
-Pairs with [`matter-ops`](https://github.com/shotcowboystyle/matter-ops-plugin), which
+Pairs with [`matter-ops`](../matter-ops/README.md), which
 owns the matter around the evidence — workspaces, document analysis, OSINT sourcing,
 redaction for disclosure, and brief writing. Each works on its own.
 

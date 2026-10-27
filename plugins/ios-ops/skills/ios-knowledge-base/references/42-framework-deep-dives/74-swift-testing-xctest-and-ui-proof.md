@@ -327,7 +327,7 @@ Record the lowest evidence level that actually supports the claim:
 | L5 | Signed Release/TestFlight run | Production health or every OS/device |
 | L6 | Production observation with logs/metrics and rollback | Universal guarantee |
 
-Every T154 recipe should identify the evidence level it can produce and the
+Every testing recipe should identify the evidence level it can produce and the
 missing boundary that still needs a stronger test.
 
 ## Sources

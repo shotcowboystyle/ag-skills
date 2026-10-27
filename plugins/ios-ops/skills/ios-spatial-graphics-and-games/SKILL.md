@@ -1,7 +1,8 @@
 ---
 name: ios-spatial-graphics-and-games
 description: Route, implement, or review iOS and visionOS spatial, AR, 2D game, 3D scene, custom Metal, and Game Center features. Use when a feature uses camera/world tracking, RealityKit entities, RealityView or ImmersiveSpace, SpriteKit, GameplayKit, Metal, controllers, or GameKit multiplayer and needs measured performance and physical-device proof.
-allowed-tools: Read, Grep, Glob
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash
+last_verified: 2026-08-19
 ---
 
 # iOS Spatial, Graphics, and Games

@@ -5,7 +5,7 @@ These recipes are compile-oriented route sketches for the iOS 26 SDK. They inten
 Before copying a recipe:
 
 1. Set the exact deployment target and Xcode SDK.
-2. Confirm the current iOS 26 symbol signatures in Xcode.
+2. Confirm the iOS 26 symbol signatures (written against the August 2026 SDK) in your installed Xcode.
 3. Compile a smallest Foundation Models slice.
 4. Add fake services for previews and tests.
 5. Run the real request on a named physical device with Apple Intelligence and model assets ready.

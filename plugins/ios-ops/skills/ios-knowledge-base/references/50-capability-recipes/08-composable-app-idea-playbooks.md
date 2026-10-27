@@ -52,7 +52,7 @@ Also model unavailable AI, storage failure, stale search entry, deleted record, 
 4. Add AppEntity, Spotlight, or an App Intent only for an observed user need.
 5. Test local data, deletion, redaction, AI-unavailable, large attachments, accessibility, and system invocation. Physical-device proof is required for the final privacy/accessibility/system-surface claim.
 
-Related routes: [private local-first utility](01-private-local-first-utility.md), [Foundation Models recipes](../70-code-recipes/01-foundation-model-recipes.md), [on-device AI feature skill](../../../on-device-ai-feature/SKILL.md), and [system-service recipes](../70-code-recipes/05-system-service-recipes.md).
+Related routes: [private local-first utility](01-private-local-first-utility.md), [Foundation Models recipes](../70-code-recipes/01-foundation-model-recipes.md), [on-device intelligence skill](../../../ios-on-device-intelligence/SKILL.md), and [system-service recipes](../70-code-recipes/05-system-service-recipes.md).
 
 ## Playbook 2: Capture-to-reviewable record
 
@@ -154,7 +154,7 @@ Also model context overflow, stale index, unavailable model, tool failure, sensi
 4. Add a review surface and only then expose selected App Intents, Spotlight entities, widgets, or shortcuts.
 5. Test privacy minimization, stale/deleted records, malicious prompt content, unavailable model, tool failure, confirmation, and physical Apple Intelligence configurations.
 
-Related routes: [tools, agents, and side effects](../30-on-device-ai/03-tools-agents-and-side-effects.md), [Core Spotlight/App Entities](../44-system-services/00-privacy-and-device-services.md), and [on-device AI feature skill](../../../on-device-ai-feature/SKILL.md).
+Related routes: [tools, agents, and side effects](../30-on-device-ai/03-tools-agents-and-side-effects.md), [Core Spotlight/App Entities](../44-system-services/00-privacy-and-device-services.md), and [on-device intelligence skill](../../../ios-on-device-intelligence/SKILL.md).
 
 ## Playbook 5: Live device session
 

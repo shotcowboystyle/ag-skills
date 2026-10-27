@@ -69,7 +69,7 @@ Start with a capability gate, one compact Display state, one input event, and te
 - [On-device compliance](../meta-wearables-on-device-compliance/SKILL.md)
 - [Operational readiness](../meta-wearables-operational-readiness/SKILL.md)
 - [Application architecture](../meta-wearables-app-architecture/SKILL.md)
-- [SwiftUI native design](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/swiftui-native-design/SKILL.md)
+- [iOS native design](https://github.com/shotcowboystyle/ag-skills/blob/main/plugins/ios-ops/skills/ios-native-design/SKILL.md)
 
 ## Sources
 

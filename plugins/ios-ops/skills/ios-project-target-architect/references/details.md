@@ -55,7 +55,7 @@ Return these artifacts in the project or knowledge base:
 - [Xcode target/module plan](../../ios-knowledge-base/references/90-templates/xcode-target-and-module-plan.md)
 - [Target-aware feature scaffold](../../ios-knowledge-base/references/90-templates/target-aware-feature-scaffold.md)
 - [Target configuration and artifact checklist](../../ios-knowledge-base/references/60-verification/06-target-configuration-and-artifact-checklist.md)
-- [Capability route planner](../../ios-capability-route-planner/SKILL.md)
+- [iOS route planner](../../ios-route-planner/SKILL.md)
 
 
 ## Sources

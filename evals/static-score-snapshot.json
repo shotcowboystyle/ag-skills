@@ -1,9 +1,9 @@
 {
   "accessibility-compliance/screen-reader-testing": {
     "badge": "silver",
-    "composite": 78.48484848484848,
-    "digest": "85cb88e08f9fc1076baad63d5778f7ab62df6a3cfd791c3b7c18ebafdf99f4da",
-    "static_score": 0.7782,
+    "composite": 78.57707509881423,
+    "digest": "1164d21ef94fb82c5a3786a76737e75cfce28134e811cd6aaf5464f852a999aa",
+    "static_score": 0.7791130434782609,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
@@ -11,22 +11,22 @@
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.65,
-      "token_efficiency": 0.9333333333333333
+      "token_efficiency": 0.9434782608695652
     }
   },
   "accessibility-compliance/wcag-audit-patterns": {
-    "badge": "bronze",
-    "composite": 67.3876698014629,
-    "digest": "47e93738b7b1c13921d16f0aaf1cffffac28c92ad765798e458d774f1469f074",
-    "static_score": 0.6718379310344827,
+    "badge": "silver",
+    "composite": 71.97379197379198,
+    "digest": "77b886412c8fdcbd521795fc26a2d204b48ed8ec16b31a001f86f2b8f2eb5961",
+    "static_score": 0.7142405405405405,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.35,
+      "progressive_disclosure": 0.65,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9793103448275862
+      "token_efficiency": 0.9837837837837837
     }
   },
   "agent-teams/multi-reviewer-patterns": {
@@ -137,7 +137,7 @@
   "ai-video-producer/budget-estimator": {
     "badge": "no_badge",
     "composite": 59.31656995486782,
-    "digest": "22ebb047b611e1746e9fcc87a7fea8754647648ee37bb6a1c8dc6076adbb9830",
+    "digest": "cc1e894cdf8836785b31726f1983bac489b34577baf543f6a10d0c0a2b166249",
     "static_score": 0.5989340425531915,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -152,7 +152,7 @@
   "ai-video-producer/comfyui-export": {
     "badge": "no_badge",
     "composite": 58.71212121212122,
-    "digest": "a10a44fdec8d244dc01fbc94a0b3c99649b6aadba91557e1db0fd36728fd55b2",
+    "digest": "2b42a0c79e4995cab0b3fdf600cefd92a3b0004c90bc54947018ea5f57d60e60",
     "static_score": 0.5847,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -167,7 +167,7 @@
   "ai-video-producer/comfyui-import": {
     "badge": "no_badge",
     "composite": 58.257575757575765,
-    "digest": "78c015b1ecb75a5398e8e66cce82301e7476d254219e705b0644a94505b47688",
+    "digest": "abbbd7f01a61aff4bbfaa9a3de3f7be99fff92bde03cbf1eb11224b629a2db86",
     "static_score": 0.5747,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -179,40 +179,55 @@
       "token_efficiency": 1.0
     }
   },
-  "ai-video-producer/model-researcher": {
-    "badge": "bronze",
-    "composite": 62.247474747474755,
-    "digest": "bcfae2c0d7a1bd4849e300c457b06e02803d29957ed65e5f2ac1627a40ab1f58",
-    "static_score": 0.6174999999999999,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.2,
-      "structural_completeness": 0.3,
-      "token_efficiency": 0.9888888888888889
-    }
-  },
-  "ai-video-producer/recommend-model": {
-    "badge": "bronze",
-    "composite": 62.351515151515144,
-    "digest": "7f6031d5f1efd968cd3a8628e3decc3a582afe649beb8ea750cea914664e1ca0",
-    "static_score": 0.62198,
+  "ai-video-producer/ffmpeg-encoder-detect": {
+    "badge": "no_badge",
+    "composite": 58.78787878787879,
+    "digest": "46dc3c987d9470f14e70f0dfd2fed3fa3064de463b6ffb274cd7473eb9e74fc0",
+    "static_score": 0.5882000000000001,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
+      "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.2,
-      "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.992
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 0.9833333333333334
+    }
+  },
+  "ai-video-producer/provider-runners": {
+    "badge": "bronze",
+    "composite": 63.10606060606061,
+    "digest": "34d76acb7c7f38cdcb5af3928eaa5c02d3bf07840c2ff8b9cd6e2dbd481e5781",
+    "static_score": 0.6232,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9333333333333333
+    }
+  },
+  "ai-video-producer/recommend-model": {
+    "badge": "bronze",
+    "composite": 66.60839160839161,
+    "digest": "6f6f7538ba63bedc96b99144d7dd4d8b53f62bc2c67bd258f68917acb7bedd57",
+    "static_score": 0.6621230769230769,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.2,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9769230769230769
     }
   },
   "ai-video-producer/script-to-tts": {
     "badge": "bronze",
     "composite": 61.74242424242424,
-    "digest": "1f8706c8f63b9baab16b6ff91c0e6cef745ce2731c915e73767b338ffdb8b763",
+    "digest": "e50b1e3509d6245d2d6c7da692a4da3b51f74d64ebeb97779e52097c2a4a471c",
     "static_score": 0.6077,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -227,7 +242,7 @@
   "ai-video-producer/text-to-image-to-video": {
     "badge": "bronze",
     "composite": 61.51515151515151,
-    "digest": "e2460191ef623f66a41b2267e4237f23099dee7e8f3b50a20834f47c66d351c7",
+    "digest": "0285c97c2d9de8996f1bc6ad85ce8cd7ec98cb69b56047b12196179204d2d25f",
     "static_score": 0.6027,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -242,7 +257,7 @@
   "ai-video-producer/text-to-video-direct": {
     "badge": "bronze",
     "composite": 61.51515151515151,
-    "digest": "420a05e8994ab8d7e37f262c5e80ea416fe29ca242e1737e0fc5d149911d9c72",
+    "digest": "6e28bc61dcff5af8640ad968106d2ed91a6d4fbcbdc820d9bfc2ebe22cb97a1b",
     "static_score": 0.6027,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -257,7 +272,7 @@
   "ai-video-producer/upscale-and-interpolate": {
     "badge": "no_badge",
     "composite": 58.484848484848484,
-    "digest": "bb07eb949e216bf9624bfc538917c68ab6124d9a2271ab9bbcf6bc26cea4816d",
+    "digest": "0fc641ae86afc44cd0671f916a9c86120d8c549faf4735b0c3652c916145bc6a",
     "static_score": 0.5797,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -271,23 +286,23 @@
   },
   "ai-video-producer/video-workspace-conventions": {
     "badge": "bronze",
-    "composite": 61.96969696969696,
-    "digest": "29bd695f41704de31b095608f3437bd120d452768a758dec871abd08e185a483",
-    "static_score": 0.6127,
+    "composite": 62.59379509379509,
+    "digest": "0f9ae027c9d1a85902dc8a6fe3fd3a1553e93bf61b0d0cce8c866c18e2f12778",
+    "static_score": 0.6271285714285715,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.2,
-      "structural_completeness": 0.3,
-      "token_efficiency": 1.0
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9936507936507937
     }
   },
   "ai-video-producer/voice-to-lip-sync": {
     "badge": "bronze",
     "composite": 64.92424242424242,
-    "digest": "55dbe054f75c769bd57a5447583bb71bd87bd99166ae69a96444fcc3283715c2",
+    "digest": "5c838a0a6f63901037b53e9ea3aa2d0cbd4070c410a87ee5dfc8c950e05c8561",
     "static_score": 0.6315,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -436,9 +451,9 @@
   },
   "backend-development/temporal-python-testing": {
     "badge": "bronze",
-    "composite": 69.96179183135705,
-    "digest": "4f859e250adef5fd3b303c6cce77806558367b9439fc55fd40bbc204f7d1975b",
-    "static_score": 0.6866217391304348,
+    "composite": 69.94456762749446,
+    "digest": "de53678ea418ff7296a1ab2ab1046ee870919489c404de50f095f7e33745b452",
+    "static_score": 0.6864512195121951,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -446,20 +461,20 @@
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9791304347826086
+      "token_efficiency": 0.9772357723577236
     }
   },
   "backend-development/workflow-orchestration-patterns": {
-    "badge": "no_badge",
-    "composite": 58.33333333333333,
-    "digest": "3ebab19bb577167059705e32af9b3e1fdc2f1accdfe0a01f2817e6fa6ea398d9",
-    "static_score": 0.5884999999999999,
+    "badge": "bronze",
+    "composite": 62.878787878787875,
+    "digest": "fb819a9d782cbdc1be907060062b2a9290f5e9fb81dc1789c673ad16005a8d60",
+    "static_score": 0.6305,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.5499999999999999,
-      "progressive_disclosure": 0.35,
+      "progressive_disclosure": 0.65,
       "structural_completeness": 0.25,
       "token_efficiency": 1.0
     }
@@ -481,17 +496,17 @@
   },
   "block-no-verify/block-no-verify-hook": {
     "badge": "silver",
-    "composite": 70.97382920110192,
-    "digest": "5501cf3fec78c00ea3657e063edff331287bd576adf16588e665b39f8dce2198",
-    "static_score": 0.7081909090909091,
+    "composite": 70.5464842600765,
+    "digest": "51c01ec7c6e7cf8d199a2bd8f96c6aa21ea7dc24c71c3e88a668e8160fa7b43b",
+    "static_score": 0.6959601941747573,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 0.98,
+      "harness_portability": 0.8300000000000001,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.6,
+      "progressive_disclosure": 0.5,
       "structural_completeness": 0.6,
-      "token_efficiency": 0.7987878787878788
+      "token_efficiency": 0.9184466019417475
     }
   },
   "business-analytics/data-storytelling": {
@@ -541,47 +556,47 @@
   },
   "cicd-automation/github-actions-templates": {
     "badge": "silver",
-    "composite": 72.49726177437022,
-    "digest": "1333e048feba98203574cad3d85e45bceaca2be8f407dd02a07fea45bdf4f132",
-    "static_score": 0.7239228915662651,
+    "composite": 75.28055278055278,
+    "digest": "2ae2b6cf144750b59b63ff2846ef4086c693bc17bb58347375d0d5b0f2a28111",
+    "static_score": 0.7417274725274725,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
+      "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.6,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.8746987951807229
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.8725274725274725
     }
   },
   "cicd-automation/gitlab-ci-patterns": {
     "badge": "silver",
-    "composite": 72.48803827751196,
-    "digest": "1dfa5c004af7161a8e2d51a2f662b2f80b37a1b6b004181b4ccb9f284eeb3254",
-    "static_score": 0.7238315789473685,
+    "composite": 75.34669353634871,
+    "digest": "b2992307c3972f70ae7372eaacba13d12d61c72da4841971d5a14a53bda6743f",
+    "static_score": 0.7423822660098522,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
+      "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.6,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.8736842105263158
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.8798029556650246
     }
   },
   "cicd-automation/secrets-management": {
     "badge": "silver",
-    "composite": 71.41245791245791,
-    "digest": "c496d67574a77849534b4dfb6f701c96fef96d68a78a7d184d7a331bd9900149",
-    "static_score": 0.7247333333333333,
+    "composite": 71.29117259552042,
+    "digest": "f030a8634b81e91e345dea9728aa25ba5cbb366821020aea86a997e9fffc5e66",
+    "static_score": 0.7207826086956521,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.6,
-      "structural_completeness": 0.6000000000000001,
-      "token_efficiency": 0.9303703703703704
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.9420289855072463
     }
   },
   "cloud-infrastructure/cost-optimization": {
@@ -616,9 +631,9 @@
   },
   "cloud-infrastructure/istio-traffic-management": {
     "badge": "bronze",
-    "composite": 68.50114043662431,
-    "digest": "2ace5d0b97ba6052ad0042c973c03b0b6e35824d9ed539cf110e2709a1c9644b",
-    "static_score": 0.6946612903225806,
+    "composite": 68.52752880921895,
+    "digest": "9588507e0afea8571b81edae5ee0a1daf8b44a1291a8c67e4f06686630d23e24",
+    "static_score": 0.6949225352112676,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -626,29 +641,29 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.6,
       "structural_completeness": 0.65,
-      "token_efficiency": 0.8351254480286738
+      "token_efficiency": 0.8380281690140845
     }
   },
   "cloud-infrastructure/linkerd-patterns": {
     "badge": "silver",
-    "composite": 71.38859180035651,
-    "digest": "73cde54b42f79508842ff08674bf3dfd64e054419dc45b95ab588dd437168a8e",
-    "static_score": 0.7199470588235294,
+    "composite": 73.8519212746017,
+    "digest": "6027d8ed154d0a5fd4c53b073e8f1f6e9fc4954567baec996153c036a2f7971d",
+    "static_score": 0.7428340206185567,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.6,
+      "progressive_disclosure": 0.75,
       "structural_completeness": 0.65,
-      "token_efficiency": 0.9027450980392157
+      "token_efficiency": 0.9237113402061856
     }
   },
   "cloud-infrastructure/mtls-configuration": {
     "badge": "bronze",
-    "composite": 64.51790633608816,
-    "digest": "dbf81198a721865f6720b7fd62d89d70ff52ec9c0ee34d199833c04f714688f4",
-    "static_score": 0.6412272727272728,
+    "composite": 64.52380952380953,
+    "digest": "c76dc1d60ae1290e4457471498bfdf827edec232909a60fb40ff93ec5a860d29",
+    "static_score": 0.6412857142857142,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -656,7 +671,7 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9636363636363636
+      "token_efficiency": 0.9642857142857143
     }
   },
   "cloud-infrastructure/multi-cloud-architecture": {
@@ -706,107 +721,107 @@
   },
   "conductor/context-driven-development": {
     "badge": "bronze",
-    "composite": 64.69696969696969,
-    "digest": "160c0098b50ed9f78dd396a365cb9a157df5c2751fe5ef6c9325de7a90c9a9d2",
-    "static_score": 0.6322,
+    "composite": 65.6060606060606,
+    "digest": "77fcada8b96f1c5ab174b6338b0b6edf4c7cee881df9cd24f3dc611dac557b3c",
+    "static_score": 0.6522,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7,
       "progressive_disclosure": 0.35,
-      "structural_completeness": 0.15000000000000002,
+      "structural_completeness": 0.35000000000000003,
       "token_efficiency": 1.0
     }
   },
   "conductor/track-management": {
-    "badge": "bronze",
-    "composite": 62.424242424242415,
-    "digest": "8973ef1d2be5a1ca15b403c5cb9ab66f9ecb39e33e1486750fb63a98988c96d9",
-    "static_score": 0.613,
+    "badge": "silver",
+    "composite": 74.36363636363636,
+    "digest": "472a2c9ea955c296f7abbf83049f269e854a259d6f5cd2e86b2feb901fc17f76",
+    "static_score": 0.7454000000000001,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.6499999999999999,
+      "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.15000000000000002,
-      "token_efficiency": 1.0
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.65,
+      "token_efficiency": 0.98
     }
   },
   "conductor/workflow-patterns": {
     "badge": "bronze",
-    "composite": 65.45454545454544,
-    "digest": "2b53ad36e3d92d5429c1386e867a3db7f2b1d10c399be169e992be3ac73d087a",
-    "static_score": 0.636,
+    "composite": 65.48620533695161,
+    "digest": "ab74ec6607fc37f8261262d3266fcc71dcde16d309d3f760b6ca7205307f6bea",
+    "static_score": 0.6618134328358208,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.9701492537313433
+    }
+  },
+  "data-engineering/airflow-dag-patterns": {
+    "badge": "bronze",
+    "composite": 68.93434343434343,
+    "digest": "d74672c80097412652f1f62b2c24420d431685ec4fb944ce9175cf81a914b3b9",
+    "static_score": 0.6799,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.991111111111111
+    }
+  },
+  "data-engineering/data-quality-frameworks": {
+    "badge": "silver",
+    "composite": 74.45141065830721,
+    "digest": "f794fad8bbd5d482b7ea4e36e25c62c1163c1de18a1d04fbf440418073adeda9",
+    "static_score": 0.7462689655172414,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.71,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.65,
+      "token_efficiency": 0.9896551724137931
+    }
+  },
+  "data-engineering/dbt-transformation-patterns": {
+    "badge": "bronze",
+    "composite": 69.40082644628099,
+    "digest": "0db69b97428b815d2c5510b43c0af9564fad1f6b035e66b5fcfe2b4d4f0a9c3c",
+    "static_score": 0.6893181818181818,
+    "sub_scores": {
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.9757575757575758
+    }
+  },
+  "data-engineering/spark-optimization": {
+    "badge": "bronze",
+    "composite": 66.26666666666667,
+    "digest": "d5a86572686719ac7c43dd8e70c99fc5d2e4a4f5e88ecee0c86b86c429fed644",
+    "static_score": 0.65504,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7999999999999999,
       "progressive_disclosure": 0.35,
-      "structural_completeness": 0.15000000000000002,
-      "token_efficiency": 1.0
-    }
-  },
-  "data-engineering/airflow-dag-patterns": {
-    "badge": "bronze",
-    "composite": 69.00534759358288,
-    "digest": "017585e65c4a8ff304f43760d53be756bd4b5098c0dcf16a27108f6f44d58ba5",
-    "static_score": 0.6918529411764706,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.65,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.9905882352941177
-    }
-  },
-  "data-engineering/data-quality-frameworks": {
-    "badge": "silver",
-    "composite": 74.03297682709447,
-    "digest": "fc4b7f76e7b6ab6de7b58082adfcdb9e03840baf36ce73052e73f1b8a0853893",
-    "static_score": 0.7393764705882353,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.6,
-      "token_efficiency": 0.9686274509803922
-    }
-  },
-  "data-engineering/dbt-transformation-patterns": {
-    "badge": "silver",
-    "composite": 74.37878787878789,
-    "digest": "d61a91900a3ffc599e5112fb8bcd9c73e8b98854fd54ff4353db26c75b44b201",
-    "static_score": 0.7375,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.77,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.49999999999999994,
-      "token_efficiency": 0.9733333333333334
-    }
-  },
-  "data-engineering/spark-optimization": {
-    "badge": "bronze",
-    "composite": 68.88604353393086,
-    "digest": "506def8477effd2fd36a7d539df2216c8cec3a66e3ed1d6b8e1179c9090dbe99",
-    "static_score": 0.6831718309859155,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.9774647887323944
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9893333333333334
     }
   },
   "database-design/postgresql-table-design": {
@@ -901,9 +916,9 @@
   },
   "design-ops/animation-recipe-library": {
     "badge": "bronze",
-    "composite": 63.930185836263185,
-    "digest": "38b61292e90775be5bfbb14220817f83e84cd7cd8b56d21817d3ab4495f9396d",
-    "static_score": 0.6606088397790055,
+    "composite": 63.96901980700863,
+    "digest": "ab50aadb6cc828a2c903f535caf2bc64bc3fc704099b8d5d3007a72d6ca977c6",
+    "static_score": 0.6609932960893855,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -911,7 +926,7 @@
       "orchestration_wiring": 0.6,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.6,
-      "token_efficiency": 0.9823204419889503
+      "token_efficiency": 0.9865921787709497
     }
   },
   "design-ops/business-design-templates": {
@@ -932,7 +947,7 @@
   "design-ops/cognitive-psychology-ux": {
     "badge": "silver",
     "composite": 72.72727272727273,
-    "digest": "cab164f6a616058659b3ca4fac01c5fbe5ef5eb6d473263fcac4cf4ea7ce0087",
+    "digest": "36ce09a60f1db7cb1447a85374be8dab50237c96d961d5ddb38e7e9a0a52a548",
     "static_score": 0.7145,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -1082,7 +1097,7 @@
   "design-ops/design-systems-architecture": {
     "badge": "silver",
     "composite": 78.21133412042504,
-    "digest": "57db1fdd88bfa2ef637b4145c9f671ccc486ad84701ae8c95deebc5e82f5d282",
+    "digest": "66f3321e407de36c2c38609c5d4523350d05fca0a8ffd25fef4f233c35e0cfb7",
     "static_score": 0.7699922077922078,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1112,7 +1127,7 @@
   "design-ops/desktop-app-design": {
     "badge": "silver",
     "composite": 70.45454545454545,
-    "digest": "16798d0b4addcd8aadd72437f01276af667aa1b5e12ef85ec7bc03be17e36b65",
+    "digest": "edc7316bc1f77683c5301f172371298c80d3f3948dd2f027ddfc993cb1e12fa6",
     "static_score": 0.6905,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1127,7 +1142,7 @@
   "design-ops/figma-design-tool-workflows": {
     "badge": "silver",
     "composite": 74.01515151515152,
-    "digest": "366a1ee5d3171c43b2af983e22c52dd7a0d90b140f049362ab416cd0c0e557bd",
+    "digest": "52ae4dae2eff2e717935b91b3180db81f0524fd5d06eb57b7efebbc418b1defb",
     "static_score": 0.7137,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1155,18 +1170,18 @@
     }
   },
   "design-ops/icon-illustration-systems": {
-    "badge": "silver",
-    "composite": 70.34848484848484,
-    "digest": "a5830514988b8b438e826934cb3111ccef1a8aa9644950e9213b356e8af5850a",
-    "static_score": 0.7097,
+    "badge": "bronze",
+    "composite": 69.60135333921743,
+    "digest": "c45a62577537253b04b1ea1dab774bbc30f29ce5f079d7146dea2be1ff22e1ba",
+    "static_score": 0.6940533980582524,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.6,
-      "token_efficiency": 0.98
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9728155339805825
     }
   },
   "design-ops/image-media-patterns": {
@@ -1202,7 +1217,7 @@
   "design-ops/layout-block-intelligence": {
     "badge": "silver",
     "composite": 71.80830039525692,
-    "digest": "4f9967bd9ab3036ccc2d170e41dbe35417dd7d6b55a105c45ff8ea9ca8086725",
+    "digest": "950d89d5edf818e94af86bc1ff9763c57f8fe8573c030d26ee519e7d1b3a7103",
     "static_score": 0.7206521739130435,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1247,7 +1262,7 @@
   "design-ops/mobile-ux-design": {
     "badge": "silver",
     "composite": 74.01515151515152,
-    "digest": "cdab5643cb50e93ee68d8deda473b6bfca584b54b1cd044a367455bee8114010",
+    "digest": "6615ee896cea35b3d1915a38a4158cebe8893177a6f2a2c24ba7a394786590ac",
     "static_score": 0.7235,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -1291,17 +1306,17 @@
   },
   "design-ops/page-composition-engine": {
     "badge": "silver",
-    "composite": 75.05982572506178,
-    "digest": "16ab93b1921db6184cf11869b96224f25f3bab64895dac429f3e092d71642c56",
-    "static_score": 0.7530922746781116,
+    "composite": 70.25062656641605,
+    "digest": "c66faf4a719bacb8349db36c6582434a52f98fc6075770448677433acd3703a6",
+    "static_score": 0.7079812030075188,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.55,
-      "token_efficiency": 0.9399141630901288
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.44999999999999996,
+      "token_efficiency": 0.9609022556390977
     }
   },
   "design-ops/performance-states-patterns": {
@@ -1352,7 +1367,7 @@
   "design-ops/reference-intelligence": {
     "badge": "bronze",
     "composite": 68.3927886459532,
-    "digest": "c5b9032d05b3a95f27ac0ca9e6384dd3224d355a389042d89a6c042469c10347",
+    "digest": "8de0662e694aa5b7d73f46dbebc0c8107d5fd9d6a909970906336e7b6b354e7b",
     "static_score": 0.6882886075949367,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -1381,17 +1396,17 @@
   },
   "design-ops/screen-flow-patterns": {
     "badge": "silver",
-    "composite": 72.80355276907,
-    "digest": "ee811c548e68cf01b6bd71702583a5368cd49ca723a9011d1226f6dde399fe7a",
-    "static_score": 0.7212551724137931,
+    "composite": 71.27494456762749,
+    "digest": "b549aea68b48259da1f3f71d6c519820621d214da2437ba8a79549c432938052",
+    "static_score": 0.7071219512195122,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7999999999999999,
-      "progressive_disclosure": 0.75,
+      "progressive_disclosure": 0.65,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9917241379310344
+      "token_efficiency": 0.9902439024390244
     }
   },
   "design-ops/scroll-experience-direction": {
@@ -1457,7 +1472,7 @@
   "design-ops/ui-pattern-intelligence": {
     "badge": "bronze",
     "composite": 67.87878787878788,
-    "digest": "6f9d450d7142d27a26fa3dc693c07b90497f52e57d095591f8a2da4363b48527",
+    "digest": "04b7f695f476b5158ce9ea08e312a887cb321c9cda7106473ebbe8ec8b72969f",
     "static_score": 0.6749999999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1487,7 +1502,7 @@
   "design-ops/ux-ethics-content-strategy": {
     "badge": "silver",
     "composite": 72.72727272727273,
-    "digest": "120f908863a4c826c70c70c7dff7962a05ea72cfc8a6501499c4717cc7496fd3",
+    "digest": "c054814275f762238cb80d572fe5aa268561cc6d41bf4bf4540343fc512de19e",
     "static_score": 0.717,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -1576,17 +1591,17 @@
   },
   "developer-essentials/bazel-build-optimization": {
     "badge": "bronze",
-    "composite": 65.91800356506238,
-    "digest": "9f6f803d0170e1e8f8006b1945c3d8326e604160bc2579bd61b207456109eabf",
-    "static_score": 0.6607882352941177,
+    "composite": 67.51196172248804,
+    "digest": "235b5cafa9d2008950bba8a5593a20a7f2afbf3fa2fdc7cd13667509d9190e47",
+    "static_score": 0.6730684210526315,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
+      "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9843137254901961
+      "token_efficiency": 0.9929824561403509
     }
   },
   "developer-essentials/code-review-excellence": {
@@ -1666,24 +1681,24 @@
   },
   "developer-essentials/monorepo-management": {
     "badge": "silver",
-    "composite": 72.93084476045371,
-    "digest": "61952fa120061344abb5783d5a8aa29953f1aa45631139a8efcad0da5014dc45",
-    "static_score": 0.7307653631284916,
+    "composite": 71.51515151515152,
+    "digest": "ff27d0af0ce36f9fd68dbe3dba0d7e3fd26d891463653b8eb845a004f6b25ce3",
+    "static_score": 0.71775,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.75,
+      "progressive_disclosure": 0.65,
       "structural_completeness": 0.6000000000000001,
-      "token_efficiency": 0.9307262569832402
+      "token_efficiency": 0.9416666666666667
     }
   },
   "developer-essentials/nx-workspace-patterns": {
     "badge": "bronze",
-    "composite": 65.98930481283422,
-    "digest": "7c37a207789f1b18846d4ee6f65d83e2db8650eecf28050e82976064042230b1",
-    "static_score": 0.6614941176470588,
+    "composite": 66.00550964187327,
+    "digest": "5f490eaca878e21c153cd9d202048002156b2c2cfe9c459f9610bbc28203d209",
+    "static_score": 0.6616545454545455,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
@@ -1691,7 +1706,7 @@
       "orchestration_wiring": 0.7,
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9921568627450981
+      "token_efficiency": 0.9939393939393939
     }
   },
   "developer-essentials/sql-optimization-patterns": {
@@ -1711,17 +1726,17 @@
   },
   "developer-essentials/turborepo-caching": {
     "badge": "silver",
-    "composite": 73.03105310531053,
-    "digest": "d80cf0ccc54a24ec2ceffbcdd119d9029f091ce2dcef04f1a08aa04236c420c2",
-    "static_score": 0.7264574257425743,
+    "composite": 73.27947101068489,
+    "digest": "aa351e75d8c651237a9d0c8f647883035e516253acb75e8aec311665a134df84",
+    "static_score": 0.7379167630057804,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
-      "harness_portability": 0.85,
+      "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.6,
       "structural_completeness": 0.7000000000000001,
-      "token_efficiency": 0.8917491749174917
+      "token_efficiency": 0.9190751445086706
     }
   },
   "dgx-spark-ops/spark-environment-setup": {
@@ -1771,47 +1786,47 @@
   },
   "documentation-generation/architecture-decision-records": {
     "badge": "silver",
-    "composite": 72.78166278166279,
-    "digest": "31ab470b906365757d3dbc99258c35e3f95dad6b42a0b147275f9fd44be53097",
-    "static_score": 0.7405384615384616,
+    "composite": 73.05714626580769,
+    "digest": "decee45d8a88f43364b1b5b50386bddef0b4ab6fe69343c2dec33fd611523b18",
+    "static_score": 0.7460157480314961,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.65,
-      "token_efficiency": 0.9726495726495726
+      "structural_completeness": 0.7000000000000001,
+      "token_efficiency": 0.9779527559055118
     }
   },
   "documentation-generation/changelog-automation": {
     "badge": "silver",
-    "composite": 71.77033492822967,
-    "digest": "de056009734c07f44c7d95cdb37e012c41a0ccd13c346613587e99b1c7f48190",
-    "static_score": 0.7175263157894737,
+    "composite": 72.12121212121212,
+    "digest": "af9e2d0ab4f48e6e186a64430fa33ad08c4f114b150674fd8cdc1c18e91aa952",
+    "static_score": 0.7157,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.6499999999999999,
+      "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.8,
+      "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.55,
-      "token_efficiency": 0.9947368421052631
+      "structural_completeness": 0.45,
+      "token_efficiency": 1.0
     }
   },
   "documentation-generation/openapi-spec-generation": {
-    "badge": "bronze",
-    "composite": 68.33333333333333,
-    "digest": "e40d86b4591349333d43aa8f12555ae593490f03ed732d639e68b34d102414a0",
-    "static_score": 0.6775,
+    "badge": "silver",
+    "composite": 70.24793388429752,
+    "digest": "3407e533b23858b98a5281115c8a6fe21e777398d022c2191f0e977679abd7aa",
+    "static_score": 0.6984545454545454,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
+      "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.35,
-      "structural_completeness": 0.45,
-      "token_efficiency": 1.0
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.9939393939393939
     }
   },
   "documentation-standards/grounded-vault": {
@@ -1861,9 +1876,9 @@
   },
   "evidence-ops/bag-evidence": {
     "badge": "bronze",
-    "composite": 60.63973063973064,
-    "digest": "ecd8909ac8585585b886664d3fdd9734bc33b78521497adf5412a3c4cd467fc9",
-    "static_score": 0.6085333333333334,
+    "composite": 60.662557781201855,
+    "digest": "745531dc6bfbf0313f8f409400e443798ee1af82f716d204f8d4a91a2353a266",
+    "static_score": 0.6087593220338983,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -1871,7 +1886,7 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9703703703703703
+      "token_efficiency": 0.9728813559322034
     }
   },
   "evidence-ops/capture-web": {
@@ -1891,9 +1906,9 @@
   },
   "evidence-ops/environment-check": {
     "badge": "bronze",
-    "composite": 61.00413223140496,
-    "digest": "fd2488d430721b8dbec9c260b7fd015fead9fe2f36336602d8399a8e580fbbe2",
-    "static_score": 0.6148909090909092,
+    "composite": 61.010971786833856,
+    "digest": "a2fe991168b157d69b7b0a9f32a4cc4ceb7d81a981886d9aa2b9ac8731ddee8b",
+    "static_score": 0.6149586206896552,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -1901,29 +1916,29 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9854545454545455
+      "token_efficiency": 0.9862068965517241
     }
   },
   "evidence-ops/evidence-install-deps": {
     "badge": "bronze",
-    "composite": 60.68181818181818,
-    "digest": "6877dc632c60929feae35daa206189cf94f3607463644a0bf044a914dc3cf183",
-    "static_score": 0.6117,
+    "composite": 67.5203527815468,
+    "digest": "67100e9c132b606194ba529ad66c222b572a03e1d3e62ad4581c9f6d3693de7d",
+    "static_score": 0.6749014925373135,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.2,
+      "progressive_disclosure": 0.65,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.95
+      "token_efficiency": 0.9522388059701492
     }
   },
   "evidence-ops/evidence-onboard": {
     "badge": "bronze",
-    "composite": 62.956091527520094,
-    "digest": "2cecb098a764d8f4a2f04c4ebdbaca242d14bdc5e5280a7dcc551fa2699cd178",
-    "static_score": 0.632765306122449,
+    "composite": 62.95757575757575,
+    "digest": "e70a2679f3094b2b126cb3c2c86945c95f83c24af342ee8c1742ee74ab3b08ee",
+    "static_score": 0.63278,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -1931,13 +1946,13 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9918367346938776
+      "token_efficiency": 0.992
     }
   },
   "evidence-ops/evidence-reference-lookup": {
     "badge": "bronze",
     "composite": 66.21212121212122,
-    "digest": "effc8848aae46018ce9d6caf3dd23cf1e88784172741e72aefc44c65987b807f",
+    "digest": "801310e0bb6ef2930fbe15acf73ecba1389a477421b3a4cc48679f09eefebc63",
     "static_score": 0.6545,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1951,24 +1966,24 @@
   },
   "evidence-ops/hash-evidence": {
     "badge": "bronze",
-    "composite": 60.539291217257315,
-    "digest": "d60f1b6b20023bbb8e32a582c4e1d2adba43611969d92e797d0965e7e1cd5f96",
-    "static_score": 0.6075389830508475,
+    "composite": 65.13833992094862,
+    "digest": "ad98e73e253029ede5b399d5e7fba976c20ac730c6f1a03bc3c1353dafae2419",
+    "static_score": 0.6500695652173913,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.2,
+      "progressive_disclosure": 0.5,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9593220338983051
+      "token_efficiency": 0.9652173913043478
     }
   },
   "evidence-ops/init-evidence-store": {
     "badge": "bronze",
-    "composite": 63.948382126348235,
-    "digest": "23f77b9e336825934887bdba43103b239da5f1674c3d3f40709ef33856485f45",
-    "static_score": 0.6363389830508475,
+    "composite": 63.97186147186148,
+    "digest": "6506fe040339ab1773b550b1d34474755e10ec26be27565ba6a24ed2f0983e59",
+    "static_score": 0.6365714285714286,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -1976,7 +1991,7 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9593220338983051
+      "token_efficiency": 0.9619047619047619
     }
   },
   "evidence-ops/inspect-metadata": {
@@ -1996,9 +2011,9 @@
   },
   "evidence-ops/log-custody": {
     "badge": "bronze",
-    "composite": 65.2939393939394,
-    "digest": "554da25c0762b32187a2db644a0c3cf6c8e14926ed32ec520f826b72761e2a0a",
-    "static_score": 0.65436,
+    "composite": 65.3270509977827,
+    "digest": "0ee93f8b83f5217ce7ec3487138e1542f7bbe0a5db59192ad81ec4c8ad70952b",
+    "static_score": 0.6546878048780488,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -2006,22 +2021,22 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9573333333333334
+      "token_efficiency": 0.9609756097560975
     }
   },
   "evidence-ops/setup-storage": {
     "badge": "bronze",
-    "composite": 63.97360703812317,
-    "digest": "508ed6957613913b94e94ec1f8ecfc216f92681caa6167d87bf65f7863348468",
-    "static_score": 0.6338387096774193,
+    "composite": 68.68406285072952,
+    "digest": "8ef91851181e4fda4cff44156c3f6cb3b9a5d66449515d75de4a74d84bed5701",
+    "static_score": 0.6802222222222222,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.2,
-      "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9870967741935484
+      "progressive_disclosure": 0.5,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.980246913580247
     }
   },
   "evidence-ops/sync-immutable": {
@@ -2041,9 +2056,9 @@
   },
   "evidence-ops/timestamp-evidence": {
     "badge": "bronze",
-    "composite": 60.51239669421488,
-    "digest": "089e07639b5edda23df049a72259866080fa2061f24d25c8e3b3f8f3e57faedc",
-    "static_score": 0.6072727272727273,
+    "composite": 60.69199457259159,
+    "digest": "7b2c8918a63548d48b93d0a499941f774f881a9b1d1255100976be0c502b476e",
+    "static_score": 0.6090507462686567,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -2051,22 +2066,22 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9563636363636363
+      "token_efficiency": 0.9761194029850746
     }
   },
   "evidence-ops/verify-bundle": {
     "badge": "bronze",
-    "composite": 60.662557781201855,
-    "digest": "2252232c388801a729dca137710ab36f8270ada93b1acef21107390808277821",
-    "static_score": 0.6087593220338983,
+    "composite": 65.26806526806527,
+    "digest": "df45fd3735f24b328c43d5808a66e89f8f9af666433ce4e9111a0596657ed3a3",
+    "static_score": 0.6513538461538462,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.2,
+      "progressive_disclosure": 0.5,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9728813559322034
+      "token_efficiency": 0.9794871794871794
     }
   },
   "file-conversion/file-conversion": {
@@ -2086,9 +2101,9 @@
   },
   "frontend-mobile-development/nextjs-app-router-patterns": {
     "badge": "silver",
-    "composite": 76.37741046831957,
-    "digest": "33d98c836feebf8966c213873ad2cb06cc570e29e7937565258070959cb796d1",
-    "static_score": 0.7473363636363637,
+    "composite": 76.40424867228991,
+    "digest": "ec9e1dd693b0f09dc664ea3fc835ef7a171a47b64d3d7f42c39c092b415f1f0b",
+    "static_score": 0.7476020618556701,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
@@ -2096,14 +2111,14 @@
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9681818181818181
+      "token_efficiency": 0.9711340206185567
     }
   },
   "frontend-mobile-development/react-native-architecture": {
     "badge": "silver",
-    "composite": 74.1800920598389,
-    "digest": "ddb5b84fa17c561376722c474cbda98323d953c0114aed2a41a618297aaec0b0",
-    "static_score": 0.740832911392405,
+    "composite": 74.18181818181819,
+    "digest": "c1ce00c23d0ef9bc80659db1dab63e0454a8e8afc8b6544f6c504fc383eacfa1",
+    "static_score": 0.74085,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
@@ -2111,14 +2126,14 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.6,
-      "token_efficiency": 0.9848101265822785
+      "token_efficiency": 0.985
     }
   },
   "frontend-mobile-development/react-state-management": {
     "badge": "silver",
-    "composite": 75.00142938822184,
-    "digest": "d292c331733399d9ce7725749a21fd4900f575de22db1c2ca2f80fc1f11be133",
-    "static_score": 0.7472641509433962,
+    "composite": 74.98566748566748,
+    "digest": "b62fc6e7ff65ae10901f4a22bcbb30070fb006eaf5f9d254c3e288daa5a6642d",
+    "static_score": 0.7471081081081081,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
@@ -2126,22 +2141,22 @@
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.49999999999999994,
-      "token_efficiency": 0.9584905660377359
+      "token_efficiency": 0.9567567567567568
     }
   },
   "frontend-mobile-development/tailwind-design-system": {
-    "badge": "silver",
-    "composite": 72.9480052321779,
-    "digest": "9d936fc75216bc992917448e0c4983fd99d5fb14a88aceeb32e49aac2bc818c2",
-    "static_score": 0.7231352517985612,
+    "badge": "bronze",
+    "composite": 68.9814814814815,
+    "digest": "040b2727c77b35bac5d4b76e0bff34d4063b808a0ad07b1f2a05f2a9a9d524fc",
+    "static_score": 0.6868666666666666,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.65,
+      "progressive_disclosure": 0.35,
       "structural_completeness": 0.49999999999999994,
-      "token_efficiency": 0.8992805755395683
+      "token_efficiency": 0.962962962962963
     }
   },
   "game-development/godot-gdscript-patterns": {
@@ -2207,7 +2222,7 @@
   "image-ops/auto-deskew": {
     "badge": "silver",
     "composite": 71.14718614718615,
-    "digest": "c377dd9b3daa358e5492fa7467ee7cfd1766f371d217ed21d5f911b02ffc4475",
+    "digest": "194fd1d318630526d6b1d81a079d29bb50f7a49f82bc7f258be7783fca90d329",
     "static_score": 0.7012571428571428,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -2266,32 +2281,32 @@
   },
   "image-ops/convert-to-avif": {
     "badge": "bronze",
-    "composite": 62.703761755485885,
-    "digest": "d2bbfc0323a8911225a5b18d392bd2c878f37ee6dccb9acea746820d765c694a",
-    "static_score": 0.6302172413793103,
+    "composite": 62.5974025974026,
+    "digest": "41ff760e63faa29cd8d688ec9e6b8640a62534803fa9eca5a97fa215692ef14e",
+    "static_score": 0.6264142857142857,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.2,
-      "structural_completeness": 0.35,
-      "token_efficiency": 0.9724137931034482
+      "structural_completeness": 0.3,
+      "token_efficiency": 0.9857142857142858
     }
   },
   "image-ops/fast-resize": {
     "badge": "bronze",
-    "composite": 63.48124098124098,
-    "digest": "4f242a78c9c1fb3ce59701c451177ae9fe55a91b7ebe85e64c44e66554b801ab",
-    "static_score": 0.6269142857142858,
+    "composite": 66.52203856749311,
+    "digest": "27a95a44a189963ac9898c93c52832e6fcd44af945050b0588d7c4f83dbfb921",
+    "static_score": 0.6500181818181818,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.9,
+      "orchestration_wiring": 1.0,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.35,
-      "token_efficiency": 0.9746031746031746
+      "token_efficiency": 0.9757575757575758
     }
   },
   "image-ops/fast-thumbnail": {
@@ -2311,9 +2326,9 @@
   },
   "image-ops/from-jxl": {
     "badge": "silver",
-    "composite": 73.50298762270593,
-    "digest": "854c6bae4d17433b669bd75d51393f6b44a01d1e6825ef52a646f13bcc792c10",
-    "static_score": 0.7183295774647888,
+    "composite": 73.51010101010101,
+    "digest": "2f535105fb8b861e0e067a6478fa6cbcef9f381c46342f1c24e77acfe6802120",
+    "static_score": 0.7183999999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6199999999999999,
@@ -2321,14 +2336,14 @@
       "orchestration_wiring": 1.0,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9436619718309859
+      "token_efficiency": 0.9444444444444444
     }
   },
   "image-ops/image-ops-install-deps": {
     "badge": "bronze",
-    "composite": 65.5668449197861,
-    "digest": "be8a93d916b04a7702c1c8da9096467569785934a5f63c7c68b36c54e5cc7b82",
-    "static_score": 0.6598117647058824,
+    "composite": 65.58222676200205,
+    "digest": "9e66883e8f8cbbde2fa847aa8ce0b13114aed0379aab0c9e25602e0a3646945a",
+    "static_score": 0.6599640449438202,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -2336,7 +2351,7 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.5,
-      "token_efficiency": 0.9623529411764706
+      "token_efficiency": 0.9640449438202248
     }
   },
   "image-ops/images-to-pdf": {
@@ -2416,9 +2431,9 @@
   },
   "image-ops/optimize-jpeg": {
     "badge": "bronze",
-    "composite": 63.356389986824766,
-    "digest": "b0b84acbf536112a04784c604cf8f92a206f4e655028ed01a23c5fd411c24eed",
-    "static_score": 0.6331782608695652,
+    "composite": 63.37472664792253,
+    "digest": "5e4e18405ca75f2a30a3cef409d66e1f69a206561b97e49ffae0a063b79e0ca7",
+    "static_score": 0.633359793814433,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -2426,14 +2441,14 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.35,
-      "token_efficiency": 0.9608695652173913
+      "token_efficiency": 0.9628865979381444
     }
   },
   "image-ops/optimize-png": {
     "badge": "no_badge",
-    "composite": 58.86363636363636,
-    "digest": "913bf149350ad3827763d9940619438a55491513ae03fa0d12f835274de733de",
-    "static_score": 0.5917,
+    "composite": 58.94628099173554,
+    "digest": "d78f481824c79018602409923430b0a16b8700d79713db23f64b327690667e99",
+    "static_score": 0.5925181818181818,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -2441,7 +2456,7 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.35,
-      "token_efficiency": 0.9666666666666667
+      "token_efficiency": 0.9757575757575758
     }
   },
   "image-ops/pdf-extract-embedded-images": {
@@ -2476,9 +2491,9 @@
   },
   "image-ops/read-metadata": {
     "badge": "bronze",
-    "composite": 67.4090909090909,
-    "digest": "f4a2f54c1b5924eccf7888ae518b1441988cdc1d0ab2486fbbe1f5690325359c",
-    "static_score": 0.6793,
+    "composite": 67.41582491582491,
+    "digest": "9bab09b84692266436f97340d3f28c380432007920e1620fa14cc402ecaffb28",
+    "static_score": 0.6793666666666667,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.5599999999999999,
@@ -2486,14 +2501,14 @@
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.94
+      "token_efficiency": 0.9407407407407408
     }
   },
   "image-ops/scrub-metadata": {
     "badge": "bronze",
-    "composite": 65.18270944741533,
-    "digest": "3c633ecb4e41249c71e6f85121ba14ab00a5a6814eaeb5d8d35658e62173fb8f",
-    "static_score": 0.6532588235294118,
+    "composite": 65.18755516328332,
+    "digest": "b13508b249ea6d65e7bd0b80044a1d97ecce26bd7297e2a5047d017704781995",
+    "static_score": 0.6533067961165049,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -2501,14 +2516,14 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9450980392156862
+      "token_efficiency": 0.945631067961165
     }
   },
   "image-ops/set-metadata": {
     "badge": "bronze",
-    "composite": 67.51940896568996,
-    "digest": "aaa24c9c6a06f385c005cb3b67589a3bbbfdcc7238ff74e7588ced2ab7178ee0",
-    "static_score": 0.6804421487603306,
+    "composite": 67.53575757575759,
+    "digest": "61a98a67af5578ffd3d4ac03add692a157efed07f15645a070635d87ff0f6e01",
+    "static_score": 0.680604,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -2516,7 +2531,7 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.55,
-      "token_efficiency": 0.943801652892562
+      "token_efficiency": 0.9456
     }
   },
   "image-ops/svg-to-raster": {
@@ -2536,17 +2551,17 @@
   },
   "image-ops/to-jxl": {
     "badge": "bronze",
-    "composite": 68.16399286987522,
-    "digest": "0a85c5e24d8aed799eefd318121316a425221857a8835652c42bc49b014a1fa7",
-    "static_score": 0.6730235294117647,
+    "composite": 68.60881542699725,
+    "digest": "cd091748af37d640dc81fe5de42c56d544c8892a67532a41f2e5bb66d21cb8d7",
+    "static_score": 0.6829272727272727,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.5,
-      "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9647058823529412
+      "structural_completeness": 0.49999999999999994,
+      "token_efficiency": 0.9636363636363636
     }
   },
   "image-ops/transcode-jpeg-to-jxl-lossless": {
@@ -2566,9 +2581,9 @@
   },
   "image-ops/upscale-image": {
     "badge": "silver",
-    "composite": 71.01119894598156,
-    "digest": "1586c180a06e29497e9f5819c69fceeba60c118728796812e52bf34f696a5633",
-    "static_score": 0.6914608695652174,
+    "composite": 71.0170857511283,
+    "digest": "fdd6b7b379092eba814648ba7268df749650b4c232c632a91166b3034cb3e565",
+    "static_score": 0.6915191489361702,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -2576,7 +2591,7 @@
       "orchestration_wiring": 1.0,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.35,
-      "token_efficiency": 0.9695652173913043
+      "token_efficiency": 0.9702127659574468
     }
   },
   "image-ops/vectorize": {
@@ -2596,9 +2611,9 @@
   },
   "image-ops/web-ready": {
     "badge": "bronze",
-    "composite": 67.36812570145902,
-    "digest": "7f9fb36bcd0793141b3f7f26e6b500ba5cc71a3fb2510441ed65ebe4ace9077d",
-    "static_score": 0.6761444444444444,
+    "composite": 67.29946524064171,
+    "digest": "909a320267c3a53dee5b15a22df51f118dcf1fbefce2ebed445d1283eebe1533",
+    "static_score": 0.675464705882353,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.5599999999999999,
@@ -2606,7 +2621,7 @@
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9604938271604938
+      "token_efficiency": 0.9529411764705882
     }
   },
   "image-ops/workspace-setup": {
@@ -2642,7 +2657,7 @@
   "incident-response/incident-runbook-templates": {
     "badge": "silver",
     "composite": 73.6455463728191,
-    "digest": "1092b093dfdf2c1dc5ab64a9ae5101cc45f2f9d03e9b6fa772545ba6b16cbbcf",
+    "digest": "5b84163d865653c8c1852ade864f8c00c625dccc932c1118ae295292dfc4bc4a",
     "static_score": 0.7600909090909092,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -2657,7 +2672,7 @@
   "incident-response/on-call-handoff-patterns": {
     "badge": "silver",
     "composite": 72.72566086395872,
-    "digest": "9a52e69f0dfc151debaf251bf3d3aaca98d9c44c8cc7e66812a95ef6d65c9761",
+    "digest": "56d22c21712ec57bfbd3a4717dcba3d232393239f045e2b0d3b742bff76b2877",
     "static_score": 0.7336340425531915,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -2684,55 +2699,10 @@
       "token_efficiency": 0.983448275862069
     }
   },
-  "ios-ops/apple-sdk-route": {
-    "badge": "bronze",
-    "composite": 65.68181818181817,
-    "digest": "f24649bcb50b22d22c6a25fb4b6be4a2ba1b3c61b06c174b3a130da31c3a9d83",
-    "static_score": 0.6465,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.2,
-      "structural_completeness": 0.2,
-      "token_efficiency": 1.0
-    }
-  },
-  "ios-ops/ios-agentic-apple-engineering-team": {
-    "badge": "silver",
-    "composite": 71.28787878787878,
-    "digest": "ef06f0d2153d53051570d775b105787ff851fa334a31dad45548ab25979d4574",
-    "static_score": 0.7136,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6799999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 1.0
-    }
-  },
-  "ios-ops/ios-capability-route-planner": {
-    "badge": "silver",
-    "composite": 70.68181818181817,
-    "digest": "bacef7aa344a9a7d373622038b00bd986d449905d9fd0cbad721616161b07493",
-    "static_score": 0.6967,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.3,
-      "token_efficiency": 1.0
-    }
-  },
   "ios-ops/ios-commerce-identity-and-security": {
     "badge": "bronze",
     "composite": 64.77272727272727,
-    "digest": "fd93bac3e88d0417ab466d3cd7c9fc2f5540f84f14b7e66d4671f3b8b8a6a0ba",
+    "digest": "05b3f2155992b142f2db4a2e6aebbadd16e827b53ab9eb72f3ec2dc08d4bcfb3",
     "static_score": 0.6437,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -2747,7 +2717,7 @@
   "ios-ops/ios-companion-communications": {
     "badge": "no_badge",
     "composite": 54.6969696969697,
-    "digest": "e66546d6f6898108a6ee4ef31744df828391c611a3c4761db287860cb83d93cb",
+    "digest": "eaf20fcb21a35226e9f4f67cb53cfac176ac06d6a8fd0ad790790abc20f43baf",
     "static_score": 0.5602,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -2762,7 +2732,7 @@
   "ios-ops/ios-data-and-device-services": {
     "badge": "no_badge",
     "composite": 54.69696969696969,
-    "digest": "38d32b1e33f6f378e29c50e37449ff40cc10be5d89d00220071db19ffe175424",
+    "digest": "ef53e052273df82258f2c922a41d1dfb70402c012dc29b14f7bfc9bd96a7d224",
     "static_score": 0.5547,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -2774,25 +2744,10 @@
       "token_efficiency": 1.0
     }
   },
-  "ios-ops/ios-device-release-proof": {
-    "badge": "bronze",
-    "composite": 60.530303030303024,
-    "digest": "5972d4595200eb0bd0f418efed953ad51be1b370e8ddadc046f45fac4cba3dc1",
-    "static_score": 0.615,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.6,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.4,
-      "token_efficiency": 1.0
-    }
-  },
   "ios-ops/ios-knowledge-base": {
     "badge": "bronze",
     "composite": 61.5151515151515,
-    "digest": "57b843a778b619e95ea0b1656fa2c6d175032504cab33bcb6f1b041d7f6c3769",
+    "digest": "4c6608fffe3836c77c407792244c814bc4ef560ac973dde7c2b566f3a2069b7d",
     "static_score": 0.6083999999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -2804,10 +2759,10 @@
       "token_efficiency": 1.0
     }
   },
-  "ios-ops/ios-media-ml-and-inputs": {
+  "ios-ops/ios-media-and-inputs": {
     "badge": "bronze",
     "composite": 64.54545454545453,
-    "digest": "af16159faae7309ad344c4da9df7f318b3620a1662cf67b61efdaf7bbfd63bc2",
+    "digest": "3139bf4634d68bca12e8168b3af4367dfc7b9a572aafe8299f230d2b0087a32b",
     "static_score": 0.6387,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -2819,14 +2774,14 @@
       "token_efficiency": 1.0
     }
   },
-  "ios-ops/ios-native-design-verification": {
+  "ios-ops/ios-native-design": {
     "badge": "bronze",
-    "composite": 61.74242424242424,
-    "digest": "10a3a8a6dbc23b3af669e72b6d0e3b6d4a208d26374d1ee016fe44445819f4f6",
-    "static_score": 0.6207,
+    "composite": 65.15151515151516,
+    "digest": "9960c512c9443b049ab6d2bd0cb280a551adfafe2344f76230e5e9814c8d2044",
+    "static_score": 0.6495,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.5599999999999999,
+      "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.35,
@@ -2834,10 +2789,10 @@
       "token_efficiency": 1.0
     }
   },
-  "ios-ops/ios-on-device-intelligence-evaluation": {
+  "ios-ops/ios-on-device-intelligence": {
     "badge": "bronze",
     "composite": 63.78787878787878,
-    "digest": "dc4f9224c6cbfe276fab3f8c4b25b95165767955fe0fafcb8c0e4d94765265a7",
+    "digest": "28d015b0072dbe885e698348c403ca3e359ccf7dd01debe838c6a3c6c9831cec",
     "static_score": 0.6237,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -2849,25 +2804,10 @@
       "token_efficiency": 1.0
     }
   },
-  "ios-ops/ios-privacy-performance-release-proof": {
-    "badge": "bronze",
-    "composite": 60.9090909090909,
-    "digest": "70a802398084ccefed3cbd9413f4b3d1e9699305f73322187b6645c86ac897db",
-    "static_score": 0.6242,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.5599999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.4,
-      "token_efficiency": 1.0
-    }
-  },
   "ios-ops/ios-project-target-architect": {
     "badge": "no_badge",
     "composite": 58.712121212121204,
-    "digest": "7418522d387317e62f2e259a6d5d429c7ec26d1571947cced21f23ae7834668d",
+    "digest": "d9e2b9af2d1cc35c6cf78059834abd669ecbe4dc93048c711e94acc806dbc975",
     "static_score": 0.5977,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -2879,25 +2819,40 @@
       "token_efficiency": 1.0
     }
   },
-  "ios-ops/ios-source-refresh-and-availability": {
+  "ios-ops/ios-release-proof": {
     "badge": "bronze",
-    "composite": 65.75757575757576,
-    "digest": "d7de377eb547ed1035734d50a6511d68ba0232affe98f0da6eb3fddc0046572f",
-    "static_score": 0.6527000000000001,
+    "composite": 68.10606060606061,
+    "digest": "133ebf76fe0713a36418189a153f8f8c7e3b248c9439bc2e175e1bcc5c29c677",
+    "static_score": 0.6799999999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.5599999999999999,
+      "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.75,
+      "orchestration_wiring": 0.7,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.30000000000000004,
+      "structural_completeness": 0.4,
       "token_efficiency": 1.0
+    }
+  },
+  "ios-ops/ios-route-planner": {
+    "badge": "silver",
+    "composite": 73.14313346228239,
+    "digest": "953d616d76cb01d8a6f6e7475b337bdc577898299684dd800b0c5313942ae6ac",
+    "static_score": 0.7241170212765957,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 0.9957446808510638
     }
   },
   "ios-ops/ios-spatial-graphics-and-games": {
     "badge": "no_badge",
     "composite": 57.72727272727272,
-    "digest": "d839bb64025e648c5dfe9e05b2c8011089105c0979ef9f2e9a5e59b0f17a7528",
+    "digest": "e9adc1ae09594ef4b6779f63806ab7f1828ec4df732f719ab25b3d776fc3a3e6",
     "static_score": 0.5777,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -2912,7 +2867,7 @@
   "ios-ops/ios-system-surfaces-and-background": {
     "badge": "no_badge",
     "composite": 57.72727272727272,
-    "digest": "6e8659d6e29a1af6e4e28204bef1f8d49b219f7c01467a29d97f8c7cdbc0b18c",
+    "digest": "b7fac977285f62eda657ee88a63ab77f7bedee79b2d9e49fd8eb6f99f50f2529",
     "static_score": 0.5832,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -2921,66 +2876,6 @@
       "orchestration_wiring": 0.7,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.2,
-      "token_efficiency": 1.0
-    }
-  },
-  "ios-ops/ios-testing-and-release-assurance": {
-    "badge": "bronze",
-    "composite": 64.24242424242424,
-    "digest": "fc86f6c0668378423e82d2b4ee0f915c8b0577689522a5d6680afe05b9c50938",
-    "static_score": 0.6412,
-    "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.5599999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.30000000000000004,
-      "token_efficiency": 1.0
-    }
-  },
-  "ios-ops/liquid-glass-design": {
-    "badge": "bronze",
-    "composite": 61.36363636363635,
-    "digest": "1e46c2e36bae5cbddfa6196a49407d69ddfb4e1a2cb11cd35fb30ec546f8cf8c",
-    "static_score": 0.617,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.2,
-      "structural_completeness": 0.25,
-      "token_efficiency": 1.0
-    }
-  },
-  "ios-ops/on-device-ai-feature": {
-    "badge": "bronze",
-    "composite": 65.9090909090909,
-    "digest": "9c385d9b6d87921e37c962aa623082fd1b15c325adcc4714ee586dbc6a625fdd",
-    "static_score": 0.6425,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 0.85,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.2,
-      "structural_completeness": 0.25,
-      "token_efficiency": 1.0
-    }
-  },
-  "ios-ops/swiftui-native-design": {
-    "badge": "bronze",
-    "composite": 66.66666666666666,
-    "digest": "e62a8ac905dcfff8eb190ac32a9188c6c47b380b5585f6da3f67c224fff9b90d",
-    "static_score": 0.6592,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7999999999999999,
-      "progressive_disclosure": 0.2,
-      "structural_completeness": 0.25,
       "token_efficiency": 1.0
     }
   },
@@ -3046,9 +2941,9 @@
   },
   "kubernetes-operations/gitops-workflow": {
     "badge": "silver",
-    "composite": 74.53997421018698,
-    "digest": "dbaae1287513218a471b03c8c9ef4a0f9e8f57f02262708e331d7d5dc492212e",
-    "static_score": 0.7598957446808511,
+    "composite": 74.57792207792208,
+    "digest": "97029efaaf065b02b7ad7765fc4d91e3ad35a0740e6a03de00b049af9ab2062d",
+    "static_score": 0.7602714285714286,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
@@ -3056,104 +2951,104 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.7000000000000001,
-      "token_efficiency": 0.8910638297872341
+      "token_efficiency": 0.8952380952380953
     }
   },
   "kubernetes-operations/helm-chart-scaffolding": {
     "badge": "silver",
-    "composite": 70.73737373737374,
-    "digest": "2859cf38647a42ed29914d7ae70dd23c59c3039355cda20b603984fd185c6d8c",
-    "static_score": 0.7165,
+    "composite": 75.31515151515153,
+    "digest": "9f9a8883aa4dce6ca5670e28c7199115c749d3c78ce3445c36365ce7656e7bb9",
+    "static_score": 0.75882,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.5,
+      "progressive_disclosure": 0.8,
       "structural_completeness": 0.55,
-      "token_efficiency": 0.9644444444444444
+      "token_efficiency": 0.968
     }
   },
   "kubernetes-operations/k8s-manifest-generator": {
     "badge": "silver",
-    "composite": 70.37878787878789,
-    "digest": "8ecdf23c128af071b04b2d2a2f789cbd840257512fdcd0997aa3e8d185653f71",
-    "static_score": 0.7047,
+    "composite": 75.37878787878789,
+    "digest": "950cb037c810f096d41ffaa1f5f9b97a4b397e10a49b13afeb048be252a786e0",
+    "static_score": 0.7567,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.5,
-      "structural_completeness": 0.39999999999999997,
+      "progressive_disclosure": 0.8,
+      "structural_completeness": 0.5000000000000001,
       "token_efficiency": 1.0
     }
   },
   "kubernetes-operations/k8s-security-policies": {
     "badge": "silver",
-    "composite": 79.6590909090909,
-    "digest": "ff517be40c8fb2d10c29704be90ac8912d681f9ded1471560a4bca535f20cea8",
-    "static_score": 0.802075,
+    "composite": 75.2451790633609,
+    "digest": "fa0a224aa68b79efe2c1a7c51132f2bce2d68a1d0f8afd49c5a5c0b5a108e5a2",
+    "static_score": 0.7636272727272727,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.9,
-      "structural_completeness": 0.7000000000000001,
-      "token_efficiency": 0.8708333333333333
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.8,
+      "structural_completeness": 0.65,
+      "token_efficiency": 0.9103030303030303
     }
   },
   "llm-application-dev/embedding-strategies": {
     "badge": "bronze",
-    "composite": 65.98323662153447,
-    "digest": "6c23607b2aa46ff21eedd92835436d367a1fb2f7e8f5f1d6ca5b8c6e828ad8ff",
-    "static_score": 0.6614340425531915,
+    "composite": 68.98395721925134,
+    "digest": "1353c9f68740d64034d2f4bc86a469a265d287ee805723b41bb3deceaa42295c",
+    "static_score": 0.6914411764705882,
     "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
+      "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9914893617021276
+      "token_efficiency": 0.9882352941176471
     }
   },
   "llm-application-dev/hybrid-search-implementation": {
-    "badge": "bronze",
-    "composite": 65.96491228070175,
-    "digest": "e797d4ba608d90894f2eecbd2a8cb3980f1c0885950c94d505643fb305b7fbf6",
-    "static_score": 0.6612526315789473,
+    "badge": "silver",
+    "composite": 77.45757575757575,
+    "digest": "e8926e6ae57c57e24efb73a65e08f872f7e777686457a50b0851106854e080d1",
+    "static_score": 0.76828,
     "sub_scores": {
-      "ecosystem_coherence": 0.5,
+      "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.9894736842105263
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.49999999999999994,
+      "token_efficiency": 0.9786666666666667
     }
   },
   "llm-application-dev/langchain-architecture": {
     "badge": "silver",
-    "composite": 70.25472112428635,
-    "digest": "f64dde3eb9b975a1a4412de62c45ed0efa4de61f7e57551fc8271ca44c1bf345",
-    "static_score": 0.7032217391304348,
+    "composite": 76.44684550422255,
+    "digest": "4a340ffd2b96bc5c3e142cd5a3aebb35fbf74bd415a01afa69da96e258dfd677",
+    "static_score": 0.7507737704918033,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.65,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.961352657004831
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.49999999999999994,
+      "token_efficiency": 0.9508196721311475
     }
   },
   "llm-application-dev/llm-evaluation": {
     "badge": "silver",
-    "composite": 72.31934731934732,
-    "digest": "6ee704ac5c78468052e0a246f9dbcf462b4bb842f0743227d5bef0c39073c73f",
-    "static_score": 0.7084615384615385,
+    "composite": 72.39025771736051,
+    "digest": "330ff677d31fa258d5ca9a32c0142d7d8a9caf0114fb89111716c0c909a699ff",
+    "static_score": 0.7091635514018692,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -3161,13 +3056,13 @@
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9884615384615385
+      "token_efficiency": 0.9962616822429906
     }
   },
   "llm-application-dev/prompt-engineering-patterns": {
     "badge": "silver",
     "composite": 71.28787878787878,
-    "digest": "ae8ca4636c348abeb210841e8244c5ba8548fd068cf2f717bd11ac6fe9ad387f",
+    "digest": "694b1ba283cfb6345e21c0167eb32f2a983410964d605968cf73814a1d51ab51",
     "static_score": 0.7017,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -3181,39 +3076,39 @@
   },
   "llm-application-dev/rag-implementation": {
     "badge": "silver",
-    "composite": 72.08520852085208,
-    "digest": "22f49e38d027cd87992e6c8bbf85ea2d83ea1d536aebcf268b525a44cee4fb4e",
-    "static_score": 0.7153435643564356,
+    "composite": 72.70053475935829,
+    "digest": "b33ef85083faedd238cb407ebde78644ba51224c3af8f2e0ff242ade64fc5702",
+    "static_score": 0.728935294117647,
     "sub_scores": {
-      "ecosystem_coherence": 0.5,
+      "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.996039603960396
+      "token_efficiency": 0.9803921568627451
     }
   },
   "llm-application-dev/similarity-search-patterns": {
     "badge": "bronze",
-    "composite": 69.01185770750988,
-    "digest": "181db40128ed052fe9c466457d561c1dec1087301c56ac2bffe9475139554767",
-    "static_score": 0.6844173913043479,
+    "composite": 68.63636363636363,
+    "digest": "a14bc3336f1e8a0bb4c7db38f70302d900ead5983ec888ec43a6b1d7af8f6a4d",
+    "static_score": 0.6825,
     "sub_scores": {
-      "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7999999999999999,
+      "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.35,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.991304347826087
+      "structural_completeness": 0.35000000000000003,
+      "token_efficiency": 1.0
     }
   },
   "llm-application-dev/vector-index-tuning": {
     "badge": "bronze",
-    "composite": 68.11069882498452,
-    "digest": "f924ffcd77d6b521601294689b1770fa459f0dee71afc6a8847ef23ef92a6e4e",
-    "static_score": 0.6752959183673469,
+    "composite": 68.17290552584669,
+    "digest": "09bc8a6cef575a85863164c7ec48cfd6d74a28549f93b6591d669318370541bc",
+    "static_score": 0.6759117647058823,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -3221,28 +3116,28 @@
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9755102040816327
+      "token_efficiency": 0.9823529411764707
     }
   },
   "llm-finetuning/checkpoint-promotion": {
-    "badge": "gold",
-    "composite": 80.41368743615934,
-    "digest": "3e595d2f30a2953d5efcf0e64809c8f9fcccd7cd4ca78e618c50fbb1f8e81af9",
-    "static_score": 0.7902955056179776,
+    "badge": "silver",
+    "composite": 75.72100313479623,
+    "digest": "67fceb8346ac98d5a5903c2a064079ea18782b0e984df8b6557e1b6a2f8267ca",
+    "static_score": 0.7443379310344828,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.95,
-      "progressive_disclosure": 0.75,
+      "orchestration_wiring": 1.0,
+      "progressive_disclosure": 0.35,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9955056179775281
+      "token_efficiency": 0.9793103448275862
     }
   },
   "llm-finetuning/dataset-curation": {
     "badge": "gold",
     "composite": 82.58881922675026,
-    "digest": "55545be0c43f02be0a16c439b1a64da15422236471c9b097087f92c82342377a",
+    "digest": "bf16a4b8b377c26891ca3d43df625c54841c57b2a533da86d799cf92729ea5de",
     "static_score": 0.8165793103448276,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3256,9 +3151,9 @@
   },
   "llm-finetuning/eval-harness-first": {
     "badge": "silver",
-    "composite": 79.97945557267592,
-    "digest": "e6db5c2546ee070cefdaa5f94a591c24e354bf2c9d4377a14f043d4f267262ef",
-    "static_score": 0.7804966101694915,
+    "composite": 79.98012916045704,
+    "digest": "1dd44aeb61e98b29b823e95b8b7212580260e579f9c457534084464821884e94",
+    "static_score": 0.7805032786885245,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
@@ -3266,13 +3161,13 @@
       "orchestration_wiring": 0.95,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9977401129943503
+      "token_efficiency": 0.9978142076502732
     }
   },
   "llm-finetuning/finetuning-method-selection": {
     "badge": "gold",
     "composite": 80.41414141414141,
-    "digest": "adf23af7d1ae064bd525d6837ab01de534f3e61d441d928b205123e1ba9b67bf",
+    "digest": "c3fdf85f3fe57004ebddbf654b72368af0835da0767e18ecdc6c1d47e315c5dd",
     "static_score": 0.7903,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3286,9 +3181,9 @@
   },
   "llm-finetuning/grpo-rlvr-training": {
     "badge": "gold",
-    "composite": 80.4335260115607,
-    "digest": "80a87bbd4c868e677d5cf41961cb7225c8f4ea7857e132b28af40ff31c5dfcd0",
-    "static_score": 0.7904919075144509,
+    "composite": 80.43400102722137,
+    "digest": "b38a12f7acf9375e47fbc81ccaa669a82bed120a95089dc004871f8534683630",
+    "static_score": 0.7904966101694915,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
@@ -3296,14 +3191,14 @@
       "orchestration_wiring": 0.95,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9976878612716763
+      "token_efficiency": 0.9977401129943503
     }
   },
   "llm-finetuning/lora-qlora-recipes": {
     "badge": "gold",
-    "composite": 80.30058651026393,
-    "digest": "6a94e812f4e554e23080cda1653357903628159ca9c44e8b6be8694e21ce78f6",
-    "static_score": 0.7972258064516129,
+    "composite": 80.3018278018278,
+    "digest": "2ffcfc3010b46a6c982122d49be874a202d977af5a99625fa531aba674a63768",
+    "static_score": 0.7972380952380952,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
@@ -3311,14 +3206,14 @@
       "orchestration_wiring": 1.0,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.6,
-      "token_efficiency": 0.9913978494623656
+      "token_efficiency": 0.9915343915343915
     }
   },
   "llm-finetuning/preference-optimization": {
     "badge": "gold",
-    "composite": 80.43364681295716,
-    "digest": "aacec0789d3c47f0c01d8744f2c7c25359250af09f101d30fe2783a0525f7e74",
-    "static_score": 0.7904931034482758,
+    "composite": 80.43400102722137,
+    "digest": "74a39e06ca4fc2ee1f9860de4f70227f6d0237219069f3ae65c3d0e97a471b17",
+    "static_score": 0.7904966101694915,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
@@ -3326,14 +3221,14 @@
       "orchestration_wiring": 0.95,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9977011494252873
+      "token_efficiency": 0.9977401129943503
     }
   },
   "llm-finetuning/quantized-export": {
     "badge": "gold",
-    "composite": 82.4055944055944,
-    "digest": "935c171e7bb88a7e8a8b65438da6204d369bdf8880567efcbff031b30cbe10b7",
-    "static_score": 0.8120153846153846,
+    "composite": 82.40578372558069,
+    "digest": "aa8edb219fe190e625907a03dedfd639a23f9c7c137a31d9b84f00ac0775da1e",
+    "static_score": 0.8120172588832487,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
@@ -3341,20 +3236,20 @@
       "orchestration_wiring": 1.0,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.55,
-      "token_efficiency": 0.997948717948718
+      "token_efficiency": 0.9979695431472081
     }
   },
   "llm-finetuning/trace-to-training-data": {
     "badge": "silver",
-    "composite": 79.54545454545455,
-    "digest": "7f734a12585c3081b4bdf168e2c0ab053fc1f1d0f82ddbf16e0ff21933e30354",
-    "static_score": 0.7706999999999999,
+    "composite": 73.48484848484848,
+    "digest": "452116bf3cca93c7ef5a27899ff6f883f8694ec0615454b73086f612135d8073",
+    "static_score": 0.7147,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.95,
-      "progressive_disclosure": 0.75,
+      "progressive_disclosure": 0.35,
       "structural_completeness": 0.25,
       "token_efficiency": 1.0
     }
@@ -3362,7 +3257,7 @@
   "llm-finetuning/vision-sft": {
     "badge": "gold",
     "composite": 80.45454545454545,
-    "digest": "c7c785d54849105f95ca8aae0ea6e6edff4977737e0295b6b05c0975094f5392",
+    "digest": "f9793b97913e8b462514b18e48efcc465c94a9050b5af23025d5a40da4b31431",
     "static_score": 0.7907,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3375,18 +3270,18 @@
     }
   },
   "machine-learning-ops/ml-pipeline-workflow": {
-    "badge": "silver",
-    "composite": 73.6122211122211,
-    "digest": "15fb40fc0bfd8813f878bc29ed368e73753709bf1194c985ca50380e37ae9bf3",
-    "static_score": 0.757710989010989,
+    "badge": "no_badge",
+    "composite": 50.24979524979525,
+    "digest": "569f002224a006a3e4af71f80bd19ce6217fa4cb20b397c4a325c4070acbe79a",
+    "static_score": 0.5153229729729729,
     "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.71,
+      "ecosystem_coherence": 1.0,
+      "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.6,
-      "structural_completeness": 0.8,
-      "token_efficiency": 0.989010989010989
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.55,
+      "token_efficiency": 0.9963963963963964
     }
   },
   "machine-learning-ops/recsys-pipeline-architect": {
@@ -3467,7 +3362,7 @@
   "matter-ops/new-matter": {
     "badge": "bronze",
     "composite": 69.41634656423389,
-    "digest": "4580c91c886c6b47082da6098901b129b34b2165be42997274f8ebdc78890e1c",
+    "digest": "48964275993d500f097ae9477cb903d79fd6ed6fccea38fc58e5ab0f5cd22627",
     "static_score": 0.6949718309859155,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3496,17 +3391,17 @@
   },
   "matter-ops/redact-content": {
     "badge": "bronze",
-    "composite": 66.74242424242424,
-    "digest": "48f41c60cf88600b27b528d5e0aabf0619fd1b0b249ce65e316f4400499cf6a6",
-    "static_score": 0.6597,
+    "composite": 68.34224598930481,
+    "digest": "d5c6a95eb5a02bff4e6f98bfd1548ff6b5a0a7c6a4cf9af45740fed710684311",
+    "static_score": 0.6747882352941177,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
+      "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.5,
-      "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 1.0
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9843137254901961
     }
   },
   "matter-ops/track-entities": {
@@ -3572,7 +3467,7 @@
   "meta-wearables-ops/meta-dat-camera-audio": {
     "badge": "no_badge",
     "composite": 57.50454545454544,
-    "digest": "b810347415af40855eeb8b0d7a9dd11f072c1d494d63af3f6461573f8d6719c6",
+    "digest": "6e416e1af950f87a913f4565c969c8858fce1ba5adfb045e1ccf93606b873a38",
     "static_score": 0.57834,
     "sub_scores": {
       "ecosystem_coherence": 0.91,
@@ -3587,7 +3482,7 @@
   "meta-wearables-ops/meta-dat-display": {
     "badge": "no_badge",
     "composite": 56.44772727272727,
-    "digest": "f50a94f1f297cfc7d3cd8f517ff67d8c350b4fc738f088762e7a5578c78c96b6",
+    "digest": "32854df548471ec9baad2df109a9aac973c02d98cffe3c227a3c28209df82dff",
     "static_score": 0.561765,
     "sub_scores": {
       "ecosystem_coherence": 0.99,
@@ -3602,7 +3497,7 @@
   "meta-wearables-ops/meta-dat-ios-integration": {
     "badge": "no_badge",
     "composite": 56.89848484848485,
-    "digest": "680b64abf931aeb45cc099cfc6dc0d673c769536b62d88163a5b22aa7b4c8b90",
+    "digest": "2d11517b583d1bbce464fb39bfe791bb2255e7278b9f3039c013fdd7742009ab",
     "static_score": 0.5655899999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.99,
@@ -3691,11 +3586,11 @@
   },
   "meta-wearables-ops/meta-wearables-device-proof": {
     "badge": "no_badge",
-    "composite": 52.6060606060606,
-    "digest": "f24df8aaeb9c5e3d3eb45871f9541db1368e701616c3446a0338c420acd23889",
-    "static_score": 0.53696,
+    "composite": 55.86818181818181,
+    "digest": "55d9beba7c889d691f6c0e2bdede58190872f19951c22a0fd58b2a83fe8afa44",
+    "static_score": 0.57001,
     "sub_scores": {
-      "ecosystem_coherence": 1.0,
+      "ecosystem_coherence": 0.99,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7,
@@ -3797,7 +3692,7 @@
   "meta-wearables-ops/meta-wearables-privacy-publishing": {
     "badge": "bronze",
     "composite": 67.95454545454544,
-    "digest": "b1ed27b035c23ed72c26b523aeec005d3f52c0fe12d32214ae8821735e875721",
+    "digest": "9cf7113a87478ff4bcb1d7db598c477f6a7f41e05ce60fb30ecae016ec0ca1b7",
     "static_score": 0.6675,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3842,7 +3737,7 @@
   "meta-wearables-ops/meta-wearables-source-refresh": {
     "badge": "bronze",
     "composite": 63.49166666666666,
-    "digest": "5d9e4b8d4541c2393133f0266a5367a05cad9ebd7ca4dfa2d268cfec9db9a2bb",
+    "digest": "e079f41f53457efe5e8217ec74bb1370ea7312c4d8fe06534a21cf3efdea97b6",
     "static_score": 0.6248149999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.83,
@@ -3945,55 +3840,55 @@
     }
   },
   "payment-processing/billing-automation": {
-    "badge": "bronze",
-    "composite": 64.7112635791881,
-    "digest": "a3fc3f3e1a4908df18f8e11e5179349d426f650b3417c4c756d004e7e9cc7564",
-    "static_score": 0.6431415094339622,
+    "badge": "silver",
+    "composite": 71.17224880382776,
+    "digest": "18d2eaf5b7b8427d1ddf96c81c20c4c71c872140633a5eeb2f14770862ef1158",
+    "static_score": 0.7061052631578947,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9849056603773585
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9789473684210526
     }
   },
   "payment-processing/paypal-integration": {
     "badge": "silver",
-    "composite": 73.58628659476118,
-    "digest": "de05aa7bcd6ded716cde60362e87eb64274ea8f5c38ececf79e34571233b0740",
-    "static_score": 0.7294542372881356,
+    "composite": 73.40669856459331,
+    "digest": "699120fbab7ca00a4c01b931bcd49fe17450e4143a6a85bdfa9b7ba16b385081",
+    "static_score": 0.7249263157894738,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.49999999999999994,
-      "token_efficiency": 0.9694915254237289
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9747368421052631
     }
   },
   "payment-processing/pci-compliance": {
     "badge": "silver",
-    "composite": 77.83636363636364,
-    "digest": "0a0bcdd4902f958134db9ec9a4b4a31fe0327b248b5492ef2e14a375ff71cb31",
-    "static_score": 0.76078,
+    "composite": 71.8709090909091,
+    "digest": "2d2787a50dea52aa77fd8cfae3071fb13d9b9b266f39cd3da2c9ef108e6e3a2f",
+    "static_score": 0.721272,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.71,
+      "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.962
+      "orchestration_wiring": 0.8,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.6,
+      "token_efficiency": 0.9808
     }
   },
   "payment-processing/stripe-integration": {
     "badge": "silver",
-    "composite": 71.36914600550965,
-    "digest": "8f95a9ae28768b9d1370b284e2f10cdf5fb09569ff9a6a884a45403d0ef2aba9",
-    "static_score": 0.7027545454545454,
+    "composite": 71.37704478412444,
+    "digest": "de81dcee73dd8e8da89184a513fdadce605f073d8431499c858204630d286eb5",
+    "static_score": 0.7028327433628319,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
@@ -4001,7 +3896,7 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9672727272727273
+      "token_efficiency": 0.968141592920354
     }
   },
   "plugin-eval/evaluation-methodology": {
@@ -4021,17 +3916,17 @@
   },
   "protect-mcp/protect-mcp-setup": {
     "badge": "silver",
-    "composite": 77.34273110855389,
-    "digest": "c879bb1e4f758f4ba1288d0cdb8f33df7e1ddef75f7a7f68b89a03d3395c3eed",
-    "static_score": 0.7804430379746835,
+    "composite": 76.7926250456371,
+    "digest": "70ca402e1b568563b51c04c69397f2dfb6d4811ad7b8f71d222bf1cee5cb1f59",
+    "static_score": 0.7667469879518072,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.75,
-      "structural_completeness": 0.7000000000000001,
-      "token_efficiency": 0.9493670886075949
+      "structural_completeness": 0.5499999999999999,
+      "token_efficiency": 0.963855421686747
     }
   },
   "python-development/async-python-patterns": {
@@ -4051,24 +3946,24 @@
   },
   "python-development/python-anti-patterns": {
     "badge": "silver",
-    "composite": 75.29017108352902,
-    "digest": "ccb1afe28ba581e1ebd82ba1ec2c5713145a931265c5ffcc60372b3ba36630c2",
-    "static_score": 0.7425726937269372,
+    "composite": 75.30961791831358,
+    "digest": "399e0fb3b5115add592517560b86eac7b2da50a3808d56632b16cc4fb0a378aa",
+    "static_score": 0.7337652173913044,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
+      "harness_portability": 0.85,
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.6,
       "structural_completeness": 0.55,
-      "token_efficiency": 0.8819188191881919
+      "token_efficiency": 0.8840579710144928
     }
   },
   "python-development/python-background-jobs": {
     "badge": "silver",
-    "composite": 75.5116741182315,
-    "digest": "91a7404e95a43a1000cf0fb98b19d373ce729e5bbc5174c95a1a8dda02fb29d2",
-    "static_score": 0.7410655737704918,
+    "composite": 75.51383399209487,
+    "digest": "70b720ee8f1715d93fe36e92bd0d9c70f00ca5bf3ecc17ab3ec1cb3bb820b6fb",
+    "static_score": 0.7410869565217392,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -4076,7 +3971,7 @@
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9562841530054644
+      "token_efficiency": 0.9565217391304348
     }
   },
   "python-development/python-code-style": {
@@ -4112,7 +4007,7 @@
   "python-development/python-design-patterns": {
     "badge": "silver",
     "composite": 73.86363636363636,
-    "digest": "422cc8fd8cc7797bd5098e3a1b82b6ac33d358f8f9fb30e624716b99eafe85db",
+    "digest": "8b49d272234dd8fbb929c5bd012f7ad67e884cb9800a91604492151c84e2090e",
     "static_score": 0.7359,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -4156,9 +4051,9 @@
   },
   "python-development/python-packaging": {
     "badge": "silver",
-    "composite": 71.38257575757576,
-    "digest": "8f6f52cef0e2365041853a5fc07757f096c775a0272cedfbf7238babffb76e60",
-    "static_score": 0.7083875000000001,
+    "composite": 71.3939393939394,
+    "digest": "ca92160e124ac2220d9166c739ee293678826e7efcadf3f59bb814c8771cff43",
+    "static_score": 0.7085,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
@@ -4166,13 +4061,13 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.91875
+      "token_efficiency": 0.92
     }
   },
   "python-development/python-performance-optimization": {
     "badge": "bronze",
     "composite": 69.39393939393939,
-    "digest": "27c83db70e27a685ebd7b4276eb7ddbd5445843cf2b439cf7651ea2206cc9901",
+    "digest": "021fe117589ac0b0988dd7ea6fa9e2d5ea7a7a989b73f6c8ff361f9bb55559d9",
     "static_score": 0.6865,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4425,63 +4320,63 @@
     }
   },
   "shell-scripting/bash-defensive-patterns": {
-    "badge": "bronze",
-    "composite": 62.424242424242415,
-    "digest": "8f5e2148ed77c78670e7942fcc0144cc69bb5208a4e6b07b6e9309bf9640a2b3",
-    "static_score": 0.613,
+    "badge": "silver",
+    "composite": 72.50369549150037,
+    "digest": "e71a876d880824f0fc14de8e3144047f281dc0ca5f4a44998463294c200fce6d",
+    "static_score": 0.7130365853658537,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.15000000000000002,
-      "token_efficiency": 1.0
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.983739837398374
     }
   },
   "shell-scripting/bats-testing-patterns": {
     "badge": "silver",
-    "composite": 75.70809248554914,
-    "digest": "ead46043ad3d234aa3081a66981d23d6ed68cdc4f4251a549af4a141733e5fce",
-    "static_score": 0.7512601156069364,
+    "composite": 73.82762046696473,
+    "digest": "18b19d8b5f8de6d934fcb029c2e35526b19d145d1b95176c2593ba5f4b7f47c1",
+    "static_score": 0.7253934426229508,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.6000000000000001,
-      "token_efficiency": 0.9028901734104047
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.45,
+      "token_efficiency": 0.9377049180327869
     }
   },
   "shell-scripting/shellcheck-configuration": {
-    "badge": "bronze",
-    "composite": 62.424242424242415,
-    "digest": "acbff48a14170ca46ebb45c3ee7eae8b2e0e5f161a8b541e502f6d05df91056d",
-    "static_score": 0.613,
+    "badge": "silver",
+    "composite": 75.27361853832443,
+    "digest": "91e1e121d3f3685e006eb69f4fbb36d99d6b6f080c69bc0930ef796363ee4595",
+    "static_score": 0.7534588235294117,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.15000000000000002,
-      "token_efficiency": 1.0
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.7000000000000001,
+      "token_efficiency": 0.971764705882353
     }
   },
   "ship-mate/scan": {
     "badge": "silver",
-    "composite": 70.88923212709621,
-    "digest": "87b5af98b770179d67523536bf6dc4e68d9753c5395b1e9be3beeed19b8c968e",
-    "static_score": 0.7005533980582525,
+    "composite": 71.28274268104778,
+    "digest": "2c91aed5f3de2ddd2f69a39965032cec233b8e0b5b3ffd0e634ac568bffaae3b",
+    "static_score": 0.7099491525423729,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.4,
-      "token_efficiency": 0.9728155339805825
+      "structural_completeness": 0.5,
+      "token_efficiency": 0.9661016949152542
     }
   },
   "signed-audit-trails/signed-audit-trails-recipe": {
@@ -4697,7 +4592,7 @@
   "travel-packing-assistant/baggage-policy-research": {
     "badge": "bronze",
     "composite": 63.03030303030304,
-    "digest": "7be3ff8ddf1772aad646be821640a0ed5ba60fd318b3c0e805c0b9afc1051a24",
+    "digest": "23ba023ee9af492309e4913bc72b394aa21fe43831a93a66944a8153b1b17022",
     "static_score": 0.6217,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4712,7 +4607,7 @@
   "travel-packing-assistant/itinerary-intake": {
     "badge": "bronze",
     "composite": 61.74242424242424,
-    "digest": "69bd6cac574fd607c05411eed1fdaff306963a8ee1fd6a7fcfc361c4b0f884d3",
+    "digest": "5e22b031db136fabe24f8aadcddf0329bff6c2b7648c1c139d307586dd308d45",
     "static_score": 0.6077,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4727,7 +4622,7 @@
   "travel-packing-assistant/leave-behind": {
     "badge": "no_badge",
     "composite": 58.87878787878789,
-    "digest": "736b4440a7784bec2e355db78e7aa4fbbcbe014f57e94c9daf5d2f1ccae1a6ab",
+    "digest": "c3e97c89fd576c0f8fcf05b3fb76cac961601a0d13f4f4fcb1c5ab4307ab1eb6",
     "static_score": 0.5891,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4741,23 +4636,23 @@
   },
   "travel-packing-assistant/new-workspace": {
     "badge": "bronze",
-    "composite": 61.08748778103617,
-    "digest": "bbbe08481392b62d87fe83cde2df515b9207bdc11d39fffbb63a519003b6caee",
-    "static_score": 0.6122161290322581,
+    "composite": 65.7965367965368,
+    "digest": "76ca0023c3296e8261527b07e06bbb3de5786f503fa5e1850410564c75349c7f",
+    "static_score": 0.6585857142857143,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.35,
-      "token_efficiency": 0.9612903225806452
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.4,
+      "token_efficiency": 0.9542857142857143
     }
   },
   "travel-packing-assistant/overage-options": {
     "badge": "bronze",
     "composite": 61.28787878787878,
-    "digest": "8a16cffb96d5ab787b4121ecbad2750bf5011ae462da299f3724479b65da137c",
+    "digest": "eea6decfc81d2cc5df0c80f24ca62c99d9c76f2a7d310276d8fbd9cbba31cb95",
     "static_score": 0.5977,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4772,7 +4667,7 @@
   "travel-packing-assistant/pack-plan": {
     "badge": "bronze",
     "composite": 66.28787878787878,
-    "digest": "a40024823bd778a50fd73915bb92de9bd6dfc564853efbce837810a2254c98e4",
+    "digest": "c74d8568ee61b9bd1c8d89232fab6a80b2c9d451fd9fae31b3962d8d6d09e36f",
     "static_score": 0.6497,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4786,23 +4681,23 @@
   },
   "travel-packing-assistant/packing-docs": {
     "badge": "bronze",
-    "composite": 68.93206256109482,
-    "digest": "224727415875ec290977cc8a9fac9f63b7366b5d8e953ad80f3d2925312549cc",
-    "static_score": 0.6888774193548387,
+    "composite": 69.01763537009438,
+    "digest": "4b233e836990f3e83856c31ec2cbe0b4ad56bc4df25afbd1b0449a181c3c5764",
+    "static_score": 0.6807245901639344,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
-      "harness_portability": 1.0,
+      "harness_portability": 0.85,
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.5499999999999999,
-      "token_efficiency": 0.9741935483870967
+      "token_efficiency": 0.9836065573770492
     }
   },
   "travel-packing-assistant/packing-inventory": {
     "badge": "bronze",
     "composite": 61.28787878787878,
-    "digest": "d0c9661469a776811b5d7af76e12b42f1ac358a11f7f4759b8a47028abf48be2",
+    "digest": "e7980065fa48ca98ee3a2cfcf88834d5b4369a53b76b9ebf04e02bf120291479",
     "static_score": 0.5977,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4817,7 +4712,7 @@
   "travel-packing-assistant/weigh-bags": {
     "badge": "no_badge",
     "composite": 59.166666666666664,
-    "digest": "6d9c5d114b19d7da4894bd8cd22efca022200365d24910cad444099e1246b1d7",
+    "digest": "a284b4d2eedc07a968dc82ac36484990fc5196e4cb78a6e8919dac02493ef2d0",
     "static_score": 0.5947,
     "sub_scores": {
       "ecosystem_coherence": 0.5,

@@ -406,7 +406,7 @@ Represent failures explicitly:
 
 ## Proof-first completion
 
-A notification tranche is complete only when the evidence matches the claim:
+A notification feature is complete only when the evidence matches the claim:
 
 - documentation and target availability show which route is supported;
 - signed entitlements and Info.plist inspection show the capabilities and extension declarations;

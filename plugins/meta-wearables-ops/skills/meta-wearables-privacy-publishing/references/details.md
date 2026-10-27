@@ -12,6 +12,5 @@
 - [Application architecture](../../meta-wearables-app-architecture/SKILL.md)
 - [Developer Center operations](../../meta-wearables-developer-operations/SKILL.md)
 - [Security and attestation](../../meta-wearables-security-attestation/SKILL.md)
-- [iOS privacy/performance/release proof](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/ios-privacy-performance-release-proof/SKILL.md)
-- [iOS privacy, performance, and release proof](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/ios-privacy-performance-release-proof/SKILL.md)
+- [iOS release proof (privacy, performance, release)](https://github.com/shotcowboystyle/ag-skills/blob/main/plugins/ios-ops/skills/ios-release-proof/SKILL.md)
 

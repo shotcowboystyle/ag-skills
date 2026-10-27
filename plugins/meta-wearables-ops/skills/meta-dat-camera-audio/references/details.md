@@ -10,7 +10,7 @@
 - [Operational readiness](../../meta-wearables-operational-readiness/SKILL.md)
 - [Application architecture](../../meta-wearables-app-architecture/SKILL.md)
 - [Transport/reliability](../../meta-wearables-transport-reliability/SKILL.md)
-- [Apple media and ML routes](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/ios-media-ml-and-inputs/SKILL.md)
+- [Apple media and inputs](https://github.com/shotcowboystyle/ag-skills/blob/main/plugins/ios-ops/skills/ios-media-and-inputs/SKILL.md)
 
 
 ## Sources

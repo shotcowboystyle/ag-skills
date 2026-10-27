@@ -1,6 +1,6 @@
 # Framework Deep Dives
 
-This tranche turns the broad framework catalog into narrower implementation routes. Each page answers four questions:
+These pages turn the broad framework catalog into narrower implementation routes. Each page answers four questions:
 
 1. What user capability does this framework provide?
 2. What is the smallest native route to implement it?

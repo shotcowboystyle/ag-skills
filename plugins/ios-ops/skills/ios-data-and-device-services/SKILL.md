@@ -1,7 +1,8 @@
 ---
 name: ios-data-and-device-services
 description: Route, implement, or review iOS persistence, CloudKit sync, HealthKit, Contacts, EventKit, WeatherKit, HomeKit, Core Bluetooth, Nearby Interaction, and local-network features. Use when an app stores personal data, syncs across devices, reads protected records, discovers accessories, measures proximity, or connects to a local service.
-allowed-tools: Read, Grep, Glob
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash
+last_verified: 2026-08-19
 ---
 
 # iOS Data and Device Services
@@ -16,7 +17,7 @@ Use this skill to keep app-owned data, Apple-managed records, external service s
 
 - Inspect the actual Xcode targets, deployment target, platforms, model containers, schema/migrations, iCloud containers, capabilities, entitlements, usage descriptions, background modes, network/accessory protocols, and persistence/privacy adapters.
 - Read the [data/persistence/sync route](../ios-knowledge-base/references/40-framework-routes/01-data-persistence-and-sync.md), [location/maps/weather route](../ios-knowledge-base/references/40-framework-routes/03-location-maps-and-places.md), [SwiftData/CloudKit deep dives](../ios-knowledge-base/references/41-framework-deep-dives/00-swiftdata-and-local-persistence.md), [HealthKit deep dive](../ios-knowledge-base/references/42-framework-deep-dives/01-healthkit-and-sensitive-data.md), [HomeKit/Bluetooth/Nearby deep dive](../ios-knowledge-base/references/42-framework-deep-dives/02-homekit-bluetooth-and-nearby.md), and [contacts/calendar/network deep dives](../ios-knowledge-base/references/43-system-framework-deep-dives/01-contacts-calendar-and-notifications.md).
-- Refresh the exact official pages in the Sources section before relying on an authorization status, capability, entitlement, iCloud/account behavior, protected-data rule, radio state, local-network prompt, weather freshness, or background-delivery claim.
+- Refresh the official pages listed in `references/details.md` before relying on an authorization status, capability, entitlement, iCloud/account behavior, protected-data rule, radio state, local-network prompt, weather freshness, or background-delivery claim.
 
 ## Route workflow
 

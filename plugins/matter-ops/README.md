@@ -1,4 +1,4 @@
-[Part of the shotcowboystyle marketplace](https://github.com/shotcowboystyle/ai-plugins)
+[Part of the shotcowboystyle marketplace](../../README.md)
 
 ## Matter Ops Plugin
 
@@ -8,7 +8,7 @@ Working a matter — the workspace it lives in, the documents and sources that f
 the entities and timeline that organise it, the redacted copies that leave it, and the
 written output that closes it.
 
-Pairs with [`evidence-ops`](https://github.com/shotcowboystyle/evidence-ops-plugin),
+Pairs with [`evidence-ops`](../evidence-ops/README.md),
 which owns evidence handling mechanics — hashing, the custody register, timestamping,
 packaging, verification, and immutable storage. Each works on its own.
 

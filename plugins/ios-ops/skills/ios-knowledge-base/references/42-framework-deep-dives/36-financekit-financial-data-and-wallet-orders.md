@@ -38,7 +38,7 @@ Do not collapse all of these into one isConnected or isFinanciallyReady flag.
 
 ## Availability and entitlement
 
-Apple’s current FinanceKit start page lists region-specific requirements. At the time this tranche was researched, the page described:
+Apple’s current FinanceKit start page lists region-specific requirements. When this page was researched (August 2026), the page described:
 
 - United States: iPhone with iOS 17.4 or later, with Apple Card, Apple Cash, and Savings eligibility limitations.
 - United Kingdom: iPhone with iOS 18.4 or later, with open-banking availability for listed institutions.

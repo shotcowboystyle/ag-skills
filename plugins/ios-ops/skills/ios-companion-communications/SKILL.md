@@ -1,7 +1,8 @@
 ---
 name: ios-companion-communications
 description: Design, route, implement, or review iOS companion and communication features using WatchConnectivity, CarPlay, App Clips, CallKit, LiveCommunicationKit, PushKit, APNs, and UserNotifications. Use when a feature spans iPhone/Watch, a vehicle screen, an App Clip/full app handoff, VoIP/calling, default calling/dialer behavior, or specialized push delivery.
-allowed-tools: Read, Grep, Glob
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash
+last_verified: 2026-08-19
 ---
 
 # iOS Companion and Communications

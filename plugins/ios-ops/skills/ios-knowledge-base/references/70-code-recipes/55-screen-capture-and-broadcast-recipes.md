@@ -70,7 +70,7 @@ final class ReplayKitAdapter {
 }
 ~~~
 
-Do not use the existence of this sketch as proof that a current iOS 26 target should ship the deprecated route. Compile it, inspect warnings, run the permission and interruption matrix, and record the result.
+Do not use the existence of this sketch as proof that an iOS 26 target should ship the deprecated route. Compile it, inspect warnings, run the permission and interruption matrix, and record the result.
 
 ## Recipe 3: Gate a newer ScreenCaptureKit route
 

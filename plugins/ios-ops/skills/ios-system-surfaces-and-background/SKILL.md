@@ -1,7 +1,8 @@
 ---
 name: ios-system-surfaces-and-background
 description: Route, design, implement, or review iOS files/photos, WebKit/PDF, sharing, widgets, Live Activities, app extensions, File Provider, App Groups, and BackgroundTasks including iOS 26 continuous background work. Use when a feature leaves the main app process, touches user-owned documents/media, needs a system surface, or asks for background execution.
-allowed-tools: Read, Grep, Glob
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash
+last_verified: 2026-08-19
 ---
 
 # iOS System Surfaces and Background

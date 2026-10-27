@@ -61,7 +61,7 @@ At minimum, track:
 - [Transport and runtime reliability](../../meta-wearables-transport-reliability/SKILL.md)
 - [Debugging and observability](../../meta-wearables-debugging-observability/SKILL.md)
 - [Application architecture](../../meta-wearables-app-architecture/SKILL.md)
-- [Apple source refresh](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/ios-source-refresh-and-availability/SKILL.md)
+- [Apple knowledge-base refresh](https://github.com/shotcowboystyle/ag-skills/blob/main/plugins/ios-ops/README.md#knowledge-base)
 
 
 ## Sources

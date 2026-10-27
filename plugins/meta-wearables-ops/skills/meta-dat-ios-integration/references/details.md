@@ -30,8 +30,8 @@ Return:
 - [Operational readiness](../../meta-wearables-operational-readiness/SKILL.md)
 - [Debugging and observability](../../meta-wearables-debugging-observability/SKILL.md)
 - [Application architecture](../../meta-wearables-app-architecture/SKILL.md)
-- [Apple system surfaces](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/ios-system-surfaces-and-background/SKILL.md)
-- [Apple privacy and security](https://github.com/shotcowboystyle/ios-ops-plugin/blob/main/.agent/skills/ios-privacy-performance-release-proof/SKILL.md)
+- [Apple system surfaces](https://github.com/shotcowboystyle/ag-skills/blob/main/plugins/ios-ops/skills/ios-system-surfaces-and-background/SKILL.md)
+- [Apple privacy and release proof](https://github.com/shotcowboystyle/ag-skills/blob/main/plugins/ios-ops/skills/ios-release-proof/SKILL.md)
 
 
 ## Sources
