@@ -5,6 +5,7 @@ description: >-
   performance", "design a prompt template", "write better prompts", "debug prompt issues", "use
   chain-of-thought", "structured prompting", "few-shot prompting", or wants to apply advanced
   prompt engineering patterns for production LLM applications.
+last_verified: 2026-10-27
 ---
 
 # Prompt Engineering Patterns
@@ -85,7 +86,7 @@ class SQLQuery(BaseModel):
     tables_used: list[str] = Field(description="List of tables referenced")
 
 # Initialize model with structured output
-llm = ChatAnthropic(model="claude-sonnet-5")
+llm = ChatAnthropic(model="claude-sonnet-5-5")  # as of 2026-10
 structured_llm = llm.with_structured_output(SQLQuery)
 
 # Create prompt template
@@ -107,9 +108,19 @@ print(result.query)
 print(result.explanation)
 ```
 
-## Detailed patterns and worked examples
+## Bundled references
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+Read only the file the task needs:
+
+- `references/details.md`: structured output, dynamic few-shot selection, progressive disclosure, error recovery, RAG and caching patterns. Read when building a prompt into code.
+- `references/few-shot-learning.md`: example selection (similarity, diversity, difficulty, error-based) and token budgets. Read when choosing or trimming examples.
+- `references/chain-of-thought.md`: zero/few-shot CoT, self-consistency, least-to-most, tree-of-thought, verification. Read when the task needs multi-step reasoning.
+- `references/prompt-templates.md`: conditional, modular, inherited and multi-turn templates with variable validation. Read when building a template system.
+- `references/system-prompts.md`: system prompt structure and role patterns. Read when writing a system prompt.
+- `references/prompt-optimization.md`: baselines, A/B tests, failure analysis, versioning. Read when measuring or iterating on a prompt.
+- `assets/prompt-template-library.md`: copy-ready templates for classification, extraction, generation, transformation, analysis and QA.
+- `assets/few-shot-examples.json`: sample example sets by task.
+- `scripts/optimize-prompt.py`: runnable A/B and iterative optimization harness. Pass your own client with a `complete(prompt) -> str` method; `python scripts/optimize-prompt.py` runs a mock demo.
 
 ## Best Practices
 

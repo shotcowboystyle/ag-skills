@@ -223,46 +223,8 @@ edge_case_examples = [
 ]
 ```
 
-## Few-Shot Prompt Templates
-
-### Classification Template
-
-```python
-def build_classification_prompt(examples, query, labels):
-    prompt = f"Classify the text into one of these categories: {', '.join(labels)}\n\n"
-
-    for ex in examples:
-        prompt += f"Text: {ex['input']}\nCategory: {ex['output']}\n\n"
-
-    prompt += f"Text: {query}\nCategory:"
-    return prompt
-```
-
-### Extraction Template
-
-```python
-def build_extraction_prompt(examples, query):
-    prompt = "Extract structured information from the text.\n\n"
-
-    for ex in examples:
-        prompt += f"Text: {ex['input']}\nExtracted: {json.dumps(ex['output'])}\n\n"
-
-    prompt += f"Text: {query}\nExtracted:"
-    return prompt
-```
-
-### Transformation Template
-
-```python
-def build_transformation_prompt(examples, query):
-    prompt = "Transform the input according to the pattern shown in examples.\n\n"
-
-    for ex in examples:
-        prompt += f"Input: {ex['input']}\nOutput: {ex['output']}\n\n"
-
-    prompt += f"Input: {query}\nOutput:"
-    return prompt
-```
+For classification, extraction and transformation templates, see
+`../assets/prompt-template-library.md`.
 
 ## Evaluation and Optimization
 

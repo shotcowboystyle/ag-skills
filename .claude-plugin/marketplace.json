@@ -736,8 +736,8 @@
     },
     {
       "name": "llm-application-dev",
-      "description": "LLM application development with LangGraph, RAG systems, vector search, and AI agent architectures for Claude 4.6 and GPT-5.4",
-      "version": "2.0.6",
+      "description": "LLM application development with LangGraph, RAG systems, vector search, and agents built on LangChain 1.x",
+      "version": "2.1.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"

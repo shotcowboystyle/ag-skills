@@ -59,20 +59,26 @@ A: Let's think step by step:"""
 Generate multiple reasoning paths and take the majority vote:
 
 ```python
-import openai
 from collections import Counter
+from openai import OpenAI
+
+client = OpenAI()
+
+def extract_final_answer(text):
+    # Assumes the model ends with a line like "Answer: 150 miles"
+    return text.strip().splitlines()[-1].removeprefix("Answer:").strip()
 
 def self_consistency_cot(query, n=5, temperature=0.7):
     prompt = f"{query}\n\nLet's think step by step:"
 
     responses = []
     for _ in range(n):
-        response = openai.ChatCompletion.create(
-            model="gpt-5.4",
+        response = client.chat.completions.create(
+            model="gpt-5.5",  # as of 2026-10; check the provider's current model list
             messages=[{"role": "user", "content": prompt}],
             temperature=temperature
         )
-        responses.append(extract_final_answer(response))
+        responses.append(extract_final_answer(response.choices[0].message.content))
 
     # Take majority vote
     answer_counts = Counter(responses)

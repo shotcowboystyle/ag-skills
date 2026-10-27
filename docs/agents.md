@@ -160,11 +160,11 @@ Reference for 183 local AI agents organized by category. The model column lists 
 
 | Agent                                                                                                    | Model   | Description                                                           |
 | -------------------------------------------------------------------------------------------------------- | ------- | --------------------------------------------------------------------- |
-| [ai-engineer](../plugins/llm-application-dev/agents/ai-engineer.md)                                      | inherit | LLM applications, RAG systems, prompt pipelines                       |
+| [ai-engineer](../plugins/llm-application-dev/agents/ai-engineer.md)                                      | sonnet  | Architecture decision for one LLM feature (call, chain, RAG, agent)   |
 | [ml-engineer](../plugins/machine-learning-ops/agents/ml-engineer.md)                                     | inherit | ML pipelines, model serving, feature engineering                      |
 | [mlops-engineer](../plugins/machine-learning-ops/agents/mlops-engineer.md)                               | inherit | ML infrastructure, experiment tracking, model registries              |
-| [prompt-engineer](../plugins/llm-application-dev/agents/prompt-engineer.md)                              | inherit | LLM prompt optimization and engineering                               |
-| [vector-database-engineer](../plugins/llm-application-dev/agents/vector-database-engineer.md)            | inherit | Vector databases, embeddings, similarity search, and hybrid retrieval |
+| [prompt-engineer](../plugins/llm-application-dev/agents/prompt-engineer.md)                              | sonnet  | Write or revise one production prompt, with test cases                |
+| [vector-database-engineer](../plugins/llm-application-dev/agents/vector-database-engineer.md)            | sonnet  | Vector search setup recommendation for a corpus and query workload    |
 | [llm-finetuning-architect](../plugins/llm-finetuning/agents/llm-finetuning-architect.md)                 | opus    | Fine-tuning strategy, method/model selection, eval-gate ownership     |
 | [llm-finetuning-training-engineer](../plugins/llm-finetuning/agents/llm-finetuning-training-engineer.md) | sonnet  | Dataset prep, Unsloth training runs, artifact export                  |
 | [llm-finetuning-eval-engineer](../plugins/llm-finetuning/agents/llm-finetuning-eval-engineer.md)         | sonnet  | Golden sets, judge calibration, checkpoint promotion verdicts         |

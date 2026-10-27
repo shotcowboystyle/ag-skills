@@ -1,6 +1,7 @@
 ---
 description: "Build AI assistant application with NLU, dialog management, and integrations"
 argument-hint: "<assistant-type> [options]"
+last_verified: 2026-10-27
 ---
 
 # AI Assistant Development
@@ -636,6 +637,8 @@ class LLMIntegrationLayer:
     def create_function_calling_interface(self):
         """Create function calling interface for LLMs"""
         return '''
+import json
+
 class FunctionCallingInterface:
     def __init__(self):
         self.functions = {}
@@ -654,11 +657,13 @@ class FunctionCallingInterface:
 
     async def process_function_call(self, llm_response):
         """Process function calls from LLM"""
-        if 'function_call' not in llm_response:
+        # OpenAI-style tool call; Anthropic returns tool_use content blocks instead
+        if not llm_response.get('tool_calls'):
             return llm_response
 
-        function_name = llm_response['function_call']['name']
-        arguments = llm_response['function_call']['arguments']
+        tool_call = llm_response['tool_calls'][0]  # handles one call per turn
+        function_name = tool_call['function']['name']
+        arguments = json.loads(tool_call['function']['arguments'])
 
         if function_name not in self.functions:
             return {'error': f'Unknown function: {function_name}'}

@@ -2,18 +2,17 @@
 
 ## Templates
 
-### Template 1: Voyage AI Embeddings (Recommended for Claude)
+### Template 1: Voyage AI Embeddings
+
+Model names as of 2026-10; check Voyage's docs for the current list, dimensions and
+context limits.
 
 ```python
 from langchain_voyageai import VoyageAIEmbeddings
 from typing import List
-import os
 
-# Initialize Voyage AI embeddings (recommended by Anthropic for Claude)
-embeddings = VoyageAIEmbeddings(
-    model="voyage-3-large",
-    voyage_api_key=os.environ.get("VOYAGE_API_KEY")
-)
+# Reads VOYAGE_API_KEY from the environment
+embeddings = VoyageAIEmbeddings(model="voyage-4-large")
 
 def get_embeddings(texts: List[str]) -> List[List[float]]:
     """Get embeddings from Voyage AI."""
@@ -23,8 +22,8 @@ def get_query_embedding(query: str) -> List[float]:
     """Get single query embedding."""
     return embeddings.embed_query(query)
 
-# Specialized models for domains
-code_embeddings = VoyageAIEmbeddings(model="voyage-code-3")
+# Specialized models (as of 2026-10)
+code_embeddings = VoyageAIEmbeddings(model="voyage-code-4")
 finance_embeddings = VoyageAIEmbeddings(model="voyage-finance-2")
 legal_embeddings = VoyageAIEmbeddings(model="voyage-law-2")
 ```
@@ -139,147 +138,85 @@ class E5Embedder:
 
 ### Template 4: Chunking Strategies
 
+Use `langchain-text-splitters` for recursive and header-aware splitting rather than a
+hand-rolled splitter. The token chunker below shows the overlap arithmetic.
+
 ```python
-from typing import List, Tuple
 import re
+
+import tiktoken
+from langchain_text_splitters import (
+    MarkdownHeaderTextSplitter,
+    RecursiveCharacterTextSplitter,
+)
+
 
 def chunk_by_tokens(
     text: str,
     chunk_size: int = 512,
     chunk_overlap: int = 50,
-    tokenizer=None
-) -> List[str]:
-    """Chunk text by token count."""
-    import tiktoken
-    tokenizer = tokenizer or tiktoken.get_encoding("cl100k_base")
-
-    tokens = tokenizer.encode(text)
+    encoding_name: str = "cl100k_base",
+) -> list[str]:
+    """Fixed-size token windows with overlap. Count tokens with the tokenizer of the
+    embedding model you use; cl100k_base is only an approximation for non-OpenAI models."""
+    if not 0 <= chunk_overlap < chunk_size:
+        raise ValueError("need 0 <= chunk_overlap < chunk_size")
+    enc = tiktoken.get_encoding(encoding_name)
+    tokens = enc.encode(text)
     chunks = []
-
-    start = 0
-    while start < len(tokens):
-        end = start + chunk_size
-        chunk_tokens = tokens[start:end]
-        chunk_text = tokenizer.decode(chunk_tokens)
-        chunks.append(chunk_text)
-        start = end - chunk_overlap
-
+    step = chunk_size - chunk_overlap
+    for start in range(0, len(tokens), step):
+        chunks.append(enc.decode(tokens[start:start + chunk_size]))
+        if start + chunk_size >= len(tokens):
+            break
     return chunks
 
 
-def chunk_by_sentences(
-    text: str,
-    max_chunk_size: int = 1000,
-    min_chunk_size: int = 100
-) -> List[str]:
-    """Chunk text by sentences, respecting size limits."""
-    import nltk
-    sentences = nltk.sent_tokenize(text)
+# Recursive split on paragraph -> line -> sentence -> word boundaries
+recursive = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+    encoding_name="cl100k_base", chunk_size=512, chunk_overlap=50
+)
 
-    chunks = []
-    current_chunk = []
-    current_size = 0
+# Markdown: split on headers, keep the header path as metadata, then size-limit
+markdown = MarkdownHeaderTextSplitter(
+    headers_to_split_on=[("#", "h1"), ("##", "h2"), ("###", "h3")]
+)
 
+
+def chunk_markdown(text: str) -> list[dict]:
+    sections = markdown.split_text(text)
+    return [
+        {"text": doc.page_content, "metadata": doc.metadata}
+        for doc in recursive.split_documents(sections)
+    ]
+
+
+def chunk_by_sentences(text: str, max_chars: int = 1000) -> list[str]:
+    """Greedy sentence packing. The regex is a cheap splitter; use a real sentence
+    segmenter (nltk, spaCy) for abbreviations and non-English text."""
+    sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+    chunks, current = [], ""
     for sentence in sentences:
-        sentence_size = len(sentence)
-
-        if current_size + sentence_size > max_chunk_size and current_chunk:
-            chunks.append(" ".join(current_chunk))
-            current_chunk = []
-            current_size = 0
-
-        current_chunk.append(sentence)
-        current_size += sentence_size
-
-    if current_chunk:
-        chunks.append(" ".join(current_chunk))
-
-    return chunks
-
-
-def chunk_by_semantic_sections(
-    text: str,
-    headers_pattern: str = r'^#{1,3}\s+.+$'
-) -> List[Tuple[str, str]]:
-    """Chunk markdown by headers, preserving hierarchy."""
-    lines = text.split('\n')
-    chunks = []
-    current_header = ""
-    current_content = []
-
-    for line in lines:
-        if re.match(headers_pattern, line, re.MULTILINE):
-            if current_content:
-                chunks.append((current_header, '\n'.join(current_content)))
-            current_header = line
-            current_content = []
+        if current and len(current) + len(sentence) + 1 > max_chars:
+            chunks.append(current)
+            current = sentence
         else:
-            current_content.append(line)
-
-    if current_content:
-        chunks.append((current_header, '\n'.join(current_content)))
-
+            current = f"{current} {sentence}".strip()
+    if current:
+        chunks.append(current)
     return chunks
 
 
-def recursive_character_splitter(
-    text: str,
-    chunk_size: int = 1000,
-    chunk_overlap: int = 200,
-    separators: List[str] = None
-) -> List[str]:
-    """LangChain-style recursive splitter."""
-    separators = separators or ["\n\n", "\n", ". ", " ", ""]
-
-    def split_text(text: str, separators: List[str]) -> List[str]:
-        if not text:
-            return []
-
-        separator = separators[0]
-        remaining_separators = separators[1:]
-
-        if separator == "":
-            # Character-level split
-            return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size - chunk_overlap)]
-
-        splits = text.split(separator)
-        chunks = []
-        current_chunk = []
-        current_length = 0
-
-        for split in splits:
-            split_length = len(split) + len(separator)
-
-            if current_length + split_length > chunk_size and current_chunk:
-                chunk_text = separator.join(current_chunk)
-
-                # Recursively split if still too large
-                if len(chunk_text) > chunk_size and remaining_separators:
-                    chunks.extend(split_text(chunk_text, remaining_separators))
-                else:
-                    chunks.append(chunk_text)
-
-                # Start new chunk with overlap
-                overlap_splits = []
-                overlap_length = 0
-                for s in reversed(current_chunk):
-                    if overlap_length + len(s) <= chunk_overlap:
-                        overlap_splits.insert(0, s)
-                        overlap_length += len(s)
-                    else:
-                        break
-                current_chunk = overlap_splits
-                current_length = overlap_length
-
-            current_chunk.append(split)
-            current_length += split_length
-
-        if current_chunk:
-            chunks.append(separator.join(current_chunk))
-
-        return chunks
-
-    return split_text(text, separators)
+if __name__ == "__main__":
+    text = " ".join(f"word{i}" for i in range(2000))
+    chunks = chunk_by_tokens(text, chunk_size=100, chunk_overlap=20)
+    enc = tiktoken.get_encoding("cl100k_base")
+    n = len(enc.encode(text))
+    assert len(chunks) == -(-(n - 20) // 80)  # no trailing overlap-only chunk
+    assert chunk_by_tokens("short", 100, 20) == ["short"]
+    md = "# A\nintro\n## B\nbody text"
+    assert chunk_markdown(md)[-1]["metadata"] == {"h1": "A", "h2": "B"}
+    assert chunk_by_sentences("One. Two. Three.", max_chars=9) == ["One. Two.", "Three."]
 ```
 
 ### Template 5: Domain-Specific Embedding Pipeline
@@ -288,6 +225,9 @@ def recursive_character_splitter(
 import re
 from typing import List, Optional
 from dataclasses import dataclass
+
+from langchain_voyageai import VoyageAIEmbeddings
+# chunk_by_tokens from Template 4
 
 @dataclass
 class EmbeddedDocument:
@@ -303,7 +243,7 @@ class DomainEmbeddingPipeline:
 
     def __init__(
         self,
-        embedding_model: str = "voyage-3-large",
+        embedding_model: str = "voyage-4-large",
         chunk_size: int = 512,
         chunk_overlap: int = 50,
         preprocessing_fn=None
@@ -375,14 +315,15 @@ class CodeEmbeddingPipeline:
     """Specialized pipeline for code embeddings."""
 
     def __init__(self):
-        # Use Voyage's code-specific model
-        self.embeddings = VoyageAIEmbeddings(model="voyage-code-3")
+        # Voyage's code-specific model (as of 2026-10)
+        self.embeddings = VoyageAIEmbeddings(model="voyage-code-4")
 
     def chunk_code(self, code: str, language: str) -> List[dict]:
         """Chunk code by functions/classes using tree-sitter."""
         try:
-            import tree_sitter_languages
-            parser = tree_sitter_languages.get_parser(language)
+            # tree-sitter-language-pack replaces the unmaintained tree-sitter-languages
+            from tree_sitter_language_pack import get_parser
+            parser = get_parser(language)
             tree = parser.parse(bytes(code, "utf8"))
 
             chunks = []
@@ -390,7 +331,7 @@ class CodeEmbeddingPipeline:
             self._extract_nodes(tree.root_node, code, chunks)
             return chunks
         except ImportError:
-            # Fallback to simple chunking
+            # Safe to continue: the whole file becomes one chunk when tree-sitter is absent
             return [{"text": code, "type": "module"}]
 
     def _extract_nodes(self, node, source_code: str, chunks: list):
