@@ -1,10 +1,14 @@
 # billing-automation — detailed patterns and worked examples
 
+These are sketches of what a billing provider does internally. They show the moving parts if you build; they are not a drop-in engine. Helpers such as `generate_id`, `get_subscription`, and `send_email` stand for your own persistence and email code. If you use Stripe Billing, Chargebee, or Recurly, most of this is configuration, not code.
+
 ## Subscription Lifecycle Management
 
 ```python
 from datetime import datetime, timedelta
 from enum import Enum
+
+from dateutil.relativedelta import relativedelta  # pip install python-dateutil
 
 class SubscriptionStatus(Enum):
     TRIAL = "trial"
@@ -52,12 +56,13 @@ class Subscription:
 
     def calculate_next_billing_date(self):
         """Calculate next billing date based on interval."""
+        # Calendar months/years, not 30/365 days: Jan 31 + 1 month = Feb 28/29
         if self.plan.interval == 'month':
-            return self.current_period_start + timedelta(days=30)
+            return self.current_period_start + relativedelta(months=1)
         elif self.plan.interval == 'year':
-            return self.current_period_start + timedelta(days=365)
+            return self.current_period_start + relativedelta(years=1)
         elif self.plan.interval == 'week':
-            return self.current_period_start + timedelta(days=7)
+            return self.current_period_start + timedelta(weeks=1)
 ```
 
 ## Billing Cycle Processing
@@ -78,7 +83,8 @@ class BillingEngine:
         # Attempt payment
         payment_result = self.charge_customer(
             subscription.customer_id,
-            invoice.total
+            invoice.total,
+            invoice.id
         )
 
         if payment_result.success:
@@ -122,21 +128,25 @@ class BillingEngine:
         invoice.finalize()
         return invoice
 
-    def charge_customer(self, customer_id, amount):
-        """Charge customer using saved payment method."""
+    def charge_customer(self, customer_id, amount_cents: int, invoice_id):
+        """Charge the customer's saved payment method off-session."""
         customer = self.get_customer(customer_id)
 
         try:
-            # Charge using payment processor
-            charge = stripe.Charge.create(
+            intent = stripe.PaymentIntent.create(
                 customer=customer.stripe_id,
-                amount=int(amount * 100),  # Convert to cents
-                currency='usd'
+                payment_method=customer.default_payment_method_id,
+                amount=amount_cents,  # integer smallest currency unit, never float dollars
+                currency='usd',
+                off_session=True,
+                confirm=True,
+                idempotency_key=f"invoice-{invoice_id}",  # a retried job can't double-charge
             )
-
-            return PaymentResult(success=True, transaction_id=charge.id)
-        except stripe.error.CardError as e:
-            return PaymentResult(success=False, error=str(e))
+            return PaymentResult(success=intent.status == 'succeeded', transaction_id=intent.id)
+        except stripe.CardError as e:
+            # Declines and authentication_required (SCA) land here; both go to dunning.
+            # On authentication_required, email the customer a link to confirm on-session.
+            return PaymentResult(success=False, error=e.code)
 ```
 
 ## Dunning Management
@@ -173,7 +183,7 @@ class DunningManager:
         invoice = self.get_invoice(dunning_attempt.invoice_id)
 
         # Attempt payment again
-        result = self.charge_customer(subscription.customer_id, invoice.total)
+        result = self.charge_customer(subscription.customer_id, invoice.total, invoice.id)
 
         if result.success:
             # Payment succeeded
@@ -264,72 +274,27 @@ class ProrationCalculator:
 
 ## Tax Calculation
 
+Don't hard-code tax rates. They differ by state, county, city, and product type, they change, and you only owe tax where you are registered or have nexus. Call a tax engine per invoice with the customer's address and your product tax code:
+
+- Stripe Tax (`automatic_tax={"enabled": True}` on Checkout, Subscriptions, and Invoices)
+- Avalara, Anrok, TaxJar, or Vertex via their APIs
+- A merchant of record (Paddle, Lemon Squeezy) if you want them to be the seller and remit tax for you
+
 ```python
-class TaxCalculator:
-    """Calculate sales tax, VAT, GST."""
-
-    def __init__(self):
-        # Tax rates by region
-        self.tax_rates = {
-            'US_CA': 0.0725,  # California sales tax
-            'US_NY': 0.04,    # New York sales tax
-            'GB': 0.20,       # UK VAT
-            'DE': 0.19,       # Germany VAT
-            'FR': 0.20,       # France VAT
-            'AU': 0.10,       # Australia GST
-        }
-
-    def calculate_tax(self, amount, customer):
-        """Calculate applicable tax."""
-        # Determine tax jurisdiction
-        jurisdiction = self.get_tax_jurisdiction(customer)
-
-        if not jurisdiction:
-            return 0
-
-        # Get tax rate
-        tax_rate = self.tax_rates.get(jurisdiction, 0)
-
-        # Calculate tax
-        tax = amount * tax_rate
-
-        return {
-            'tax_amount': tax,
-            'tax_rate': tax_rate,
-            'jurisdiction': jurisdiction,
-            'tax_type': self.get_tax_type(jurisdiction)
-        }
-
-    def get_tax_jurisdiction(self, customer):
-        """Determine tax jurisdiction based on customer location."""
-        if customer.country == 'US':
-            # US: Tax based on customer state
-            return f"US_{customer.state}"
-        elif customer.country in ['GB', 'DE', 'FR']:
-            # EU: VAT
-            return customer.country
-        elif customer.country == 'AU':
-            # Australia: GST
-            return 'AU'
-        else:
-            return None
-
-    def get_tax_type(self, jurisdiction):
-        """Get type of tax for jurisdiction."""
-        if jurisdiction.startswith('US_'):
-            return 'Sales Tax'
-        elif jurisdiction in ['GB', 'DE', 'FR']:
-            return 'VAT'
-        elif jurisdiction == 'AU':
-            return 'GST'
-        return 'Tax'
-
-    def validate_vat_number(self, vat_number, country):
-        """Validate EU VAT number."""
-        # Use VIES API for validation
-        # Returns True if valid, False otherwise
-        pass
+# Stripe Tax on a one-off calculation, e.g. to show tax before checkout
+calculation = stripe.tax.Calculation.create(
+    currency="usd",
+    line_items=[{"amount": 2000, "reference": "pro_monthly", "tax_code": "txcd_10103001"}],  # SaaS
+    customer_details={
+        "address": {"line1": "510 Townsend St", "city": "San Francisco", "state": "CA",
+                    "postal_code": "94103", "country": "US"},
+        "address_source": "billing",
+    },
+)
+tax_cents = calculation.tax_amount_exclusive
 ```
+
+For EU B2B reverse charge, validate the customer's VAT number (VIES) and pass it as a customer tax ID so the engine applies reverse charge.
 
 ## Invoice Generation
 

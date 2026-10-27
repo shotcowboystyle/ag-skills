@@ -1,6 +1,7 @@
 ---
 name: stripe-integration
 description: Implement Stripe payment processing for robust, PCI-compliant payment flows including checkout, subscriptions, and webhooks. Use when integrating Stripe payments, building subscription systems, or implementing secure checkout flows.
+last_verified: 2026-10-27
 ---
 
 # Stripe Integration
@@ -136,10 +137,12 @@ def test_payment_flow():
         customer=customer.id
     )
 
-    # Confirm with test card
+    # Confirm with test card. automatic_payment_methods can include redirect-based
+    # methods, so Stripe requires a return_url when confirming server-side.
     confirmed = stripe.PaymentIntent.confirm(
         intent.id,
-        payment_method='pm_card_visa'  # Test payment method
+        payment_method='pm_card_visa',  # Test payment method
+        return_url='https://yourdomain.com/complete'
     )
 
     assert confirmed.status == 'succeeded'
