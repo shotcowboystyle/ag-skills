@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import itertools
 import json
 import re
 import tomllib
@@ -9,7 +10,6 @@ from pathlib import Path
 
 import pytest
 import yaml
-
 from tools.doc_gardener import Report, check_split_corruption
 
 PLUGINS = Path(__file__).resolve().parents[2] / "plugins"
@@ -51,7 +51,12 @@ def test_changelog_has_no_unconfirmed_push() -> None:
 def test_changelog_releases_are_drafts() -> None:
     configs = [json.loads(b) for b in _changelog_blocks("json") if '"release-type"' in b]
     assert configs and all(c["draft"] is True for c in configs)
-    gh_release = [line for b in _changelog_blocks("yaml") for line in b.splitlines() if "gh release create" in line]
+    gh_release = [
+        line
+        for b in _changelog_blocks("yaml")
+        for line in b.splitlines()
+        if "gh release create" in line
+    ]
     assert gh_release and all("--draft" in line for line in gh_release)
 
 
@@ -69,11 +74,15 @@ def test_changelog_actions_pinned_to_sha() -> None:
     assert uses and all(re.fullmatch(r"[\w.-]+/[\w.-]+@[0-9a-f]{40}", u) for u in uses), uses
 
 
-@pytest.mark.parametrize("skill", ["icon-illustration-systems", "screen-flow-patterns", "page-composition-engine"])
+@pytest.mark.parametrize(
+    "skill", ["icon-illustration-systems", "screen-flow-patterns", "page-composition-engine"]
+)
 def test_design_ops_skill_has_no_empty_sections(skill: str) -> None:
     """A heading followed straight by a same-or-higher heading is splitter residue."""
-    lines = [line for line in (DESIGN_OPS / skill / "SKILL.md").read_text().splitlines() if line.strip()]
-    for here, nxt in zip(lines, lines[1:]):
+    lines = [
+        line for line in (DESIGN_OPS / skill / "SKILL.md").read_text().splitlines() if line.strip()
+    ]
+    for here, nxt in itertools.pairwise(lines):
         a, b = HEADING.match(here), HEADING.match(nxt)
         if a and b:
             assert len(b.group(1)) > len(a.group(1)), f"empty section: {here!r}"
@@ -81,5 +90,7 @@ def test_design_ops_skill_has_no_empty_sections(skill: str) -> None:
 
 def test_page_composition_uses_no_undefined_block_ids() -> None:
     text = (DESIGN_OPS / "page-composition-engine" / "SKILL.md").read_text()
-    ids = re.findall(r"\b(?:NAV|HERO|PROOF|FEAT|STATS|CTA|PRICE|FAQ|FOOTER|DASH|CONTENT|FORM|TEAM)-\d\d\b", text)
+    ids = re.findall(
+        r"\b(?:NAV|HERO|PROOF|FEAT|STATS|CTA|PRICE|FAQ|FOOTER|DASH|CONTENT|FORM|TEAM)-\d\d\b", text
+    )
     assert ids == []
