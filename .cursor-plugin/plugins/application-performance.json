@@ -1,7 +1,7 @@
 {
   "name": "application-performance",
   "displayName": "Application Performance",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Application profiling, performance optimization, and observability for frontend and backend systems",
   "author": {
     "name": "Curtis Blanton",

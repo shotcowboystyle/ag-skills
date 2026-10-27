@@ -1,6 +1,6 @@
 # Agent Reference
 
-Reference for 165 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
+Reference for 164 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
 
 ## Agent Categories
 
@@ -111,8 +111,8 @@ Reference for 165 local AI agents organized by category. The model column lists 
 
 | Agent                                                                                            | Model  | Description                                                     |
 | ------------------------------------------------------------------------------------------------ | ------ | --------------------------------------------------------------- |
-| [code-reviewer](../plugins/comprehensive-review/agents/code-reviewer.md)                         | opus   | Code review with security focus and production reliability      |
-| [security-auditor](../plugins/comprehensive-review/agents/security-auditor.md)                   | opus   | Vulnerability assessment and OWASP compliance                   |
+| [code-reviewer](../plugins/comprehensive-review/agents/code-reviewer.md) | opus | Ranked review findings and a verdict; read-only |
+| [security-auditor](../plugins/comprehensive-review/agents/security-auditor.md) | opus | OWASP Top 10:2025 / ASVS 5.0 audit; read-only, implements nothing |
 | [backend-security-coder](../plugins/backend-api-security/agents/backend-security-coder.md)       | sonnet | Secure backend coding practices, API security implementation    |
 | [frontend-security-coder](../plugins/frontend-mobile-security/agents/frontend-security-coder.md) | sonnet | XSS prevention, CSP implementation, client-side security        |
 | [mobile-security-coder](../plugins/frontend-mobile-security/agents/mobile-security-coder.md)     | sonnet | Mobile security patterns, WebView security, biometric auth      |
@@ -133,16 +133,16 @@ Reference for 165 local AI agents organized by category. The model column lists 
 
 | Agent                                                                         | Model  | Description                                                |
 | ----------------------------------------------------------------------------- | ------ | ---------------------------------------------------------- |
-| [test-automator](../plugins/codebase-cleanup/agents/test-automator.md)        | sonnet | Comprehensive test suite creation (unit, integration, e2e) |
-| [tdd-orchestrator](../plugins/backend-development/agents/tdd-orchestrator.md) | opus   | Test-Driven Development methodology guidance               |
-| [debugger](../plugins/error-debugging/agents/debugger.md)                     | sonnet | Error resolution and test failure analysis                 |
-| [error-detective](../plugins/error-debugging/agents/error-detective.md)       | sonnet | Log analysis and error pattern recognition                 |
+| [test-automator](../plugins/unit-testing/agents/test-automator.md) | sonnet | Writes tests in the project framework and runs them |
+| [tdd-orchestrator](../plugins/tdd-workflows/agents/tdd-orchestrator.md) | sonnet | Red-green-refactor loop, suite run at every step |
+| [debugger](../plugins/error-debugging/agents/debugger.md) | sonnet | Reproducible bug to root cause, regression test, smallest fix |
+| [error-detective](../plugins/error-debugging/agents/error-detective.md) | sonnet | Error signature, timeline and scope from logs; redacts secrets |
 
 #### Performance & Observability
 
 | Agent                                                                                          | Model   | Description                                                    |
 | ---------------------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------- |
-| [performance-engineer](../plugins/observability-monitoring/agents/performance-engineer.md)     | inherit | Application profiling and optimization                         |
+| [performance-engineer](../plugins/application-performance/agents/performance-engineer.md) | sonnet | Measured bottlenecks and ranked fixes; INP-based web vitals |
 | [observability-engineer](../plugins/observability-monitoring/agents/observability-engineer.md) | sonnet | Instrumentation, SLOs and burn-rate alerts for one service |
 
 ### Data & AI

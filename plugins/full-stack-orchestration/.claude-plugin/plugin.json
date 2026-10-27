@@ -1,6 +1,6 @@
 {
   "name": "full-stack-orchestration",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "End-to-end feature orchestration with testing, security, performance, and deployment",
   "author": {
     "name": "Curtis Blanton",

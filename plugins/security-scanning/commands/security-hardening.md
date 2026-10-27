@@ -196,10 +196,10 @@ Use the Task tool:
 
 ```
 Task:
-  subagent_type: "security-scanning-security-auditor"
+  subagent_type: "general-purpose"
   description: "Remediate critical vulnerabilities for $TARGET"
   prompt: |
-    Coordinate immediate remediation of critical vulnerabilities (CVSS 7+) in: $TARGET.
+    You are an application security engineer. Coordinate immediate remediation of critical vulnerabilities (CVSS 7+) in: $TARGET.
 
     ## Vulnerability Scan Results
     [Insert contents of .security-hardening/01-vulnerability-scan.md]
@@ -369,10 +369,10 @@ Use the Task tool:
 
 ```
 Task:
-  subagent_type: "security-scanning-security-auditor"
+  subagent_type: "general-purpose"
   description: "Enhance authentication and authorization for $TARGET"
   prompt: |
-    Implement a modern authentication system for: $TARGET.
+    You are an identity and access engineer. Implement a modern authentication system for: $TARGET.
 
     ## Architecture Review
     [Insert contents of .security-hardening/03-architecture-review.md]
@@ -491,7 +491,7 @@ Do NOT proceed to Phase 4 until the user approves.
 
 ## Phase 4: Validation & Compliance (Steps 11–13)
 
-### Step 11: Penetration Testing & Validation
+### Step 11: Fix Validation
 
 Read `.security-hardening/04-critical-fixes.md`, `.security-hardening/05-backend-hardening.md`, and `.security-hardening/08-auth-enhancement.md`.
 
@@ -500,9 +500,9 @@ Use the Task tool:
 ```
 Task:
   subagent_type: "security-scanning-security-auditor"
-  description: "Penetration testing and validation for $TARGET"
+  description: "Validate security fixes for $TARGET"
   prompt: |
-    Execute comprehensive penetration testing for: $TARGET.
+    Validate the security fixes for: $TARGET.
 
     ## Critical Fixes Applied
     [Insert contents of .security-hardening/04-critical-fixes.md]
@@ -514,15 +514,14 @@ Task:
     [Insert contents of .security-hardening/08-auth-enhancement.md]
 
     ## Instructions
-    1. Perform authenticated and unauthenticated testing
-    2. Execute API security testing
-    3. Test business logic vulnerabilities
-    4. Attempt privilege escalation
-    5. Validate all security controls effectiveness
-    6. Use Burp Suite, Metasploit, and custom exploit patterns
+    1. Re-trace every finding from the vulnerability scan and mark it closed, open or regressed
+    2. Review authenticated and unauthenticated paths, API endpoints and business logic
+    3. Check for privilege escalation paths through the new auth controls
+    4. Run the project's security tests and dependency audit
+    5. For each check that needs live testing, write the test plan for an authorized human
+       to run against a non-production target
 
-    Provide: penetration test report, proof-of-concept exploits,
-    remediation validation, and security control effectiveness metrics.
+    Provide: remediation validation report, open findings, and a live-test plan.
 ```
 
 Save the agent's output to `.security-hardening/11-pentest-results.md`.
@@ -542,7 +541,7 @@ Task:
   prompt: |
     Verify compliance with security frameworks for: $TARGET.
 
-    ## Penetration Test Results
+    ## Fix Validation Results
     [Insert contents of .security-hardening/11-pentest-results.md]
 
     ## Compliance Frameworks to Validate
@@ -638,7 +637,7 @@ Security hardening complete: $TARGET
 ## Success Criteria
 - [ ] All critical vulnerabilities (CVSS 7+) remediated
 - [ ] OWASP Top 10 vulnerabilities addressed
-- [ ] Zero high-risk findings in penetration testing
+- [ ] Zero high-risk findings in fix validation
 - [ ] Compliance frameworks validation passed
 - [ ] Security monitoring detecting and alerting on threats
 - [ ] All secrets managed through secure vault
