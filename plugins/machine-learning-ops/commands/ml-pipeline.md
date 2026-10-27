@@ -105,7 +105,7 @@ Provide complete training code with configuration management.
 </Task>
 
 <Task>
-subagent_type: python-pro
+subagent_type: general-purpose
 prompt: |
   Optimize and productionize ML code from: {phase2.ml-engineer.output}
 
@@ -138,7 +138,7 @@ Deliver production-ready, maintainable code with full test coverage.
 subagent_type: mlops-engineer
 prompt: |
   Design production deployment for models from: {phase2.ml-engineer.output}
-  With optimized code from: {phase2.python-pro.output}
+  With optimized code from: {phase2.general-purpose.output}
 
 Implementation requirements:
 

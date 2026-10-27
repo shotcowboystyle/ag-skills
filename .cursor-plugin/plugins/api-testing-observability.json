@@ -1,7 +1,7 @@
 {
   "name": "api-testing-observability",
   "displayName": "Api Testing Observability",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "API testing automation, request mocking, OpenAPI documentation generation, observability setup, and monitoring",
   "author": {
     "name": "Curtis Blanton",

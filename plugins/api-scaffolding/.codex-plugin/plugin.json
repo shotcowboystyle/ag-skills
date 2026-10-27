@@ -1,6 +1,6 @@
 {
   "name": "api-scaffolding",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "REST and GraphQL API scaffolding, framework selection, backend architecture, and API generation",
   "skills": "./skills/",
   "author": {
