@@ -627,7 +627,7 @@ export const SwipeCard = ({ onSwipeLeft, onSwipeRight, children }: {
         if (info.offset.x > 150) onSwipeRight();
         else if (info.offset.x < -150) onSwipeLeft();
       }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
     >
       {children}
     </motion.div>
@@ -789,7 +789,7 @@ export const SwipeCarousel = ({ slides }: { slides: React.ReactNode[] }) => {
             else if (info.offset.x > threshold && current > 0) setCurrent(current - 1);
           }
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
       >
         {slides.map((slide, i) => (
           <div key={i} style={{ flex: "0 0 100%", minWidth: "100%" }}>{slide}</div>
@@ -823,7 +823,7 @@ export const SnapDrawer = ({ snapPoints = [0, 50, 100] }: { snapPoints?: number[
         const snap = findClosestSnap(info.point.y);
         y.set(snap); // In practice, use animate()
       }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
     >
       <div style={{ width: 32, height: 4, background: "#d1d5db", borderRadius: 2,
         margin: "8px auto" }} />
@@ -1201,7 +1201,7 @@ const SwipeDismiss = ({ onDismiss, children }) => (
     if (info.offset.x > 150) handleLike();
     else if (info.offset.x < -150) handlePass();
   }}
-  transition={{ type: "spring", stiffness: 300, damping: 20 }} />
+  transition={{ type: "spring", stiffness: 300, damping: 25 }} />
 ```
 
 #### H4. pinchZoom

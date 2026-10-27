@@ -31,89 +31,44 @@ timing must be predictable.
 ## Constants
 
 Every recipe in every reference file writes against these. Without them in
-context the references are unusable.
+context the references are unusable. They are the base motion scale owned by
+`interaction-motion-design` (`animation-timing-curves.md`); same
+names, same values. The extended curve catalog is in
+`references/easing-and-spring-catalog.md`.
 
 ```css
 :root {
-  /* === Core Easings === */
-  --ease-out:          cubic-bezier(0.16, 1, 0.3, 1);         /* Decelerate — entrances */
-  --ease-out-soft:     cubic-bezier(0.33, 1, 0.68, 1);        /* Gentle decelerate */
-  --ease-out-quad:     cubic-bezier(0.25, 0.46, 0.45, 0.94);  /* Quadratic decelerate */
-  --ease-out-cubic:    cubic-bezier(0.22, 0.61, 0.36, 1);     /* Cubic decelerate */
-  --ease-out-quart:    cubic-bezier(0.17, 0.84, 0.44, 1);     /* Quartic decelerate */
-  --ease-out-quint:    cubic-bezier(0.23, 1, 0.32, 1);        /* Quintic decelerate */
-  --ease-out-expo:     cubic-bezier(0.16, 1, 0.3, 1);         /* Exponential decelerate */
-  --ease-out-circ:     cubic-bezier(0.08, 0.82, 0.17, 1);     /* Circular decelerate */
-  --ease-out-back:     cubic-bezier(0.34, 1.56, 0.64, 1);     /* Overshoot decelerate */
+  /* === Base easings === */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);          /* Decelerate — entrances */
+  --ease-in:     cubic-bezier(0.55, 0.055, 0.675, 0.19); /* Accelerate — exits */
+  --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);         /* Symmetric — movement */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);      /* Single overshoot ≈ spring-default */
 
-  --ease-in:           cubic-bezier(0.55, 0.055, 0.675, 0.19);/* Accelerate — exits */
-  --ease-in-soft:      cubic-bezier(0.32, 0, 0.67, 0);        /* Gentle accelerate */
-  --ease-in-quad:      cubic-bezier(0.55, 0.085, 0.68, 0.53); /* Quadratic accelerate */
-  --ease-in-cubic:     cubic-bezier(0.55, 0.055, 0.675, 0.19);/* Cubic accelerate */
-  --ease-in-quart:     cubic-bezier(0.9, 0.03, 0.69, 0.22);   /* Quartic accelerate */
-  --ease-in-expo:      cubic-bezier(0.7, 0, 0.84, 0);         /* Exponential accelerate */
-  --ease-in-back:      cubic-bezier(0.36, 0, 0.66, -0.56);    /* Pull-back accelerate */
+  /* === Base durations === */
+  --duration-instant: 50ms;  --duration-fast: 150ms;     --duration-normal: 250ms;
+  --duration-moderate: 300ms; --duration-slow: 400ms;    --duration-slower: 600ms;
 
-  --ease-in-out:       cubic-bezier(0.87, 0, 0.13, 1);        /* Symmetric — movement */
-  --ease-in-out-soft:  cubic-bezier(0.45, 0, 0.55, 1);        /* Gentle symmetric */
-  --ease-in-out-quad:  cubic-bezier(0.46, 0.03, 0.52, 0.96);  /* Quadratic symmetric */
-  --ease-in-out-cubic: cubic-bezier(0.65, 0, 0.35, 1);        /* Cubic symmetric */
-  --ease-in-out-back:  cubic-bezier(0.68, -0.6, 0.32, 1.6);   /* Overshoot symmetric */
-
-  /* === Spring Physics (CSS approximations) === */
-  --spring-gentle:     cubic-bezier(0.34, 1.56, 0.64, 1);     /* stiffness:120 damping:14 */
-  --spring-bouncy:     cubic-bezier(0.68, -0.55, 0.27, 1.55); /* stiffness:180 damping:12 */
-  --spring-snappy:     cubic-bezier(0.25, 1.5, 0.5, 1);       /* stiffness:300 damping:20 */
-  --spring-wobbly:     cubic-bezier(0.36, 1.7, 0.5, 0.9);     /* stiffness:150 damping:8 */
-  --spring-stiff:      cubic-bezier(0.12, 1.2, 0.4, 1);       /* stiffness:400 damping:30 */
-  --spring-slow:       cubic-bezier(0.34, 1.3, 0.64, 1);      /* stiffness:80 damping:20 */
-
-  /* === Bounce === */
-  --bounce:            cubic-bezier(0.34, 1.56, 0.64, 1);     /* Single overshoot bounce */
-  --bounce-heavy:      cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Double overshoot */
-
-  /* === Elastic (requires @keyframes for true elastic) === */
-  --elastic-out:       cubic-bezier(0.36, 1.7, 0.5, 0.85);    /* Approximation of elastic */
-
-  /* === Emphasis === */
-  --emphasis-dramatic:  cubic-bezier(0.04, 0.62, 0.23, 0.98);
-  --emphasis-energetic: cubic-bezier(0.22, 0.68, 0, 1.71);
-
-  /* === Platform-Specific === */
-  --ios-spring:        cubic-bezier(0.25, 0.8, 0.25, 1);      /* iOS default animation */
-  --material-standard: cubic-bezier(0.2, 0, 0, 1);            /* M3 standard easing */
-  --material-decel:    cubic-bezier(0, 0, 0, 1);              /* M3 decelerate */
-  --material-accel:    cubic-bezier(0.3, 0, 1, 1);            /* M3 accelerate */
-  --material-emphasized: cubic-bezier(0.2, 0, 0, 1);          /* M3 emphasized */
+  /* === CSS approximations of the named spring presets === */
+  --spring-snappy: cubic-bezier(0.25, 1.5, 0.5, 1);       /* ≈ spring-snappy 400/30 */
+  --spring-gentle: cubic-bezier(0.34, 1.3, 0.64, 1);      /* ≈ spring-gentle 200/25 */
+  --spring-bouncy: cubic-bezier(0.68, -0.55, 0.27, 1.55); /* ≈ spring-bouncy 300/10 */
 }
 ```
 
 ### Framer Motion Spring Presets
 
 ```tsx
-// Gentle — modals, overlays, panels
-const springGentle = { type: "spring", stiffness: 120, damping: 14, mass: 1 };
+// Snappy — toggles, switches, presses, small controls
+const springSnappy  = { type: "spring", stiffness: 400, damping: 30, mass: 1 };
 
-// Bouncy — playful UI, notifications, FABs
-const springBouncy = { type: "spring", stiffness: 180, damping: 12, mass: 1 };
+// Default — general UI, panels, drag release, modals
+const springDefault = { type: "spring", stiffness: 300, damping: 25, mass: 1 };
 
-// Snappy — toggles, switches, small elements
-const springSnappy = { type: "spring", stiffness: 300, damping: 20, mass: 0.8 };
+// Gentle — large surfaces, sheets, shared-element and layout morphs
+const springGentle  = { type: "spring", stiffness: 200, damping: 25, mass: 1 };
 
-// Wobbly — emphasis, celebrations, attention-grab
-const springWobbly = { type: "spring", stiffness: 150, damping: 8, mass: 1 };
-
-// Stiff — precise, utility, no-nonsense
-const springStiff = { type: "spring", stiffness: 400, damping: 30, mass: 1 };
-
-// Slow — large-area reveals, page transitions
-const springSlow = { type: "spring", stiffness: 80, damping: 20, mass: 1.2 };
-
-// iOS-like — platform-matching for hybrid apps
-const springIOS = { type: "spring", stiffness: 200, damping: 22, mass: 1 };
-
-// Material-like — for M3 matching
-const springMaterial = { type: "spring", stiffness: 250, damping: 25, mass: 1 };
+// Bouncy — celebrations, likes, playful confirmations
+const springBouncy  = { type: "spring", stiffness: 300, damping: 10, mass: 1 };
 ```
 
 ### When to Use Each Easing
@@ -123,7 +78,7 @@ const springMaterial = { type: "spring", stiffness: 250, damping: 25, mass: 1 };
 | ease-out | Entrances, appearing elements | Exits, disappearing elements |
 | ease-in | Exits, disappearing elements | Entrances (feels sluggish) |
 | ease-in-out | Position changes, slides between states | Quick micro-interactions |
-| ease-out-back | Playful entrances, bouncing buttons | Serious/enterprise UI |
+| ease-spring | Playful entrances, bouncing buttons | Serious/enterprise UI |
 | spring (gentle) | Modals, sheets, overlays | Rapid repeated actions |
 | spring (snappy) | Toggles, switches, small controls | Large page transitions |
 | spring (bouncy) | Notifications, celebrations | Data-heavy interfaces |
@@ -143,37 +98,6 @@ The reduced-motion floor, which every recipe assumes is already in the sheet:
   }
 }
 ```
-
-## Index
-
-| Want | Category | Reference |
-|---|---|---|
-| Fade, scale, slide, blur, drop in | Entrance (25) | `css-animation-recipes.md` |
-| Fade, scale, slide, collapse out | Exit (18) | `css-animation-recipes.md` |
-| Spinner, skeleton shimmer, progress, dots | Loading (16) | `css-animation-recipes.md` |
-| Button press, toggle, hover lift, focus ring | Micro-interaction (35) | `micro-interaction-recipes.md` |
-| Route change, shared element, container morph | Page transition (18) | `page-transition-recipes.md` |
-| List reorder, grid reflow, accordion | Layout (12) | `page-transition-recipes.md` |
-| Reveal on scroll, parallax, sticky progress | Scroll-driven (16) | `scroll-gesture-recipes.md` |
-| Swipe, drag, pull-to-refresh, long press | Gesture (12) | `scroll-gesture-recipes.md` |
-| Stagger, sequence, orchestrated groups | Orchestration | `framer-motion-recipes.md` |
-| Framer Motion variants and layout prop | — | `framer-motion-recipes.md` |
-| Pin, scrub, horizontal scroll, SplitText | GSAP / ScrollTrigger | `gsap-scrolltrigger-recipes.md` |
-| Custom cursor, magnetic button, text effects, 3D | — | `cursor-text-3d-effects.md` |
-| More than two visual states | State machines | `animation-state-machines.md` |
-
-## Reference architecture
-
-| File | Covers | Lines |
-|---|---|---|
-| `references/gsap-scrolltrigger-recipes.md` | GSAP, ScrollTrigger, Lenis | 1897 |
-| `references/cursor-text-3d-effects.md` | cursor, text, R3F, particles | 1394 |
-| `references/css-animation-recipes.md` | entrance, exit, loading in CSS | 1325 |
-| `references/scroll-gesture-recipes.md` | scroll-driven and gesture | 1292 |
-| `references/framer-motion-recipes.md` | Framer Motion + orchestration | 965 |
-| `references/micro-interaction-recipes.md` | 35 micro-interactions | 400 |
-| `references/page-transition-recipes.md` | page and layout transitions | 323 |
-| `references/animation-state-machines.md` | multi-state animation | 73 |
 
 ## What every reference file contains
 
@@ -219,6 +143,10 @@ React Three Fiber, particles: read `references/cursor-text-3d-effects.md`.
 For **anything with more than two visual states**: read
 `references/animation-state-machines.md`.
 
+For **extended easing curves** (quad/cubic/quart/circ/back variants,
+elastic, emphasis, platform approximations) and extra springs: read
+`references/easing-and-spring-catalog.md`.
+
 For **why a motion should exist at all** -- Disney's twelve principles
 translated into interface terms: read `references/motion-principles.md`.
 
@@ -229,3 +157,4 @@ translated into interface terms: read `references/motion-principles.md`.
 - `performance-states-patterns` -- loading and skeleton states as UX, not motion
 - `accessibility-inclusive-design` -- the full reduced-motion and vestibular story
 - `shadow-elevation-density` -- animating elevation specifically
+- `platform-visual-standards` -- native iOS / Material 3 Expressive springs

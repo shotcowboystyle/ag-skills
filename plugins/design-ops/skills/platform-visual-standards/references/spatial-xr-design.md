@@ -407,3 +407,66 @@ When designing any spatial/XR experience, validate against these criteria:
 - [ ] 2D fallback available for non-spatial contexts
 - [ ] Tested with eye tracking, hand tracking, and accessibility modes
 - [ ] Environmental diversity tested (lighting, backgrounds, movement)
+
+---
+
+## visionOS Quick Specifications
+
+### Depth and Layering
+
+visionOS places UI at specific depths in the user's physical space:
+
+- **Windows** — 2D content panels floating at arm's length (approximately 1-2 meters from the user). Default depth: 0 (the "base plane").
+- **Volumes** — 3D content containers. Objects within a volume have real depth and can be viewed from different angles.
+- **Full Spaces** — Immersive environments that replace or augment the user's entire visual field.
+
+Layering rules:
+- Glass windows sit at depth 0
+- Popovers and menus sit at depth +20pt (closer to user)
+- Alerts sit at depth +40pt
+- Never place interactive UI behind the base plane (negative depth). Users cannot comfortably focus on content behind them.
+
+### Eye Tracking Targets
+
+Eye tracking replaces cursor hover on visionOS:
+
+- **Minimum target size**: 60x60pt (eye tracking has lower precision than touch or cursor)
+- **Hover effect**: Elements subtly highlight when the user's gaze lands on them. A gentle scale-up (1.02x) and specular highlight shift indicates "this is focusable."
+- **Gaze duration**: Do not trigger actions on gaze alone. Gaze selects, pinch confirms. Avoid dwell-to-activate patterns (they cause Midas touch problems).
+- **Gaze feedback latency**: Hover effects must appear within 50ms of gaze landing. Any delay feels unresponsive in spatial UI.
+
+### Hand Tracking Gestures
+
+| Gesture | Action | Notes |
+|---------|--------|-------|
+| Pinch (index + thumb) | Select / tap | Primary interaction. Works at any hand position in view. |
+| Pinch and drag | Scroll, move, resize | Equivalent to touch drag |
+| Two-hand pinch and pull | Zoom / scale | Both hands pinch, then move apart |
+| Wrist rotation | Fine adjustment | Used in precision controls (e.g., 3D rotation) |
+| Open palm push | Dismiss | Push a window away to close it |
+
+Design for indirect interaction: the user's hands rest in their lap, not reaching toward the UI. Gestures are detected by downward-facing cameras, so all hand gestures must work in a low, relaxed hand position.
+
+### Spatial Audio
+
+- UI sounds should be spatialized to the source window's position. A notification from a window to the user's left should sound like it comes from the left.
+- Ambient sounds (background music, environment audio) should be non-directional (omnidirectional).
+- Feedback sounds (tap, toggle, error) should be subtle and spatialized. Loud or harsh sounds are jarring in a head-mounted context.
+
+### Window Placement and Ornaments
+
+- **Default placement**: New windows appear centered in the user's forward gaze, at approximately 1.5 meters distance.
+- **Window bar**: A grab handle at the bottom of every window allows repositioning. Users can place windows anywhere in their space.
+- **Ornaments**: Small UI elements (toolbars, tab bars) that float just outside the window's edge. Ornaments are attached to the window and move with it.
+- **Window size**: Recommended minimum 800x600pt. Maximum varies by content but avoid exceeding 2000pt in any dimension (requires excessive head movement to scan).
+- **Multi-window**: Users can open multiple windows simultaneously. Design for the possibility that your app is one of several visible apps.
+
+### Passthrough Considerations
+
+In augmented reality (passthrough) mode, the user sees their real environment with your UI overlaid:
+
+- Glass materials work exceptionally well because they harmonize with any physical background
+- Avoid large opaque surfaces that block the user's view of their room
+- Dark mode is generally preferred in passthrough: it minimizes the "floating screen" effect
+- Shadows cast by windows onto the passthrough feed increase the sense of physical presence
+- Test your UI against diverse real-world backgrounds (bright window, dark room, cluttered desk)

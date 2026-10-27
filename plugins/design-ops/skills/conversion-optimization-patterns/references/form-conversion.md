@@ -343,6 +343,8 @@ Using the correct HTML input type triggers the appropriate mobile keyboard, dram
 
 ### Error Message Principles
 
+For ready-to-use validation, system and success message copy, use the `micro-copy-intelligence` skill's `error-success-messages.md`. The principles below cover the conversion impact.
+
 1. **Be specific about what went wrong:** "Enter a valid email address (e.g., name@example.com)" not "Invalid field"
 2. **Be specific about how to fix it:** "Enter at least 8 characters" not "Password does not meet requirements"
 3. **Use human language:** "We couldn't find an account with that email" not "Error 404: User not found"

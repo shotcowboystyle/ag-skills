@@ -800,7 +800,6 @@ When detecting and fixing slop, draw knowledge from:
 - `nng-ux-heuristics` — Heuristic violations for component and interaction fixes
 - `accessibility-inclusive-design` — WCAG 2.2 compliance for all accessibility transforms
 - `cognitive-psychology-ux` — Fitts's Law (target sizing), Gestalt principles (spacing), Von Restorff (hierarchy)
-- `ui-visual-design-system` — Color theory, type scales, visual hierarchy principles
 - `visual-design-mastery` — Canonical design rules, visual scoring calibration
 - `design-systems-architecture` — Token architecture, naming conventions, semantic layers
 - `component-patterns-code` — Production component patterns (React, SwiftUI, CSS)

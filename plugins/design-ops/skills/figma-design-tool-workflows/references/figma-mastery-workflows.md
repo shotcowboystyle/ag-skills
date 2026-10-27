@@ -652,3 +652,86 @@ Figma supports built-in audio conversations:
 ---
 
 This reference equips practitioners with specific, actionable Figma techniques spanning layout engineering, component systems, token-driven theming, interactive prototyping, developer handoff, library governance, organizational discipline, plugin tooling, operational efficiency, and team collaboration. Each section maps directly to daily design tool operations and scales from individual practice to enterprise design system management.
+
+## 11. Canvas-to-Code Mapping Summary
+
+How Figma structures map to code props, CSS, and tokens (moved from `SKILL.md`).
+
+### Component Architecture in Figma
+
+#### Variants and Properties
+
+Figma components support four property types that map directly to code component APIs:
+
+- **Boolean properties** control visibility of child layers. A button's `showIcon` boolean maps to a React `showIcon?: boolean` prop. The icon layer is present or absent based on this toggle, which means the generated code conditionally renders the icon.
+- **Text properties** expose editable text content. A button's `label` text property maps to a `children: string` or `label: string` prop. The designer controls the default, the developer overrides at the call site.
+- **Instance swap properties** define composition slots. A button's `icon` instance swap maps to an `icon?: ReactNode` prop. The slot accepts any icon component from the icon library, and the generated code renders the passed component.
+- **Preferred values** constrain instance swap choices to a curated set. Rather than showing every component in the file, preferred values limit the swap picker to relevant options (icon library components only, for example).
+
+#### Variant Architecture
+
+Use **variants** when a component has visually distinct states that change multiple properties simultaneously. A Button component might have variants across two axes: `variant` (primary, secondary, ghost, danger) and `size` (small, medium, large). Each combination is a distinct visual design within the same component set.
+
+Use **component properties** (booleans, text, instance swaps) when a single property toggles independently. Whether a button shows an icon is independent of its variant and size. Making this a boolean property rather than doubling the variant count keeps the component manageable.
+
+Use **separate components** when two patterns share no structural DNA. A Button and a Card are separate components, not variants of each other.
+
+#### Nested Components and Slot Patterns
+
+Production-grade Figma components use nested sub-components to create composition points. A Card component contains a `CardHeader` sub-component, a `CardBody` sub-component, and a `CardFooter` sub-component. Each sub-component is a separate Figma component that the Card references via instance swap slots. This mirrors the compound component pattern in React (`<Card><Card.Header /><Card.Body /><Card.Footer /></Card>`).
+
+#### Naming Conventions
+
+Follow a `Category/Type/State` naming hierarchy:
+
+- `Button/Primary/Default`
+- `Button/Primary/Hover`
+- `Button/Secondary/Disabled`
+- `Input/Text/Default`
+- `Input/Text/Error`
+- `Card/Elevated/Default`
+
+This naming convention creates automatic grouping in the Figma assets panel and maps cleanly to code organization: the `Button` directory contains `Primary` and `Secondary` variant files, each handling their own states.
+
+### Variable Modes
+
+Figma variables replace static styles with dynamic, mode-switchable tokens. Variables organize into collections with multiple modes.
+
+#### Token Layer Architecture
+
+Structure variable collections in three tiers:
+
+1. **Primitive collection** — raw values: `blue-500: #3b82f6`, `spacing-4: 16`, `radius-md: 8`. A single mode; these values never change.
+2. **Semantic collection** — contextual meaning with modes for light/dark/high-contrast: `color-bg-primary` resolves to `white` in light mode and `neutral-900` in dark mode. `color-text-primary` resolves to `neutral-900` in light mode and `neutral-50` in dark mode.
+3. **Component collection** — component-specific bindings: `button-primary-bg` references `color-action-primary`, which references `blue-500` in the primitive layer. Modes here handle density (compact/default/comfortable) or brand switching (brand-a/brand-b).
+
+#### Mode Switching
+
+Variable modes enable designers to preview every combination without duplicating frames. A single button component, bound to semantic variables, previews as light primary, dark primary, high-contrast primary, light compact, dark comfortable, and every other permutation — all by switching the mode on the enclosing frame.
+
+This is the design equivalent of CSS custom property theming. The structure must match: Figma variable names should correspond directly to CSS custom property names or token identifiers in the codebase.
+
+### Auto Layout
+
+Auto Layout is the mechanism that makes Figma components developer-friendly. A component without Auto Layout is a static drawing. A component with proper Auto Layout is a responsive specification that communicates padding, spacing, alignment, and resize behavior to developers.
+
+Key principles:
+
+- **Every component uses Auto Layout.** No exceptions. If a component cannot be built with Auto Layout, the design needs to be reconsidered.
+- **Padding and spacing use variables.** Bind Auto Layout padding and item spacing to spacing variables so that density modes work automatically.
+- **Fill container for responsive elements.** Text blocks and content areas use "Fill container" width so they stretch to available space, matching CSS `flex: 1` behavior.
+- **Hug contents for intrinsic sizing.** Icons, badges, and labels use "Hug contents" so they size to their content, matching CSS `width: auto` behavior.
+- **Absolute positioning sparingly.** Badges positioned on avatar corners and floating action buttons use absolute positioning within Auto Layout. This maps to CSS `position: absolute` within a `position: relative` container.
+
+### Dev Mode
+
+Figma Dev Mode is the bridge between design and development. When a developer inspects a component in Dev Mode, they see:
+
+- **Component properties** mapped to code props
+- **CSS values** for every selected layer (spacing, colors, typography)
+- **Variable references** showing the token name rather than the raw value
+- **Annotations** added by designers explaining behavior, interaction rules, and edge cases
+- **Code snippets** generated from component configuration
+- **Measurements** between elements (spacing, alignment guides)
+
+Dev Mode effectiveness depends entirely on how well the designer structured the component. Proper naming, variable binding, and Auto Layout produce clean Dev Mode output. Poor structure produces noise.

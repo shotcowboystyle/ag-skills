@@ -601,3 +601,12 @@ When conducting research specifically to evaluate neurodiversity accommodations:
 10. Test with neurodivergent users using adapted protocols that respect diverse communication and processing styles.
 11. Explore AI-adaptive interfaces that learn and respond to individual sensory and cognitive profiles.
 12. Involve neurodivergent users as co-designers, not just test participants.
+
+## The Inclusive Design Spectrum (Microsoft)
+
+Disability exists on a spectrum of permanent, temporary, and situational:
+- **Permanent:** One arm → **Temporary:** Arm injury → **Situational:** Holding a baby
+- **Permanent:** Blind → **Temporary:** Eye infection → **Situational:** Distracted driver
+- **Permanent:** Deaf → **Temporary:** Ear infection → **Situational:** Loud restaurant
+
+Designing for permanent disability creates solutions that help everyone.

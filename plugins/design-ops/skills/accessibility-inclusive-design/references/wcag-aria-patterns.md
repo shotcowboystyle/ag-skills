@@ -868,3 +868,120 @@ AI is augmenting assistive technology capabilities, creating both opportunities 
 - **AI image descriptions:** Automatic alt text generation is improving but remains unreliable for critical content. Use AI-generated descriptions as a fallback, not a replacement for human-authored alt text. Always allow users to request a more detailed AI description.
 - **AI-augmented assistive tech:** Design for a future where assistive technology can ask your interface questions about its content and structure. Provide rich semantic markup, structured data, and API endpoints that AI assistive tech can query.
 - **Voice AI and screen readers:** Ensure that voice AI features (copilots, voice assistants) work alongside screen readers without conflict. Test AI voice output with VoiceOver, NVDA, and TalkBack running simultaneously.
+
+## Keyboard Navigation
+
+### Tab Order and Focus Management
+
+- Tab order must follow visual layout and logical reading order.
+- Use `tabindex="0"` to add non-native elements to tab order (when semantic HTML is not possible).
+- Use `tabindex="-1"` for programmatic focus management (not in tab order but focusable via JavaScript).
+- Never use `tabindex` values greater than 0 — they create unpredictable tab order.
+
+### Focus Indicator Design
+
+- Focus rings must be visible on all interactive elements — never apply `outline: none` without a replacement.
+- Minimum focus indicator: 2px solid outline with 3:1 contrast ratio against adjacent colors.
+- WCAG 2.2 enhanced: focus indicator area at least as large as a 2px perimeter, 3:1 contrast.
+- Use `focus-visible` to show focus rings on keyboard navigation only (hide on mouse click).
+
+### Keyboard Interaction Patterns
+
+- **Enter/Space:** Activate buttons and links.
+- **Arrow keys:** Navigate within composite widgets (tabs, menus, radio groups, trees).
+- **Escape:** Close modals, popovers, dropdowns.
+- **Home/End:** Jump to first/last item in lists.
+- **Tab:** Move between independent interactive elements.
+
+## Screen Reader Optimization
+
+### Content Strategies
+
+- Write meaningful alt text: describe the information the image conveys, not the image itself.
+- Decorative images: use `alt=""` (empty, not omitted) or `role="presentation"`.
+- Complex images (charts, diagrams): provide detailed text description in context.
+- Link text must be descriptive out of context — avoid "click here" and "read more."
+- Use `aria-label` or `aria-labelledby` when visible text is insufficient.
+- Use `aria-describedby` for supplementary descriptions (error messages, help text).
+
+### Dynamic Content
+
+- Announce dynamic changes with `aria-live` regions — do not assume users see visual changes.
+- Single-page apps: manage focus on route changes — move focus to new content heading.
+- Loading states: announce with `aria-busy="true"` and announce completion.
+- Toast/notification: use `role="status"` (polite) or `role="alert"` (assertive).
+
+## Testing Methodology
+
+### Automated Testing (Find ~30% of Issues)
+- Run axe-core, Lighthouse, or WAVE for automated scanning.
+- Integrate ESLint with jsx-a11y plugin for development-time catches.
+- Configure CI/CD pipelines to fail builds on critical accessibility violations.
+
+### Manual Testing (Find ~70% of Issues)
+- **Keyboard-only navigation:** Tab through entire flows without a mouse.
+- **Screen reader testing:** Test with VoiceOver (macOS/iOS), NVDA/JAWS (Windows), TalkBack (Android).
+- **Zoom testing:** Verify at 200% and 400% browser zoom — no content loss or overlap.
+- **Color testing:** Check with color blindness simulators and contrast checkers.
+
+### User Testing with Disabled Users
+- Include people with disabilities in usability testing (minimum one per study).
+- Test with actual assistive technology users — simulating disability is insufficient.
+- Compensate participants fairly for their time and expertise.
+
+## WCAG 3.0 Preview and Preparation
+
+The W3C is developing the next major version of accessibility guidelines, now named "W3C Accessibility Guidelines" (WAG 3.0) — dropping "Web Content" from the title to reflect expanded scope beyond web to apps, documents, XR, embedded systems, and emerging technologies.
+
+### Key Changes from WCAG 2.x
+
+**New Conformance Model: Bronze/Silver/Gold**
+WCAG 3.0 replaces the A/AA/AAA conformance levels with a Bronze/Silver/Gold system. Bronze represents the minimum acceptable accessibility standard. Silver adds enhanced support. Gold represents best-in-class accessibility across all dimensions.
+
+**Outcome-Based Scoring (0-4)**
+Instead of binary pass/fail per success criterion, WCAG 3.0 uses a 0-4 scoring system per outcome: 0 = Very Poor, 1 = Poor, 2 = Fair, 3 = Good, 4 = Excellent. Scores are weighted by impact and aggregated to determine conformance level. This granular scoring recognizes that accessibility exists on a spectrum rather than a binary state.
+
+**174 Outcomes Framework**
+The September 2025 working draft defines 174 outcomes organized by functional categories. These outcomes are more specific and measurable than WCAG 2.x success criteria, making evaluation more consistent across auditors.
+
+**Expanded Scope**
+WCAG 3.0 covers web content, native applications, documents, XR/immersive environments, embedded systems, and emerging technologies including AI-driven interfaces. Any digital experience falls within scope.
+
+### Timeline and Migration Strategy
+
+The W3C targets April 2026 for the next major draft milestone, with the full recommendation expected later in the decade. WCAG 2.2 remains the current legal standard. Migration strategy:
+
+1. Continue targeting WCAG 2.2 Level AA as the compliance baseline.
+2. Monitor WCAG 3.0 working drafts for directional changes.
+3. Adopt the outcome-oriented mindset now — evaluate accessibility as a spectrum, not binary compliance.
+4. Expand accessibility testing to cover native apps, documents, and non-web surfaces proactively.
+5. When WCAG 3.0 stabilizes, plan a formal gap analysis and migration timeline.
+
+## WCAG 3.0 Progress Update
+
+The WCAG 3.0 Preview and Preparation section above reflects the September 2025 working draft. The W3C targets an **April 2026 milestone draft** that is expected to refine the 174 outcomes framework, finalize the Bronze/Silver/Gold scoring methodology, and introduce updated guidance for AI-generated content accessibility. Monitor W3C working group publications for the April 2026 update, which may introduce significant changes to the conformance model and outcome definitions.
+
+## The Four Principles (POUR)
+
+**1. Perceivable** — Information must be presentable in ways all users can perceive
+- Provide text alternatives for non-text content (images, icons, charts).
+- Provide captions and transcripts for audio/video.
+- Create content that can be presented in different ways without losing meaning.
+- Make it easy to see and hear content (contrast, resize, spacing).
+
+**2. Operable** — Interface components must be operable by all users
+- Make all functionality accessible via keyboard alone.
+- Give users enough time to read and use content.
+- Do not design content that causes seizures or physical reactions.
+- Provide clear navigation and wayfinding mechanisms.
+- Support input modalities beyond keyboard (voice, pointer, touch).
+
+**3. Understandable** — Information and operation must be understandable
+- Keep text readable and understandable at the target audience level.
+- Ensure content appears and operates in predictable ways.
+- Help users avoid and correct mistakes.
+
+**4. Robust** — Content must be robust enough for diverse user agents and assistive tech
+- Maximize compatibility with current and future assistive technologies.
+- Use valid, semantic HTML as the foundation.
+- Ensure programmatic name, role, and value for all UI components.

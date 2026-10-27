@@ -41,22 +41,7 @@ mistake wearing a new coat of paint.
 | Which patterns a sector expects                      | `sector-pattern-matrix.md`       |
 | Benchmark DNA by product tier                        | `designer-benchmark-dna.md`      |
 
-## Reference architecture
-
-| File                                        | Covers                          | Lines |
-| ------------------------------------------- | ------------------------------- | ----- |
-| `references/pattern-quick-lookup.md`        | indexed lookup, all categories  | 2481  |
-| `references/pattern-taxonomy-complete.md`   | 190+ patterns, 10 categories    | 1878  |
-| `references/emerging-patterns-2025-2026.md` | what is arriving                | 914   |
-| `references/pattern-decision-engine.md`     | decision trees                  | 905   |
-| `references/world-class-pattern-dna.md`     | 20 products deconstructed       | 618   |
-| `references/anti-pattern-encyclopedia.md`   | 43 anti-patterns                | 328   |
-| `references/pattern-evolution-2024-2026.md` | what died and why               | —     |
-| `references/sector-pattern-matrix.md`       | pattern expectations per sector | 417   |
-| `references/pattern-matching-engine.md`     | identify, benchmark, sector-fit | 412   |
-| `references/designer-benchmark-dna.md`      | products and designers by tier  | 369   |
-
-`pattern-quick-lookup.md` is the largest file in the plugin. Read a section, not
+`references/pattern-quick-lookup.md` (~2,500 lines) is the largest file in the plugin. Read a section, not
 the file.
 
 ## What every reference file contains
@@ -96,8 +81,6 @@ read `references/pattern-matching-engine.md`, with
 
 ## Cross-References
 
-This skill is the connective tissue that links analysis to action:
-
 - **`sector-style-intelligence`** — Provides visual direction (colors, typography, tone) per sector. This skill provides pattern direction per sector. Together they define what a product in sector X should look like AND how it should work.
 - **`screen-flow-patterns`** — Provides screen type and flow catalogs. This skill provides the broader pattern taxonomy that screen types are composed of.
 - **`component-patterns-code`** — Provides React, SwiftUI, and CSS code for individual components. This skill identifies which components are needed; component-patterns-code provides the implementation.
@@ -113,25 +96,11 @@ This skill is the connective tissue that links analysis to action:
 
 | Command      | How This Skill Is Used                                                                |
 | ------------ | ------------------------------------------------------------------------------------- |
-| `/audit`     | Primary command — runs the full 5-stage analysis pipeline                             |
+| `/audit`     | Primary command — full analysis pipeline; pattern quality in heuristic evaluation     |
 | `/component` | Consumes pattern taxonomy for component building, benchmark DNA for quality targeting |
 | `/screen`    | Consumes screen patterns from taxonomy, sector expectations from matrix               |
-| `/audit`     | Cross-references pattern quality during heuristic evaluation                          |
 | `/benchmark` | Uses designer benchmark DNA for competitive comparison                                |
 | `/style`     | Uses pattern taxonomy and benchmark DNA for inspiration references                    |
 | `/roast`     | References anti-pattern encyclopedia during design critique                           |
 | `/remix`     | Uses prescriptions from pattern analysis to drive redesign                            |
 | `/grade`     | Pattern quality contributes to overall design score                                   |
-
-## How to Use This Skill
-
-When this skill activates, it draws from:
-
-1. **Pattern Taxonomy** to identify and classify what is present in the user's code/screenshots
-2. **Designer Benchmark DNA** to know what world-class execution looks like for each pattern
-3. **Sector Pattern Matrix** to know which patterns are critical for the user's industry
-4. **Pattern Matching Engine** to run the systematic 5-stage analysis pipeline
-5. **Pattern Evolution** to ensure recommendations are temporally current
-6. **Anti-Pattern Encyclopedia** to identify and explain what is wrong
-
-The combination of these six reference files gives Design Ops deep pattern intelligence — not by listing every possible UI, but by providing a taxonomy deep enough to classify any UI, benchmarks comprehensive enough to score any execution, and prescriptions specific enough to upgrade any pattern to world-class.

@@ -378,3 +378,71 @@ Support **hybrid workflows** where users move fluidly between physical and digit
 10. **Design for the body you inhabit**: account for the full range of human physical ability, sensory capacity, and cognitive diversity in every spatial and multimodal design decision.
 
 These patterns will evolve rapidly as spatial computing hardware matures, voice AI improves, and new input modalities emerge. Treat this reference as a living document that requires regular revision as the field advances.
+
+## AR Interface Patterns
+
+**Spatial Anchoring:**
+- Anchor UI elements to real-world surfaces (tables, walls) when contextually appropriate
+- Keep frequently-accessed controls anchored to the user's field of view (head-locked)
+- Use world-locked placement for persistent information (room labels, equipment status)
+- Ensure anchored content does not obstruct critical real-world visual information
+
+**Visual Design for AR:**
+- Use semi-transparent panels with blur backgrounds — maintain awareness of real environment
+- High contrast text and icons — AR competes with unpredictable real-world lighting
+- Avoid pure white backgrounds — they wash out in bright environments
+- Dark UI with light text works better in varied lighting conditions
+- Minimum text size: 1.5-2x standard screen sizes due to rendering at distance
+
+**AR Interaction:**
+- Gaze + pinch (Apple Vision Pro pattern) for selection
+- Hand tracking for direct manipulation
+- Voice commands for hands-free operations
+- Spatial audio cues for off-screen elements
+- Ray casting for distant object selection
+
+## VR Interface Patterns
+
+**Comfort and Safety:**
+- Maintain stable horizon line — never tilt the world
+- Provide a fixed reference frame (virtual floor, cockpit, room) to prevent motion sickness
+- Field of view tunneling during movement reduces motion sickness
+- Maximum movement speed should be comfortable; offer teleportation as alternative
+- Rest-state UI: elements at 1-2 meter distance, slightly below eye level (ergonomic neutral)
+
+**VR Layout:**
+- Primary content: centered, 1-2m from user, slight downward angle
+- Secondary panels: curved arrangement at 120-160 degree arc around user
+- Avoid placing content behind the user — require explicit turning
+- Maximum comfortable horizontal eye sweep: plus/minus 30 degrees from center
+- Maximum comfortable vertical eye range: +20 degrees to -40 degrees from eye level
+
+**VR Text and Readability:**
+- Minimum angular text size: 1.5 degrees of visual angle (roughly 3x screen sizes)
+- Use bold, high-contrast fonts — thin strokes render poorly in VR headsets
+- Limit text to short labels and essential information — spatial UIs favor visual communication
+- Panel curvature: match content panels to a curved surface at consistent distance
+
+## Voice Interaction Patterns
+
+**Invocation and Wake:**
+- Clear wake word or button activation
+- Visual + audio indicator that the system is listening
+- Timeout with gentle prompt: "Are you still there?"
+
+**Dialogue Design:**
+- Present maximum 3 options in voice menus — more causes memory overload
+- Use confirming responses: "Okay, setting a timer for 10 minutes"
+- Offer correction mechanisms: "Did you mean...?"
+- Support barge-in (interrupting the system while it is speaking)
+
+**Error Recovery:**
+- "I didn't catch that. Could you say it again?" (friendly, specific)
+- Escalation path: after 2-3 failures, offer alternative input method or human help
+- Never respond with silence — even "I'm not sure how to help with that" is better than nothing
+
+**Multimodal Voice + Screen:**
+- Voice for input, screen for output works best for complex information
+- Show visual confirmation of voice commands
+- Allow switching between voice and touch seamlessly
+- Voice should complement touch, not replace it entirely

@@ -389,3 +389,39 @@ Defined layout, component selection, content hierarchy, and interaction patterns
 Near-final design. Focus on visual polish, micro-interactions, accessibility compliance, responsive behavior, and implementation feasibility. Feedback should be specific and scoped — not the time to question foundational architecture.
 
 ---
+
+## Part 9: Critique Types
+
+### Studio Critique (Group, Scheduled)
+
+The formal studio critique gathers 4-8 participants in a scheduled session, typically 45-60 minutes, with defined roles: presenter, facilitator, critics, and note-taker. The presenter shares work at a specific fidelity level and frames the feedback they need. The facilitator manages time, enforces rules, and ensures all voices are heard. Critics provide structured feedback. The note-taker captures decisions, open questions, and action items. Studio critique works best for major design milestones — concept exploration, mid-fidelity flow review, and pre-handoff polish.
+
+### Desk Critique (Informal, 1:1)
+
+Desk critique is the spontaneous, low-ceremony version: a designer turns to a colleague and says, "Can you look at this for two minutes?" The value of desk critique lies in its frequency and low activation energy. It catches small issues — alignment inconsistencies, confusing label text, missing states — before they compound. The risk is that without structure, desk critique can devolve into vague affirmation ("looks good") or ungrounded opinion ("I'd make that blue"). Even in informal settings, the critic should anchor feedback to a principle, heuristic, or user scenario.
+
+### Async Critique (Figma Comments, Recorded Loom)
+
+Distributed teams often cannot gather synchronously. Async critique uses Figma comment threads, annotated screenshots, or recorded Loom walkthroughs to deliver structured feedback across time zones. The presenter records a 3-5 minute walkthrough explaining context, decisions, and open questions. Critics respond with timestamped or pin-pointed comments. Async critique requires more discipline than synchronous formats because the feedback loop is slower and misunderstandings are harder to resolve in real time. Best practice: require critics to label each comment with a type tag — [Question], [Concern], [Suggestion], [Praise] — to prevent ambiguous annotations.
+
+### Self-Critique (Checklist-Driven)
+
+Before exposing work to others, designers should run a structured self-critique against a checklist. This is not about catching every issue — it is about eliminating the obvious ones so that group critique time is spent on genuinely hard problems. A strong self-critique checklist covers: Does this design handle empty states, loading states, and error states? Is the visual hierarchy clear within 3 seconds? Does the primary action have the strongest affordance on the screen? Are labels written in user language rather than system language? Does this meet WCAG AA contrast and target size requirements? Self-critique builds the habit of evaluation rigor that transfers to every other critique format.
+
+## Part 10: Liz Lerman's Critical Response Process — The Four Steps
+
+Liz Lerman developed the Critical Response Process in the performing arts, and it has been widely adopted in design because it solves the core problem of critique: how to deliver honest, useful feedback without triggering defensiveness that closes the presenter's mind. The process has four steps, executed in strict order.
+
+**Step 1: Statements of Meaning.** Critics begin by articulating what was meaningful, interesting, surprising, or effective about the work. This is not empty praise — it is specific identification of what is working and why. "The progressive disclosure of the pricing tiers respects the user's decision-making process" is a statement of meaning. "Looks nice" is not. This step ensures the presenter knows which elements to protect as they iterate.
+
+**Step 2: Artist's Questions.** The presenter (the "artist") asks questions about aspects they are uncertain about. "I'm not sure whether the secondary navigation is discoverable enough — what was your experience finding it?" This step gives the presenter control over the direction of feedback, ensuring they get input on their actual concerns rather than whatever the critics feel like discussing.
+
+**Step 3: Neutral Questions.** Critics ask non-leading questions to understand the presenter's intent. "What was your rationale for placing the filters above the results rather than in a sidebar?" is neutral. "Don't you think the filters would work better in a sidebar?" is not — it embeds an opinion. Neutral questions surface the reasoning behind decisions, which often reveals whether a choice was deliberate or accidental.
+
+**Step 4: Opinion Time.** Only after the first three steps do critics offer direct opinions, and only with the presenter's permission. The facilitator asks: "Sarah has an opinion about the onboarding flow — would you like to hear it?" The presenter can accept or defer. When opinions are offered, they must be grounded: "I believe the three-step onboarding will cause drop-off because each step requires a decision that new users aren't equipped to make yet — research from the ux-research-methods reference shows progressive onboarding outperforms upfront configuration by 40%."
+
+## Part 11: Personal Preference vs. Evidence
+
+### Personal Preference vs. Evidence
+
+"I prefer left-aligned navigation" is a personal preference. "Nielsen Norman Group's navigation study found hidden navigation cuts content discoverability by nearly half compared to visible navigation" is evidence. Critique must distinguish between these. When evidence is unavailable, the appropriate response is to flag the question for user testing rather than defaulting to the loudest opinion.

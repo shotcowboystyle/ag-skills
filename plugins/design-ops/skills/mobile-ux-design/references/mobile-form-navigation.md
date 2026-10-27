@@ -486,10 +486,55 @@ Specifying the correct input type is one of the highest-impact, lowest-effort op
 
 ---
 
+## Quick Rules Summary
+
+### Mobile Navigation Patterns
+
+#### Bottom Tab Navigation (Preferred)
+- Maximum 5 tabs; use "More" tab if exceeding
+- Always show labels with icons — icons alone are ambiguous
+- Highlight active tab clearly with color and/or indicator
+- Maintain tab state: users expect to return to where they left off
+
+#### Stack Navigation
+- Clear back button and swipe-back gesture support
+- Show meaningful page titles
+- Deep links must resolve to the correct stack position
+- Avoid deep stacks (>4 levels) — restructure IA instead
+
+#### Search-First Navigation
+- For content-heavy apps (e-commerce, media), elevate search to primary navigation
+- Support voice search and barcode/image scan where relevant
+- Show recent searches and suggestions immediately on search activation
+
+### Mobile Form Design (Luke Wroblewski)
+
+#### Form Field Best Practices
+- **Top-aligned labels** outperform left-aligned on mobile (faster completion)
+- **Floating labels** (Material Design pattern) save vertical space while maintaining context
+- **One column only** — never use multi-column forms on mobile
+- **Appropriate keyboard types:** email -> email keyboard, phone -> numeric, URL -> URL keyboard
+- **Auto-advance** between fixed-length fields (verification codes, credit card segments)
+
+#### Input Optimization
+- **Autofill support:** name, email, address, credit card — use proper HTML autocomplete attributes
+- **Smart defaults:** pre-fill country from locale, suggest city from zip code
+- **Input masks** for phone numbers, dates, credit cards — show format as user types
+- **Inline validation:** validate on blur (not on every keystroke), show success states too
+- **Password visibility toggle** — default to hidden with easy toggle
+
+#### Form Reduction
+- Ask only what is absolutely necessary for the current step
+- Use progressive disclosure: collect minimal info first, request details later
+- Replace text input with structured alternatives where possible: toggle, picker, slider
+- Social login and autofill can reduce registration forms from 10+ fields to 1-2 taps
+
+---
+
 ## Cross-Referencing
 
 - For platform-specific component differences, reference `ios-android-patterns.md` in this skill's references.
-- For visual design and typography systems, reference `ui-visual-design-system`.
+- For visual design and typography systems, reference `visual-design-mastery`.
 - For motion and transition design, reference `interaction-motion-design`.
 - For comprehensive accessibility guidance, reference `accessibility-inclusive-design`.
 - For design system component architecture, reference `design-systems-architecture`.

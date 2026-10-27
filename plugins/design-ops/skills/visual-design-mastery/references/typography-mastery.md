@@ -524,3 +524,192 @@ MaterialTheme.typography.labelSmall     // Roboto 11/16 Medium
 ```
 
 **Why Inter**: Designed specifically for computer screens. Optimized for 11-16px sizes. Tabular numbers, slashed zero, contextual alternates. 2 axes (weight + optical size). Free and open source. 9 weights. Used by Linear, Figma, and hundreds of products.
+
+---
+
+## Pairing by Era
+
+**Era pairing**: Combine typefaces from the same design era. Futura (1927) + Bodoni (1798) works because both are high-contrast and geometric. Avoid pairing typefaces from the same decade in the same classification.
+
+## Pairing Checks
+
+**Complementary Characteristics to Evaluate**
+
+Assess these attributes when pairing fonts:
+
+- **x-height ratio**: Ensure both faces share a similar x-height so they optically align at the same font-size.
+- **Stroke contrast**: Pair high-contrast strokes with low-contrast strokes for hierarchy differentiation.
+- **Letter spacing tendency**: Avoid pairing two tightly-spaced faces; combine a tight face with a naturally open one.
+- **Historical period**: Fonts from the same era (e.g., both humanist) pair naturally; cross-era pairings require more careful balancing.
+- **Intended use class**: Pair a face designed for long-form reading with one designed for short labels or headlines.
+
+Limit any project to two typeface families maximum; use weight and size variations to create additional hierarchy levels within each family.
+
+**Display + body**
+
+Reserve display typefaces for headings at 24px and above. Never use display faces at body sizes; their exaggerated features degrade legibility below 18px.
+
+- Match a condensed display face with a wider body face to create spatial contrast.
+- Pair a rounded display face with a structured geometric body face to balance personality with readability.
+
+## Type as Design Element
+
+Typography is not just for reading — it is the primary visual element in most interfaces. Techniques:
+- **Scale contrast**: 72px heading next to 14px body creates dramatic hierarchy.
+- **Weight contrast**: Black weight (900) heading next to Light weight (300) body.
+- **Color as type tool**: Key words in accent color within a sentence for emphasis.
+- **Mixed case**: ALL CAPS for labels and small text (with tracking +0.05em), Sentence case for headings, Title Case sparingly.
+- **Negative space typography**: Let large type breathe with massive margins. Do not crowd large type.
+
+## Display Typography (Hero Sections, Marketing)
+
+Display text (40px+) follows different rules than body text:
+- Tighten letter-spacing: -0.02em to -0.04em at display sizes.
+- Tighten line-height: 1.0 to 1.15 for multi-line display text.
+- Consider display-specific optical sizes in variable fonts.
+- Use font-feature-settings for stylistic alternates, contextual ligatures.
+- Display text can break body text rules: centered is acceptable, all-caps works, decorative typefaces earn their place.
+
+## Typography by Content Type
+
+**Editorial / Long-Form**
+
+- Set body text between 16-20px (1rem-1.25rem) with line-height of 1.5-1.7.
+- Maintain line length between 45-75 characters (measure); 66 characters is optimal.
+- Use generous paragraph spacing (1em-1.5em margin-bottom).
+- Apply hanging punctuation and optical margin alignment where supported.
+- Employ drop caps or lead-in styles for article openings.
+
+**UI / Application**
+
+- Set base UI text at 14-16px with line-height of 1.3-1.5.
+- Use semibold (600) for labels and controls; avoid bold (700) in small text.
+- Differentiate primary, secondary, and tertiary text through opacity or color value, not size alone.
+- Enforce strict truncation rules with ellipsis for overflow in constrained components.
+
+**Data-Heavy / Dashboards**
+
+- Use tabular (monospaced) figures for numerical columns: `font-variant-numeric: tabular-nums`.
+- Set data at 12-14px; maintain consistent column alignment.
+- Use condensed widths for dense data tables to fit more information without horizontal scrolling.
+- Differentiate row headers from data cells through weight, not color alone.
+
+**Marketing / Landing Pages**
+
+- Set hero text at step-4 or step-5 in the type scale (36-64px equivalent).
+- Use display optical sizes for large headings; switch to text optical sizes for body.
+- Apply letter-spacing adjustments: tighten at display sizes (-0.02em), loosen at small sizes (+0.01em).
+- Limit body text width to 600-700px maximum for comfortable reading even on wide viewports.
+
+## International Typography
+
+**CJK Considerations (Chinese, Japanese, Korean)**
+
+- CJK characters occupy a square em-box; set line-height to 1.7-2.0 for comfortable vertical spacing.
+- Never justify CJK text with Latin justification algorithms; use `text-justify: inter-ideograph` or equivalent.
+- Specify CJK font families explicitly in the font stack: `font-family: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans', sans-serif`.
+- CJK fonts are large (5-20MB); use unicode-range subsetting or variable CJK fonts where available.
+- Punctuation rules differ: full-width punctuation, prohibition rules (kinsoku) prevent certain characters from appearing at line starts or ends.
+
+**RTL Script Handling (Arabic, Hebrew)**
+
+- Set `dir="rtl"` on the HTML element or container; use `direction: rtl` in CSS only as a supplement.
+- Use CSS logical properties (`margin-inline-start`, `padding-inline-end`) instead of physical directions to ensure layouts flip correctly.
+- Arabic requires connected cursive rendering; test that font ligatures render correctly at all sizes.
+- Bidirectional text (mixed LTR and RTL) requires explicit `<bdo>` or Unicode bidi control characters for correct ordering.
+- Mirror UI icons and layouts, but do not mirror content that is universally directional (media playback controls, clocks, phone numbers).
+
+**Multi-Script Systems**
+
+- When mixing scripts in a single line, adjust `vertical-align` or `line-height` to harmonize different x-heights and ascender/descender proportions.
+- Provide separate `@font-face` declarations with `unicode-range` to load only the glyphs needed for each script.
+- Test text rendering on target platforms; font fallback behavior varies significantly across operating systems.
+
+## Font Fallback Metric Matching
+
+| Strategy | `font-display` | Behavior | Best For |
+|----------|----------------|----------|----------|
+| **FOUT** (Flash of Unstyled Text) | `swap` | Show fallback immediately; swap when loaded | Body text, accessibility priority |
+| **FOIT** (Flash of Invisible Text) | `block` | Hide text up to 3s; swap or show fallback | Display/heading text only |
+| **Optional** | `optional` | Use font only if cached; never swap | Decorative/non-essential fonts |
+| **Fallback** | `fallback` | Brief block (100ms), then fallback; late load ignored | Balanced approach |
+
+Use `size-adjust`, `ascent-override`, `descent-override`, and `line-gap-override` in `@font-face` to match fallback system fonts to the web font metrics, minimizing layout shift during swap:
+
+```css
+@font-face {
+  font-family: 'Inter-fallback';
+  src: local('Arial');
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+```
+
+## Cross-Platform Rendering
+
+**Anti-Aliasing**
+
+- macOS uses subpixel-free grayscale anti-aliasing by default (since Mojave). Apply `-webkit-font-smoothing: antialiased` only when intentionally thinning heavy fonts on light backgrounds.
+- Windows uses ClearType subpixel rendering with DirectWrite. Text appears heavier than on macOS at the same weight.
+- Never force anti-aliasing mode globally; test on both platforms and adjust weight selections per platform if needed.
+
+**Platform Differences**
+
+- The same font at the same size renders with different visual weight, spacing, and hinting across macOS, Windows, Linux, iOS, and Android.
+- Design with platform-native system fonts as a fallback baseline; test custom fonts on each target platform.
+- Hinting matters on Windows at small sizes (below 16px); prefer fonts with quality TrueType hinting (e.g., Inter, Roboto) for cross-platform consistency.
+
+## OpenType Features
+
+Activate OpenType features to refine typographic quality. Use `font-feature-settings` or the higher-level `font-variant-*` properties.
+
+| Feature | CSS | Use |
+|---------|-----|-----|
+| Standard ligatures | `font-variant-ligatures: common-ligatures` | fi, fl, ffi connections (enabled by default) |
+| Tabular numbers | `font-variant-numeric: tabular-nums` | Aligned numbers in tables and data |
+| Lining numbers | `font-variant-numeric: lining-nums` | Uniform-height numbers for UI |
+| Oldstyle numbers | `font-variant-numeric: oldstyle-nums` | Numbers that blend with body text |
+| Small caps | `font-variant-caps: small-caps` | Abbreviations, acronyms in running text |
+| Stylistic alternates | `font-feature-settings: 'salt' 1` | Alternate letterforms for brand character |
+| Fractions | `font-variant-numeric: diagonal-fractions` | Properly stacked fractions (1/2 becomes a single glyph) |
+| Case-sensitive forms | `font-feature-settings: 'case' 1` | Adjusts punctuation for all-caps text |
+
+## Vertical Rhythm
+
+Maintain a consistent baseline grid so all text and spacing aligns to a predictable vertical pattern.
+
+**Establishing the Grid**
+
+1. Set a base unit equal to the body line-height in pixels (e.g., 16px font-size * 1.5 line-height = 24px base unit).
+2. Constrain all vertical spacing (margins, padding, gaps) to multiples of this base unit: 24px, 48px, 72px.
+3. Set heading line-heights so that each heading occupies an integer multiple of the base unit.
+
+**Practical Implementation**
+
+```css
+:root {
+  --baseline: 1.5rem; /* 24px at 16px base */
+}
+
+h1 { font-size: var(--step-4); line-height: calc(var(--baseline) * 2); margin-bottom: var(--baseline); }
+h2 { font-size: var(--step-3); line-height: calc(var(--baseline) * 2); margin-bottom: var(--baseline); }
+p  { font-size: var(--step-0); line-height: var(--baseline); margin-bottom: var(--baseline); }
+```
+
+Accept slight deviations for fluid type sizes. The goal is optical consistency, not pixel-perfect mathematical alignment at every viewport width.
+
+## Typography Testing
+
+**Readability Testing**
+
+- Test with real content, not lorem ipsum. Use representative paragraphs at minimum 300 words.
+- Verify line length (measure) stays within 45-75 characters across all breakpoints.
+- Conduct the "newspaper test": can a user scan headlines and grasp page structure in under 3 seconds?
+
+**Automated Checks**
+
+- Integrate contrast checking into CI (axe-core, Pa11y) to validate text-to-background contrast at every heading and body level.
+- Use line-length linting (stylelint custom rules) to flag containers wider than `75ch` without `max-width` constraints.
+- Run font loading performance audits with Lighthouse; flag render-blocking font requests.

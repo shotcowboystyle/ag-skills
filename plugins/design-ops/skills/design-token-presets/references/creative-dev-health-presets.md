@@ -467,7 +467,7 @@ Monospace-heavy, dark-first, syntax highlighting tokens. Information-dense, keyb
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in:     cubic-bezier(0.55, 0.055, 0.675, 0.19);
   --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
-  --ease-snap:   cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.2, 0, 0, 1);
 
   /* --- Breakpoints --- */
   --bp-sm:  640px;
@@ -754,7 +754,7 @@ Calming, accessible, high contrast, professional. Blues and greens for trust and
   --ease-out:    cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in:     cubic-bezier(0.5, 0, 0.75, 0);
   --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
-  --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* --- Breakpoints --- */
   --bp-sm:  640px;
@@ -1032,11 +1032,11 @@ Friendly, colorful but organized. Large touch targets, clear hierarchy, joyful b
   --duration-normal:   200ms;
   --duration-moderate: 300ms;
   --duration-slow:     500ms;
-  --duration-celebrate: 800ms;
+  --duration-slower:    800ms;
   --ease-out:     cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in:      cubic-bezier(0.5, 0, 0.75, 0);
   --ease-in-out:  cubic-bezier(0.45, 0, 0.55, 1);
-  --ease-bounce:  cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-playful: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
   /* --- Breakpoints --- */
@@ -1322,11 +1322,11 @@ Earth tones, organic feel, warm neutrals. Nature-inspired palette, soft textures
   --duration-normal:   250ms;
   --duration-moderate: 400ms;
   --duration-slow:     600ms;
-  --duration-gentle:   900ms;
+  --duration-slower:   900ms;
   --ease-out:     cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in:      cubic-bezier(0.64, 0, 0.78, 0);
   --ease-in-out:  cubic-bezier(0.45, 0, 0.55, 1);
-  --ease-organic: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-gentle:  cubic-bezier(0.4, 0, 0.2, 1);
 
   /* --- Breakpoints --- */

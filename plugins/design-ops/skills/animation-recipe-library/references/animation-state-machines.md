@@ -59,8 +59,8 @@ const variants = {
     transition: {
       duration: 0.4,
       opacity: { duration: 0.25 },
-      scale: { type: "spring", stiffness: 200, damping: 20 },
-      y: { type: "spring", stiffness: 150, damping: 18 }
+      scale: { type: "spring", stiffness: 200, damping: 25 },
+      y: { type: "spring", stiffness: 200, damping: 25 }
     }
   },
   exit: {

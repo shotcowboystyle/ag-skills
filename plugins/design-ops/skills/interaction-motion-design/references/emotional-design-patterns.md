@@ -102,7 +102,7 @@ The perceptible response that communicates the result of the rules. Feedback can
 ### Like / Heart / Reaction Animations
 
 **Heart animation pattern:**
-1. On tap, scale the heart icon from 1.0 to 1.3 using a bouncy spring (stiffness 300, damping 10).
+1. On tap, scale the heart icon from 1.0 to 1.3 using `spring-bouncy` (stiffness 300, damping 10).
 2. Simultaneously change fill color from transparent/outlined to the brand's reaction color (typically red for hearts).
 3. Emit 5–8 small particles (circles or mini-hearts) from the center, each traveling outward at random angles with decreasing opacity.
 4. The heart settles back to scale 1.0 via the spring decay.
@@ -173,7 +173,7 @@ Duration: 1500–2500ms. Apply `pointer-events: none` to the confetti layer so i
 1. The button text fades out (100ms).
 2. The button width shrinks to a circle (200ms, ease-in-out).
 3. A checkmark draws itself inside the circle using SVG stroke-dashoffset animation (300ms, ease-out).
-4. Optionally, the circle scales up slightly with a bounce (spring, stiffness 300, damping 15).
+4. Optionally, the circle scales up slightly with a bounce (`spring-bouncy`: stiffness 300, damping 10).
 5. Hold for 500ms, then transition to the next state.
 
 **Particle burst:** A ring of particles expanding outward from the success element, fading as they travel. Simpler than confetti, suitable for less dramatic moments (saving a draft, marking a task complete).
@@ -339,12 +339,20 @@ Always pair haptic feedback with at least one other modality — visual or audit
 
 ## Brand Personality Through Motion
 
+### Emotional Motion Vocabulary
+
+- **Confidence:** Smooth, direct, no hesitation — ease-out curves.
+- **Playfulness:** Bounce, overshoot, spring physics — slight exaggeration.
+- **Urgency:** Fast, sharp transitions — short durations, ease-in.
+- **Calm:** Slow, gentle fades — longer durations, ease-in-out.
+- **Celebration:** Explosive, radial, particle effects — reserve for significant moments.
+
 ### Playful: Slack, Duolingo
 
 **Characteristics:** Overshoot and bounce in spring animations. Saturated, varied color palettes in animated elements. Character animations and illustrated responses. Sound effects with musical quality. Exaggerated scale changes (elements growing to 1.3x–1.5x before settling).
 
 **Motion signature:**
-- Spring config: high stiffness (250–300), low damping (8–12) — pronounced bounce
+- Spring config: `spring-bouncy` (300/10) — pronounced bounce
 - Durations on the longer side (400–600ms) to let the playfulness read
 - Liberal use of particle effects and confetti
 - Animated mascots responding to user actions
@@ -357,7 +365,7 @@ Always pair haptic feedback with at least one other modality — visual or audit
 **Characteristics:** Minimal easing with smooth deceleration. Monochromatic or limited color animation. No bounce, no overshoot. Precise, clipped transitions that respect the user's time. Opacity and transform only — no flashy effects.
 
 **Motion signature:**
-- Easing: standard ease-out or Material decelerate curves — `cubic-bezier(0.0, 0.0, 0.2, 1.0)`
+- Easing: `--ease-out` from the base scale (`references/animation-timing-curves.md`)
 - Durations kept short (150–300ms) — motion communicates, then gets out of the way
 - Stagger intervals tight (20–40ms) for grouped reveals
 - No particles, no confetti, no celebration beyond a brief checkmark
@@ -370,7 +378,7 @@ Always pair haptic feedback with at least one other modality — visual or audit
 **Characteristics:** Physics-based spring animations with careful damping (no visible bounce, but organic deceleration). Generous but not excessive durations. Spatial depth through layered motion (background elements move slower than foreground). Attention to sub-pixel rendering and anti-aliasing in animated elements.
 
 **Motion signature:**
-- Spring config: moderate stiffness (150–200), carefully tuned damping (20–30) — critically damped or slightly underdamped
+- Spring config: `spring-gentle` (200/25, ratio 0.88) — near-critically damped, no visible bounce
 - Durations moderate to long (300–500ms) — motion is savored, not rushed
 - Parallax and depth effects in scrolling
 - Blur transitions (background blur on modal presentation)
@@ -384,7 +392,7 @@ Always pair haptic feedback with at least one other modality — visual or audit
 **Characteristics:** Dynamic scale and position changes. Bold color transitions. Motion that feels rhythmic, sometimes synced to audio or content. Higher velocity with quick snaps. Full-screen animations for key moments. Motion graphics sensibility — closer to broadcast design than traditional UI.
 
 **Motion signature:**
-- Quick acceleration into position — `cubic-bezier(0.0, 0.0, 0.2, 1.0)` with short durations (200–350ms)
+- Quick arrival into position — `--ease-out` with short durations (200–350ms)
 - Large-scale motion: full-screen transitions, elements traveling significant distances
 - Bold use of color in animated transitions (color washes, gradient shifts)
 - Scroll-driven animations that create magazine-like storytelling

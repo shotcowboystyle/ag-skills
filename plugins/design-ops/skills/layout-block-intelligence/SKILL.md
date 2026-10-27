@@ -23,7 +23,7 @@ or a block doing none.
   *within* them, or the eye cannot find the seams.
 
 For ordering blocks into a whole page, that is `page-composition-engine`. This
-skill is the blocks themselves.
+skill is the blocks themselves: marketing and content page sections.
 
 ## Index
 
@@ -38,7 +38,6 @@ skill is the blocks themselves.
 | Logo wall, ratings, review display | — | `social-proof-patterns.md` |
 | Top nav as a page block | standard, mega, transparent-over-hero | `navigation-footer-patterns.md` |
 | Footer | minimal, sitemap, newsletter, mega | `navigation-footer-patterns.md` |
-| KPI card row, data widgets, chart cards | — | `dashboard-data-patterns.md` |
 
 ## Reference architecture
 
@@ -49,7 +48,6 @@ skill is the blocks themselves.
 | `references/navigation-footer-patterns.md` | nav and footer blocks | 638 |
 | `references/cta-pricing-patterns.md` | conversion blocks | 635 |
 | `references/social-proof-patterns.md` | testimonials, logos, ratings | 616 |
-| `references/dashboard-data-patterns.md` | dashboard blocks | 571 |
 
 ## What every reference file contains
 
@@ -78,8 +76,9 @@ For **navigation and footers** as page blocks — standard top nav, mega menu,
 transparent-over-hero, and footer variants: read
 `references/navigation-footer-patterns.md`.
 
-For **dashboard blocks** — layout patterns, the dashboard spacing system, KPI
-card rows and data-widget variants: read `references/dashboard-data-patterns.md`.
+Dashboards (shells, KPI cards, charts, data tables) are not page sections:
+use `data-visualization-mastery`. App blocks such as kanban boards, calendars
+and activity feeds belong to `ui-pattern-intelligence`.
 
 ## Cross-References
 
@@ -100,57 +99,7 @@ card rows and data-widget variants: read `references/dashboard-data-patterns.md`
 
 ## Production Code Patterns
 
-### Section Wrapper (React/TSX + Tailwind)
-```tsx
-interface SectionProps {
-  children: React.ReactNode;
-  background?: 'white' | 'gray' | 'dark' | 'brand' | 'gradient';
-  padding?: 'sm' | 'md' | 'lg' | 'xl';
-  maxWidth?: 'narrow' | 'standard' | 'wide' | 'full';
-  id?: string;
-}
-
-const paddingMap = { sm: 'py-8 md:py-12 lg:py-16', md: 'py-12 md:py-16 lg:py-20', lg: 'py-16 md:py-20 lg:py-24', xl: 'py-20 md:py-28 lg:py-32' };
-const maxWidthMap = { narrow: 'max-w-3xl', standard: 'max-w-6xl', wide: 'max-w-7xl', full: 'max-w-full' };
-const bgMap = { white: 'bg-white text-gray-900', gray: 'bg-gray-50 text-gray-900', dark: 'bg-gray-900 text-white', brand: 'bg-primary text-primary-foreground', gradient: 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground' }; // brand tokens from /style, never a stock blue→purple
-
-export function Section({ children, background = 'white', padding = 'lg', maxWidth = 'standard', id }: SectionProps) {
-  return (
-    <section id={id} className={bgMap[background]}>
-      <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${maxWidthMap[maxWidth]} ${paddingMap[padding]}`}>{children}</div>
-    </section>
-  );
-}
-```
-
-### Section Header
-```tsx
-export function SectionHeader({ label, title, description, align = 'center' }: { label?: string; title: string; description?: string; align?: 'left' | 'center' }) {
-  const cls = align === 'center' ? 'text-center mx-auto' : 'text-left';
-  return (
-    <div className={`max-w-2xl mb-12 lg:mb-16 ${cls}`}>
-      {label && <p className="text-sm font-semibold uppercase tracking-wider text-blue-600 mb-3">{label}</p>}
-      <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">{title}</h2>
-      {description && <p className="mt-4 text-lg text-gray-600 leading-relaxed">{description}</p>}
-    </div>
-  );
-}
-```
-
-### CSS Custom Properties
-```css
-:root {
-  --section-py: clamp(3rem, 8vw, 7.5rem);
-  --section-px: clamp(1rem, 5vw, 5rem);
-  --section-max-width: 72rem;
-  --section-title-size: clamp(1.875rem, 4vw, 3rem);
-  --section-header-gap: clamp(2rem, 4vw, 4rem);
-}
-.section { padding: var(--section-py) var(--section-px); }
-.section__inner { max-width: var(--section-max-width); margin-inline: auto; }
-```
-
----
+Section wrapper, section header and the CSS custom properties: read `references/section-scaffolding.md`.
 
 ## Block Quality Checklist
 

@@ -117,5 +117,5 @@ When generating code from design, draw patterns from:
 - `component-patterns-code` skill for platform-specific component patterns
 - `design-systems-architecture` skill for token architecture and Style Dictionary pipeline
 - `accessibility-inclusive-design` skill for WCAG validation
-- `ui-visual-design-system` skill for visual system integrity
+- `visual-design-mastery` skill for visual system integrity
 - `cross-cultural-i18n-ux` skill for RTL/i18n layout considerations

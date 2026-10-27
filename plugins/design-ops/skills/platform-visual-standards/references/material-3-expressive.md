@@ -84,6 +84,17 @@ MaterialTheme.shapes.extraLarge    // 28dp radius
 MaterialTheme.shapes.full          // 50% (pill/circle)
 ```
 
+| Family | Corner Style | Use Case |
+|--------|-------------|----------|
+| **Extra Small** | 4dp radius | Chips, small badges |
+| **Small** | 8dp radius | Cards, text fields |
+| **Medium** | 12dp radius | Dialogs, menus |
+| **Large** | 16dp radius | Sheets, FAB |
+| **Extra Large** | 28dp radius | Large surfaces, navigation drawer |
+| **Full** | 50% radius (circle/pill) | FAB in resting, avatar, pill buttons |
+
+Morph shapes animate between corner families during state transitions. A FAB morphing into a bottom sheet transitions from Full to Extra Large with a spring animation; a FAB starts as Full (circle), morphs to Large when expanded, and returns to Full when collapsed.
+
 ### Morphing Shapes in Practice
 
 ```kotlin
@@ -121,7 +132,9 @@ FloatingActionButton(
 
 ## Spring-Physics Motion
 
-M3 Expressive replaces all duration-based animations (200ms ease-in-out) with spring physics. Springs are physically modeled — they have mass, stiffness, and damping — which makes motion feel natural and interruptible.
+> These are **Material 3 platform-native spring values** for Android/Compose. They are not the product's base motion scale; for base durations and easings see `interaction-motion-design` (its `animation-timing-curves.md` reference).
+
+M3 Expressive replaces duration-based animations (200ms ease-in-out) with spring physics. Material specifies each spring with two parameters only — **stiffness** and **damping ratio** (mass is fixed). Springs are interruptible: if the target changes mid-flight, the animation redirects from its current velocity with no stutter or restart, which matters during rapid interaction (e.g., quickly switching navigation tabs).
 
 ### Why Springs
 
@@ -132,36 +145,27 @@ M3 Expressive replaces all duration-based animations (200ms ease-in-out) with sp
 
 ### Spring Parameters
 
-- **Mass**: How heavy the element feels (default: 1.0). Higher mass = slower, more deliberate movement.
-- **Stiffness**: How quickly the spring pulls toward the target (default: varies). Higher stiffness = faster snap.
-- **Damping**: How quickly oscillation settles (default: varies). Lower damping = more bounce.
-- **Damping ratio**: 0 = infinite oscillation, 1 = critically damped (no bounce), >1 = overdamped (sluggish)
+- **Stiffness**: How quickly the spring pulls toward the target. Higher stiffness = faster, shorter animation.
+- **Damping ratio**: 0 = infinite oscillation, < 1 = underdamped (overshoot/bounce), 1 = critically damped (no bounce), > 1 = overdamped (sluggish)
 
-### Spring Presets
+### Motion Schemes and Spring Tokens
 
-**Bouncy**
-- Stiffness: 200, Damping: 10
-- Damping ratio: ~0.35
-- Use: Playful interactions, like/favorite animations, success states
-- Visible overshoot and 1-2 bounces before settling
+Material defines two **motion schemes** (`MotionScheme.standard()` and `MotionScheme.expressive()` in Compose). Each has six spring tokens: **spatial** springs (position, size, shape/corner radius — may overshoot) and **effects** springs (color, opacity — never bounce), each in **fast / default / slow**.
 
-**Smooth**
-- Stiffness: 400, Damping: 20
-- Damping ratio: ~0.5
-- Use: Most UI transitions — sheets, page changes, reveals
-- Minimal overshoot, settles quickly
+| Token | Standard scheme (damping ratio / stiffness) | Expressive scheme (damping ratio / stiffness) |
+|-------|---------------------------------------------|-----------------------------------------------|
+| Fast spatial | 0.9 / 1400 | 0.6 / 800 |
+| Default spatial | 0.9 / 700 | 0.8 / 380 |
+| Slow spatial | 0.9 / 300 | 0.8 / 200 |
+| Fast effects | 1.0 / 3800 | 1.0 / 3800 |
+| Default effects | 1.0 / 1600 | 1.0 / 1600 |
+| Slow effects | 1.0 / 800 | 1.0 / 800 |
 
-**Stiff**
-- Stiffness: 800, Damping: 30
-- Damping ratio: ~0.53
-- Use: Small, precise movements — toggles, checkboxes, focus indicators
-- Almost no overshoot, snappy response
+Sources: expressive values from androidx `compose/material3/.../tokens/ExpressiveMotionTokens.kt`; standard values from material-components-android `docs/theming/Motion.md` (`motionSpring*` attributes).
 
-**Gentle**
-- Stiffness: 100, Damping: 14
-- Damping ratio: ~0.7
-- Use: Large-area transitions — full-screen reveals, background shifts
-- Slow, graceful movement
+Choosing a speed: **fast** for small component changes (switches, checkboxes, icon buttons), **default** for most component transitions (sheets, nav indicator, FAB morph), **slow** for full-screen transitions. Use the expressive scheme for hero moments and the standard scheme for utilitarian UI.
+
+Guidance (not a Material token): lists and grids can stagger children 20-40ms per item, capped at about 300ms total. Elements moving across the screen can follow arced paths rather than straight lines.
 
 ### Compose Implementation
 
@@ -175,7 +179,14 @@ val offset by animateFloatAsState(
     )
 )
 
-// Spring constants provided by Material
+// Expressive default spatial spring (scheme token values, see table above)
+val cornerRadius by animateDpAsState(
+    targetValue = if (isExpanded) 16.dp else 28.dp,
+    animationSpec = spring(dampingRatio = 0.8f, stiffness = 380f)
+)
+
+// Generic Compose spring constants (androidx.compose.animation.core.Spring),
+// not the M3 scheme tokens above
 Spring.DampingRatioNoBouncy        // 1.0
 Spring.DampingRatioLowBouncy       // 0.75
 Spring.DampingRatioMediumBouncy    // 0.5
@@ -235,7 +246,6 @@ HCT is Google's perceptually accurate color space developed specifically for Mat
 - 0 = pure black
 - 50 = medium (perceptual midpoint)
 - 100 = pure white
-- A tone difference of 40+ between foreground and background guarantees WCAG AA contrast (4.5:1)
 - A tone difference of 50+ guarantees 4.5:1 contrast (WCAG AA for normal text); 40+ guarantees 3:1
 
 ### Why HCT Over HSL
@@ -413,15 +423,27 @@ TextButton(onClick = { }) { Text("Text") }
 
 ### 15 Text Styles
 
-| Role | Size | Large | Medium | Small |
-|------|------|-------|--------|-------|
-| Display | For hero/splash | 57sp / 64 lh | 45sp / 52 lh | 36sp / 44 lh |
-| Headline | For sections | 32sp / 40 lh | 28sp / 36 lh | 24sp / 32 lh |
-| Title | For subsections | 22sp / 28 lh | 16sp / 24 lh / medium weight | 14sp / 20 lh / medium weight |
-| Body | For paragraphs | 16sp / 24 lh | 14sp / 20 lh | 12sp / 16 lh |
-| Label | For buttons/chips | 14sp / 20 lh / medium weight | 12sp / 16 lh / medium weight | 11sp / 16 lh / medium weight |
+Display is for hero/splash text, Headline for sections, Title for subsections, Body for paragraphs, Label for buttons and chips.
 
-(sp = scaleable pixels, lh = line height)
+| Role | Font | Size | Weight | Line Height | Tracking |
+|------|------|------|--------|-------------|----------|
+| Display Large | Brand/Serif | 57sp | 400 | 64sp | -0.25sp |
+| Display Medium | Brand/Serif | 45sp | 400 | 52sp | 0sp |
+| Display Small | Brand/Serif | 36sp | 400 | 44sp | 0sp |
+| Headline Large | Brand/Sans | 32sp | 400 | 40sp | 0sp |
+| Headline Medium | Brand/Sans | 28sp | 400 | 36sp | 0sp |
+| Headline Small | Brand/Sans | 24sp | 400 | 32sp | 0sp |
+| Title Large | Sans | 22sp | 400 | 28sp | 0sp |
+| Title Medium | Sans | 16sp | 500 | 24sp | 0.15sp |
+| Title Small | Sans | 14sp | 500 | 20sp | 0.1sp |
+| Body Large | Sans | 16sp | 400 | 24sp | 0.5sp |
+| Body Medium | Sans | 14sp | 400 | 20sp | 0.25sp |
+| Body Small | Sans | 12sp | 400 | 16sp | 0.4sp |
+| Label Large | Sans | 14sp | 500 | 20sp | 0.1sp |
+| Label Medium | Sans | 12sp | 500 | 16sp | 0.5sp |
+| Label Small | Sans | 11sp | 500 | 16sp | 0.5sp |
+
+(sp = scaleable pixels)
 
 ### Default Typeface
 
@@ -572,3 +594,152 @@ LazyColumn(
 | Standard margin | 16 dp |
 | Card elevation | 1-6 dp |
 | Bottom sheet peek | 56 dp |
+
+---
+
+## Release Context and Compatibility
+
+M3 Expressive was announced at Google I/O 2025 and ships with Android 16. It is backward-compatible with Material 3: existing M3 apps do not break, and the new components and behaviors are additive. To get the expressive look, apps opt into the new component variants, spring motion specs, and shape tokens.
+
+## Dynamic Color Details
+
+- **Tone stops**: M3 tonal palettes are commonly sampled at 0, 10, 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 95, 98, 99, 100; the surface and surface-container roles also use intermediate tones (4, 6, 12, 17, 22, 24, 87, 92, 94, 96).
+- **Role assignment**: tokens like `colorPrimary`, `colorOnPrimary`, `colorSurface`, `colorOnSurface` map to specific tonal stops. Light theme uses high-tone backgrounds (98-99) with low-tone text (10-20); dark theme inverts: low-tone backgrounds (6-10) with high-tone text (80-90).
+- **Color from content**: beyond wallpaper theming, dominant colors can be extracted from in-app content (album art, product images) and applied to nearby UI.
+- **Emphasis through tonal weight**: create hierarchy by choosing lighter or darker tones from the same palette rather than lowering opacity, which hurts readability on varied backgrounds.
+- **Scheme variants**: `DynamicScheme` generates a full scheme from one seed color; variants include `SchemeTonalSpot` (default), `SchemeExpressive`, `SchemeFruitSalad`, `SchemeRainbow`, `SchemeMonochrome`, each distributing the palette across roles differently.
+- **Contrast**: generated schemes enforce WCAG AA for text/background pairs in light and dark themes. Custom overrides can break this — always re-check contrast.
+
+### Elevation with Tonal Surfaces
+
+M3 replaced drop shadows with tonal elevation:
+
+| Elevation Level | Shadow | Tonal Overlay | Use Case |
+|----------------|--------|---------------|----------|
+| Level 0 | None | None | Flat surfaces |
+| Level 1 | None | +3% primary | Cards, list items |
+| Level 2 | None | +5% primary | Elevated cards, menus |
+| Level 3 | Subtle | +8% primary | Navigation drawer, FAB |
+| Level 4 | Medium | +11% primary | App bar (scrolled state) |
+| Level 5 | Prominent | +14% primary | Modal bottom sheet |
+
+Tonal overlay means the surface color shifts toward the primary color as elevation increases.
+
+### Material You Personalization
+
+- **Wallpaper-derived color** — Dynamic Color tonal palettes
+- **Themed icons** — Home-screen app icons adopt the user's tonal palette as a monochrome tint
+- **Widget theming** — Glance widgets consume `DynamicColors` to blend with the home screen
+- **Lock screen clock** — Uses Display Large typography with the wallpaper primary color
+- **Cross-device sync** — The selected wallpaper color syncs across phone, tablet, Wear OS, and Chromebook via the Google account
+
+### Component Theming
+
+Every M3 component exposes three theming layers: **color scheme** (role tokens from Dynamic Color, never raw colors), **shape scheme** (corner radius and family per size variant), and **typography scheme** (text style per component element). Override at the component level with the `*Defaults` / `*Colors` Compose APIs:
+
+```kotlin
+ButtonDefaults.buttonColors(
+    containerColor = MaterialTheme.colorScheme.tertiary,
+    contentColor = MaterialTheme.colorScheme.onTertiary
+)
+```
+
+---
+
+## New and Updated Expressive Components
+
+- **FAB / FAB menu** — morphs between shape states (circle idle, rounded rectangle when focused, pill when extended with a label); new large variant.
+- **Bottom app bar / floating toolbar** — can expand to reveal more actions; spring-driven, swipe up to expand and down to collapse.
+- **Navigation rail** — animated icon transitions; active indicator uses expressive shape tokens.
+- **Navigation bar** — the active indicator slides, stretches, and settles between destinations on a spring.
+- **Segmented / connected button groups** — the selection indicator stretches to the new item then contracts.
+- **Carousel** — first-class component with multi-browse, hero, uncontained, and full-screen layouts; spring-based snap.
+- **Date and time pickers** — expressive shapes, spring-animated selection and month transitions.
+- **Chips** — spring scale on selection; chip groups reflow with spring layout animation.
+- **Progress indicators** — determinate progress springs to the new value; new wavy variants.
+- **Search** — expands from a bar into a full-screen search view on a spring.
+- **Top app bar** — when scrolling stops mid-collapse, the bar springs to expanded or collapsed instead of snapping.
+- **Buttons and icon buttons** — shape "squish" on press (corner radius changes) and spring scale feedback beyond the ripple.
+- **Dialogs and bottom sheets** — spring entry/exit; sheets released mid-drag spring to the nearest snap point.
+
+### Compose Examples
+
+```kotlin
+@Composable
+fun MorphingFAB(isExpanded: Boolean, onClick: () -> Unit, icon: ImageVector, label: String) {
+    val spec = spring<Dp>(dampingRatio = 0.8f, stiffness = 380f) // expressive default spatial
+    val cornerRadius by animateDpAsState(if (isExpanded) 16.dp else 28.dp, spec)
+    FloatingActionButton(
+        onClick = onClick,
+        shape = RoundedCornerShape(cornerRadius),
+        modifier = Modifier.animateContentSize(spring(dampingRatio = 0.8f, stiffness = 380f))
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = if (isExpanded) 20.dp else 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Icon(imageVector = icon, contentDescription = null)
+            AnimatedVisibility(visible = isExpanded) {
+                Text(text = label, style = MaterialTheme.typography.labelLarge)
+            }
+        }
+    }
+}
+
+@Composable
+fun ExpressiveCarousel(items: List<CarouselItem>, modifier: Modifier = Modifier) {
+    HorizontalMultiBrowseCarousel(
+        state = rememberCarouselState { items.count() },
+        modifier = modifier.height(220.dp),
+        preferredItemWidth = 186.dp,
+        itemSpacing = 8.dp
+    ) { index ->
+        val item = items[index]
+        Card(shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxSize()) {
+            AsyncImage(
+                model = item.imageUrl,
+                contentDescription = item.description,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+```
+
+---
+
+## Accessibility in M3 Expressive
+
+- **Reduced motion**: when the user turns animations off or reduces them (Android "Remove animations" / animator duration scale), replace springs with instant cuts or a critically damped effects-style spring (damping ratio 1.0, high stiffness) — no bounce.
+- **Touch targets**: keep 48 x 48dp minimum in every shape state; shape morphing must not shrink the hit area.
+- **Animated icons**: state shown by icon animation must also be exposed through semantics — TalkBack does not see the animation.
+- **Dynamic color contrast**: see Dynamic Color Details above.
+
+## iOS 26 vs M3 Expressive
+
+Apple's answer to "make interfaces feel premium" is **material** (glass, refraction, tinting; motion serves the material). Google's answer is **motion** (springs, shape morphing, animated state changes). A glass aesthetic on Android looks out of place and bouncy springs on iOS feel un-Apple. For cross-platform teams:
+
+- **Follow each platform for chrome** (bars, tab bars, toolbars, system controls) — glass on iOS, expressive springs on Android.
+- **Unify content areas** — cards, lists, and media can share one brand language inside platform-native chrome.
+- **Budget for it** — plan roughly 15-25% extra design/engineering effort (estimate, not measured) to support both languages properly.
+- **Use platform-adaptive components** — Flutter `Cupertino`/`Material`, React Native platform components, Compose Multiplatform + SwiftUI.
+
+## Migrating from M3 to M3 Expressive
+
+1. Update the Material 3 Compose BOM to a version with the Expressive components and `MotionScheme`.
+2. Wrap the app in `MaterialExpressiveTheme` (or pass `motionScheme = MotionScheme.expressive()`), then replace `tween()` specs in navigation components with scheme springs.
+3. Replace custom carousels, FABs, and segmented controls with the M3 Expressive components.
+4. Align custom shapes with the M3 shape token scale.
+5. Try the expressive `PaletteStyle` / `SchemeExpressive` for dynamic color; re-check contrast in every generated scheme.
+6. Audit every spring for reduced-motion handling.
+
+**Testing checklist:**
+- Springs are smooth at 60/90/120fps on target devices, with no frame drops on mid-range hardware
+- Reduced motion: all springs become critically damped or instant
+- Dynamic color: text contrast meets WCAG AA in light, dark, and high-contrast schemes
+- Shape morphing: touch targets stay >= 48dp in every state
+- Carousel: TalkBack navigation announces position ("item 2 of 5")
+- Predictive back works with expanded search, sheet springs, and dialog entry
+- Navigation rail expressive icons render and animate on tablets and foldables

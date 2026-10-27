@@ -422,3 +422,98 @@ Research operations typically evolves through three stages:
 3. **Scaled**: A dedicated research operations function manages recruiting panels, compensation budgets, tool procurement, compliance, and knowledge management. Research velocity increases significantly.
 
 Assess the organization's current maturity level and invest in the next stage's capabilities to unlock greater research throughput without proportionally increasing headcount.
+
+## Research Method Selection Matrix
+
+### Discovery / Generative Methods
+
+**Contextual Inquiry**
+- Observe users in their natural environment while they perform real tasks
+- Combine observation with in-situ interviewing — the "master-apprentice" model
+- Ideal for understanding workflows, workarounds, and unarticulated needs
+- Sample size: 4-8 participants for pattern identification
+- Duration: 1-2 hours per session
+
+**User Interviews (Semi-Structured)**
+- Prepare 8-12 open-ended questions organized by research theme
+- Follow the "funnel" structure: broad context → specific behaviors → future needs
+- Never ask "Would you use X?" — instead ask "Tell me about the last time you..."
+- Use the Critical Incident Technique for rich behavioral data
+- Sample size: 5-8 participants per segment (saturation typically at 5-6)
+- Remote interviews are acceptable; enable video for nonverbal cues
+
+**Diary Studies**
+- Participants log experiences over 1-4 weeks using structured prompts
+- Captures longitudinal patterns that single-session methods miss
+- Excellent for understanding habit formation, pain points over time, and context switching
+- Use mobile-friendly logging tools (photos, voice memos, short text)
+- Sample size: 10-15 participants to account for dropout
+
+**Card Sorting**
+- Open sort: users create their own category structure — reveals mental models
+- Closed sort: users organize items into predefined categories — validates IA
+- Hybrid sort: predefined categories with option to create new ones
+- Use tools like Optimal Workshop or Maze for remote card sorts
+- Sample size: 15-30 participants for statistical reliability
+
+**Stakeholder Interviews**
+- Map business constraints, technical limitations, and success metrics before user research
+- Ask: "What would need to be true for this project to succeed?"
+- Identify conflicting stakeholder goals early to mediate through user evidence
+
+### Evaluative Methods
+
+**Usability Testing (Moderated)**
+- The gold standard of evaluative UX research
+- Think-aloud protocol: ask participants to verbalize thoughts while performing tasks
+- Task-based structure: 5-8 realistic scenarios with measurable success criteria
+- Metrics: task success rate, time on task, error rate, satisfaction (SUS/SEQ)
+- Sample size: 5 participants identify ~85% of usability issues (NNG finding)
+- Run iterative rounds (test → fix → retest) rather than one large study
+
+**Unmoderated Remote Testing**
+- Scale usability testing to larger samples without moderator presence
+- Platform options: UserTesting, Maze, Lookback, PlaybookUX
+- Best for validating specific flows rather than open exploration
+- Include post-task and post-study questionnaires
+- Sample size: 10-20 for quantitative confidence
+
+**A/B Testing**
+- Compare two design variants with random user assignment
+- Requires sufficient traffic volume for statistical significance (use calculators)
+- Test one variable at a time for clear causation
+- Minimum detectable effect must be defined before test launch
+- Run for full business cycles (at least 1-2 weeks) to avoid temporal bias
+
+**Heuristic Evaluation**
+- Expert review against established usability principles (see nng-ux-heuristics skill)
+- Fast and cost-effective — complements but does not replace user testing
+- 3-5 evaluators find ~75% of usability problems
+- Use severity ratings to prioritize findings
+
+**Cognitive Walkthrough**
+- Step through tasks from a first-time user's perspective
+- At each step ask: Will the user know what to do? Will they recognize the correct action? Will they understand the feedback?
+- Effective for onboarding flow evaluation
+
+### Quantitative Methods
+
+**Surveys and Questionnaires**
+- Use validated instruments: SUS (System Usability Scale), SUPR-Q, NPS, UMUX-Lite
+- Custom surveys: limit to 10-15 questions, use Likert scales consistently
+- Avoid leading questions and double-barreled questions
+- Pilot test with 3-5 people before full deployment
+- Sample size: 100+ for statistical reliability (400+ for segment comparison)
+
+**Analytics and Behavioral Data**
+- Define key behavioral metrics tied to user goals, not vanity metrics
+- Funnel analysis: identify where users drop off in critical flows
+- Session recordings and heatmaps for qualitative context on quantitative patterns
+- Cohort analysis to understand behavior changes over time
+- Set up event tracking before launch, not after
+
+**Tree Testing**
+- Evaluate information architecture findability without visual design influence
+- Present text-only hierarchy, ask users to locate specific items
+- Success metrics: directness (% choosing correct path first), completion rate
+- Sample size: 50+ for reliable results

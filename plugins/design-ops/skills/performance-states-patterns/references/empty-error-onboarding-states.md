@@ -642,3 +642,21 @@ Every state pattern must be accessible. States that only communicate through vis
 - Announce each step change: "Step 2 of 4: Click the Create button to make a new project."
 - The "Skip tour" button must be reachable by keyboard on every step.
 - When the tour ends, return focus to a logical location — typically the element that was highlighted in the final step, or the main content area.
+
+
+## The Onboarding Spectrum
+
+Onboarding is not a single screen or a tooltip tour. It is a spectrum of patterns that help users move from unfamiliarity to competence. The best onboarding serves the user's goal, not the product's feature tour.
+
+The onboarding spectrum, from least to most intrusive:
+
+1. **Progressive disclosure** — features reveal themselves as users naturally encounter them. No explicit onboarding UI at all; the interface teaches by being well-designed.
+2. **Contextual hints** — subtle, one-time tooltips that appear when a user first encounters a specific feature area.
+3. **Checklist model** — a visible list of setup tasks (often with endowed progress — starting at "1 of 5 complete" rather than "0 of 5") that guides users through initial configuration.
+4. **Interactive sandbox** — a safe, pre-populated environment where users can experiment without consequences before committing to real data.
+5. **Guided tour** — a step-by-step walkthrough with coach marks highlighting specific UI elements. Must be skippable, should be fewer than 5 steps, and should focus on the one or two actions that deliver the product's core value fastest.
+6. **Video walkthrough** — a short (under 90 seconds) video demonstrating the product's core workflow. Always skippable, always optional.
+
+The pattern chosen should match the product's complexity and the user's likely familiarity with the domain. A developer tool can assume higher baseline literacy than a consumer social app. A complex B2B platform may need a checklist; a simple utility may need nothing beyond a well-designed empty state.
+
+Empty states and onboarding are deeply connected. The first-use empty state is often the user's first onboarding moment — it should answer "What is this?" and "What do I do first?"

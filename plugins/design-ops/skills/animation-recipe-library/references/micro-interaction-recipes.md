@@ -11,7 +11,7 @@ presses, toggles, hovers, focus, drag affordances, and state confirmations.
 .btn:active { transform: scale(0.96); transition-duration: 80ms; }
 ```
 ```tsx
-<motion.button whileTap={{ scale: 0.96 }} transition={{ type: "spring", stiffness: 400, damping: 25 }} />
+<motion.button whileTap={{ scale: 0.96 }} transition={{ type: "spring", stiffness: 400, damping: 30 }} />
 ```
 
 #### C2. buttonHover
@@ -37,7 +37,7 @@ presses, toggles, hovers, focus, drag affordances, and state confirmations.
 ```
 ```tsx
 <motion.div animate={{ x: isOn ? 20 : 0 }}
-  transition={{ type: "spring", stiffness: 300, damping: 20 }} />
+  transition={{ type: "spring", stiffness: 300, damping: 25 }} />
 ```
 
 #### C4. checkboxCheck

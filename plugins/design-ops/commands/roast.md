@@ -287,7 +287,6 @@ When critiquing, draw evaluation criteria from:
 - `cognitive-psychology-ux` — Cognitive load and bias analysis
 - `accessibility-inclusive-design` — Accessibility scoring
 - `ux-ethics-content-strategy` — Ethical design evaluation
-- `ui-visual-design-system` — Visual design quality assessment
 - `visual-design-mastery` — Visual scoring calibration
 - `sector-style-intelligence` — Sector-appropriate expectations
 

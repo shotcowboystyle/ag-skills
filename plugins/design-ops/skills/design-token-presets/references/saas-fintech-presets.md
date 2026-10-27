@@ -1201,7 +1201,7 @@ Dark-first, data-dense, action-oriented. Green/red for up/down. Monospace number
   --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in:     cubic-bezier(0.55, 0.055, 0.675, 0.19);
   --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
-  --ease-snap:   cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.2, 0, 0, 1);
 
   /* --- Breakpoints --- */
   --bp-sm:  640px;

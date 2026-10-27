@@ -1,73 +1,6 @@
-# Data-Dense Interface Design Patterns
+# Desktop Interaction Patterns
 
-## Data Table Deep Dive
-
-### Advanced Table Patterns
-
-Data tables are the backbone of enterprise desktop applications. Move beyond simple flat tables to support the structural and interactive complexity that professional users demand.
-
-**Expandable rows.** Allow rows to expand in-place to reveal nested detail: sub-items, metadata, related records, or inline charts. Indicate expandability with a chevron icon in the first column. Expand a single row at a time to prevent vertical sprawl, or allow multiple expansions depending on use case. Animate the expansion with a brief slide-down (150-200ms) so users perceive spatial continuity. Indent the expanded content and apply a subtle background tint to visually associate it with the parent row.
-
-**Grouped rows.** Group rows by a shared dimension (status, category, date, assignee) with a sticky group header that persists while scrolling through that group. Display an aggregate summary in the group header: count, sum, average. Allow collapsing an entire group to a single summary row. Support re-grouping by different columns through a "Group by" dropdown or drag-and-drop column headers into a grouping zone.
-
-**Tree tables.** For hierarchical data (org charts, file systems, bill of materials), render rows as an expandable tree with indentation levels. Display expand/collapse toggles at each node. Support keyboard navigation: Right Arrow expands a node, Left Arrow collapses it, Down Arrow moves to the next visible row. Maintain expansion state across data refreshes and pagination events.
-
-**Frozen columns.** Freeze the first 1-3 identifier columns (name, ID, status) so they remain visible during horizontal scrolling. Apply a subtle shadow or border on the right edge of the frozen zone to indicate the scroll boundary. Allow users to configure which columns freeze. Frozen columns must remain vertically synchronized with the scrollable region -- scroll jank between frozen and scrollable zones is a critical usability defect.
-
-**Virtual scrolling.** For tables with thousands or tens of thousands of rows, implement virtual scrolling (windowed rendering) that only renders the rows visible in the viewport plus a small buffer above and below. Recycle DOM nodes as the user scrolls. Maintain a consistent scrollbar thumb size that accurately reflects total row count. Libraries such as react-window, react-virtualized, or AG Grid provide production-grade implementations.
-
----
-
-## Inline Editing Patterns
-
-### Cell Editing
-
-Transform a cell into an editable state on double-click or Enter keypress when the cell has focus. Display an input control appropriate to the data type: text input for strings, number input with stepper for numerics, date picker for dates, dropdown for enumerated values, checkbox for booleans. Highlight the active cell with a prominent border (2px, primary color). Commit the edit on Enter, Tab (which advances to the next cell), or blur. Cancel on Escape, restoring the original value.
-
-Validate immediately on commit. Display inline validation errors as a red border and tooltip on the cell. For server-side validation, show a brief loading indicator within the cell during the round-trip, then confirm with a subtle green flash or display the error.
-
-### Row Editing
-
-Enter row-level edit mode on an explicit "Edit" action (row action button or keyboard shortcut). Transform all editable cells in the row simultaneously. Display Save and Cancel buttons at the end of the row or in a floating toolbar. Highlight the entire row with a distinct background to signal edit mode. Prevent navigation away from the row with unsaved changes -- display a confirmation dialog or auto-save.
-
-### Bulk Editing
-
-Allow users to select multiple rows and apply a single value change to a shared field across all selected rows. Open a modal or inline panel listing the affected rows and the field to change. Display a preview of the change: "Set status to 'Approved' for 47 selected items." Require explicit confirmation for bulk edits. Provide undo capability immediately after the bulk operation completes.
-
-### Validation in Tables
-
-Display validation errors at three levels:
-
-1. **Cell level.** Red border and inline tooltip for the specific field.
-2. **Row level.** Error icon in the row status column linking to a summary of all errors in that row.
-3. **Table level.** A banner above the table: "3 rows have validation errors. Fix errors before saving." with links to jump to each error row.
-
-Prevent submission of the table or form while validation errors exist. For server-side validation failures returned after a batch save, highlight the specific rows and cells that failed and preserve the user's input.
-
----
-
-## Data Grid vs. Data Table
-
-### When to Use Spreadsheet-Style Grids
-
-A data grid is a spreadsheet-like component that supports cell-level editing, formulas, copy-paste, fill-down, and free-form data entry. A data table is a structured list of records with column-based operations.
-
-**Use a data grid when:**
-
-- Users need to enter or edit data across many cells rapidly, resembling spreadsheet workflows (financial modeling, inventory management, scheduling).
-- The mental model is a matrix of values rather than a list of entities.
-- Copy-paste from external spreadsheets is a core workflow.
-- Users expect cell range selection (click-drag across cells), fill handles, and keyboard-driven rapid entry (Tab to advance, Enter to move down).
-
-**Use a data table when:**
-
-- Each row represents a distinct entity (user, order, ticket, device).
-- Operations are row-level: view detail, edit record, delete, change status.
-- Data arrives from an API as a collection of objects.
-- Sorting, filtering, pagination, and search are the primary interactions.
-- Rows have action buttons, links, or navigation targets.
-
-**Hybrid patterns.** Some enterprise applications use a data table with inline editable cells that selectively activate grid-like behaviors. This hybrid is common in ERP and CRM systems where records are entities but rapid multi-cell editing is needed for certain workflows (pricing updates, batch status changes).
+Dashboards, charts and data tables (sorting, filtering, density, inline editing, grid vs. table) are owned by `data-visualization-mastery`; see its `dashboards-and-tables.md` and `data-table-mastery.md`.
 
 ---
 
@@ -215,7 +148,7 @@ Design drop targets to be large and forgiving. Expand the hit area beyond the vi
 
 ### Accessibility Alternatives
 
-Drag and drop is inaccessible to keyboard-only and screen reader users by default. Provide a parallel interaction: select the item, invoke a "Move" action (from context menu or keyboard shortcut), then select the destination from a list or tree dialog. Announce the operation via ARIA live regions: "Item 'Project Alpha' selected for move. Choose destination." Implement ARIA drag-and-drop attributes (aria-grabbed, aria-dropeffect) for screen readers that support them, but do not rely on these alone.
+Drag and drop is inaccessible to keyboard-only and screen reader users by default. Provide a parallel interaction: select the item, invoke a "Move" action (from context menu or keyboard shortcut), then select the destination from a list or tree dialog. Announce the operation via ARIA live regions: "Item 'Project Alpha' selected for move. Choose destination." Do not use `aria-grabbed` or `aria-dropeffect`: both are deprecated in ARIA 1.1 and poorly supported. The parallel interaction and live-region announcements carry the accessibility.
 
 ---
 
@@ -380,6 +313,82 @@ For advanced applications (design tools, document editors, audio/video editors),
 
 ---
 
+## Quick Rules: Workflows, Keyboard, Panels, Enterprise UI
+
+### Complex Workflow Design
+
+#### Multi-Step Workflows
+- **Progress indicator:** Show current step, total steps, and completion state
+- **Non-linear navigation:** Allow jumping to completed steps for editing
+- **Save draft at every step** — never lose user work on navigation
+- **Summary/review step** before final submission
+- **Clear step labels** that describe the content, not just "Step 1, Step 2"
+
+#### Form-Heavy Interfaces
+- **Section grouping** with clear headings and optional collapse
+- **Contextual help** near complex fields — info icons with tooltips or inline descriptions
+- **Dependent fields:** Show/hide fields based on previous selections
+- **Auto-save with visual confirmation** (subtle "Saved" indicator)
+- **Validation summary** at top of form linking to each error field
+
+#### Master-Detail Pattern
+- **List/grid on left, detail panel on right** — the dominant desktop productivity pattern
+- Support resizable split panes
+- Detail panel updates without full page reload
+- Keyboard navigation: arrow keys traverse list, Enter opens detail, Escape returns to list
+- Mobile adaptation: replace side-by-side with stack navigation
+
+### Keyboard-First Interaction
+
+#### Essential Keyboard Patterns
+- **Global shortcuts:** Document common shortcuts in an overlay (? or Ctrl+/)
+- **Command palette:** Cmd/Ctrl+K for quick action access — the most important desktop UX innovation of the 2020s
+- **Tab order:** Logical focus progression through interactive elements
+- **Focus indicators:** Always visible, high-contrast focus rings (never remove outline without replacement)
+- **Escape key:** Consistently closes modals, dropdowns, and cancels operations
+
+#### Shortcut Design Rules
+- Follow platform conventions (Ctrl/Cmd+S = Save, Ctrl/Cmd+Z = Undo)
+- Avoid overriding browser shortcuts
+- Use modifier combinations logically: Ctrl = action, Shift = modify/extend, Alt = alternate
+- Provide visual shortcut hints in menus, tooltips, and command palette
+
+### Multi-Window and Panel Management
+
+#### Panel Patterns
+- **Sidebar navigation:** Collapsible, persistent across views, icon+label or icon-only modes
+- **Inspector panels:** Right-side contextual properties panel (design tool pattern)
+- **Bottom panels:** Console, log, terminal outputs — resizable with collapse
+- **Floating panels:** Detachable for multi-monitor workflows
+
+#### State Management
+- Persist panel states (open/closed, sizes) across sessions
+- Remember user's last-used view and filters
+- Support workspace presets ("Developer layout", "Review layout")
+- Handle window resize gracefully — responsive desktop is essential for varied monitor sizes
+
+### Enterprise UI
+
+#### Permission-Aware UI
+- Hide elements users cannot access (not just disable) for cleaner interfaces
+- For disabled elements that provide context, show tooltip explaining why access is restricted
+- Role-based views: admin sees all controls, viewer sees read-only, etc.
+- Audit trails for sensitive actions with clear attribution
+
+#### Notification and Alert Design
+- **Severity levels:** Info (blue), Success (green), Warning (amber), Error (red), Critical (red + icon)
+- **Position:** Non-blocking toasts for confirmations, blocking modals for critical decisions
+- **Persistence:** Success toasts auto-dismiss (3-5s), errors persist until addressed
+- **Grouping:** Batch similar notifications to prevent notification fatigue
+
+#### Empty States and Onboarding
+- First-run experience should guide users to first value moment
+- Empty states include illustration, explanation, and clear CTA to populate the view
+- Progressive onboarding: introduce features as they become relevant, not all at once
+- In-app guidance: highlight new features with subtle callouts, dismissible permanently
+
+---
+
 ## Key Sources
 
 - Cooper, A., Reimann, R., Cronin, D., and Noessel, C. (2014). *About Face: The Essentials of Interaction Design.* 4th ed. Wiley.
@@ -387,7 +396,6 @@ For advanced applications (design tools, document editors, audio/video editors),
 - Microsoft Fluent 2 Design System -- Data grid, command bar, and panel patterns.
 - Apple macOS Human Interface Guidelines -- Sidebars, split views, and table views.
 - ARIA Authoring Practices Guide (APG) -- Treegrid, table, dialog, and drag-and-drop patterns.
-- AG Grid documentation -- Enterprise data grid implementation patterns.
 - Figma engineering blog -- Canvas rendering architecture and performance.
 - VS Code UX guidelines -- Command palette, keyboard shortcuts, and panel layout.
 - Nielsen Norman Group -- Enterprise UX research on complex application design.

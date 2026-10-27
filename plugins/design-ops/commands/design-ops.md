@@ -5,7 +5,7 @@ argument-hint: "[optional: command or topic]"
 
 # Design Ops — Your Design Intelligence System
 
-Welcome to Design Ops. 39 commands. 46 skills. 4 team agents. Vibe coded slop into visual cuisine.
+Welcome to Design Ops. 39 commands. 47 skills. 4 team agents. Vibe coded slop into visual cuisine.
 
 **New here?** Run `/start` instead. It asks one question and routes you — no need to read this map.
 
@@ -178,9 +178,9 @@ Skills activate automatically when relevant. You never need to call them directl
 
 **Core UX**: design-process-methods, nng-ux-heuristics, ux-research-methods, cognitive-psychology-ux, ux-metrics-measurement, ux-ethics-content-strategy
 
-**Platform**: mobile-ux-design, desktop-app-design, platform-visual-standards, cross-cultural-i18n-ux
+**Platform**: mobile-ux-design, desktop-app-design, platform-visual-standards, cross-cultural-i18n-ux, spatial-voice-ux
 
-**Visual**: reference-intelligence, ui-visual-design-system, visual-design-mastery, color-palette-library, typography-pairing-recipes, shadow-elevation-density, image-media-patterns, icon-illustration-systems
+**Visual**: reference-intelligence, visual-design-mastery, color-palette-library, typography-pairing-recipes, shadow-elevation-density, image-media-patterns, icon-illustration-systems
 
 **Patterns**: screen-flow-patterns, ui-pattern-intelligence, layout-block-intelligence, page-composition-engine, navigation-pattern-encyclopedia, form-design-encyclopedia, responsive-block-patterns
 
@@ -188,7 +188,7 @@ Skills activate automatically when relevant. You never need to call them directl
 
 **Systems**: design-systems-architecture, component-patterns-code, design-token-presets, data-visualization-mastery
 
-**AI & Generation**: ai-spatial-voice-ux, agentic-ai-generative-ux, ai-design-generation, figma-design-tool-workflows
+**AI & Generation**: agentic-ai-generative-ux, ai-design-generation, figma-design-tool-workflows
 
 **Strategy**: sector-style-intelligence, conversion-optimization-patterns, micro-copy-intelligence, design-critique-case-studies, accessibility-inclusive-design, business-design-templates
 

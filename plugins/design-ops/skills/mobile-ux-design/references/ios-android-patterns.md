@@ -368,46 +368,40 @@ Design each platform as a first-class citizen. The best cross-platform apps feel
 
 ---
 
-## iOS 26 Liquid Glass & Material 3 Expressive Updates
+## iOS 26 Liquid Glass & Material 3 Expressive
 
-### iOS 26: Liquid Glass Design Language
+Owned by `platform-visual-standards`: read its `ios-26-liquid-glass.md` (glass materials, `.glassEffect()`, vibrancy, Reduce Transparency, migration) and `material-3-expressive.md` (motion schemes and spring tokens, shape morphing, expressive components). In short: glass and vibrancy for chrome on iOS, spring-driven motion and expressive indicators on Android — do not port one platform's expression to the other.
 
-Apple's iOS 26 (announced WWDC 2025) introduces Liquid Glass as the foundational visual paradigm across the entire system. This is the most significant visual redesign since iOS 7's shift to flat design, and it fundamentally changes how navigation bars, tab bars, toolbars, and sidebars render.
+---
 
-**Glass as the Default Material.** All standard UIKit and SwiftUI navigation chrome now uses glass by default. Navigation bars, tab bars, toolbars, and sidebars render as translucent, light-refracting surfaces that reveal the content behind them while maintaining legibility. This is not optional styling — it is the system default, and apps that do not account for it will look inconsistent with the rest of the OS.
+## Platform Conventions Quick Reference
 
-**The `.glassEffect()` Modifier.** SwiftUI introduces the `.glassEffect()` modifier to apply glass material to custom views. This enables designers and developers to extend the glass language beyond system chrome into custom UI elements — cards, floating panels, action buttons, and overlay surfaces. The modifier handles light refraction, specular highlights, and background sampling automatically, adapting to the content behind the glass surface in real time.
+#### iOS (Human Interface Guidelines)
 
-**System Vibrancy for Text on Glass.** Text rendered on glass surfaces must use system vibrancy to remain legible. Vibrancy dynamically adjusts text color and weight based on the background content visible through the glass. Use `primaryVibrancy`, `secondaryVibrancy`, and `tertiaryVibrancy` hierarchies for text on glass. Hard-coded text colors will appear washed out or illegible on glass surfaces.
+- **Navigation:** Tab bar (bottom, max 5 items), navigation bar (top, with back), large titles that collapse on scroll
+- **Typography:** SF Pro (system font), Dynamic Type support mandatory for accessibility
+- **Spacing:** 16pt standard margins, 8pt grid system
+- **Modals:** Sheet presentation (partial cover from bottom) replaces full-screen modals
+- **Haptics:** Use system haptic feedback for confirmations, selections, and errors
+- **Safe areas:** Respect notch, Dynamic Island, and home indicator insets
+- **Interaction:** Swipe-back navigation is expected on all pushed views
 
-**Accessibility: `accessibilityReduceTransparency`.** When a user enables Reduce Transparency in accessibility settings, glass effects must degrade to solid, opaque surfaces. Always check and respect `UIAccessibility.isReduceTransparencyEnabled` (UIKit) or the `accessibilityReduceTransparency` environment value (SwiftUI). Apps that ignore this setting will fail accessibility review. Design glass layouts with a fallback opaque state that maintains the same spatial relationships and information hierarchy.
+#### Android (Material Design 3)
 
-**Depth and Layering.** Liquid Glass introduces a formal depth model where glass surfaces exist at different Z-planes. System navigation bars sit at one depth, floating elements at another, and content at the base layer. Each depth level applies different levels of refraction and blur, creating a natural sense of spatial hierarchy without relying on drop shadows.
+- **Navigation:** Bottom navigation bar (3-5 destinations), navigation drawer for 5+, top app bar
+- **Typography:** Roboto or system font, Material Type Scale
+- **Spacing:** 16dp standard margins, 4dp base grid
+- **Material You:** Dynamic color theming from user wallpaper — design systems must be color-flexible
+- **FAB (Floating Action Button):** One primary action per screen, bottom-right
+- **Predictive back gesture:** Support the new Android predictive back animation
+- **Edge-to-edge:** Content extends behind system bars with appropriate insets
 
-### Material 3 Expressive: Spring Motion and New Components
+#### Cross-Platform Considerations
 
-Google's Material 3 Expressive update (2025-2026) represents a parallel but philosophically different evolution. Where Apple moves toward materiality (glass, light, refraction), Google moves toward expression through spring-based physics and exuberant component design.
-
-**Spring-Based Motion System.** M3 Expressive replaces duration-based animation curves with spring physics as the default motion model. The default spring configuration uses stiffness 380 and damping ratio 0.7, producing responsive motion with a subtle organic settle. This is a fundamental shift: instead of specifying "animate over 300ms with ease-out," designers specify physical properties that produce natural-feeling motion with inherent interruptibility.
-
-**Morphing FAB (Floating Action Button).** The FAB now morphs fluidly between states — from a compact circle to an extended label, from a resting position to an expanded action menu. The morphing animation uses the spring system, and the FAB can transform into a bottom sheet or a full-screen creation surface. This replaces the previous expand-from-center pattern.
-
-**Expressive Navigation Bar Indicator.** The bottom navigation bar's active destination indicator evolves from a static pill shape to an animated, spring-driven indicator that morphs and bounces between destinations. The indicator stretches, contracts, and settles with visible spring physics, adding personality to navigation transitions. The animation parameters (stiffness 380, dampingRatio 0.7) keep the motion responsive without feeling slow.
-
-**Carousel Component.** M3 Expressive introduces a new Carousel component for horizontally scrollable content. The carousel supports hero (single large item), multi-browse (multiple visible items), and contained (fixed-width items) layouts. Items scale, fade, and snap with spring-driven physics as the user scrolls.
-
-### Platform Divergence: Glass vs Expression
-
-The 2025-2026 update cycle reveals a fascinating divergence in platform philosophy:
-
-- **Apple** moves toward physical materiality — glass, refraction, light response, and depth. The interaction model becomes more grounded in optical physics.
-- **Google** moves toward emotional expression — spring physics, morphing shapes, animated indicators, and exuberant motion. The interaction model becomes more grounded in mechanical physics.
-
-For cross-platform teams, this divergence demands a design strategy that embraces platform-native patterns rather than forcing convergence. A cross-platform app should use glass materials and vibrancy on iOS while using spring-driven motion and expressive indicators on Android. Attempting to implement glass effects on Android or spring FABs on iOS produces an uncanny experience that feels native to neither platform.
-
-The shared ground between platforms: both now favor physics-based systems (optical physics on iOS, mechanical physics on Android) over arbitrary timing curves. Both prioritize adaptive, responsive interfaces that react to user input and environmental context. Design systems serving both platforms should define shared semantic intent (e.g., "navigation feedback," "surface hierarchy") while allowing platform-specific implementation.
-
-> For the complete deep-dive on implementation specifics, glass modifier API details, spring parameter tuning, and cross-platform bridging strategies, see `ios26-liquid-glass-material3-expressive.md`.
+- Respect platform conventions — do not force iOS patterns onto Android or vice versa
+- Shared design systems need platform-adaptive components (different navigation, typography, interaction)
+- React Native and Flutter apps should still feel native to each platform
+- Test on real devices — emulators miss touch feel, performance, and gesture edge cases
 
 ---
 

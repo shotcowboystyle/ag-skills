@@ -604,3 +604,175 @@ Design implications:
 - [ ] Tested at actual E Ink refresh rates
 - [ ] Font has open counters and healthy x-height
 - [ ] Layout works in both portrait and landscape
+
+---
+
+## Quick Specifications: Watch / Wear OS
+
+### Apple Watch Specifications by Size
+
+| Case Size | Screen Width | Screen Height | Corner Radius | Scale Factor |
+|-----------|-------------|---------------|---------------|-------------|
+| 42mm (SE) | 176px | 215px | 36px | 2x |
+| 44mm (S10) | 198px | 242px | 36px | 2x |
+| 46mm (S10) | 208px | 254px | 40px | 2x |
+| 49mm (Ultra 3) | 205px | 251px | 40px | 2x |
+
+### Complication Design
+
+Complications are small data displays on the watch face:
+
+- **Circular Small** — 32x32pt. Icon or single metric only.
+- **Modular Small** — 52x52pt. Short text or icon with one data point.
+- **Modular Large** — Full width (varies). Multi-line content: title + up to 3 lines of body.
+- **Rectangular** — 154x68pt (varies by watch size). Rich content: images, gauges, text combinations.
+- **Corner** — Curved text along the watch face edge. Maximum 4-5 characters.
+
+Design rules: complications must be readable at arm's length (approximately 30cm). Use SF Compact Rounded for complication text. Minimum font size 13pt. Tint color should be a single accent per complication.
+
+### Glanceable Information Hierarchy
+
+Watch content must be parsed in under 3 seconds:
+
+1. **Primary metric** — The single most important number/status. Largest text, highest contrast.
+2. **Context label** — What the metric means. Secondary vibrancy, smaller text.
+3. **Trend indicator** — Arrow, spark line, or color shift showing direction.
+4. **Action hint** — One obvious tap target or instruction. Maximum one action per screen.
+
+Never show more than 3 information groups on a single watch screen. If content requires scrolling, use a paginated layout (vertical page dots), not a long scroll.
+
+### Crown and Bezel Interactions
+
+- **Digital Crown scroll** — Default scroll behavior for lists. Haptic detents every 4pt of scroll offset.
+- **Digital Crown precise input** — Used for pickers (time, date, numeric). Each detent maps to one value step.
+- **Bezel rotation (Wear OS)** — Equivalent to Digital Crown. Rotary input events map to scroll or value selection.
+- **Double-tap gesture (Apple Watch)** — Primary hand gesture for one-handed interaction. Maps to the "primary action" on the current screen.
+
+### Small Screen Typography
+
+| Role | Font | Size | Weight |
+|------|------|------|--------|
+| Large Title | SF Compact Rounded | 22pt | Bold |
+| Headline | SF Compact Rounded | 17pt | Semibold |
+| Body | SF Compact Rounded | 15pt | Regular |
+| Caption | SF Compact Rounded | 13pt | Regular |
+| Minimum readable | SF Compact Rounded | 11pt | Medium |
+
+Line lengths: maximum 20-25 characters per line on a 44mm watch. Use sentence fragments, not full sentences. Abbreviate aggressively: "Mon" not "Monday", "3h 22m" not "3 hours 22 minutes".
+
+## Quick Specifications: TV / 10-Foot UI
+
+### Focus-Based Navigation
+
+TV interfaces have no cursor or touch. Navigation is entirely focus-based:
+
+- **Focus ring** — A visible highlight (border, scale, or glow) indicating the currently focused element. Minimum 4px visible border or 1.05x scale increase.
+- **Focus movement** — D-pad (up/down/left/right) moves focus between elements. Focus movement must be predictable: pressing "right" should move to the element visually to the right.
+- **Focus memory** — When a user navigates away from a section and returns, focus should restore to the last-focused element within that section.
+- **Focus trapping** — Modals and overlays trap focus within their bounds. D-pad navigation cycles through the modal's focusable elements.
+
+### Overscan Safe Area
+
+Legacy TVs crop the outer edges of the signal. Even modern TVs may overscan slightly:
+
+- **Action safe area** — 5% inset from all edges (where interactive elements must live)
+- **Title safe area** — 10% inset from all edges (where text must live)
+- **Modern practice** — Most streaming apps use a 48px inset from all edges as a safe margin on 1080p, or 96px on 4K
+
+### Reading Distance Typography
+
+TV viewers sit 2-3 meters from the screen. Typography must be sized accordingly:
+
+| Role | Minimum Size (1080p) | Minimum Size (4K) | Notes |
+|------|---------------------|--------------------|-------|
+| Hero title | 48px | 72px | Maximum 2 lines |
+| Section title | 32px | 48px | Single line preferred |
+| Card title | 24px | 36px | Maximum 2 lines |
+| Metadata/subtitle | 18px | 28px | Single line |
+| Minimum readable | 16px | 24px | Never go below this |
+
+Font weight: use medium to bold weights. Thin and light weights disappear at TV viewing distance. Prefer sans-serif families with open counters and generous x-height.
+
+### D-Pad Navigation Patterns
+
+- **Grid navigation** — Focus moves in a 2D grid. Arrow keys move one cell. Wrap-around is optional but must be consistent (all rows wrap or none do).
+- **Rail/carousel navigation** — Horizontal list of cards. Left/right moves between cards. Up/down exits the rail to the rail above/below.
+- **Nested focus** — Pressing Select on a card expands it or navigates into a detail view. Back button returns to the previous focus context.
+- **Long-press** — Reserved for secondary actions (add to watchlist, info panel). Never required for primary interactions.
+
+### Remote Control UX
+
+- **Minimize button count** — Assume 5 buttons: D-pad (4 directions + select) and Back. Design every flow to be completable with these 5 inputs.
+- **Voice search** — Provide voice input as a shortcut for text entry. On-screen keyboards are painful with D-pad navigation.
+- **Idle timeout** — If no input for 4+ hours, show a "still watching?" prompt to avoid burning static UI into OLED panels.
+
+### Card-Based Layouts
+
+TV UI is overwhelmingly card-based:
+
+- **Standard card** — 16:9 landscape thumbnail with title below. Focus state scales the card to 1.05x-1.1x with an elevation increase.
+- **Wide card** — 2.39:1 cinematic ratio for hero/featured content.
+- **Tall card** — 2:3 portrait for book covers, profiles, app icons.
+- **Card spacing** — 16-24px gap between cards. Enough to clearly separate but not so much that the screen feels empty.
+- **Row labels** — Left-aligned, above each carousel rail. 24-32px font size with 16px gap to the first card.
+
+## Quick Specifications: Automotive / HUD
+
+### Driver Distraction Guidelines
+
+The National Highway Traffic Safety Administration (NHTSA) defines strict limits:
+
+- **Single glance time** — Maximum 2 seconds per glance away from the road
+- **Total task time** — Maximum 12 seconds cumulative for any single task (e.g., setting a destination)
+- **Total glances** — Maximum 6 glances for a single task
+- **Eyes-off-road time** — 85th percentile total eyes-off-road time must not exceed 12 seconds
+
+These are not suggestions. Automotive OEMs certify against these guidelines. Infotainment UI that exceeds these limits can result in regulatory action.
+
+### NHTSA Compliance Checklist
+
+1. No scrolling text or animations that require sustained attention
+2. No tasks requiring more than 6 sequential inputs
+3. Voice-first for any task exceeding the 12-second glance budget
+4. Automatic lockout of complex functions when the vehicle is in motion (above 5 mph)
+5. Haptic or audio confirmation for every touch input (driver cannot look to confirm)
+6. No video playback on the driver-facing display while in motion
+
+### Glance Time Limits by Content Type
+
+| Content | Max Glance | Interaction |
+|---------|-----------|-------------|
+| Current song / station | 1s | None (read-only) |
+| Navigation next turn | 1s | None (read-only) |
+| Temperature adjustment | 1.5s | Single tap or voice |
+| Contact selection | 2s | Voice-preferred |
+| Destination entry | Voice only | Text entry locked at speed |
+| Message reading | Voice only | Read aloud, never displayed |
+
+### Night Mode
+
+Automotive displays must support an aggressive night mode:
+
+- **Background**: Pure black (#000000) to minimize light emission
+- **Text**: Amber or red-shifted white (color temperature 2700K-3200K) to preserve scotopic (night) vision
+- **Brightness**: Auto-dimming to 1-5 nits in full darkness (phone screens are typically 200-1000 nits)
+- **No white surfaces**: Even "light gray" backgrounds can cause glare on the windshield
+- **HUD (head-up display)**: Green or white monochrome, 15-25pt text projected at optical infinity (focused at 2-3 meters ahead of the windshield)
+
+### Large Touch Targets
+
+Drivers interact with gloved hands, without looking, while the vehicle vibrates:
+
+- **Minimum touch target**: 18mm x 18mm (approximately 72px at typical automotive DPI)
+- **Recommended touch target**: 24mm x 24mm
+- **Spacing between targets**: Minimum 8mm gap
+- **Physical controls preferred**: Climate, volume, and hazard lights should remain physical knobs/buttons, not touchscreen-only
+
+### Voice-First Interaction
+
+For tasks exceeding a single glance:
+
+- Voice is the primary input, touch is the fallback
+- Provide confirmation prompts: "Navigating to 123 Main Street. Is that correct?"
+- Wake word should be configurable (users in noisy environments may prefer push-to-talk)
+- Visual feedback for voice state: listening, processing, confirming (simple icon states, not text)

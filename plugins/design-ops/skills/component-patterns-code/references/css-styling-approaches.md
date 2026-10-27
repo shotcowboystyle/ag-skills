@@ -1,5 +1,25 @@
 # CSS Styling Approaches Reference
 
+How to choose and apply a styling approach for a component library. CVA +
+Tailwind + `cn()` (tailwind-merge) are covered with full components in
+`react-component-cookbook.md`; native CSS features (container queries, `:has()`,
+`@layer`) are in `css-modern-patterns.md`.
+
+## Choosing an Approach
+
+| Solution              | Approach               | Best For                          |
+| --------------------- | ---------------------- | --------------------------------- |
+| **Tailwind CSS**      | Utility classes        | Rapid prototyping, design systems |
+| **CSS Modules**       | Scoped CSS files       | Existing CSS, gradual adoption    |
+| **styled-components** | Template literals      | React, dynamic styling            |
+| **Emotion**           | Object/template styles | Flexible, SSR-friendly            |
+| **Vanilla Extract**   | Zero-runtime           | Performance-critical apps         |
+
+Runtime CSS-in-JS (styled-components, Emotion) needs a client runtime and does
+not work in React Server Components; styled-components is in maintenance mode.
+Prefer a zero-runtime option (CSS Modules, Tailwind, Vanilla Extract) for new
+React Server Components / App Router code.
+
 ## Comparison Matrix
 
 | Approach          | Runtime | Bundle Size    | Learning Curve | Dynamic Styles | SSR   |
@@ -110,81 +130,14 @@ export function Button({
 
 ## Tailwind CSS
 
-Utility-first CSS with design system constraints.
-
-### Class Variance Authority (CVA)
-
-```tsx
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-
-const buttonVariants = cva(
-  // Base styles
-  "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  },
-);
-
-interface ButtonProps
-  extends
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, ...props }, ref) => {
-    return (
-      <button
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
-);
-```
-
-### Tailwind Merge Utility
-
-```tsx
-// lib/utils.ts
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-// Usage - handles conflicting classes
-cn("px-4 py-2", "px-6"); // => 'py-2 px-6'
-cn("text-red-500", condition && "text-blue-500"); // => 'text-blue-500' if condition
-```
+Utility-first CSS with design system constraints. For CVA variants and the
+`cn()` merge helper, see `react-component-cookbook.md` (Shared Utility and
+Button sections).
 
 ### Custom Plugin
+
+Tailwind v3 config shown. In Tailwind v4, define simple utilities in CSS with
+`@utility`, and load a JS plugin like this one with `@plugin "./plugin.js";`.
 
 ```js
 // tailwind.config.js

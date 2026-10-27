@@ -12,6 +12,78 @@
 
 ---
 
+## Action Verb Matrix
+
+The verb on a button or link is the user's contract with the system. Choosing the right verb sets accurate expectations about what will happen.
+
+### Create — Bringing something new into existence
+
+| Verb | Use When | Tone | Example |
+|---|---|---|---|
+| Create | Generic creation of a new entity | Neutral | "Create project" |
+| Add | Appending to an existing collection | Neutral | "Add team member" |
+| New | Shorthand for creation in toolbars | Terse | "New document" |
+| Compose | Writing a message or email | Focused | "Compose message" |
+| Start | Initiating a process or session | Active | "Start free trial" |
+| Generate | System creates something on the user's behalf | Technical | "Generate report" |
+| Upload | Transferring a file from local to remote | Specific | "Upload photo" |
+| Import | Bringing in data from an external source | Specific | "Import contacts" |
+| Record | Capturing audio or video | Specific | "Record voice memo" |
+
+### Modify — Changing something that exists
+
+| Verb | Use When | Tone | Example |
+|---|---|---|---|
+| Edit | Opening a form to change fields | Neutral | "Edit profile" |
+| Update | Saving changes to an existing record | Neutral | "Update settings" |
+| Change | Switching from one option to another | Direct | "Change password" |
+| Rename | Changing only the name | Specific | "Rename file" |
+| Move | Changing location in a hierarchy | Spatial | "Move to folder" |
+| Resize | Changing dimensions | Specific | "Resize image" |
+| Replace | Substituting one thing for another | Direct | "Replace file" |
+| Reorder | Changing sequence | Specific | "Reorder columns" |
+
+### Navigate — Moving through the interface
+
+| Verb | Use When | Tone | Example |
+|---|---|---|---|
+| View | Opening a read-only detail screen | Passive | "View details" |
+| Open | Launching a document or application | Neutral | "Open in editor" |
+| Go to | Jumping to a specific location | Direct | "Go to settings" |
+| Browse | Exploratory navigation | Casual | "Browse templates" |
+| Explore | Open-ended discovery | Inviting | "Explore features" |
+| Back | Returning to previous state | Terse | "Back to dashboard" |
+| Show | Revealing hidden content | Direct | "Show more" |
+| Expand | Enlarging a collapsed section | Specific | "Expand all" |
+
+### Communicate — Sending or sharing information
+
+| Verb | Use When | Tone | Example |
+|---|---|---|---|
+| Send | Transmitting a message or form | Final | "Send message" |
+| Share | Making content available to others | Collaborative | "Share with team" |
+| Publish | Making content publicly visible | Formal | "Publish article" |
+| Submit | Sending a form for review or processing | Formal | "Submit application" |
+| Post | Publishing to a feed or forum | Casual | "Post comment" |
+| Invite | Requesting someone to join | Social | "Invite collaborator" |
+| Notify | Alerting others of something | Informational | "Notify team" |
+
+### Manage — Controlling, organizing, or removing
+
+| Verb | Use When | Tone | Example |
+|---|---|---|---|
+| Save | Persisting current state | Neutral | "Save changes" |
+| Delete | Permanently removing | Destructive | "Delete account" |
+| Remove | Taking out of a collection (may not destroy) | Moderate | "Remove from list" |
+| Archive | Moving to inactive storage | Moderate | "Archive conversation" |
+| Cancel | Stopping a process or dismissing a dialog | Neutral | "Cancel subscription" |
+| Disable | Turning a feature off without removing | Moderate | "Disable notifications" |
+| Restore | Bringing back a deleted or archived item | Recovery | "Restore from trash" |
+| Export | Downloading data to local | Specific | "Export as CSV" |
+| Duplicate | Creating a copy | Specific | "Duplicate template" |
+
+---
+
 ## 1. Account and Authentication
 
 ### Sign Up / Registration

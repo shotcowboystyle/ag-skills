@@ -449,7 +449,7 @@ struct SnapCard: View {
                     }
                     .onEnded { value in
                         let snapPoint: CGFloat = value.translation.width > 100 ? 200 : 0
-                        withAnimation(.interpolatingSpring(stiffness: 300, damping: 20)) {
+                        withAnimation(.interpolatingSpring(stiffness: 300, damping: 25)) {
                             offset = snapPoint
                         }
                         // Fire haptic at snap moment

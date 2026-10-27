@@ -540,7 +540,7 @@ Track the refinement history so users can navigate back to any previous version.
 
 ## Cross-Referencing
 
-- For foundational AI interface patterns (chat, copilot, transparency), reference `ai-spatial-voice-ux/ai-native-interface-patterns`.
+- For voice interaction mechanics and spatial/multimodal AI surfaces, reference `spatial-voice-ux`.
 - For AI ethics, dark pattern avoidance, and content strategy, reference `ux-ethics-content-strategy`.
 - For accessibility requirements in agent interfaces, reference `accessibility-inclusive-design`.
 - For design system integration with generative and agent-driven UI, reference `design-systems-architecture`.
@@ -558,3 +558,73 @@ Track the refinement history so users can navigate back to any previous version.
 - ACM CHI 2025: Prompt Augmentation Patterns for Human-AI Co-Creation
 - World Economic Forum: Multi-Agent AI Systems Design
 - Arxiv: Survey of Agentic AI Design Workflows and Multi-Agent Orchestration UX
+
+## Background Agent Orchestration
+
+Agents running asynchronously — while users do other work — require entirely new UX patterns for monitoring, attention management, and result delivery.
+
+### Background Task Patterns
+
+- **Task cards:** Persistent, minimal-footprint cards showing active agent tasks with status indicators (queued, running, needs input, complete, failed).
+- **Attention-on-demand:** Agents work silently until they need user input or encounter an issue. Notification severity matches the urgency: silent completion, gentle notification, interrupt-level alert.
+- **Progress transparency:** Show meaningful progress indicators, not just spinners. "Analyzing 847 of 2,400 documents" is better than "Working..."
+- **Result staging:** When an agent completes a task, stage results for review rather than auto-applying. "I found 3 flights that match. Review them?" preserves user agency.
+
+### Monitoring Dashboards
+
+- Show all active agents, their current status, and recent outputs in a unified view.
+- Allow users to pause, reprioritize, or cancel agent tasks.
+- Provide execution logs for transparency — let users see what the agent did and why.
+- Surface agent resource consumption (tokens used, API calls made, time elapsed) for cost-aware users.
+
+## Multi-Agent Coordination
+
+Systems with multiple specialized agents require coordination patterns that are visible and comprehensible to users.
+
+### Agent Identity and Specialization
+
+- Give each agent a clear name, role description, and capability scope. "Research Agent," "Writing Agent," "Code Review Agent" — not "Agent 1, Agent 2, Agent 3."
+- Show which agent is active at any moment and why. "Research Agent is gathering sources for your report."
+- Visualize handoffs between agents explicitly. "Research Agent found 12 sources. Handing off to Writing Agent to draft the summary."
+
+### Orchestration Visibility
+
+- Show the agent workflow plan before execution when complexity warrants it. "Here's my plan: 1) Research → 2) Outline → 3) Draft → 4) Review. Proceed?"
+- Allow users to intervene at handoff points between agents.
+- Provide a coordination timeline or swimlane view showing parallel agent activity for complex workflows.
+
+---
+
+## Delegation and Supervision Patterns
+
+### Task Delegation UI
+
+Design interfaces for describing and delegating complex tasks to autonomous AI agents.
+
+Provide a **task description** input that supports both natural language and structured templates. Offer template starters for common task types: "Research and summarize [topic]," "Refactor [code section] to [objective]," "Generate a [document type] based on [inputs]." Parse the natural language description and display the AI's understanding of the task as a structured breakdown: objective, constraints, expected outputs, and estimated scope. Allow the user to confirm, modify, or reject the interpretation before execution begins.
+
+Include **scope controls** that constrain the agent's authority: which files it may modify, which APIs it may call, what budget (time, tokens, API calls) it may consume, and what actions require human approval. Present these controls as a permissions checklist with sensible defaults that err on the side of caution.
+
+### Step-by-Step Execution Log
+
+Display a **step-by-step execution log** showing each action the agent takes: files read, searches performed, code written, tests run, external APIs called. Use a timeline or vertical stepper visualization with status indicators (completed, in-progress, queued, failed) for each step. Allow expanding any step to see full details: inputs, outputs, duration, and token usage.
+
+Show a **progress summary** at the top of the monitoring view: percentage complete (if estimable), elapsed time, tokens consumed, and a one-sentence description of what the agent is currently doing. Provide a live preview of any artifacts being generated (documents, code files, images) so users can intervene early if the agent is heading in the wrong direction.
+
+### Approval Decision Cards
+
+Design the **approval interface** as a concise decision card: what the agent wants to do, why it believes this action is necessary, what the consequences will be, and what alternatives exist. Provide "Approve," "Modify," and "Reject" actions. For "Modify," open an inline editor where the user can adjust the proposed action before the agent proceeds. For "Reject," prompt the user for guidance on how to proceed alternatively.
+
+### Correction Propagation
+
+Implement **correction propagation**: when a user corrects one instance of an error, offer to apply the same correction pattern across all similar instances in the agent's output. Track corrections as feedback that can improve future agent behavior on similar tasks.
+
+### Autonomous vs. Supervised Mode Toggle
+
+Provide a clear, prominent toggle between autonomous and supervised operation modes.
+
+In **autonomous mode**, the agent executes tasks end-to-end with minimal interruption, only pausing for mandatory approval gates. Display a compact monitoring widget (minimizable to a status bar indicator) that shows progress without demanding attention.
+
+In **supervised mode**, the agent pauses after each significant step for user review and approval. Display the full execution log with step-by-step controls: approve and continue, modify and continue, or abort.
+
+Support **hybrid mode** where users define specific phases or action types that require supervision while others proceed autonomously. Visualize the execution plan upfront with supervision checkpoints clearly marked so users know when they will need to be available for approvals.

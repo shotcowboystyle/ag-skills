@@ -131,6 +131,105 @@ Until `$include` is standardized, tools like Style Dictionary handle multi-file 
 
 ---
 
+## Three-Tier Token Examples
+
+### Token Hierarchy
+
+**Tier 1: Global/Primitive Tokens (Raw Values)**
+Define the complete value palette — all available options.
+
+```json
+{
+  "color": {
+    "blue": {
+      "50":  { "$value": "#eff6ff" },
+      "100": { "$value": "#dbeafe" },
+      "500": { "$value": "#3b82f6" },
+      "900": { "$value": "#1e3a5a" }
+    },
+    "neutral": {
+      "0":   { "$value": "#ffffff" },
+      "50":  { "$value": "#fafafa" },
+      "900": { "$value": "#171717" }
+    }
+  },
+  "spacing": {
+    "1": { "$value": "4px" },
+    "2": { "$value": "8px" },
+    "4": { "$value": "16px" },
+    "8": { "$value": "32px" }
+  }
+}
+```
+
+**Tier 2: Semantic/Alias Tokens (Contextual Meaning)**
+Map raw values to design intent — what the value means.
+
+```json
+{
+  "color": {
+    "bg": {
+      "primary":   { "$value": "{color.neutral.0}" },
+      "secondary": { "$value": "{color.neutral.50}" },
+      "inverse":   { "$value": "{color.neutral.900}" }
+    },
+    "text": {
+      "primary":   { "$value": "{color.neutral.900}" },
+      "secondary": { "$value": "{color.neutral.500}" },
+      "brand":     { "$value": "{color.blue.500}" }
+    },
+    "action": {
+      "primary":   { "$value": "{color.blue.500}" },
+      "primary-hover": { "$value": "{color.blue.600}" }
+    }
+  }
+}
+```
+
+**Tier 3: Component Tokens (Specific Application)**
+Map semantic tokens to component properties — where the value is used.
+
+```json
+{
+  "button": {
+    "primary": {
+      "bg":    { "$value": "{color.action.primary}" },
+      "text":  { "$value": "{color.neutral.0}" },
+      "hover-bg": { "$value": "{color.action.primary-hover}" },
+      "padding-x": { "$value": "{spacing.4}" },
+      "padding-y": { "$value": "{spacing.2}" },
+      "border-radius": { "$value": "{radius.md}" }
+    }
+  }
+}
+```
+
+### W3C Design Token Format (DTCG)
+
+Follow the W3C Design Tokens Community Group specification:
+- Use `$value` for token values
+- Use `$type` to specify value type (color, dimension, fontFamily, fontWeight, duration, cubicBezier, shadow)
+- Use `$description` for documentation
+- Use `{}` syntax for references/aliases
+- File extension: `.tokens.json`
+
+### Token Categories
+
+| Category | Examples | Type |
+|----------|----------|------|
+| Color | Brand, semantic, surface, text, border | color |
+| Spacing | Padding, margin, gap | dimension |
+| Typography | Font family, size, weight, line height, letter spacing | mixed |
+| Border Radius | Corner rounding per component type | dimension |
+| Elevation/Shadow | Box shadow definitions per level | shadow |
+| Duration | Animation timing | duration |
+| Easing | Animation curves | cubicBezier |
+| Sizing | Icon, avatar, touch target sizes | dimension |
+| Opacity | Disabled state, overlay, hover | number |
+| Z-index | Layering order | number |
+
+---
+
 ## Cross-References
 
 - For W3C specification details, `$type` values, file format, and validation tooling, see `token-specification-guide.md`.

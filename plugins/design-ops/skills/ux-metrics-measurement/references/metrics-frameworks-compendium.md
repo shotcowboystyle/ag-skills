@@ -448,7 +448,21 @@ Determine the required sample size per variant before launching any experiment. 
 | Significance level (alpha) | Probability of false positive | 0.05 |
 | Power (1 - beta) | Probability of detecting a true effect | 0.80 |
 
-**Rule of thumb:** For a baseline conversion rate of 5% and a 10% relative MDE (absolute change from 5.0% to 5.5%), expect to need approximately 50,000 users per variant at 80% power and 95% significance.
+**Rule of thumb:** For a baseline conversion rate of 5% and a 10% relative MDE (absolute change from 5.0% to 5.5%), expect to need approximately 31,000 users per variant at 80% power and 95% significance (two-tailed).
+
+Reference values from the standard two-proportion formula, n = (z₁₋α/₂ + z₁₋β)² · [p₁(1−p₁) + p₂(1−p₂)] / (p₂ − p₁)², two-tailed, alpha = 0.05, power = 0.80 (rounded):
+
+| Baseline CR | MDE (Relative) | Sample Per Variation |
+|---|---|---|
+| 1% | 20% | 42,700 |
+| 2% | 20% | 21,100 |
+| 3% | 15% | 24,200 |
+| 5% | 10% | 31,200 |
+| 10% | 10% | 14,700 |
+| 20% | 10% | 6,500 |
+| 30% | 10% | 3,800 |
+
+Low-conversion pages (enterprise pricing, for example) need very large samples or a larger MDE to reach significance. Recompute with a power calculator for your actual baseline; do not reuse these rows as targets.
 
 ### Statistical Significance
 
@@ -475,6 +489,22 @@ Use multivariate tests (MVT) when evaluating the combined effect of multiple sim
 ### Sequential Testing
 
 Sequential testing (also called continuous monitoring) applies statistical methods that control for multiple comparisons over time. Use group sequential designs or always-valid confidence intervals to monitor experiment results without inflating the false positive rate. Tools like Optimizely and Eppo implement sequential testing natively. Prefer sequential testing for experiments on business-critical flows where waiting for full sample accumulation is impractical.
+
+### Common Analysis Errors
+
+**Peeking.** Checking results repeatedly and stopping as soon as a winner appears. With frequent checks this can inflate the false positive rate from the nominal 5% to 20-30%. Fix: fix the sample size in advance and analyze once, or use a sequential method built for continuous monitoring.
+
+**Multiple comparisons.** Testing 10 variants against control at p < 0.05 without adjustment gives roughly a 40% chance of at least one false positive (1 − 0.95¹⁰). Fix: Bonferroni correction or control the false discovery rate (Benjamini-Hochberg).
+
+**Insufficient sample size.** Running a test for "one week" regardless of traffic. Calculate MDE and sample size before launch; the required sample depends heavily on the baseline rate (see the table above).
+
+**Survivorship bias in case studies.** Published A/B results skew toward winners. Most tests produce no significant difference, and that null result is useful information.
+
+**Day-of-week and seasonality effects.** Run full weeks. A Monday-Thursday test misses weekend behavior, which often differs substantially.
+
+### Bayesian vs Frequentist Testing
+
+Frequentist testing answers: "If there is no difference, how likely is this data?" Bayesian testing answers: "Given this data and a prior, what is the probability that B is better than A?" Bayesian output is easier to communicate ("92% chance B is better") and can incorporate prior knowledge from earlier tests. It does not make peeking free: stopping the moment the posterior crosses a threshold still raises the rate of wrong calls, so pre-set a decision rule (sample size or expected-loss threshold) either way. Priors do not create information, so low-traffic tests stay uncertain under either approach.
 
 ---
 
@@ -638,3 +668,168 @@ Avoid these common dashboard failures:
 | Interaction effort | CES | 1 | Post-support, post-onboarding, high-friction flows |
 | Touchpoint satisfaction | CSAT | 1 | Contextual deployment at specific experience moments |
 | Holistic product health | HEART + GSM | Custom | Structuring a complete measurement strategy across all UX dimensions |
+
+## HEART Five Dimensions
+
+**Happiness** — Subjective user satisfaction and sentiment
+- Signals: survey responses, ratings, sentiment in feedback
+- Example metrics: satisfaction score (CSAT), NPS, SUS score, ease-of-use rating
+- Measurement: post-task surveys, in-app ratings, periodic satisfaction surveys
+
+**Engagement** — Depth and frequency of user interaction
+- Signals: session frequency, feature usage, content consumption
+- Example metrics: DAU/MAU ratio, actions per session, feature adoption rate, session depth
+- Measurement: product analytics, event tracking
+
+**Adoption** — New users successfully onboarding
+- Signals: signups, onboarding completion, first key action
+- Example metrics: signup-to-activation rate, onboarding completion rate, time to first value
+- Measurement: funnel analytics, cohort analysis
+
+**Retention** — Users continuing to derive value over time
+- Signals: return visits, subscription renewals, continued usage
+- Example metrics: D1/D7/D30 retention, churn rate, renewal rate, feature retention
+- Measurement: cohort retention curves, survival analysis
+
+**Task Success** — Ability to complete intended goals effectively and efficiently
+- Signals: task completion, errors, time spent, help requests
+- Example metrics: task success rate, time on task, error rate, lostness score
+- Measurement: usability testing, analytics funnels, error logging
+
+## When to Use SUS
+
+- After usability testing sessions (post-study).
+- Baseline measurement before redesign.
+- Comparative evaluation between design alternatives.
+- Longitudinal tracking across releases.
+- Industry benchmarking.
+
+## SUS Limitations
+
+- SUS measures perceived usability, not actual usability. A user may rate a system highly despite making errors.
+- The 10-item format is not ideal for quick pulse checks — use UMUX-Lite (2 items) for lightweight measurement.
+- SUS does not diagnose specific issues — it is a thermometer, not a diagnostic tool.
+
+## UEQ (User Experience Questionnaire)
+
+The UEQ measures six dimensions of user experience: Attractiveness, Perspicuity (clarity), Efficiency, Dependability, Stimulation, and Novelty. It uses 26 semantic differential items (word pairs).
+
+### When to Use UEQ Over SUS
+
+- When you need dimensional insight beyond a single usability score.
+- When hedonic qualities (stimulation, novelty) matter alongside pragmatic qualities (perspicuity, efficiency, dependability).
+- When comparing products across multiple experience dimensions.
+- UEQ+ (modular version) allows selecting only relevant scales.
+
+## UMUX-Lite
+
+A two-item questionnaire that correlates strongly with SUS (r = 0.83). Useful for: in-app pulse surveys, post-task quick checks, high-frequency measurement where survey fatigue is a concern.
+
+Items: (1) "[System] capabilities meet my requirements." (2) "[System] is easy to use." Both rated on a seven-point Likert scale.
+
+## SUPR-Q (Standardized User Experience Percentile Rank Questionnaire)
+
+Web-specific measurement covering four factors: Usability, Trust/Credibility, Appearance, and Loyalty. Produces a percentile rank against a database of 200+ websites. Best for benchmarking web experiences against industry competitors.
+
+## Task-Based Metrics
+
+### Task Success Rate
+
+The most fundamental UX metric. Percentage of users who successfully complete a defined task.
+
+- **Binary success:** Did the user complete the task? Yes/No.
+- **Partial success:** Weighted scoring for partially completed tasks (e.g., 0 = fail, 0.5 = completed with significant difficulty, 1 = success).
+- **Benchmark:** Industry average for web tasks is approximately 78%. Below 70% indicates serious usability problems.
+
+### Time on Task
+
+How long users take to complete a task. Lower is generally better, but context matters — rushed completion may indicate skipped steps.
+
+- Measure from task start to task completion.
+- Use geometric mean (not arithmetic mean) because time data is typically right-skewed.
+- Compare against baseline or competitor benchmarks.
+- Distinguish between first-time and repeat users.
+
+### Error Rate
+
+Frequency and severity of errors during task completion.
+
+- **Error frequency:** Number of errors per task attempt.
+- **Error taxonomy:** Classify errors as slips (wrong action, right intention), mistakes (wrong intention), or system errors (not user-caused).
+- **Recovery rate:** Percentage of errors the user successfully recovers from.
+- **Error impact:** Which errors cause task abandonment versus temporary friction.
+
+### Lostness Score
+
+Measures navigation efficiency. Calculated as: Lostness = sqrt((N/S - 1)^2 + (R/N - 1)^2) where N = number of pages visited, S = minimum pages needed, R = unique pages visited.
+
+- Score of 0 = optimal path. Score above 0.4 = user is seriously lost.
+- Useful for evaluating information architecture and navigation design.
+
+## Behavioral Analytics
+
+### Funnel Analysis
+
+Track user progression through multi-step flows. Identify where users drop off and why.
+
+- Define funnels for every critical flow: onboarding, checkout, feature activation, upgrade.
+- Measure step-to-step conversion rate, overall completion rate, and time per step.
+- Segment funnels by user cohort, acquisition channel, device, and user experience level.
+- Investigate drop-off points with session recordings and qualitative research.
+
+### Cohort Analysis
+
+Group users by shared characteristic (signup date, acquisition channel, plan tier) and track behavior over time.
+
+- Retention cohorts: What percentage of users who signed up in Week 1 are still active in Week 4, 8, 12?
+- Feature cohorts: How does behavior differ between users who adopted Feature X versus those who did not?
+- Identify the "aha moment" — the action most correlated with long-term retention.
+
+### Retention Curves
+
+Plot the percentage of active users over time since signup.
+
+- **Flattening curve:** Healthy product — a stable base of users finds lasting value.
+- **Declining curve:** Problem — users are not finding enough value to stay.
+- **Smiling curve:** Recovery — initial drop-off followed by increasing engagement (often from re-engagement campaigns).
+
+## Experimentation
+
+### A/B Testing
+
+Compare two design variants with random user assignment to determine which performs better on a defined metric.
+
+- **Hypothesis template:** "If we [change], then [metric] will [improve/decrease] by [amount] because [reasoning]."
+- **Sample size:** Calculate before launching using a power calculator. Specify minimum detectable effect, significance level (typically 0.05), and power (typically 0.80).
+- **Duration:** Run for at least one full business cycle (minimum 1-2 weeks). Do not peek at results and stop early.
+- **One variable:** Test one change at a time for clear causation. Multivariate testing requires exponentially larger samples.
+- **Guard rails:** Monitor guardrail metrics (crash rate, load time, error rate) to ensure the variant does not cause harm even if the primary metric improves.
+
+### Sequential Testing
+
+Alternative to fixed-horizon A/B testing. Allows checking results continuously without inflating false positive rate. Useful when you need faster decisions or have variable traffic.
+
+## Benchmarking
+
+### Industry Benchmarks
+
+- **SUS:** Average across studies is 68. B2B software averages 65-72. Consumer apps average 70-78.
+- **Task success rate:** Web average 78%. E-commerce checkout 65-70%. Mobile forms 60-75%.
+- **NPS:** Average varies by industry. SaaS averages 30-40. B2C averages 40-60.
+- **Time on task:** Highly variable. Compare against your own historical baseline rather than cross-industry.
+
+### Historical Tracking
+
+- Track key metrics across every release. Plot trendlines.
+- Set regression thresholds: alert when a metric drops more than 5% from baseline.
+- Celebrate improvements with the team — measurement should drive positive reinforcement.
+
+## Design System Metrics
+
+- **Adoption rate:** Percentage of UI built with design system components versus custom implementations.
+- **Component reuse:** Average instances per component across products.
+- **Consistency score:** Visual regression pass rate across products.
+- **Contribution rate:** External PRs per month to the design system.
+- **Developer satisfaction:** Quarterly NPS survey of design system consumers.
+- **Design system ROI:** [(Time efficiency gains + Quality gains + Scale gains + Consistency gains) - (Initial cost + Maintenance cost)] / (Initial + Maintenance) x 100%.
+- Sparkbox research data: 38% design efficiency, 31% dev efficiency, 228% higher ROI with mature DesignOps.

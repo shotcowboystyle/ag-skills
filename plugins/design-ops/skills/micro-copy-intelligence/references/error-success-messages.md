@@ -420,3 +420,40 @@ When a form has multiple errors, show a summary at the top:
 | Success banner | Persistent until dismissed | No | Important information |
 | Redirect confirmation | 1-2s then redirect | Yes | Brief confirmation before navigation |
 | Payment/order confirmation | Persistent (full page) | No | High importance, reference information |
+
+---
+
+## Celebration Proportionality
+
+Success states should be clear, brief, and proportional to the action.
+
+### Completion
+
+For routine actions, a brief toast notification is sufficient.
+
+- **File saved**: "Changes saved." (No exclamation mark — saving is routine.)
+- **Email sent**: "Message sent to 3 recipients."
+- **Profile updated**: "Profile updated."
+- **Payment processed**: "Payment of $49.00 processed. You'll receive a receipt by email."
+
+### Achievement
+
+For meaningful milestones, slightly more celebration is appropriate.
+
+- **First project created**: "Your first project is live! Share it with your team to start collaborating."
+- **Goal reached**: "You've hit your weekly reading goal. 7 articles in 7 days."
+- **Streak**: "12-day streak! You've logged in every day for almost two weeks."
+
+### Milestone
+
+For significant, infrequent accomplishments, a dedicated screen is appropriate.
+
+- **Account verified**: Title: "You're verified." Body: "Your identity has been confirmed. You now have full access to all features."
+- **Course completed**: Title: "Course complete!" Body: "You finished 'Advanced Data Visualization.' Download your certificate below."
+- **Migration finished**: Title: "Migration complete." Body: "All 2,340 records have been imported. Review your data to make sure everything looks right."
+
+### Celebration Without Excess
+
+- **Match the magnitude**: A saved form gets a toast. A completed 6-month project gets a full-screen moment. Mismatch in either direction feels wrong.
+- **Avoid false excitement**: Do not add confetti to a password change. Do not use exclamation marks for routine saves. The word "Congratulations!" should be reserved for genuinely congratulatory moments.
+- **Provide next steps**: Every success state is an opportunity for forward momentum. "Payment processed" can be followed by "View your order" or "Continue shopping."

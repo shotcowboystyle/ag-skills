@@ -799,3 +799,44 @@ Before shipping an internationalized interface, verify:
 10. Line height is adjusted per script family to prevent clipping of diacriticals and dense glyphs.
 11. Pseudo-localization testing runs in CI to catch layout regressions before translations arrive.
 12. Every translatable string includes a context description for translators.
+
+## The Scope of Global Design
+
+The scale of multilingual, multicultural design is often underestimated. The internet has roughly 5.5 billion users across 195 countries, speaking over 7,000 languages. Even a modest international expansion from English-only to 10 supported locales immediately introduces right-to-left scripts, logographic writing systems, agglutinative grammars, and at least three fundamentally different numeral systems. Each of these has implications for layout, typography, input methods, and data formatting.
+
+The i18n discipline distinguishes between several layers of adaptation. Script support is the most fundamental: can the interface render Arabic, Devanagari, Thai, or CJK characters correctly? Layout direction comes next: does the interface reflow correctly for RTL scripts? Locale formatting follows: are dates, numbers, currencies, and units displayed according to local convention? Content localization addresses translation quality, cultural tone, and imagery appropriateness. Finally, cultural adaptation considers deeper behavioral patterns: how users evaluate trust, make decisions, and respond to interface patterns.
+
+Teams that plan for internationalization from the start embed these concerns into their design system foundations: logical CSS properties instead of physical ones, flexible containers instead of fixed-width layouts, locale-aware formatters instead of hardcoded string concatenation, and component APIs that accept direction and locale as first-class parameters. Teams that defer internationalization accumulate technical and design debt that compounds with every new feature.
+
+## Right-to-Left Layout: More Than Mirroring
+
+Supporting right-to-left (RTL) scripts such as Arabic, Hebrew, Urdu, and Persian is one of the most visible i18n challenges. RTL support requires mirroring the entire layout along the inline axis: navigation flows from right to left, text alignment defaults to the right, progress indicators advance rightward to leftward, and scroll position origins shift.
+
+However, RTL layout is not a simple mirror operation applied uniformly. Several categories of content do not mirror:
+
+- **Numbers and phone numbers** are always displayed left-to-right, even within RTL text.
+- **Icons with directionality** (back arrows, forward arrows, undo/redo) must mirror because they represent inline-direction movement. But universal icons (search, home, settings, checkmarks) do not mirror.
+- **Media playback controls** do not mirror because the timeline metaphor (left-to-right progression of time) is universal.
+- **Bidirectional text** occurs when RTL text contains embedded LTR content (brand names, code, URLs). The Unicode Bidirectional Algorithm (UBiDi) handles this, but designers must understand that mixed-direction strings can produce unexpected reordering without proper isolation using the `<bdi>` element or explicit direction markers.
+
+CSS logical properties are the foundation of RTL-ready layout. Instead of `margin-left`, use `margin-inline-start`. Instead of `padding-right`, use `padding-inline-end`. This single conceptual shift eliminates the need for duplicate RTL stylesheets entirely. The detailed property mapping and code examples are in the CSS Logical Properties section above.
+
+## Text Expansion and Contraction
+
+When English source text is translated, the resulting string length varies dramatically by target language. German text typically expands 30-35% compared to English. Finnish and Russian can expand 20-30%. French expands 15-20%. Conversely, Chinese, Japanese, and Korean (CJK) text is often more compact character-for-character, but the visual width per character is larger due to full-width glyphs occupying roughly a square em-box.
+
+The practical implication is that every text container in the interface must accommodate significant variation without breaking. Short strings (button labels, menu items) are the most vulnerable because percentage expansion is highest for short strings. A two-word English button label might become a five-word German phrase. The W3C recommends designing for at least 200% text expansion for strings under 20 characters.
+
+Strategies include: using flexible layout containers that grow with content, establishing maximum width constraints with ellipsis truncation as a last resort, testing with pseudo-localization strings that artificially inflate text length during development, and avoiding fixed-height containers that clip overflowing translated text.
+
+Pseudo-localization deserves special emphasis. It is the single most effective early-detection technique for i18n layout issues. By replacing English characters with accented equivalents and padding strings with extra characters during development, teams can see exactly where layouts will break under translation pressure without waiting for actual translations. Many i18n-mature organizations run pseudo-localized builds as part of their continuous integration pipeline, catching regressions before they reach QA or translators.
+
+## Formatting: Dates, Numbers, Currency, and Addresses
+
+Locale-specific formatting is a reliability concern, not a polish concern. Displaying a date as 01/02/2026 is ambiguous: it reads as January 2nd in the US and February 1st in most other countries. Displaying currency without the correct symbol, decimal separator, and grouping separator can cause financial errors. Address formats vary dramatically (Japan uses block-based addressing rather than street-based, the UK places the city below the street, Germany places the house number after the street name).
+
+The Intl API in JavaScript and Foundation formatters in Swift/iOS provide locale-aware formatting that should always be used instead of manual string concatenation. Hardcoding date formats, number separators, or currency symbols is a bug, not a shortcut.
+
+Beyond basic formatting, measurement units introduce another layer of locale complexity. The United States uses imperial units (miles, pounds, Fahrenheit) while virtually every other country uses metric. India uses the lakh (100,000) and crore (10,000,000) grouping system for large numbers rather than millions and billions. Japan and Korea count large numbers in units of 10,000 (man/man). These are not edge cases; they affect any product that displays distances, weights, temperatures, or large financial figures to a global audience.
+
+Name formatting is equally treacherous. Western name conventions (given name followed by family name) are reversed in Chinese, Japanese, Korean, and Hungarian contexts. Many cultures use patronymics rather than family names (Iceland), multiple family names (Spanish-speaking countries), or single names (parts of Indonesia). Form fields labeled "First Name" and "Last Name" impose a Western cultural assumption that breaks for a significant portion of the world's population. A robust approach uses a single "Full Name" field or, when structured data is necessary, uses culturally neutral labels like "Given name(s)" and "Family name(s)" with clear guidance.

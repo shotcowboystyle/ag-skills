@@ -494,3 +494,141 @@ AI generation is powerful but not appropriate for every design task. Prefer manu
 ### The 70/30 Rule
 
 AI generation can get you 70% of the way to a final design in 10% of the time. The remaining 30% — refinement, polish, edge cases, accessibility, interaction details — requires design intelligence and manual work. Use generation for the 70%, Design Ops' skills for the 30%.
+
+
+---
+
+## Appendix: Pipelines, Design-Tool Integration, Philosophy
+
+Moved verbatim from the `ai-design-generation` SKILL.md.
+
+### 1. AI Design Generation Philosophy
+
+#### AI as Co-Pilot, Not Replacement
+
+AI generation tools are accelerators, not replacements for design thinking. A generation tool has no understanding of user needs, business goals, or brand strategy — it only transforms text into pixels. The designer (or design-aware agent like Design Ops) provides the intelligence: the brief, the constraints, the quality bar, the iteration direction.
+
+**The Co-Pilot Model:**
+
+- Human/agent defines the problem, constraints, and success criteria
+- AI generates candidates rapidly across the solution space
+- Human/agent evaluates, selects, critiques, and steers
+- AI refines based on directed feedback
+- Human/agent makes final production decisions
+
+This is not a compromise — it is genuinely superior to either pure human or pure AI workflows. AI explores breadth (hundreds of variations in minutes); humans provide depth (taste, context, strategy). The combination outperforms either alone.
+
+#### The Human Curation Loop
+
+Every AI generation workflow must include a curation checkpoint. The loop follows a consistent pattern:
+
+1. **Specify** — Translate design intent into a structured prompt
+2. **Generate** — Produce 3-6 candidates per round
+3. **Evaluate** — Score against design criteria (brand, usability, aesthetics)
+4. **Select** — Choose the strongest candidate(s) to advance
+5. **Refine** — Adjust the prompt based on what worked and what did not
+6. **Repeat** — 2-4 rounds typically reach production quality
+
+Never ship a first-generation output without evaluation. Even when the result looks good, check: Does it match the brand? Is the typography readable? Are the proportions correct? Does it solve the actual user problem?
+
+### 7. Generation Pipelines
+
+#### Concept to Production Workflow
+
+**Stage 1 — Concept Exploration (Breadth):**
+
+- Tool: FLUX Schnell or DALL-E 3 (fast, cheap)
+- Goal: 10-20 rough concepts exploring different directions
+- Prompt style: Loose, descriptive, varied
+- Evaluation: Which direction feels right? Which matches the brief?
+- Output: 2-3 selected directions to pursue
+
+**Stage 2 — Variation (Depth):**
+
+- Tool: FLUX Pro or Midjourney (higher quality)
+- Goal: 4-6 variations of each selected direction
+- Prompt style: Specific, detailed, building on Stage 1 selections
+- Evaluation: Score against brand, usability, aesthetics criteria
+- Output: 1-2 strong candidates per direction
+
+**Stage 3 — Refinement (Precision):**
+
+- Tool: Best tool for the specific asset type
+- Goal: Polish the selected candidates to near-production quality
+- Prompt style: Highly specific, include exact measurements, colors, content
+- Evaluation: Would this pass a design review? Does it meet the brief?
+- Output: Final generated assets ready for post-processing
+
+**Stage 4 — Production (Integration):**
+
+- Post-process: Upscale, color correct, extract assets
+- Integrate: Import to Figma, generate code, add to design system
+- Validate: Final quality check against production requirements
+- Deliver: Export in all required formats and resolutions
+
+#### Batch Asset Generation
+
+When generating asset sets (icon packs, illustration libraries, photo collections), consistency is paramount.
+
+**Icon Set Pipeline:**
+
+1. Define style guide: stroke weight, grid size, corner radius, color mode
+2. List all icons needed (typically 20-60 for a product)
+3. Generate anchor icon (most complex subject)
+4. Generate in batches of 6, using anchor as style reference
+5. Review batch cohesion — regenerate outliers
+6. Export all as SVG (via Recraft) at target grid sizes (16, 20, 24, 32, 48)
+7. Validate: consistent weight, alignment, visual density across set
+
+**Illustration Set Pipeline:**
+
+1. Define illustration style system (palette, style, mood, characters)
+2. List all scenes needed
+3. Generate hero illustration first (most complex, sets the bar)
+4. Generate supporting illustrations in priority order
+5. Review as a collection — adjust any that break consistency
+6. Export at required resolutions with transparent backgrounds where needed
+
+#### Design System Asset Generation
+
+Generate foundational design system assets in a coordinated pipeline:
+
+1. **Color palette visualization** — Generate color swatches with labels, accessibility contrast pairs
+2. **Typography specimens** — Generate type scale samples at all sizes with real content
+3. **Component previews** — Generate each component in all states (default, hover, active, disabled, error)
+4. **Page templates** — Generate common page layouts using the component library
+5. **Dark mode variants** — Regenerate key screens and components in dark mode
+
+### 10. Integration with Design Tools
+
+#### Figma Import
+
+Generated assets flow into Figma for refinement and handoff:
+
+1. **Direct import:** Drag generated images into Figma frames
+2. **Figma MCP:** Use the official Figma MCP server to programmatically place assets
+3. **Auto Layout conversion:** Use generated screenshots as reference to rebuild with Figma Auto Layout
+4. **Component extraction:** Identify reusable components in generated screens, rebuild as Figma components
+5. **Token application:** Replace AI-approximated styles with actual design tokens
+
+**Figma MCP Workflow:**
+
+```
+1. Generate screen via Stitch or image model
+2. Read target Figma file via Figma MCP
+3. Create a new frame in the target page
+4. Place generated image as fill or reference layer
+5. Build component structure on top of reference
+6. Remove reference layer when component build is complete
+```
+
+#### Code Generation from AI Mockups
+
+AI mockups serve as visual specifications for code generation:
+
+1. Generate high-fidelity mockup with all states
+2. Extract design tokens from the mockup (colors, spacing, typography)
+3. Map to existing design system components where possible
+4. Use the `component-patterns-code` skill to generate React/SwiftUI/CSS
+5. Compare rendered code output against the AI mockup for fidelity
+6. Iterate on code until visual match is achieved

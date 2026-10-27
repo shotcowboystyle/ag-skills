@@ -89,6 +89,8 @@ The highest-converting CTAs embed the value proposition directly:
 
 ## 50+ High-Converting CTA Templates by Context
 
+These lists cover conversion contexts (trials, upgrades, lead generation, newsletters, events). For general button labels (auth, create/save, destructive, navigation, commerce) with character counts and tone, use the `micro-copy-intelligence` skill's `button-label-templates.md`.
+
 ### SaaS Free Trial CTAs
 1. Start my free trial
 2. Try [Product] free for 14 days

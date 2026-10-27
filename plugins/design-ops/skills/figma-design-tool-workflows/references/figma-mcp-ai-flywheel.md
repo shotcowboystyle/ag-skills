@@ -798,6 +798,32 @@ This compounding effect is why the flywheel metaphor is accurate: initial invest
 
 ---
 
+## 11. MCP Capabilities and the Six-Step Flywheel
+
+With Figma MCP, Claude can:
+
+- Read the complete structure of a design file (pages, frames, components)
+- Extract component properties, variants, and their values
+- Read variable definitions and mode configurations
+- Understand Auto Layout specifications (padding, spacing, alignment, sizing)
+- Extract color, typography, and effect styles
+- Read prototype flows and interaction definitions
+
+This means a designer can build a component in Figma, and Claude can read that component's specification, generate production-quality code (React, SwiftUI, CSS), and produce accompanying tests — all without a human translating the design spec into a ticket.
+
+### The Design-to-Code Flywheel
+
+The flywheel operates in six steps:
+
+1. **Design** — Designer builds a component in Figma with proper architecture: Auto Layout, variables, component properties, correct naming.
+2. **Read** — Claude reads the component specification via Figma MCP: layout structure, token bindings, property API, responsive behavior.
+3. **Generate** — Claude produces code: React component with TypeScript types, CSS Module with token references, Storybook story with all variants, unit test covering props and accessibility.
+4. **Validate** — Visual regression testing (Chromatic, Percy) compares the rendered component against the Figma source. Accessibility testing (axe-core) validates WCAG compliance.
+5. **Iterate** — Designer updates the component in Figma. The MCP read detects changes. Claude generates an incremental code update. Visual regression catches any drift.
+6. **Ship** — CI/CD pipeline deploys validated components. Token pipeline syncs updated variables. Consuming applications pull the latest version.
+
+Each cycle gets faster. Later passes over an existing component are cheaper than the first, because the structure, tests, and stories already exist and only need updating. Measure the saving on your own components before quoting a number.
+
 ## References and Further Reading
 
 - Anthropic. "Model Context Protocol Specification." 2024. https://modelcontextprotocol.io

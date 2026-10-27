@@ -824,7 +824,7 @@
 ```
 
 **Behavior:**
-1. Click a cell to enter edit mode
+1. Double-click the cell, or press Enter or F2 on the focused cell, to enter edit mode
 2. Cell becomes an input field
 3. Tab to move to next editable cell
 4. Enter to confirm, Escape to cancel
@@ -1157,6 +1157,8 @@ Default to a native `<table>` with `<th scope="col">` headers; put `aria-sort` o
 
 ### 15.3 Keyboard Navigation
 
+This keyboard model applies to an interactive `role="grid"`. A native read-only `<table>` needs none of it: users Tab through its sort buttons and links.
+
 | Key | Action |
 |-----|--------|
 | **Tab** | Move focus to the table, then to next focusable element after table |
@@ -1184,7 +1186,7 @@ Default to a native `<table>` with `<th scope="col">` headers; put `aria-sort` o
 }
 ```
 
-**Rules:** Single tab stop for the entire table (roving tabindex). Arrow keys navigate between cells. Focus ring visible on the active cell. Screen reader announces cell content, column header, and row context.
+**Rules (interactive `role="grid"` only; a native `<table>` keeps normal Tab order through its controls):** Single tab stop for the entire table (roving tabindex). Arrow keys navigate between cells. Focus ring visible on the active cell. Screen reader announces cell content, column header, and row context.
 
 ---
 
