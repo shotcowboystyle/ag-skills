@@ -2,6 +2,7 @@
 name: payment-integration
 description: Integrate Stripe, PayPal, and payment processors. Handles checkout flows, subscriptions, webhooks, and PCI compliance. Use PROACTIVELY when implementing payments, billing, or subscription features.
 model: sonnet
+tools: Read, Grep, Glob, Bash, Write, Edit
 last_verified: 2026-10-27
 ---
 

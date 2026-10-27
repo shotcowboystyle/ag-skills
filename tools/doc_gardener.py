@@ -116,8 +116,8 @@ INTENTIONAL_AGENT_VARIANTS = frozenset(
 class Finding:
     kind: str
     # 'info' | 'warning' | 'error' | 'audit'. Audit findings come from the 2026-10
-    # agent/skill audit (#6). They print with counts but never fail the run, not even
-    # under --strict, until the content is fixed and they are promoted to errors (#38).
+    # agent/skill audit (#6). They are warnings in a plain run and errors under
+    # --strict, which CI uses (#38).
     severity: str
     path: Path
     message: str
@@ -909,12 +909,14 @@ def check_arguments_framing(report: Report) -> None:
             )
 
 
-# ── Audit checks (warn-only, #7) ─────────────────────────────────────────────
+# ── Audit checks (#7, blocking since #38) ────────────────────────────────────
 # Mechanical findings from the 2026-10 agent/skill audit. Every one reports with
-# severity "audit" so the tree's existing debt shows up without failing CI. The
-# final remediation ticket (#38) flips them to errors.
+# severity "audit": a warning in a plain run, an error under --strict (CI).
 
 AUDIT = "audit"
+# Audit kinds that stay warnings under --strict. A freshness date expires on a
+# clock, so making it blocking would fail unrelated PRs.
+WARN_ONLY_AUDIT_KINDS = frozenset({"STALE_LAST_VERIFIED"})
 _HEADING_RE = re.compile(r"^ {0,3}#{1,6}\s")
 
 
@@ -1124,7 +1126,8 @@ def check_skill_size(report: Report) -> None:
             )
 
 
-_READ_ONLY_ROLE_RE = re.compile(r"review|audit|analy[sz]|detect")
+# An `-author` or `-writer` (review-policy-author) writes files even when its subject is review.
+_READ_ONLY_ROLE_RE = re.compile(r"^(?!.*-(?:author|writer)$).*(?:review|audit|analy[sz]|detect)")
 _WRITE_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
 
 
@@ -1217,13 +1220,45 @@ _CONFIRM_RE = re.compile(
 _CONFIRM_WINDOW = 5
 
 
+_SHELL_FENCE_INFO = frozenset({"", "bash", "sh", "shell", "zsh", "console", "shell-session"})
+
+
+def _command_lines(content: str) -> set[int]:
+    """0-based indexes of lines an agent would run: shell code blocks and `allowed-tools:`.
+
+    Prose that names a command ("never use `git push --force`"), and JSON, Markdown or
+    Python blocks that hold one as data, are not commands. A block nested inside a
+    longer fence belongs to the outer block's language.
+    """
+    # ponytail: inline code in prose ("then run `git push`") is not scanned; add it if
+    # a real unconfirmed push slips through that way.
+    kept: set[int] = set()
+    fence: str | None = None
+    shell = False
+    for idx, line in enumerate(content.splitlines()):
+        match = _FENCE_PATTERN.match(line)
+        if fence is None:
+            if match:
+                fence = match.group(1)
+                shell = line.strip()[len(fence) :].strip().lower() in _SHELL_FENCE_INFO
+            elif line.startswith("allowed-tools:"):
+                kept.add(idx)
+            continue
+        run = line.strip()
+        if match and set(run) == {fence[0]} and len(run) >= len(fence):
+            fence = None
+        elif shell:
+            kept.add(idx)
+    return kept
+
+
 def check_hazard_patterns(report: Report) -> None:
     """Destructive or outward-facing commands in plugin source (audit S9).
 
-    Overwrites always report. A push reports only when no confirmation wording sits
-    within five lines of it. Fenced code is scanned too: that is where the commands
-    live. Frontmatter `allowed-tools` patterns are scanned as well, since they
-    pre-approve the command.
+    Only lines an agent would run are scanned (see _command_lines). Overwrites always
+    report. A push reports only when no confirmation wording sits within five lines
+    of it. Frontmatter `allowed-tools` patterns count, since they pre-approve the
+    command.
     """
     if not PLUGINS_DIR.is_dir():
         return
@@ -1239,7 +1274,8 @@ def check_hazard_patterns(report: Report) -> None:
         if content is None:
             continue
         lines = content.splitlines()
-        for idx, line in enumerate(lines):
+        for idx in sorted(_command_lines(content)):
+            line = lines[idx]
             for pattern, message, fix in _HAZARDS:
                 if pattern.search(line):
                     report.add(
@@ -1272,7 +1308,7 @@ def check_policy_fields(report: Report) -> None:
 
     A malformed value is an error: it would silently disable the freshness audit or
     the generator's harness skip. A date past LAST_VERIFIED_MAX_AGE_DAYS is an audit
-    warning (audit S8).
+    warning (audit S8) that stays a warning under --strict (WARN_ONLY_AUDIT_KINDS).
     """
     if not PLUGINS_DIR.is_dir():
         return
@@ -1362,7 +1398,11 @@ CHECKS = {
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Recurring drift detection (doc-gardener).")
-    parser.add_argument("--strict", action="store_true", help="Exit nonzero on any finding.")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Exit nonzero on any finding; audit findings become errors.",
+    )
     parser.add_argument(
         "--check",
         choices=list(CHECKS.keys()),
@@ -1376,6 +1416,10 @@ def main() -> int:
     report = Report()
     for name in selected:
         CHECKS[name](report)
+    if args.strict:
+        for finding in report.findings:
+            if finding.severity == AUDIT and finding.kind not in WARN_ONLY_AUDIT_KINDS:
+                finding.severity = "error"
 
     if not report.findings:
         if not args.quiet:
@@ -1414,7 +1458,7 @@ def main() -> int:
         print()
         print(
             f"Totals: {len(errors)} error(s), {len(warnings)} warning(s), {len(infos)} info, "
-            f"{len(audits)} audit warning(s) (warn-only)."
+            f"{len(audits)} audit warning(s) (errors under --strict, except STALE_LAST_VERIFIED)."
         )
 
     if report.by_severity("error"):

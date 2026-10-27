@@ -1,4 +1,18 @@
 {
+  "accessibility-compliance/agents/ui-visual-validator": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "c4ad87f9d9a22ce1a523d361b945ce4cf8c7bd7a01dc56d533a9fd7e3d0367b4",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "accessibility-compliance/screen-reader-testing": {
     "badge": "silver",
     "composite": 78.57707509881423,
@@ -27,6 +41,76 @@
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.45,
       "token_efficiency": 0.9837837837837837
+    }
+  },
+  "agent-orchestration/agents/context-manager": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "c79981d1bf1ad2b3ac29a650f173f4b0d5c7fa90d2eca1425f55d4ec4319ed3f",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "agent-teams/agents/team-debugger": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "288f8c494598b4b5dbca0fcd5e539cd65cb987c3e8502b374a1128c351359998",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "agent-teams/agents/team-implementer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "5b72aefc1d3a0c973ab0cba4dcbc6e8a02cf9c34bb0c768e90285478ea54dfaf",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "agent-teams/agents/team-lead": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "9ebe37b30aa5d90ec8f1155e37b01a70650f5ebf704333db908b7a423415ca5a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "agent-teams/agents/team-reviewer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "562b87e1f015f9a6bb9a40b34ede20eeea9f1e875062da5577b7dcacd692dc5b",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "agent-teams/multi-reviewer-patterns": {
@@ -62,7 +146,7 @@
   "agent-teams/parallel-feature-development": {
     "badge": "silver",
     "composite": 70.81357048748353,
-    "digest": "884c9cec5496e566a3b40d75821c96f2a2efe9f6952b350f7a90f5406c38b59d",
+    "digest": "5471b0126ef82e40de7336f80da9ed3e50aa956faf8702425185264d398f9465",
     "static_score": 0.725704347826087,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -90,24 +174,24 @@
     }
   },
   "agent-teams/team-communication-protocols": {
-    "badge": "silver",
-    "composite": 73.96153846153845,
-    "digest": "bcf3cbe23ada671663d25ac9d2ff002f3f2aa86769b894ceec40a1e149985710",
-    "static_score": 0.7553692307692308,
+    "badge": "bronze",
+    "composite": 65.22727272727272,
+    "digest": "18c460a005f39f291ffd9db70babff55bfeb9a4b3cbae61d221a8d88a1a080e4",
+    "static_score": 0.6769000000000001,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.77,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.7000000000000001,
-      "token_efficiency": 0.9107692307692308
+      "orchestration_wiring": 0.5499999999999999,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.6000000000000001,
+      "token_efficiency": 1.0
     }
   },
   "agent-teams/team-composition-patterns": {
     "badge": "silver",
     "composite": 71.28787878787878,
-    "digest": "fac5a11c339bc9475f8f21310f44aabeb3a4f2508021010ee3d8f5e810da2e27",
+    "digest": "de97f20c8a467c9a318b64bc37bd2e788b3bd94f1439442c89dc3335e1442f02",
     "static_score": 0.7262000000000001,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -117,6 +201,104 @@
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.6000000000000001,
       "token_efficiency": 1.0
+    }
+  },
+  "ai-video-producer/agents/aspect-converter": {
+    "badge": "silver",
+    "composite": 79.16666666666666,
+    "digest": "923ca09f2aaec3c923bc70c0b0c72083978ba9b08d46d032648b23a9a85af7ef",
+    "static_score": 0.7916666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ai-video-producer/agents/concatenator": {
+    "badge": "bronze",
+    "composite": 62.5,
+    "digest": "f8674a065079b0f37f6abf8a962406eaa4d04e129a6bb4a8718f3be26a0003f2",
+    "static_score": 0.625,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 0.0,
+      "procedure": 0.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ai-video-producer/agents/normalizer": {
+    "badge": "platinum",
+    "composite": 95.83333333333334,
+    "digest": "661a56109709d2b1a3037039d5d78c13529c7c8ed34c8d6e6c57534c46124695",
+    "static_score": 0.9583333333333334,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ai-video-producer/agents/pipeline-builder": {
+    "badge": "gold",
+    "composite": 83.33333333333334,
+    "digest": "44fa8518212c2a77ae2b6fcf4427e4eba702696a4f072482cfa968e45f9ba764",
+    "static_score": 0.8333333333333334,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ai-video-producer/agents/pipeline-repo-setup": {
+    "badge": "silver",
+    "composite": 79.16666666666666,
+    "digest": "6185e5ed33ac073558e13edc3bb3956b01532f17d2a9df8f9a996bcc0747ad81",
+    "static_score": 0.7916666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 0.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ai-video-producer/agents/pipeline-scaffolder": {
+    "badge": "silver",
+    "composite": 79.16666666666666,
+    "digest": "ba8cd98e90f379189c35e6991bb37645c5c5a60a110120697871188d2e92f002",
+    "static_score": 0.7916666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ai-video-producer/agents/script-writer": {
+    "badge": "gold",
+    "composite": 83.33333333333334,
+    "digest": "fb989fd6c228f94bf9a77fc831106197f16a1fa0648daf29815b7f7e4cad45da",
+    "static_score": 0.8333333333333334,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "ai-video-producer/ai-media-tools-index": {
@@ -227,7 +409,7 @@
   "ai-video-producer/script-to-tts": {
     "badge": "bronze",
     "composite": 61.74242424242424,
-    "digest": "e50b1e3509d6245d2d6c7da692a4da3b51f74d64ebeb97779e52097c2a4a471c",
+    "digest": "4d8a80e766229898360c5ff5472f96da51f1409ee704b612952884bd08399c27",
     "static_score": 0.6077,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -302,7 +484,7 @@
   "ai-video-producer/voice-to-lip-sync": {
     "badge": "bronze",
     "composite": 64.92424242424242,
-    "digest": "5c838a0a6f63901037b53e9ea3aa2d0cbd4070c410a87ee5dfc8c950e05c8561",
+    "digest": "6ed562e37ce5200a302ff56ec76fd3f32dbce53922fef395caf2ffa969dfef39",
     "static_score": 0.6315,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -312,6 +494,62 @@
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.2,
       "token_efficiency": 1.0
+    }
+  },
+  "api-scaffolding/agents/backend-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "46922820aab4478b6ea6afa24876725edbb65bcc6f66820e74be187f34884eb6",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "api-scaffolding/agents/django-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "055f52c64afc65d03129a68308b8bcfcbf999962eb3095ec690f34cb854746a8",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "api-scaffolding/agents/fastapi-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "d783a309f855c55507f9abb90c1ba03a20c57dc9209445a2a4bbdccd86f47757",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "api-scaffolding/agents/graphql-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "0ef40b27eca2c907cf1aa91cd6131060cd35d022c7c670a81b52af8267948a13",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "api-scaffolding/fastapi-templates": {
@@ -329,6 +567,62 @@
       "token_efficiency": 0.9770491803278689
     }
   },
+  "api-testing-observability/agents/api-documenter": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "f90c1ac7ebf2e866eaa2e3eba2234cabf187e886b5e1b67fd7e99e16bc7c07df",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "application-performance/agents/frontend-developer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "fda99a970c634f62058af1e0545ab582843a3251e11d0e817181836c4116134a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "application-performance/agents/observability-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "bf589abd8b2fca01ed5d2d0d797935cb11b235de238dc090f2307234c94ee6e0",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "application-performance/agents/performance-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "648fd790dbd227a45418a83e4dd0f65c332b1326e8f8db0a8a62b45c03a19635",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "avoid-ai-writing/avoid-ai-writing": {
     "badge": "bronze",
     "composite": 64.24242424242424,
@@ -342,6 +636,132 @@
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.30000000000000004,
       "token_efficiency": 1.0
+    }
+  },
+  "backend-api-security/agents/backend-security-coder": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "edf96c1c6dfaf2fedc16424f70aba0a3a8e9bd7123f06a92ded0ba7148dced1a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "backend-development/agents/backend-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "bb3be69e498ff3553a18d785450cfcd6e5b895d5981e013749ffca2ac814a596",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "backend-development/agents/event-sourcing-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "59f8caf19822c196a7e6bcdf42f58d071a3571bb183d3cde7ab1c6c6c50b35e4",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "backend-development/agents/graphql-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "278dab981059734cb4677fdfa7d4de202cc9a90bced6c72eda4f353d45aacc2b",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "backend-development/agents/performance-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "eca005806649f3ad29bf0fc8ade3901712a24be0a8c8401fc24f467ea586625f",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "backend-development/agents/security-auditor": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "7ea1752f9e35e62ee31ab70f3788ba57366109c687cff2c2ff4289d074c9c4e6",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "backend-development/agents/tdd-orchestrator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "0ce3a2228e147fc9455e5732228c4d9ba93caad1f5798c33e6af95d97c11138b",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "backend-development/agents/temporal-python-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "b7e2d7144e114d502599be8397985ccfb6d7bf4e5f20b822a6c82ac9ee12bbd6",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "backend-development/agents/test-automator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "21677bbb62f3f6f3c25cdf1542d18366356a2df72b5591632d560c4762a3aff4",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "backend-development/api-design-principles": {
@@ -497,7 +917,7 @@
   "block-no-verify/block-no-verify-hook": {
     "badge": "silver",
     "composite": 70.5464842600765,
-    "digest": "51c01ec7c6e7cf8d199a2bd8f96c6aa21ea7dc24c71c3e88a668e8160fa7b43b",
+    "digest": "cae99b116268af08d57a7c69ba90e68da9ee7396ec3e6144a472e24bae281ce7",
     "static_score": 0.6959601941747573,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -507,6 +927,20 @@
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.6,
       "token_efficiency": 0.9184466019417475
+    }
+  },
+  "business-analytics/agents/business-analyst": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "0d4e0dc5fe7f8dae2637c3ef7f99e8f46a9a34940b67729537cf7c6a304a5332",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "business-analytics/data-storytelling": {
@@ -537,6 +971,76 @@
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.8,
       "token_efficiency": 0.9666666666666667
+    }
+  },
+  "c4-architecture/agents/c4-code": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "00942c4ccebdbf352cea4fedaaad6a6cd78076a56309e4da17059d86651bd4fa",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "c4-architecture/agents/c4-component": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "4e13087891d6d549ec7aa5f9a7cc987b961ebfbbdf1a01a95ca0360dfd221905",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "c4-architecture/agents/c4-container": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "327f34df2824347dc791c2caba4bf36743fb80c4e306d8d36b623973e00f62e4",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "c4-architecture/agents/c4-context": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "4d0d44f8320fa6d41aab9c0c007c4d0d6d14f0f633126df8d195768fe8b3dd41",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "cicd-automation/agents/deployment-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "4118c495bd1b0942b25a42cc43283b7baa187f38c2da6c736cf1bcca2f636bef",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "cicd-automation/deployment-pipeline-design": {
@@ -597,6 +1101,90 @@
       "progressive_disclosure": 0.6,
       "structural_completeness": 0.55,
       "token_efficiency": 0.9420289855072463
+    }
+  },
+  "cloud-infrastructure/agents/cloud-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "0f951d9530361cdce1917fa9eaa0e89e8f533b2bf04b5eb262b22770989fc899",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "cloud-infrastructure/agents/hybrid-cloud-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "88ca3bea1314dcd906691ddc3c82fdbb715b4be82a44f718b87807d1806d4a03",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "cloud-infrastructure/agents/kubernetes-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "9f71eeaa3804050d194a1da59410e663e93d1fb1d13b59bc6b98634229bc123b",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "cloud-infrastructure/agents/network-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "f9f7d030e0a7c7698f5a3969c2ba1f0005e1476d18aa3c4cf84ff4d8965c98bc",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "cloud-infrastructure/agents/service-mesh-expert": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "2a5506287804a2eb86c02caaae51867934e9f31de8aac5c85a8af7e663b5bfd7",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "cloud-infrastructure/agents/terraform-specialist": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "6e0f74d6ee493531676729d983743e0162afbf59fa557ab9507ea761263469a5",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "cloud-infrastructure/cost-optimization": {
@@ -719,6 +1307,118 @@
       "token_efficiency": 0.9095477386934674
     }
   },
+  "code-documentation/agents/docs-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "3c6b859123f7129da8f0659589a02c999fb110164c69d4c89f5d08159be32222",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "code-documentation/agents/tutorial-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "56af4902b8f67e7adf07eaffddde0cf3ab9352a751e170ec7564d1f39642bb5f",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "codebase-cleanup/agents/code-reviewer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "d8982a10d5bc5f73ab1fe4b52e1067fe0a46aa9647d83b6d7408a2759c6a491f",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "codebase-cleanup/agents/test-automator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "36fa6028a173a736f0cd192a3b15da68fac11719b6ec483d7e76bd7b226d3046",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "comprehensive-review/agents/architect-review": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "708f258c3bbc70262eafdb153b36fdadb386b60657fb815d0db29a4dc78d75fe",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "comprehensive-review/agents/code-reviewer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "44ee7cd42497e1547dce4e9f1b46314d3f912eaf391b7a104d45872b3f980ee4",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "comprehensive-review/agents/security-auditor": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "e87f2dd6b4aaa6cdb3c483fc3045f8a7e4b528d621cdcaf6ff6b5e20c04f2604",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "conductor/agents/conductor-validator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "a255109dafe62167b0b215732b9887e0d7a63796158392ce1bb55cb7b46359ad",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "conductor/context-driven-development": {
     "badge": "bronze",
     "composite": 65.6060606060606,
@@ -762,6 +1462,48 @@
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.55,
       "token_efficiency": 0.9701492537313433
+    }
+  },
+  "context-management/agents/context-manager": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "2ecf14a6ac695f186d01097531db1d5069a50841746cbd1521f3112f3b79d7f7",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "data-engineering/agents/backend-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "fe27cd0d5671fd15f224b6c9536469d2dc468d18978c7bc37a1cffd0b9a51501",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "data-engineering/agents/data-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "71648b08dbf5b20af7ff645c9ab4b826cd78f1dca3279c5a7cc8bd63a987fb82",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "data-engineering/airflow-dag-patterns": {
@@ -824,6 +1566,62 @@
       "token_efficiency": 0.9893333333333334
     }
   },
+  "database-cloud-optimization/agents/cloud-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "d8cc015d3c179b8a01748aa9527b0125e6f28737aca6581f1a6adcc1cee64258",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "database-cloud-optimization/agents/database-optimizer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "ee6bca2d0ed9495b7a67717152e8848af2af9a1cc82232be4bc85b37afdc8ba4",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "database-design/agents/database-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "48506bd618d1fa2e8080cf86f0c88771016cc8262e935bb1db56bf1451552878",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "database-design/agents/sql-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "fdec578d129f10dc09e8ad8dd85f21893b4a9058a9b4d8926bd843b1e697c383",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "database-design/postgresql-table-design": {
     "badge": "silver",
     "composite": 70.50802139037432,
@@ -837,6 +1635,90 @@
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.65,
       "token_efficiency": 0.9725490196078431
+    }
+  },
+  "database-migrations/agents/database-admin": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "8012435e051dff574140e40eed63a3c97fffa8b8fb1d7e4ac1d64ecc6f108ad9",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "database-migrations/agents/database-optimizer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "b826b354f85c48a2671986221ea424e95d1fcee345dcb4e5c07aa9fd82df68eb",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "debugging-toolkit/agents/debugger": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "f06ac7dc0e1ea486cc39ae09f43a8a1175717cb53ccfe6e7f1ed3b063b6abb13",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "debugging-toolkit/agents/dx-optimizer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "9b8f9f9c1888685cb37c1b982c3e3b1300ce673ab0051d4ca76c9792643ceb77",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "deployment-strategies/agents/deployment-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "ebecfd5f960c131e9ab23dd839e40e09853a095f50aaa146ed4da38309ee899b",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "deployment-strategies/agents/terraform-specialist": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "66ba331581520147107cd7a1eccc0b5877dadef492ce6e3de272f061f7a1a8f0",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "design-ops/accessibility-inclusive-design": {
@@ -867,6 +1749,62 @@
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.2,
       "token_efficiency": 1.0
+    }
+  },
+  "design-ops/agents/art-director": {
+    "badge": "gold",
+    "composite": 83.33333333333334,
+    "digest": "c31dd93700f0c20f4358ba238b5901987675766d97f766df0dd77fbbbb21ae82",
+    "static_score": 0.8333333333333334,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 0.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "design-ops/agents/critic": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "1fed4b51d068d253c7c6038e8c06022c18d46f85cdd591c80d61e2682d2496f2",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "design-ops/agents/scout": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "8a243abb2a6eb671026df87c4a075fc8358527b6660d72d3fa7e1a48e8a6df50",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "design-ops/agents/ux-architect": {
+    "badge": "silver",
+    "composite": 79.16666666666666,
+    "digest": "5e368a428269eac5dfff117977504928c25f177902db4b3cee5d9d1e5a531130",
+    "static_score": 0.7916666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 0.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "design-ops/ai-design-generation": {
@@ -1037,7 +1975,7 @@
   "design-ops/design-memory": {
     "badge": "bronze",
     "composite": 64.06926406926407,
-    "digest": "57dc6c5e888acfdafb6dc3ecd260b9026d47d2f7860aefa1b0ce5c730a2c3ab9",
+    "digest": "7db29a632d79841c384bdf91fbe17fc841b220949dc27c4ed108d79aab9aaebf",
     "static_score": 0.6514357142857142,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1544,6 +2482,20 @@
       "token_efficiency": 1.0
     }
   },
+  "developer-essentials/agents/monorepo-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "30c18f19c38a5f6ddd576b1763ae9cbd1b05ae6ad79f937e38a304fdd2b3811f",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "developer-essentials/auth-implementation-patterns": {
     "badge": "bronze",
     "composite": 68.18181818181817,
@@ -1637,7 +2589,7 @@
   "developer-essentials/git-advanced-workflows": {
     "badge": "silver",
     "composite": 70.91222570532916,
-    "digest": "0d3811273108d9bd77657cac427c67f2dd499df79f4a1d64fc4d98847e3947e7",
+    "digest": "b6cae04045d89b671830a7a89cd80b3e3a83b5e5699b432810ed57119cd24fee",
     "static_score": 0.7060310344827586,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1709,6 +2661,20 @@
       "token_efficiency": 0.9190751445086706
     }
   },
+  "dgx-spark-ops/agents/dgx-spark-ops-engineer": {
+    "badge": "silver",
+    "composite": 75.0,
+    "digest": "3d4c274b069fd0e67c049eb9bef0dc464c2e989ed9bfe5b8ec73399167d5357f",
+    "static_score": 0.75,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 0.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "dgx-spark-ops/spark-environment-setup": {
     "badge": "gold",
     "composite": 80.67222861526659,
@@ -1742,7 +2708,7 @@
   "dgx-spark-ops/spark-training-gotchas": {
     "badge": "silver",
     "composite": 79.83608815426997,
-    "digest": "53d0b84b203934318f0145c2c5de9e63be58e9d5cef6cacb57abdd8ea8aaccce",
+    "digest": "74669775c7556b98cbcd4321e517c7c6ef666eb43997ecfb278901ec0157af82",
     "static_score": 0.8043272727272728,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -1752,6 +2718,104 @@
       "progressive_disclosure": 0.9,
       "structural_completeness": 0.75,
       "token_efficiency": 0.9903030303030302
+    }
+  },
+  "distributed-debugging/agents/devops-troubleshooter": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "b80e4f29ad258021e37f36e12bc42ab9fdd7f50ee4ec8e3b8d8d29942ed6ff6c",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "distributed-debugging/agents/error-detective": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "ef64964ddda8d95886af791964bb861ba6e72701d38b395a7fb7b90d58653adc",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "documentation-generation/agents/api-documenter": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "0fdb56c3d9eec4eedd93631add478685127fc90520f630a659c190b7347c1747",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "documentation-generation/agents/docs-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "347882b18a00b5584bb6764cc1cf09ae8655f5c4af3854973896a59f9e04bbf8",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "documentation-generation/agents/mermaid-expert": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "20bf771dad12509b212afcfa51a1a99ec4323405ccaf8f3e08eb410d2ee3f3fc",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "documentation-generation/agents/reference-builder": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "602670bdaf81343f485a973a92bffde4c094b3bdf7d0532f15c0415c6963ffa2",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "documentation-generation/agents/tutorial-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "34602c802383674d992671f86fd2fcfc1dc94de3a701c28ded354f504cf98f44",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "documentation-generation/architecture-decision-records": {
@@ -1801,9 +2865,9 @@
   },
   "documentation-standards/grounded-vault": {
     "badge": "silver",
-    "composite": 74.06911581569116,
-    "digest": "4dc613f615071aa9003de365c7f94ced3fc642470ae672bb533c7fce8b2ae1bd",
-    "static_score": 0.7397342465753425,
+    "composite": 74.07575757575758,
+    "digest": "5f3881c107d1ca05360afb8106437a9f1171494181568566197ce88d82be1c00",
+    "static_score": 0.7398,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.71,
@@ -1811,7 +2875,7 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.6,
-      "token_efficiency": 0.9726027397260274
+      "token_efficiency": 0.9733333333333334
     }
   },
   "documentation-standards/hads": {
@@ -1844,6 +2908,34 @@
       "token_efficiency": 1.0
     }
   },
+  "error-debugging/agents/debugger": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "1cc4ada4fd984d18320b4a050e7c077fbe62a93b8ee928b78957278659c55c48",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "error-debugging/agents/error-detective": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "bce9dc68ba3b962022d01aff61976e3e343d126d0093b1de54354fecce3b6347",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "evidence-ops/bag-evidence": {
     "badge": "bronze",
     "composite": 60.662557781201855,
@@ -1861,9 +2953,9 @@
   },
   "evidence-ops/capture-web": {
     "badge": "bronze",
-    "composite": 60.497427101200685,
-    "digest": "925db3ab204fa34e9bdba34cd591ee2e414af50426a040e3b8d5c120a36c4f2d",
-    "static_score": 0.6071245283018868,
+    "composite": 60.51239669421488,
+    "digest": "a1707a69c6e0cadb608a6426bd59bda677e2b5e34289e45cfd3bf653da8099af",
+    "static_score": 0.6072727272727273,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -1871,7 +2963,7 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9547169811320755
+      "token_efficiency": 0.9563636363636363
     }
   },
   "evidence-ops/environment-check": {
@@ -1922,7 +3014,7 @@
   "evidence-ops/evidence-reference-lookup": {
     "badge": "bronze",
     "composite": 66.21212121212122,
-    "digest": "801310e0bb6ef2930fbe15acf73ecba1389a477421b3a4cc48679f09eefebc63",
+    "digest": "2c929a02fb50d85e2af070707899be72b62b12af83d83ea04919a63871fa1d9a",
     "static_score": 0.6545,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1966,9 +3058,9 @@
   },
   "evidence-ops/inspect-metadata": {
     "badge": "bronze",
-    "composite": 62.552246603970744,
-    "digest": "bf7728990772d0272b9c54a8d8b96ae252390a39f35ab0ed11862fab5d9cdd24",
-    "static_score": 0.6260172413793104,
+    "composite": 62.56060606060606,
+    "digest": "395a60bb75e2706575fd19bd66b79f1b79da1300b1ba96e61e95e212ddca3755",
+    "static_score": 0.6261,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.6499999999999999,
@@ -1976,7 +3068,7 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9724137931034482
+      "token_efficiency": 0.9733333333333334
     }
   },
   "evidence-ops/log-custody": {
@@ -2069,6 +3161,34 @@
       "token_efficiency": 0.96875
     }
   },
+  "frontend-mobile-development/agents/frontend-developer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "d9fa5fdcac51946b61095ccf078947a453fd88c3632ab77bf175373a38368e63",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "frontend-mobile-development/agents/mobile-developer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "29ace417881341b3c04babdc6f55ab53398fd1e849cf7e4ebf883d38cb3ecd53",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "frontend-mobile-development/nextjs-app-router-patterns": {
     "badge": "silver",
     "composite": 76.40424867228991,
@@ -2129,6 +3249,132 @@
       "token_efficiency": 0.962962962962963
     }
   },
+  "frontend-mobile-security/agents/frontend-developer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "6a89fb2a320c2cec28bb17b0281c79db0da5bdb08d33b1da1247a298ecf14c1d",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "frontend-mobile-security/agents/frontend-security-coder": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "ec2e202155a94253b6253f15a2636a97c367ead5a55500783772ec08b2ec6b6f",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "frontend-mobile-security/agents/mobile-security-coder": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "e9e6daa5529ff8cd87bc55e649ecb3edf42fcc726e0c61a664e73baac425a397",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "full-stack-orchestration/agents/deployment-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "61a18abd43cfca9fb61e1dba4c80a04dcfc2f874ade28cf9311573894cf7f40f",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "full-stack-orchestration/agents/performance-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "329e7da4c6525247364bf010de9dfda50417df92f2789b67375e23e0b29131eb",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "full-stack-orchestration/agents/security-auditor": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "a27ffa27f223284c3a6801ba5eeb56b71945620721f3409eb59cd887b8917515",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "full-stack-orchestration/agents/test-automator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "3b4d51b6d5d083efde8394750dfc4a824928cc42c0fd4e9dc16a09539bcb379e",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "game-development/agents/minecraft-bukkit-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "ecc7c41c037e1f750f6daa14e87984e05cdaeafdc70f2b1ef03c575ee9c8c7fc",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "game-development/agents/unity-developer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "7d4fc1de3bf1090fd8ad2e5f249071a48c6b2d219b6a383e674a6dd9b027529f",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "game-development/godot-gdscript-patterns": {
     "badge": "bronze",
     "composite": 69.79437229437228,
@@ -2157,6 +3403,48 @@
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.45,
       "token_efficiency": 0.990909090909091
+    }
+  },
+  "git-workflows/agents/code-reviewer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "dff40d957c856dc335b4cd7a9060e4af122c2072afd5e40f827a94c4bf8343d9",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "hr-legal-compliance/agents/hr-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "e494e08585da5bff59c022e3a53e04c90a5224303a209fd2388417916bc0a035",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "hr-legal-compliance/agents/legal-advisor": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "4a66b3c9fa3ab6e83286f391ec7b1c7102b4c07505c0e51b8c636d5c9fdc2699",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "hr-legal-compliance/employment-contract-templates": {
@@ -2609,6 +3897,90 @@
       "token_efficiency": 0.9591836734693877
     }
   },
+  "incident-response/agents/code-reviewer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "7a2d2887079a01670cde81ee4bb012dc3732bc29fa7137c05cd26af3e87dc60e",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "incident-response/agents/debugger": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "06ce7d026a6203cfd1fc6940e656f9af090752fa936ec2ec06d9103d545465b2",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "incident-response/agents/devops-troubleshooter": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "6c78357f8da38b0517669b4a63a99d9a5fd46c3e649425c0c524eed81b3ca15a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "incident-response/agents/error-detective": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "f76942b4e395ef67600594de9615867ebad3d9e1377224af33bed593c698404a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "incident-response/agents/incident-responder": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "4deae0c2c9582db0ddd3c5803667528acbaa9d07e1e67699ab65361eae25da2a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "incident-response/agents/test-automator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "7ef8faaee480c44e2be6b2ed592aad4600c886c8eac8eb4a32d1a5ed99949843",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "incident-response/connectivity-triage": {
     "badge": "silver",
     "composite": 76.67464114832536,
@@ -2849,19 +4221,47 @@
       "token_efficiency": 1.0
     }
   },
+  "javascript-typescript/agents/javascript-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "6b5af7c966fcf8e0da965050d21b9d66b804a55f6e34e25f40819117958c10a8",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "javascript-typescript/agents/typescript-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "f4ba41424fae86c72081af057bf8fef0626b64e01ee4fe1684cedb47227a4a4a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "javascript-typescript/javascript-testing-patterns": {
-    "badge": "gold",
-    "composite": 82.3982174688057,
-    "digest": "46493add3cfe4c180402a56ac8bafb33257c274b9d38f55b686f1a9672324652",
-    "static_score": 0.8054423529411765,
+    "badge": "silver",
+    "composite": 78.16188197767146,
+    "digest": "ca8a1cce679e660b3110d739089d38529255a85605e5f6790cc5bfb1d9fdd431",
+    "static_score": 0.7687526315789474,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
-      "orchestration_wiring": 1.0,
-      "progressive_disclosure": 0.85,
-      "structural_completeness": 0.45,
-      "token_efficiency": 0.8804705882352941
+      "orchestration_wiring": 0.9,
+      "progressive_disclosure": 0.75,
+      "structural_completeness": 0.39999999999999997,
+      "token_efficiency": 0.9394736842105263
     }
   },
   "javascript-typescript/modern-javascript-patterns": {
@@ -2907,6 +4307,20 @@
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.55,
       "token_efficiency": 0.9158798283261802
+    }
+  },
+  "kubernetes-operations/agents/kubernetes-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "d7b05af68cdcd751876c6a37006964630d061bf656b91bddc7c66ccfdeda8fb6",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "kubernetes-operations/gitops-workflow": {
@@ -2967,6 +4381,48 @@
       "progressive_disclosure": 0.8,
       "structural_completeness": 0.65,
       "token_efficiency": 0.9103030303030303
+    }
+  },
+  "llm-application-dev/agents/ai-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "3fe95f24bb51535c6a0a91be4ab7539caa31cf00004ff6f6e917fe43d89c0250",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "llm-application-dev/agents/prompt-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "a7eb6296bf1494b9bfbee51a0b26bad00a467073a328058fd39713e12a9d75b0",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "llm-application-dev/agents/vector-database-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "876cf6a7859b67c241b0552b305aa0eb40f78696b5d64a8078d5202f3b5a4c66",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "llm-application-dev/embedding-strategies": {
@@ -3089,11 +4545,53 @@
       "token_efficiency": 0.9823529411764707
     }
   },
+  "llm-finetuning/agents/llm-finetuning-architect": {
+    "badge": "bronze",
+    "composite": 66.66666666666666,
+    "digest": "4a52a0e02dbf284387bc38fea86c2e63555a6c2a4bfa6e9cc87ca645d5f45fa2",
+    "static_score": 0.6666666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 0.5,
+      "output_contract": 0.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "llm-finetuning/agents/llm-finetuning-eval-engineer": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "94a866e1b31d4e245063ed3e38145a72b47c3ae9dc0af4ffc354133f6d7950f3",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "llm-finetuning/agents/llm-finetuning-training-engineer": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "52c825590d3996b210ad8cb4b42a4183e65329911e94d46d5c59a7af7edd2cb7",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "llm-finetuning/checkpoint-promotion": {
     "badge": "silver",
-    "composite": 75.72100313479623,
-    "digest": "67fceb8346ac98d5a5903c2a064079ea18782b0e984df8b6557e1b6a2f8267ca",
-    "static_score": 0.7443379310344828,
+    "composite": 75.7241910631741,
+    "digest": "9473ffd9322fc3f1b51c4298e39ed5894759e0bb4b9c82dbc7e24b1992176fd0",
+    "static_score": 0.7443694915254238,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
@@ -3101,14 +4599,14 @@
       "orchestration_wiring": 1.0,
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.45,
-      "token_efficiency": 0.9793103448275862
+      "token_efficiency": 0.9796610169491525
     }
   },
   "llm-finetuning/dataset-curation": {
     "badge": "gold",
-    "composite": 82.58881922675026,
-    "digest": "bf16a4b8b377c26891ca3d43df625c54841c57b2a533da86d799cf92729ea5de",
-    "static_score": 0.8165793103448276,
+    "composite": 82.59124393102294,
+    "digest": "b05acfec3ad651277444251eabeabe03c878b627324874622919c3a9c403aae4",
+    "static_score": 0.816603314917127,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.71,
@@ -3116,7 +4614,7 @@
       "orchestration_wiring": 1.0,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.6,
-      "token_efficiency": 0.993103448275862
+      "token_efficiency": 0.9933701657458563
     }
   },
   "llm-finetuning/eval-harness-first": {
@@ -3152,7 +4650,7 @@
   "llm-finetuning/grpo-rlvr-training": {
     "badge": "gold",
     "composite": 80.43400102722137,
-    "digest": "b38a12f7acf9375e47fbc81ccaa669a82bed120a95089dc004871f8534683630",
+    "digest": "fe96f2f53b5669336274eb422f7057fa9eafd19285dd119a58519ebb811ace24",
     "static_score": 0.7904966101694915,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3167,7 +4665,7 @@
   "llm-finetuning/lora-qlora-recipes": {
     "badge": "gold",
     "composite": 80.3018278018278,
-    "digest": "2ffcfc3010b46a6c982122d49be874a202d977af5a99625fa531aba674a63768",
+    "digest": "198b1255dc60795fae46bb6cb90d3fa34597296d8c16a2c267581aba05de8648",
     "static_score": 0.7972380952380952,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3182,7 +4680,7 @@
   "llm-finetuning/preference-optimization": {
     "badge": "gold",
     "composite": 80.43400102722137,
-    "digest": "74a39e06ca4fc2ee1f9860de4f70227f6d0237219069f3ae65c3d0e97a471b17",
+    "digest": "465e22e30818c51ce43aef8f81d866bfd9fb44d689689feafd2bd88f5f7863f5",
     "static_score": 0.7904966101694915,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3197,7 +4695,7 @@
   "llm-finetuning/quantized-export": {
     "badge": "gold",
     "composite": 82.40578372558069,
-    "digest": "aa8edb219fe190e625907a03dedfd639a23f9c7c137a31d9b84f00ac0775da1e",
+    "digest": "9c55ff2f17f7f45f1d29270914dd7a44814433c82950ba3397d36b90a11f5010",
     "static_score": 0.8120172588832487,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3212,7 +4710,7 @@
   "llm-finetuning/trace-to-training-data": {
     "badge": "silver",
     "composite": 73.48484848484848,
-    "digest": "452116bf3cca93c7ef5a27899ff6f883f8694ec0615454b73086f612135d8073",
+    "digest": "ed52a5fc066a7d5964ef0892de52b61eaa674d0a419c72bfbe9dac2084a46fce",
     "static_score": 0.7147,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3227,7 +4725,7 @@
   "llm-finetuning/vision-sft": {
     "badge": "gold",
     "composite": 80.45454545454545,
-    "digest": "f9793b97913e8b462514b18e48efcc465c94a9050b5af23025d5a40da4b31431",
+    "digest": "f6a162477a451d39928513034b44fba751f3ee3a5fa159e6f51b24daa48c6677",
     "static_score": 0.7907,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3237,6 +4735,48 @@
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.45,
       "token_efficiency": 1.0
+    }
+  },
+  "machine-learning-ops/agents/data-scientist": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "9d4d6e5f1e1e3ab40d0c0dd62909cc5b3812e022ff36e26d0788df21f93bd0aa",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "machine-learning-ops/agents/ml-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "ade86264de26e16f9fe0ae3fd641bc57192111b1dc1258930a47f92de3aa334e",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "machine-learning-ops/agents/mlops-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "68725db48b2457f8c6b9ccaa9bfebb8f6a0aab7598f9fe119741200660cb9648",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "machine-learning-ops/ml-pipeline-workflow": {
@@ -3272,7 +4812,7 @@
   "matter-ops/analyze-document": {
     "badge": "bronze",
     "composite": 63.787878787878796,
-    "digest": "3a15b0aceecbef5563b1b279ff333eaf68bd6ea0a48af8af4e5b2c88f340954c",
+    "digest": "11a778ad7ed4d48623d8069fe09893e4020dd629b264b74caa7bc49c6f6d81de",
     "static_score": 0.6485,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3286,9 +4826,9 @@
   },
   "matter-ops/build-timeline": {
     "badge": "no_badge",
-    "composite": 59.85563178959406,
-    "digest": "a78cec46862f6db1587e04229fc12f3a947d5de629cdf082173c781130ebb893",
-    "static_score": 0.6090207547169811,
+    "composite": 59.858126721763085,
+    "digest": "708f996cbcc7cbe65174c73e0dda2579b69f55674a1562afd4bbd078a1d2a680",
+    "static_score": 0.6090454545454546,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.5599999999999999,
@@ -3296,13 +4836,13 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.35000000000000003,
-      "token_efficiency": 0.9924528301886792
+      "token_efficiency": 0.9927272727272727
     }
   },
   "matter-ops/generate-brief": {
     "badge": "bronze",
     "composite": 60.378787878787875,
-    "digest": "23a802198f9a66ce7fe2163ebf5c40670894bc6f06d121316bf7f68e4fd3abe6",
+    "digest": "cbbe44cd3dc832ee5aac2b069c55bf51151a927122a23aa94e53acf4173a71b0",
     "static_score": 0.6197,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3331,9 +4871,9 @@
   },
   "matter-ops/new-matter": {
     "badge": "bronze",
-    "composite": 69.41634656423389,
-    "digest": "48964275993d500f097ae9477cb903d79fd6ed6fccea38fc58e5ab0f5cd22627",
-    "static_score": 0.6949718309859155,
+    "composite": 69.41919191919193,
+    "digest": "e0169bd855ee6251fa3881f68c14a16e4cbcb0c1ef827cb590d31dd323aba29c",
+    "static_score": 0.695,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
@@ -3341,13 +4881,13 @@
       "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9774647887323944
+      "token_efficiency": 0.9777777777777777
     }
   },
   "matter-ops/osint-source": {
     "badge": "no_badge",
     "composite": 59.46969696969697,
-    "digest": "ec600a0b2b39d2bfbe7a52f56bb16c6672a8b2d019a967db24341605109a7d03",
+    "digest": "3b82787b70650951c6d249010c7a68f36121a4c6c97cbeb748621302b8870e86",
     "static_score": 0.5997,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -3361,9 +4901,9 @@
   },
   "matter-ops/redact-content": {
     "badge": "bronze",
-    "composite": 68.34224598930481,
-    "digest": "d5c6a95eb5a02bff4e6f98bfd1548ff6b5a0a7c6a4cf9af45740fed710684311",
-    "static_score": 0.6747882352941177,
+    "composite": 68.34498834498834,
+    "digest": "64ee7aa070e5d57cbdff2ac2d646756c1193afb8b1000717c5a06aac6273d68c",
+    "static_score": 0.6748153846153846,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
       "frontmatter_quality": 0.5599999999999999,
@@ -3371,13 +4911,13 @@
       "orchestration_wiring": 0.9,
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.39999999999999997,
-      "token_efficiency": 0.9843137254901961
+      "token_efficiency": 0.9846153846153847
     }
   },
   "matter-ops/track-entities": {
     "badge": "no_badge",
     "composite": 58.71212121212122,
-    "digest": "9989a0fe36b735fc0632bd84fac3374052d57da2a3becbf73be5a8031b890229",
+    "digest": "a277005fb6e639fb96a31b300df32f4e6b98f298d951857637c491d34bbbd43e",
     "static_score": 0.5847,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -3467,7 +5007,7 @@
   "meta-wearables-ops/meta-wearables-knowledge-base": {
     "badge": "no_badge",
     "composite": 51.93939393939394,
-    "digest": "f619198ca6574eed64e30c827ed51a363b12c3fb38eff1d6dad98fa1b3d5c482",
+    "digest": "47e6fb6dc4d9db625b46857cb0e8571cbf417127f4c12d2aa3753bf40421d2ec",
     "static_score": 0.50976,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -3539,6 +5079,118 @@
       "token_efficiency": 1.0
     }
   },
+  "multi-platform-apps/agents/android-developer": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "9eb11a846053eb55723a1d0848bc3c0b89d1ec615e45a4a2f6208ecafb923bcc",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 0.5,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "multi-platform-apps/agents/backend-architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "39b4041e9b6d39f5fac3c469e05b4cff93ff594b7331feac77e3c606b832284b",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "multi-platform-apps/agents/flutter-expert": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "79bf163e9a8a1ff9ad385e06361605b6f665375bff43f9417517094220d3ca8d",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "multi-platform-apps/agents/frontend-developer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "439699eda1d4cf5c6bbe2d19dc449f17d6afb26591e0531a7affcf38ee9a34fb",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "multi-platform-apps/agents/ios-developer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "6f5b7758b02e5ed55fc4798f050fd899ac850a27395107441bec27683dc69536",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "multi-platform-apps/agents/ui-ux-designer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "8c23d713fe578ffe3e41c7a9d11e637bcbedc0072b74b53398cff09f0d0c888d",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "observability-monitoring/agents/observability-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "92b521b85d1ed8dff2bb9f731027c5f985a039eccfc64dec0d1cfdf237472c09",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "observability-monitoring/agents/performance-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "543e76613054dfe3e327a8ee637ae1b63412e3915a80f8ca87d7451189474d87",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "observability-monitoring/distributed-tracing": {
     "badge": "bronze",
     "composite": 67.04545454545455,
@@ -3597,6 +5249,90 @@
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.65,
       "token_efficiency": 0.8990654205607477
+    }
+  },
+  "operating-kit/agents/code-review-preshipment": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "608d7d03f367d9f785eda2c877afec2a9fb272aff82b8e05c3a378e8b09bb9f4",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "operating-kit/agents/deploy-with-verification": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "2ec725bd0253ebbee221319f9e86cf3d9db40ec5675325263b46fb8601a2b363",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "operating-kit/agents/prod-logs-health-check": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "e38ce7304ef309fb1dd0138ff6dd9092cb604aafa3fed698f3f865406fc4162a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "operating-kit/agents/session-end": {
+    "badge": "platinum",
+    "composite": 95.83333333333334,
+    "digest": "88428abfe1b6dd23ab85903963af5e847761a9f138fb14ec0eaf171a86771671",
+    "static_score": 0.9583333333333334,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "operating-kit/agents/session-start": {
+    "badge": "platinum",
+    "composite": 95.83333333333334,
+    "digest": "7e69b39fd54cf8ba82255376c8ca9557647857c53bd8b179f93189a7d0d44317",
+    "static_score": 0.9583333333333334,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "payment-processing/agents/payment-integration": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "1f0e6f28d06195d8354f8c5ecd560f3ef5f021042da4b1bf0a75576f5a0f7f66",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "payment-processing/billing-automation": {
@@ -3659,6 +5395,62 @@
       "token_efficiency": 0.968141592920354
     }
   },
+  "performance-testing-review/agents/performance-engineer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "2a701119a04b651637d38c6c418b1680252c0174a014bbf787b31855c354552b",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "performance-testing-review/agents/test-automator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "eb70ff58bf4436fbb4d34fb6c0ced3fee39b8f3640771e14a473eec2d3303bc1",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "plugin-eval/agents/eval-judge": {
+    "badge": "platinum",
+    "composite": 95.83333333333334,
+    "digest": "06612f9137a12d0f92a98374de6d2eeb1cf657b589f5ceb26965c7823da9a3b4",
+    "static_score": 0.9583333333333334,
+    "sub_scores": {
+      "frontmatter_quality": 0.75,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "plugin-eval/agents/eval-orchestrator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "5e3eca09533171bf772f06ce1845bf80afaa63443d89d5d933ac84d0fbb2bb0a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "plugin-eval/evaluation-methodology": {
     "badge": "silver",
     "composite": 77.36462990561353,
@@ -3674,19 +5466,89 @@
       "token_efficiency": 0.9934426229508196
     }
   },
+  "protect-mcp/agents/policy-enforcer": {
+    "badge": "silver",
+    "composite": 75.0,
+    "digest": "c3811d1c56e277034c93f9d39accacc87034455290591ecb04c6551fc0a5b966",
+    "static_score": 0.75,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 0.5,
+      "output_contract": 0.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "protect-mcp/agents/receipt-verifier": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "198779e655a0704ce34e4623c8d610b61f809e7ce4eb0b38f1331897f98a0eb9",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "protect-mcp/protect-mcp-setup": {
     "badge": "silver",
-    "composite": 76.7926250456371,
-    "digest": "70ca402e1b568563b51c04c69397f2dfb6d4811ad7b8f71d222bf1cee5cb1f59",
-    "static_score": 0.7667469879518072,
+    "composite": 75.02719502719502,
+    "digest": "ef5ed5a371984d8ca5f70c85e1bcde6f0913dcdba291dd15c1672a8ccfc4e387",
+    "static_score": 0.7447692307692307,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.9,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.5499999999999999,
-      "token_efficiency": 0.963855421686747
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.44999999999999996,
+      "token_efficiency": 0.9863247863247864
+    }
+  },
+  "python-development/agents/django-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "9522d213a416b2bff579b07fbe90bda7f422ea1e28a17b4e33b9d7181769daa8",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "python-development/agents/fastapi-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "42f95012a5a3a27fe547be5853cd4e827c82294ec02daf525d943c6fa27bb86a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "python-development/agents/python-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "e3c21368d3e4527b565494b1e340c7158b97c7609b880cab4911cff8a8eeb955",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "python-development/async-python-patterns": {
@@ -3929,6 +5791,48 @@
       "token_efficiency": 0.943089430894309
     }
   },
+  "reverse-engineering/agents/firmware-analyst": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "daba1297fcbd877cdbb0010d7e6365d97f9a95ca3ec8a568c3ab32b11e0e866f",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 0.5,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "reverse-engineering/agents/malware-analyst": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "47da2279cd02f5c8702dc121de21dd99c8dc7af6f4b56e67474b8d1167f62ec0",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 0.5,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "reverse-engineering/agents/reverse-engineer": {
+    "badge": "platinum",
+    "composite": 91.66666666666666,
+    "digest": "a2230cd0009fec5459d3e2b0b8a50f7cb6c95b1d6da9e12637a39b4ef35e62fe",
+    "static_score": 0.9166666666666666,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 0.5,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "reverse-engineering/anti-reversing-techniques": {
     "badge": "silver",
     "composite": 73.07792207792207,
@@ -3989,6 +5893,20 @@
       "token_efficiency": 0.9340659340659341
     }
   },
+  "review-agent-governance/agents/review-policy-author": {
+    "badge": "gold",
+    "composite": 83.33333333333334,
+    "digest": "45d93de2a6478bb3d4cd66647cadde7e1540f26deaa277b041fb8d841067943e",
+    "static_score": 0.8333333333333334,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 0.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "review-agent-governance/review-agent-setup": {
     "badge": "bronze",
     "composite": 69.6875,
@@ -4002,6 +5920,34 @@
       "progressive_disclosure": 0.5,
       "structural_completeness": 0.7000000000000001,
       "token_efficiency": 0.940625
+    }
+  },
+  "security-scanning/agents/security-auditor": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "5c9d9cb9f17c1a2283147feb6a1d11e7eb5e6f462f1bd1fd409c36fea20031ae",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "security-scanning/agents/threat-modeling-expert": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "5fdd726bfdbc532750d16b32702f4519a184b522e44d53303d87c8196d1d653e",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "security-scanning/attack-tree-construction": {
@@ -4079,6 +6025,118 @@
       "token_efficiency": 0.9741935483870967
     }
   },
+  "seo-analysis-monitoring/agents/seo-cannibalization-detector": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "eb01aad74118371f6df68d8e735fc67dc6067c373b732fb9336607260a9d232e",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "seo-content-creation/agents/seo-content-auditor": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "a6a804a284f5b62b24fc7e521d74e496f9f708cdedee47cb2bb18b02506ddd6a",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "seo-content-creation/agents/seo-content-planner": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "4e9faf29cc6f6bdcf64bc7f1abfc233499d5486dc87c6507d0365aa22da8df69",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "seo-content-creation/agents/seo-content-writer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "770d56813b50c60a674f1dce52d8632c8b08f1293e63593285cf51c02a4d6a78",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "seo-technical-optimization/agents/seo-meta-optimizer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "ee5f3cbb925dc3ff9227fc6dacc7de0b4683b596248d8883d61619d6e5642208",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "seo-technical-optimization/agents/seo-technical-auditor": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "fe91375867591511ee87493483929076538bf34891630856f0d8636daa30b9e5",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "shell-scripting/agents/bash-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "aedcb5786bb7facf4a443a21b90a75a71ecf361796bc0dd1585db7764c864bd3",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "shell-scripting/agents/posix-shell-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "edd51d8e6bd1c61128c49b5f68164b134dc794adfb63ae961fa0e43192c5f729",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "shell-scripting/bash-defensive-patterns": {
     "badge": "silver",
     "composite": 72.50369549150037,
@@ -4124,6 +6182,90 @@
       "token_efficiency": 0.971764705882353
     }
   },
+  "ship-mate/agents/architect": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "bae3e584f940ce479fae2f859509eb7e2d2af1b97f989608161c7ef1c69db1c8",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ship-mate/agents/implement": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "f9109b1952f7eab23c5b74eb841292853d0ec11ec1bf28c5190b7c19bd2cd8c7",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ship-mate/agents/orchestrate": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "66300f421d3f490f2817b923ba049ac916b78a6cdaaf2f0e97c599900f41586d",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ship-mate/agents/playwright": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "1849d31c7566b2c0173551b549cbdc5e4dc8a3b2d4fb3f54b9c0ada32d48e285",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ship-mate/agents/qa": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "c8a6c6dc3d59be48dbe42e373468e6fc9019f5d1be7525f437c9fe98e6e93646",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "ship-mate/agents/review": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "bd77be2b9416003e86bf0365ff267307e02df36b8c581652ef0fda8c81d1ab1b",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "ship-mate/scan": {
     "badge": "silver",
     "composite": 71.28274268104778,
@@ -4141,23 +6283,23 @@
   },
   "signed-audit-trails/signed-audit-trails-recipe": {
     "badge": "silver",
-    "composite": 74.29265921244532,
-    "digest": "ab0167366614325ac421092f58efbda71198fae341cb644f7500c5af0d749c20",
-    "static_score": 0.7544973262032085,
+    "composite": 72.19374597034172,
+    "digest": "0c6d2fb3c6337d9a3aa1d860afb3c209d16869046846e766108462e442b5f6d5",
+    "static_score": 0.7264680851063829,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.8,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.65,
-      "token_efficiency": 0.9721925133689839
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.49999999999999994,
+      "token_efficiency": 0.9829787234042553
     }
   },
   "skill-forge-essentials/ai-debt-detector": {
     "badge": "bronze",
     "composite": 69.6969696969697,
-    "digest": "f84d37cc2df27a456d6b46ff6d5a288ede6bf5e7b655bd5595d194e0511e0e48",
+    "digest": "6f2ae9b503053b3976597e3d0fa88a3139a3d9fb2cbae6dcb15345cb312cf2c7",
     "static_score": 0.6749,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4170,13 +6312,13 @@
     }
   },
   "skill-forge-essentials/session-guard": {
-    "badge": "bronze",
-    "composite": 67.12121212121212,
-    "digest": "aca0bd410d7ae846eface6bb91345a3d8a3152090944022792bcf480a3dd0ee0",
-    "static_score": 0.6619,
+    "badge": "no_badge",
+    "composite": 59.166666666666664,
+    "digest": "bd4379290967dd8c2511edbac813dd51286eb79114dc68f589d25236fdf2aedc",
+    "static_score": 0.5947,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.77,
+      "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.2,
@@ -4199,26 +6341,54 @@
       "token_efficiency": 1.0
     }
   },
+  "social-publishing/agents/social-publishing-publisher": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "4a277fdb56e1068b61657a83813f1470057fab276cbd05fb0f0b042f0725043d",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "social-publishing/social-publishing": {
     "badge": "bronze",
-    "composite": 64.81907308377896,
-    "digest": "c80bcea2d836c18db51a1b094e6c9a7b97b55ca6a3788ea899f85fc94a4a2ddf",
-    "static_score": 0.6641588235294118,
+    "composite": 62.55736914600552,
+    "digest": "f25fdb9223821bd48956e9c91f8e9bfe9afea483f388bf17f32cbcaf8723da34",
+    "static_score": 0.6343754545454545,
     "sub_scores": {
-      "ecosystem_coherence": 0.5,
+      "ecosystem_coherence": 0.58,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.75,
+      "orchestration_wiring": 0.8,
       "progressive_disclosure": 0.5,
-      "structural_completeness": 0.65,
-      "token_efficiency": 0.971764705882353
+      "structural_completeness": 0.5499999999999999,
+      "token_efficiency": 0.9418181818181818
+    }
+  },
+  "startup-business-analyst/agents/startup-analyst": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "01c7eac177e8e71028d59b131265eca270ce7c9b4aafa4a9ad42e7684b9ffd55",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "startup-business-analyst/competitive-landscape": {
     "badge": "silver",
-    "composite": 72.16742109895637,
-    "digest": "73a16f7d51ab641e05ed6c3c51c64529b98a67f0dddd9f190acf41b9d846e6ee",
-    "static_score": 0.728707468879668,
+    "composite": 72.168911335578,
+    "digest": "aea5f585526d970018ed02eb08a38e33a427dab20aa0997559cf1e106316f772",
+    "static_score": 0.7287222222222222,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
@@ -4226,7 +6396,7 @@
       "orchestration_wiring": 0.75,
       "progressive_disclosure": 0.75,
       "structural_completeness": 0.49999999999999994,
-      "token_efficiency": 0.9800829875518672
+      "token_efficiency": 0.980246913580247
     }
   },
   "startup-business-analyst/market-sizing-analysis": {
@@ -4304,6 +6474,62 @@
       "token_efficiency": 1.0
     }
   },
+  "systems-programming/agents/c-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "356376fde50db4e03fe8536115425f9f91bf82fd38a37ce3d2cb41b5c59f8cb0",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "systems-programming/agents/cpp-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "44c5e56085664226281b657939556ba8b28641bbcd394b0ac6b7103ef90f2cff",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "systems-programming/agents/golang-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "1295b9d4f0de502226020cd2c34819676d45e96614eaaa1290bbca45117c8738",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "systems-programming/agents/rust-pro": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "a5ebf75e7235e4cf49b9013290b4e9d12f1ac8ad76b18d7d47de675a557a74e8",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
   "systems-programming/go-concurrency-patterns": {
     "badge": "silver",
     "composite": 73.3601841196778,
@@ -4347,6 +6573,48 @@
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.6,
       "token_efficiency": 0.9771428571428571
+    }
+  },
+  "tdd-workflows/agents/code-reviewer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "a3027d24e91daca18ea6e222c1e61abfdc4beadd11bde3e7153e2b56dbc937e4",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "tdd-workflows/agents/tdd-orchestrator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "31f4e08ddc81c2516885bd0604d6f16d3c325139b5d9779bac037c5e4635fc14",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "team-collaboration/agents/dx-optimizer": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "a50680d19906f23c3100abfb9e6e044a438cc00fe6d9b3e2b6ad3e60b8ec8b8c",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   },
   "travel-packing-assistant/baggage-policy-research": {
@@ -4442,7 +6710,7 @@
   "travel-packing-assistant/packing-docs": {
     "badge": "bronze",
     "composite": 69.01763537009438,
-    "digest": "4b233e836990f3e83856c31ec2cbe0b4ad56bc4df25afbd1b0449a181c3c5764",
+    "digest": "abce915d27dda89c8229121ce7c48b0f399b21402285eee7f36e5f0275041707",
     "static_score": 0.6807245901639344,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -4482,6 +6750,34 @@
       "progressive_disclosure": 0.2,
       "structural_completeness": 0.35,
       "token_efficiency": 1.0
+    }
+  },
+  "unit-testing/agents/debugger": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "2db5a310b0564dd510ffb252367a56ff1035bd3ceb73e6db67c01ca84a275b91",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
+    }
+  },
+  "unit-testing/agents/test-automator": {
+    "badge": "platinum",
+    "composite": 100.0,
+    "digest": "e4fd0d3c560b397d1a1fdf48eb2f0a24050a3faa762dfcdc8de603031da2473c",
+    "static_score": 1.0,
+    "sub_scores": {
+      "frontmatter_quality": 1.0,
+      "model_tier": 1.0,
+      "output_contract": 1.0,
+      "procedure": 1.0,
+      "tool_scoping": 1.0,
+      "uniqueness": 1.0
     }
   }
 }

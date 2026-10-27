@@ -133,3 +133,16 @@ class TestParsePlugin:
         assert plugin.name == "test-plugin"
         assert len(plugin.skills) == 1
         assert len(plugin.agents) == 1
+
+
+def test_unquoted_colon_in_description_falls_back_to_lenient_parse(tmp_path: Path) -> None:
+    path = tmp_path / "team-lead.md"
+    path.write_text(
+        "---\nname: team-lead\ndescription: Lead a team: split the work. Use when\n"
+        "  a task spans files.\nmodel: sonnet\ntools: Read, Grep\n---\nBody\n"
+    )
+    agent = parse_agent(path)
+    assert agent.name == "team-lead"
+    assert agent.description == "Lead a team: split the work. Use when a task spans files."
+    assert agent.model == "sonnet"
+    assert agent.tools == ["Read", "Grep"]

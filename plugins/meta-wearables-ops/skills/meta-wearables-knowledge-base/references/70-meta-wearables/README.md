@@ -80,7 +80,7 @@ surface is identified; it does not invent a third SDK.
 The reusable specialist packages live under
 the Meta Wearables skill team (the other skills in this plugin). The central
 Apple evidence vocabulary remains the contract for both lanes:
-evidence and verification language (`ios-knowledge-base` skill: `references/00-foundations/05-evidence-and-verification-language.md`).
+evidence and verification language (`ios-knowledge-base` skill: [05-evidence-and-verification-language.md](../../../../../ios-ops/skills/ios-knowledge-base/references/00-foundations/05-evidence-and-verification-language.md)).
 
 ## Non-negotiable boundaries
 
@@ -120,4 +120,4 @@ evidence and verification language (`ios-knowledge-base` skill: `references/00-f
 - [Full Wearables platform reference](https://wearables.developer.meta.com/llms.txt?full=true)
 - [Wearables MCP](https://mcp.developer.meta.com/wearables)
 - [Apple privacy manifest documentation](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files)
-- Evidence and verification language (`ios-knowledge-base` skill: `references/00-foundations/05-evidence-and-verification-language.md`)
+- Evidence and verification language (`ios-knowledge-base` skill: [05-evidence-and-verification-language.md](../../../../../ios-ops/skills/ios-knowledge-base/references/00-foundations/05-evidence-and-verification-language.md))

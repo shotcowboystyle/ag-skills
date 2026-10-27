@@ -1,7 +1,7 @@
 ---
 name: packing-docs
 description: Render the trip's packing documents — a one-page airport counter card of the binding allowances and bag weights, and a full per-bag packing list with tick boxes — as PDF via Typst and as Markdown, then deliver them by email, to cloud storage, into a static-site repo, or to disk. Use when the user asks for a packing list, a PDF, something to print, a page on their site, or to have the plan sent to them.
-allowed-tools: Read, Write, Edit, Bash(typst *), Bash(uv run *), Bash(mkdir *), Bash(ls *), Bash(cp *), Bash(curl *), Bash(git status *), Bash(git add *), Bash(git commit *), Bash(git push *), Glob
+allowed-tools: Read, Write, Edit, Bash(typst *), Bash(uv run *), Bash(mkdir *), Bash(ls *), Bash(cp *), Bash(curl *), Bash(git status *), Bash(git add *), Bash(git commit *), Glob
 ---
 
 # Packing Documents

@@ -9,7 +9,7 @@ You take a finished script and produce per-model, per-line TTS input files.
 
 ## Inputs
 
-- `scripts/final/script.md` (or a draft path the user passes).
+- The project's `./scripts/final/script.md` (or a draft path the user passes).
 - Target model — ask if not stated. Common: `elevenlabs-v3`, `elevenlabs-v2`, `openai-tts`, `google-tts`, `azure-tts`, `hume`, `chatterbox`.
 - Voice ID / preset, if known. Pull from `brief/tools-and-models.md` if listed.
 

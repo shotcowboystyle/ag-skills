@@ -34,7 +34,7 @@ AGENTS.md is the canonical context file. Codex, Cursor, OpenCode, Antigravity CL
 
 ```bash
 make validate STRICT=1     # structural validation across all harness outputs
-make garden                # drift detection (dead links, stale artifacts, oversize skills)
+make garden STRICT=1       # drift detection plus blocking audit checks (docs/authoring.md)
 make test                  # full pytest suite (plugin-eval + tools/tests/)
 make smoke-test            # real-CLI subprocess tests against generated artifacts
 ```

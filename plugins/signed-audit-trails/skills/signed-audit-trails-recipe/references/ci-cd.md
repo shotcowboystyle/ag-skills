@@ -15,7 +15,7 @@ not run it on pull requests, for two reasons:
 - GitHub does not pass secrets to a workflow run for a pull request from a
   fork, so the key is empty and the verify step fails.
 - On a pull request from a branch in the same repository, the job would run
-  that branch's `scripts/run_agent.py` after it writes the key to disk. The
+  that branch's `./scripts/run_agent.py` after it writes the key to disk. The
   branch could change the script to read the key and send it elsewhere.
 
 The environment's branch limit is a second guard: if someone later adds a

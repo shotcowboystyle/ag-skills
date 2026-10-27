@@ -236,9 +236,28 @@ def _split_frontmatter(content: str) -> tuple[dict, str]:
     try:
         frontmatter = yaml.safe_load(parts[1]) or {}
     except yaml.YAMLError:
-        frontmatter = {}
+        frontmatter = _lenient_frontmatter(parts[1])
 
     return frontmatter, parts[2]
+
+
+def _lenient_frontmatter(block: str) -> dict:
+    """Top-level `key: value` pairs from frontmatter that strict YAML rejects.
+
+    Harnesses accept an unquoted `: ` inside a description, as in
+    `description: Lead a team: split the work`, and so do the repo's adapters.
+    Indented lines continue the previous value; lists and mappings are not parsed.
+    """
+    fields: dict = {}
+    key = None
+    for line in block.splitlines():
+        match = re.match(r"^(\w[\w-]*):\s*(.*)$", line)
+        if match:
+            key, value = match.group(1), match.group(2).strip()
+            fields[key] = value
+        elif key and line.startswith((" ", "\t")) and line.strip():
+            fields[key] = f"{fields[key]} {line.strip()}".strip()
+    return fields
 
 
 def _extract_cross_references(body: str) -> list[str]:

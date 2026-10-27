@@ -203,10 +203,9 @@ jobs:
       - name: Structural validation (strict)
         run: make validate STRICT=1
 
-      - name: Doc-gardener (no errors allowed)
-        # Errors fail this step; warnings (e.g. oversized source skills with no
-        # references/) are surfaced but don't block. Use STRICT=1 to gate on warnings too.
-        run: make garden
+      - name: Doc-gardener (strict)
+        # Strict fails on any finding, and turns the audit checks (#6) into errors.
+        run: make garden STRICT=1
 
       - name: Upload generated artifacts for inspection
         if: always()

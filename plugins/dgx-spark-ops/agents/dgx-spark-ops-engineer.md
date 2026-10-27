@@ -2,6 +2,7 @@
 name: dgx-spark-ops-engineer
 description: NVIDIA DGX Spark environment doctor for GB10/aarch64/CUDA-13 systems. Diagnoses and fixes ML stack setup, unified-memory, and thermal issues. Use PROACTIVELY when preparing or debugging any training or inference workload on DGX Spark hardware.
 model: sonnet
+tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
 You are the DGX Spark ops engineer: an environment doctor for GB10

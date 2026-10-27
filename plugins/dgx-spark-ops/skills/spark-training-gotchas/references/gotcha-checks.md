@@ -75,7 +75,7 @@ down its `elif supports_sdpa:` branch instead of the flash-attn
 branch — confirmed working (`config._attn_implementation ==
 "sdpa"` after the monkeypatch). On plain TRL/PEFT (bypassing
 Unsloth entirely — see `lora-qlora-recipes`'
-`references/unsloth-trl-mapping.md` escape hatch),
+[unsloth-trl-mapping.md](../../../../llm-finetuning/skills/lora-qlora-recipes/references/unsloth-trl-mapping.md) escape hatch),
 `attn_implementation="sdpa"` passed to
 `AutoModelForCausalLM.from_pretrained` **is** honored correctly;
 this gap is Unsloth-specific, not a general TRL/transformers

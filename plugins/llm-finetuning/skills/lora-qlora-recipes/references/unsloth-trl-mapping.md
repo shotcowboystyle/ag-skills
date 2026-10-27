@@ -68,7 +68,7 @@ path at all.** A `formatting_func` can only return flat
 text, which forces pre-rendering the chat template
 before the trainer sees per-turn boundaries — the exact
 flat-text anti-pattern `dataset-curation`'s
-`references/formats-and-templates.md` warns computes
+[formats-and-templates.md](../../dataset-curation/references/formats-and-templates.md) warns computes
 loss over the entire sequence, defeating
 `assistant_only_loss`'s purpose. **Fix: use the plain
 TRL + PEFT escape hatch below** — this is not a rare

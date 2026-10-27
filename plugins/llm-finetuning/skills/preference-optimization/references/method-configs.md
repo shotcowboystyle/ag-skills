@@ -7,12 +7,12 @@ to by `SKILL.md`'s Method Selection table. Base
 models are never named here — every example uses
 `BASE_MODEL`/`SFT_CHECKPOINT` placeholders; see
 `finetuning-method-selection`'s
-[`references/model-catalog.md`](../../finetuning-method-selection/references/model-catalog.md) for which actual
+[model-catalog.md](../../finetuning-method-selection/references/model-catalog.md) for which actual
 checkpoint to load. All trainer calls use current
 TRL API conventions (`processing_class`, not
 `tokenizer=`) — the same conventions established
 in `lora-qlora-recipes`'s
-[`references/unsloth-trl-mapping.md`](../../lora-qlora-recipes/references/unsloth-trl-mapping.md).
+[unsloth-trl-mapping.md](../../lora-qlora-recipes/references/unsloth-trl-mapping.md).
 
 **Learning rates are per adapter type.** The
 `learning_rate` in each plain-TRL block below is the
@@ -20,7 +20,7 @@ full-fine-tune value. A LoRA or QLoRA adapter (the
 Unsloth wrapper, or any `peft_config`) runs about
 10x higher. Take the value from the LoRA column of
 `lora-qlora-recipes`'s
-[`references/hyperparameters.md`](../../lora-qlora-recipes/references/hyperparameters.md)
+[hyperparameters.md](../../lora-qlora-recipes/references/hyperparameters.md)
 Post-SFT Methods table, not from these blocks.
 
 ## DPO — the Default

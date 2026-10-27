@@ -75,12 +75,13 @@ git -C "$TARGET" commit -m "Initial matter workspace"
 
 ### 6. Publish only if asked
 
-Unless `--local-only` was given, ask whether to create a remote repository. Default to
+Unless `--local-only` was given, ask the user whether to create a remote repository. Default to
 private, and say plainly what would be published — a matter workspace usually contains
 material that should not be public. Never create a public repository without an explicit,
 specific yes.
 
 ```bash
+# Run only after the user confirms.
 gh repo create "$NAME" --private --source="$TARGET" --push
 ```
 

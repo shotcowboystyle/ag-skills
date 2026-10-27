@@ -18,7 +18,7 @@ PreToolUse hooks are a Claude Code feature. For other harnesses, see [Other harn
 When AI agents commit code, they may use bypass flags to avoid hook failures:
 
 ```bash
-# These commands skip pre-commit hooks entirely
+# These commands skip pre-commit hooks entirely. Never run them without the user's approval.
 git commit --no-verify -m "quick fix"
 git push --no-verify
 git commit --no-gpg-sign -m "unsigned commit"

@@ -9,7 +9,14 @@ from plugin_eval.layers.harness_portability import (
     score_skill_portability,
 )
 from plugin_eval.models import AntiPattern, LayerResult
-from plugin_eval.parser import ParsedAgent, ParsedSkill, parse_plugin, parse_skill
+from plugin_eval.parser import (
+    ParsedAgent,
+    ParsedSkill,
+    _split_frontmatter,
+    parse_agent,
+    parse_plugin,
+    parse_skill,
+)
 
 # Weights for skill sub-scores. Rebalanced from original to make room for
 # harness_portability (~6% weight) without changing relative order.
@@ -45,6 +52,42 @@ def _skill_uses_description_trigger(skill: ParsedSkill) -> bool:
         return False
     paths = fm.get("paths")
     return not (isinstance(paths, str) and paths != "")
+
+
+# Agent scoring (analyze_agent). Role and tool sets match the gardener's
+# READ_ONLY_AGENT_WRITES check in tools/doc_gardener.py.
+# An `-author` or `-writer` (review-policy-author) writes files even when its subject is review.
+_READ_ONLY_ROLE_RE = re.compile(r"^(?!.*-(?:author|writer)$).*(?:review|audit|analy[sz]|detect)")
+_WRITE_TOOLS = frozenset({"Write", "Edit", "MultiEdit", "NotebookEdit"})
+_COORDINATOR_RE = re.compile(r"lead|router|orchestrat|coordinat")
+_OPUS_JUSTIFIED_RE = re.compile(r"^Model: opus\b", re.MULTILINE)
+# `1. Do X`, `**1. Do X**`, or a numbered heading such as `### 1. Correctness` or `### 1: Pull logs`.
+_NUMBERED_STEP_RE = re.compile(
+    r"^\s{0,3}(?:#{1,6}\s*)?(?:\*\*)?(?:step\s+)?\d+[.):]\s", re.IGNORECASE
+)
+_CAPABILITY_HEADING_RE = re.compile(
+    r"^\s{0,3}#{1,6}\s*(?:capabilities|behavioral traits|knowledge base|expertise)\b",
+    re.IGNORECASE,
+)
+# A heading that names the answer (`## Output`, `## Verdict`, `## What to report`,
+# `## What you produce`), or a line that starts with such a label (`Output: a table…`).
+_OUTPUT_CONTRACT_RE = re.compile(
+    r"^\s{0,3}#{1,6}\s.*\b(?:output|report\w*|verdict|deliverables?|produce|return\w*|response|results?)\b"
+    r"|^\s{0,3}(?:\*\*)?(?:output|report|verdict|return|deliverables?)\b",
+    re.IGNORECASE,
+)
+
+
+def _prose_lines(body: str) -> list[str]:
+    """Lines of `body` outside fenced code blocks."""
+    kept: list[str] = []
+    in_fence = False
+    for line in body.splitlines():
+        if line.lstrip().startswith(("```", "~~~")):
+            in_fence = not in_fence
+        elif not in_fence:
+            kept.append(line)
+    return kept
 
 
 # Line count threshold for BLOATED_SKILL (no references/ dir)
@@ -428,29 +471,76 @@ class StaticAnalyzer:
     # Agent scoring
     # ------------------------------------------------------------------
 
+    def analyze_agent(self, agent_or_path: Path | ParsedAgent, duplicates: int = 0) -> LayerResult:
+        """Score an agent against the agent shape in docs/authoring.md.
+
+        Each sub-score is 0-1 and the score is their mean. `duplicates` is how many
+        agents in other plugins share this agent's body without a shared source; the
+        caller counts them, since that needs the whole tree.
+        """
+        agent = (
+            agent_or_path if isinstance(agent_or_path, ParsedAgent) else parse_agent(agent_or_path)
+        )
+        sub_scores = {
+            "frontmatter_quality": self._score_agent_frontmatter(agent),
+            "tool_scoping": self._score_agent_tools(agent),
+            "model_tier": self._score_agent_tier(agent),
+            "procedure": self._score_agent_procedure(agent),
+            "output_contract": self._score_agent_output(agent),
+            "uniqueness": 0.0 if duplicates else 1.0,
+        }
+        return LayerResult(
+            layer="static",
+            score=sum(sub_scores.values()) / len(sub_scores),
+            sub_scores=sub_scores,
+            metadata={"agent_name": agent.name},
+        )
+
     def _score_agent(self, agent: ParsedAgent) -> float:
-        """Produce a simple quality score for an agent."""
-        score = 0.5  # baseline
+        return self.analyze_agent(agent).score
 
-        # Proactive trigger
-        if agent.has_proactive_trigger:
-            score += 0.2
+    def _score_agent_frontmatter(self, agent: ParsedAgent) -> float:
+        fm = agent.frontmatter
+        checks = [
+            bool(fm.get("name")),
+            len(agent.description.strip()) >= 40,
+            bool(_TRIGGER_PATTERN.search(agent.description)),
+            bool(agent.model),
+        ]
+        return sum(checks) / len(checks)
 
-        # Tools restriction (scoped permissions)
-        if agent.has_tools_restriction and len(agent.tools) > 0:
-            score += 0.1
+    def _score_agent_tools(self, agent: ParsedAgent) -> float:
+        """No `tools:` inherits every tool; a read-only role that can write scores half."""
+        if "tools" not in agent.frontmatter:
+            return 0.0
+        if _READ_ONLY_ROLE_RE.search(agent.path.stem) and _WRITE_TOOLS & set(agent.tools):
+            return 0.5
+        return 1.0
 
-        # Description length
-        if len(agent.description.strip()) >= 40:
-            score += 0.1
-        elif len(agent.description.strip()) >= 20:
-            score += 0.05
+    def _score_agent_tier(self, agent: ParsedAgent) -> float:
+        """haiku/sonnet/inherit are fine; opus needs a `Model: opus, because` line; fable is never for coordination."""
+        model = str(agent.model or "").strip().lower()
+        if model in {"haiku", "sonnet", "inherit"}:
+            return 1.0
+        if model == "opus":
+            return 1.0 if _OPUS_JUSTIFIED_RE.search(agent.raw_content) else 0.5
+        if model == "fable":
+            return 0.0 if _COORDINATOR_RE.search(agent.path.stem) else 0.5
+        return 0.5 if model else 0.0
 
-        # Model specified
-        if agent.model:
-            score += 0.1
+    def _score_agent_procedure(self, agent: ParsedAgent) -> float:
+        """Three or more numbered steps; a capability-list heading halves the score."""
+        lines = _prose_lines(_split_frontmatter(agent.raw_content)[1])
+        steps = sum(1 for line in lines if _NUMBERED_STEP_RE.match(line))
+        score = 1.0 if steps >= 3 else 0.5 if steps else 0.0
+        if any(_CAPABILITY_HEADING_RE.match(line) for line in lines):
+            score *= 0.5
+        return score
 
-        return min(1.0, score)
+    def _score_agent_output(self, agent: ParsedAgent) -> float:
+        """A heading or label that fixes the shape of the answer."""
+        lines = _prose_lines(_split_frontmatter(agent.raw_content)[1])
+        return 1.0 if any(_OUTPUT_CONTRACT_RE.match(line) for line in lines) else 0.0
 
     # ------------------------------------------------------------------
     # Helpers
