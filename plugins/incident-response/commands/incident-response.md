@@ -346,29 +346,92 @@ Update `state.json`: set `current_step` to 8, add step 7 to `completed_steps`.
 
 ### Step 8: Deployment and Validation
 
+Step 8 has three parts: plan the rollout, get approval, then execute. Nothing touches production before the approval gate.
+
+#### Step 8a: Rollout Plan
+
 Read `.incident-response/06-fix.md`.
 
 ```
 Task:
   subagent_type: "incident-response-devops-troubleshooter"
-  description: "Deploy and validate fix for: $INCIDENT"
+  description: "Plan rollout of fix for: $INCIDENT"
   prompt: |
-    Execute emergency deployment for incident fix.
+    Propose an emergency rollout plan for this incident fix. Do not deploy, roll back,
+    restart or scale anything; read-only checks of the current state are fine.
 
     Fix details: [Insert contents of .incident-response/06-fix.md]
 
-    Process:
-    1. Blue-green or canary deployment strategy
-    2. Progressive rollout with monitoring
-    3. Health check validation at each stage
-    4. Rollback triggers configured
-    5. Real-time monitoring during deployment
+    Plan:
+    1. Strategy (blue-green, canary or direct) and why
+    2. Stages, with the traffic share and hold time for each
+    3. Health checks that must pass before each stage advances
+    4. Rollback trigger (the exact metric and threshold) and rollback procedure
+    5. The exact commands to run, in order
+
+    Provide structured output with: ROLLOUT_STRATEGY, STAGES, HEALTH_CHECKS,
+    ROLLBACK_TRIGGER, ROLLBACK_PROCEDURE, COMMANDS.
+```
+
+Save output to `.incident-response/07-deployment.md` under a `## Rollout Plan` heading.
+
+Update `state.json`: set `current_step` to "8-approval".
+
+#### DEPLOYMENT GATE — User Approval Required
+
+You MUST stop here. Display the plan from `.incident-response/07-deployment.md` and ask:
+
+```
+Rollout plan ready. Please review .incident-response/07-deployment.md
+
+Strategy: [from plan]
+Stages: [from plan]
+Rollback trigger: [from plan]
+
+1. Approve — run this rollout in production
+2. Request changes — revise the plan
+3. Pause — save progress and stop here (nothing deployed)
+```
+
+Only an explicit approval continues. On approval, ask for the approver's name if you don't already know it, then append to `.incident-response/07-deployment.md`:
+
+```markdown
+## Approval
+
+- Approved by: [name]
+- Approved at: [ISO timestamp]
+- Plan approved: Rollout Plan above, unchanged
+```
+
+Update `state.json`: set `current_step` to "8-execute".
+
+Do NOT run any part of the rollout until this approval is recorded.
+
+#### Step 8b: Execute and Validate
+
+Read `.incident-response/07-deployment.md` and confirm it has an `## Approval` section. If it doesn't, return to the deployment gate.
+
+```
+Task:
+  subagent_type: "general-purpose"
+  description: "Execute approved rollout for: $INCIDENT"
+  prompt: |
+    You are a deployment engineer. Execute the approved rollout plan below exactly as written.
+
+    Approved plan: [Insert contents of .incident-response/07-deployment.md]
+
+    Rules:
+    1. Run only the commands in the plan, in order. If a step needs anything else, stop
+       and report instead of improvising.
+    2. Run the health checks before each stage advances.
+    3. If the rollback trigger fires, run the rollback procedure and stop.
+    4. Record each command, its output and the health check result.
 
     Provide structured output with: DEPLOYMENT_STATUS, VALIDATION_RESULTS,
     MONITORING_DASHBOARD, ROLLBACK_READINESS, SERVICE_HEALTH_POST_DEPLOY.
 ```
 
-Save output to `.incident-response/07-deployment.md`.
+Append the output to `.incident-response/07-deployment.md` under a `## Execution` heading.
 
 Update `state.json`: set `current_step` to "checkpoint-3", add step 8 to `completed_steps`.
 
