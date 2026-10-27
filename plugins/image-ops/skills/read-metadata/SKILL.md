@@ -55,15 +55,17 @@ exiftool -G1 -a -s "$file" | head -50
 **Filtered by group (EXIF only):**
 
 ```bash
-exiftool -j -G1 -EXIF "$file"
+exiftool -j -a -G1 -EXIF:all "$file"
 ```
 
 **Common filters:**
 
-- `-EXIF` — EXIF metadata only.
-- `-IPTC` — IPTC tags (description, keywords, copyright).
-- `-XMP` — XMP metadata (structured, often used by Adobe).
-- `-GPS` — GPS coordinates (latitude, longitude, altitude).
+- `-EXIF:all` — EXIF metadata only.
+- `-IPTC:all` — IPTC tags (description, keywords, copyright).
+- `-XMP:all` — XMP metadata (structured, often used by Adobe).
+- `-GPS:all` — GPS coordinates (latitude, longitude, altitude).
+
+Always write the `:all` suffix. A bare `-EXIF` or `-GPS` is read as a request for a single *tag* with that name, not the group. `-EXIF` returns at most the raw binary EXIF block, and `-GPS` matches no tag at all, so a photo with full GPS coordinates looks clean. Pair a group filter with `-a`, too. Without it, exiftool hides duplicate tag names, and `GPS:GPSLatitude` is dropped in favour of the `Composite` tag of the same name. The group filter then leaves only the `Ref` tags.
 
 `MakerNote` is a single raw EXIF tag holding an undecoded binary blob, not a group you can filter on like the four above. exiftool decodes maker notes into manufacturer-named groups (`Canon`, `Nikon`, `Sony`, …) — filter on those, or just run unfiltered and read what appears.
 
@@ -113,8 +115,8 @@ Print the metadata (JSON or summary, per user preference). If batch:
 ## Notes
 
 - **Metadata standards overlap:** EXIF, IPTC, and XMP sometimes describe the same field (e.g., copyright, description, keywords). `exiftool -j` merges these intelligently; check the JSON keys to see what's present.
-- **Camera-specific tags:** Each manufacturer embeds maker-specific metadata. exiftool decodes it into a manufacturer-named group — filter with `-Canon`, `-Nikon`, `-Sony`, or run unfiltered with `-G1` to see which groups a given file actually carries.
-- **GPS privacy:** Check for `-GPS` tags before sharing a photo. Many smartphone cameras and some cameras embed GPS by default.
+- **Camera-specific tags:** Each manufacturer embeds maker-specific metadata. exiftool decodes it into a manufacturer-named group — filter with `-Canon:all`, `-Nikon:all`, `-Sony:all`, or run unfiltered with `-G1` to see which groups a given file actually carries.
+- **GPS privacy:** Check `exiftool -a -G1 -GPS:all "$file"` before sharing a photo. Many smartphone cameras and some cameras embed GPS by default.
 - **Phone metadata:** iPhones embed extensive metadata in EXIF and XMP, including model, iOS version, and processing applied.
 - **PNG text chunks:** PNG metadata lives in text chunks (`tEXt`, `iTXt`) rather than EXIF. `exiftool` reads them as XMP or PNG metadata.
 - **Batch JSON:** prefer letting exiftool walk the directory (`-j -r <dir>`) — it emits one valid array. Only reach for `jq -s 'add'` when you had to drive it from an external file list and ended up with several concatenated arrays.

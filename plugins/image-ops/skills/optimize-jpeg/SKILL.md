@@ -8,8 +8,8 @@ allowed-tools: Bash(which *), Bash(command *), Bash(brew *), Bash(test *), Bash(
 
 Squeeze JPEG file size. Two modes:
 
-- **lossless** (default) — `jpegoptim --strip-all`. Repacks Huffman tables and strips metadata. No re-encode, no quality change.
-- **recompress** — `mozjpeg`. Re-encodes with better quantisation tables; 10–15% smaller than libjpeg-turbo for the same SSIM. Quality flag controls trade-off. Always strips metadata (see step 4).
+- **lossless** (default) — `jpegoptim` with EXIF/IPTC/XMP/comment stripping. Repacks Huffman tables, keeps the ICC colour profile. No re-encode, no quality change.
+- **recompress** — `mozjpeg`. Re-encodes with better quantisation tables; 10–15% smaller than libjpeg-turbo for the same SSIM. Quality flag controls trade-off. Strips metadata but carries the ICC profile across (see step 4).
 
 ## When to use
 
@@ -29,7 +29,7 @@ Do **not** use this skill when:
 3. **Recursive** — `--recursive` for directory descent.
 4. **In-place** — default. `--output-dir <path>` to write copies.
 5. **Quality** (mode=recompress) — `cjpeg -quality N`. Default `82` (web-quality). `90` for archival; `75` for aggressive web compression.
-6. **Strip metadata** — default `on` for both modes. EXIF/IPTC/XMP gone. `--keep-metadata` is honoured in **lossless mode only** (drop `--strip-all`). Recompress always loses metadata at the decode step; the skill re-injects it afterwards with `exiftool` when `--keep-metadata` is set — see step 4.
+6. **Strip metadata** — default `on` for both modes. EXIF/IPTC/XMP/comments are removed. The ICC profile is always kept, because the pixels are still in the profile's colour space and dropping it shifts the colours of any non-sRGB photo. `--keep-metadata` keeps everything: in lossless mode, drop the `--strip-*` flags. Recompress loses all metadata at the decode step, so the skill re-injects it with `exiftool` (see step 4).
 7. **Progressive** — default `on`. Smaller files + better perceived load. `--baseline` to disable for compatibility with very old decoders.
 
 ## Procedure
@@ -63,31 +63,36 @@ Do **not** use this skill when:
 3. **Lossless** (jpegoptim):
 
    ```bash
-   jpegoptim --strip-all --all-progressive ${outdir:+--dest "$outdir"} "$input" \
+   jpegoptim --strip-com --strip-exif --strip-iptc --strip-xmp --all-progressive \
+     ${outdir:+--dest "$outdir"} "$input" \
      || echo "FAILED: $input" >> "$failed_log"
    ```
 
-   `--all-progressive` forces progressive output (smaller). `--strip-all` removes EXIF/IPTC/XMP/comments. Drop these if `--keep-metadata` was set.
+   `--all-progressive` forces progressive output (smaller). The four `--strip-*` flags remove comments, EXIF, IPTC and XMP and leave the ICC profile, which `--strip-all` would also delete. Drop them if `--keep-metadata` was set.
 
 4. **Recompress** (mozjpeg):
 
    mozjpeg's CLI is decode-then-encode. **Never redirect into the input path** — the shell truncates the redirect target before `djpeg` reads it, destroying the source. Always encode to a temp file and move it into place only on success:
 
    ```bash
-   tmp="$(mktemp "${input}.XXXXXX.jpg")"
+   # No suffix after the X's: macOS mktemp would not randomise them, GNU rejects them.
+   tmpdir="$(mktemp -d "$(dirname "$input")/.mozjpeg.XXXXXX")"
+   tmp="$tmpdir/out.jpg"
    if "$MOZ_BIN/djpeg" "$input" \
         | "$MOZ_BIN/cjpeg" -quality "$q" -progressive -optimize > "$tmp"
    then
-     # --keep-metadata: recompress decodes to raw PPM, so EXIF/IPTC/XMP/ICC are
-     # gone by this point. Re-inject from the original before the swap.
-     if [ "$keep_metadata" = "yes" ]; then
-       exiftool -overwrite_original -tagsFromFile "$input" -all:all "$tmp" || {
-         echo "FAILED (metadata re-inject): $input" >&2; rm -f "$tmp"; continue; }
-     fi
+     # Recompress decodes to raw PPM, so EXIF/IPTC/XMP/ICC are gone by this point.
+     # Re-inject from the original before the swap: everything with --keep-metadata,
+     # otherwise the ICC profile only. A source with no profile leaves $tmp
+     # unchanged and still exits 0.
+     if [ "$keep_metadata" = "yes" ]; then tags="-all:all"; else tags="-ICC_Profile"; fi
+     exiftool -q -tagsFromFile "$input" "$tags" "$tmp" || {   # its _original backup stays in $tmpdir
+       echo "FAILED (metadata re-inject): $input" >&2; rm -rf "$tmpdir"; continue; }
      mv "$tmp" "$output"
+     rm -rf "$tmpdir"
    else
      echo "FAILED (recompress): $input" >&2
-     rm -f "$tmp"
+     rm -rf "$tmpdir"
      continue
    fi
    ```

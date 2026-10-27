@@ -59,14 +59,18 @@ Do **not** use this skill for:
    **In-place writes go through a temp file.** A vips process killed mid-write (OOM, corrupt source) otherwise leaves a truncated file where the original was:
 
    ```bash
-   tmp="$(mktemp "${input}.XXXXXX.${ext}")"
+   # Temp dir beside the input, so the final mv stays on one filesystem (atomic).
+   tmpdir="$(mktemp -d "$(dirname "$input")/.resize.XXXXXX")"
+   tmp="$tmpdir/out.${ext}"
    if vipsthumbnail "$input" --size "${W}x${H}" --output "$tmp[Q=85]"; then
      mv "$tmp" "$input"
    else
-     rm -f "$tmp"
      echo "FAILED: $input" >> "$failed_log"
    fi
+   rm -rf "$tmpdir"
    ```
+
+   Don't put a suffix after the `X`s (`mktemp "$input.XXXXXX.jpg"`). macOS `mktemp` only randomises trailing `X`s, so it creates the literal file `photo.jpg.XXXXXX.jpg` and fails on the next call. GNU `mktemp` rejects the template outright. A temp *directory* holding a normally named file works on both, and vips still picks the output format from the extension.
 
 4. Run in parallel where safe. vips is internally threaded; running multiple processes via xargs/parallel adds little. One process per CPU core is the sweet spot for large batches — `$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)`, which works on both macOS and Linux (`nproc` is GNU-only).
 

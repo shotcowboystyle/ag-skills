@@ -39,7 +39,8 @@ Do **not** use this skill when:
 
 1. Locate the binary. Check in order:
    - `which upscayl-bin`
-   - `/opt/Upscayl/resources/bin/upscayl-bin`
+   - `/opt/Upscayl/resources/bin/upscayl-bin` (Linux deb)
+   - `/Applications/Upscayl.app/Contents/Resources/bin/upscayl-bin` (macOS, including `brew install --cask upscayl`)
    - `~/.var/app/org.upscayl.Upscayl/data/bin/upscayl-bin` (Flatpak)
    - `which realesrgan-ncnn-vulkan` (fallback — same syntax, smaller model selection)
 
@@ -47,6 +48,7 @@ Do **not** use this skill when:
 
 2. Locate the models directory. For upscayl-bin, typically:
    - `/opt/Upscayl/resources/models/`
+   - `/Applications/Upscayl.app/Contents/Resources/models/`
    - `~/.var/app/org.upscayl.Upscayl/data/models/`
    - User-custom dir at `~/.config/Upscayl/models/`
 

@@ -101,7 +101,7 @@ Do **not** use this skill when:
    That snippet is not shipped as a file — write it to a temp script at run time, then invoke it with the venv interpreter resolved in step 1:
 
    ```bash
-   DESKEW_PY="$(mktemp -t deskew_photo.XXXXXX.py)"
+   DESKEW_PY="$(mktemp "${TMPDIR:-/tmp}/deskew_photo.XXXXXX")"   # no suffix: BSD mktemp leaves it unrandomised
    cat > "$DESKEW_PY" <<'PYEOF'
    # ... the Python above, verbatim ...
    PYEOF
