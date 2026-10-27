@@ -22,26 +22,22 @@ package upgrade, hardware claim, or publishing decision.
    package checks, and record the next trigger.
 
 Before treating the pinned repository revisions as current, run the portable
-[public-ref checker](../../../meta-wearables-source-refresh/scripts/check_source_revisions.py):
+[public-ref checker](../../../meta-wearables-knowledge-base/scripts/check_source_revisions.py):
 
 ```bash
-python3 ../skills/packages/meta-wearables-source-refresh/scripts/check_source_revisions.py
+# run from the meta-wearables-ops skills folder
+uv run meta-wearables-knowledge-base/scripts/check_source_revisions.py
 ```
 
 It checks the public iOS, Android, and Web Apps `main` refs plus the exact iOS
-reproducible release tag recorded in the [surface manifest](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml).
+reproducible release tag recorded in the [surface manifest](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml).
 `DRIFT` means the source snapshot needs a new receipt and impact audit; it does
 not authorize an automatic manifest rewrite.
 
-Then run the [source-tree inventory checker](../../../meta-wearables-source-refresh/scripts/check_source_tree_inventory.py)
+Then run the [source-tree inventory checker](../../../meta-wearables-knowledge-base/scripts/check_source_tree_inventory.py)
 to verify the pinned Package.swift products, plugin versions/exact role names
 and counts, sample roots/toolchains, Android artifacts, and Web Apps
 references/examples/templates.
-
-When upstream role names or local owners change, also run the [team-manifest
-validator](../../../meta-wearables-agentic-team/scripts/validate_team_manifest.py)
-against the [source-pinned manifest](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
-and workspace role directories before delegating implementation.
 
 For a request that says “full SDK,” “regular SDK,” or “all capabilities,” use
 the [full SDK capability and source-conflict matrix](15-full-sdk-capability-and-source-conflict-matrix.md)

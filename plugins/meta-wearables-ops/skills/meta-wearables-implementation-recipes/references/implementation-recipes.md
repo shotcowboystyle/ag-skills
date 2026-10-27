@@ -467,5 +467,5 @@ refresh_trigger: <release/API/toolkit/device/access change>
 - [DAT Android API reference](https://wearables.developer.meta.com/docs/reference/android/dat/latest)
 - [Meta Wearables Web Apps toolkit](https://github.com/facebook/meta-wearables-webapp)
 - [Full Wearables platform reference](https://wearables.developer.meta.com/llms.txt?full=true)
-- [Portable API manifest](../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
-- [Vertical-slice playbooks](../../meta-wearables-app-architecture/references/vertical-slice-playbooks.md)
+- [Portable API manifest](../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
+- [Vertical-slice playbooks](../../meta-wearables-route-planner/references/vertical-slice-playbooks.md)

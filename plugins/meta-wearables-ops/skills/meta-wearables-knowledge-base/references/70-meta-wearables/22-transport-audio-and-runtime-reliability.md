@@ -133,7 +133,7 @@ parity question.
 
 ## Evidence packet
 
-Use the companion [transport contract](../../../meta-wearables-transport-reliability/references/transport-contract.md) and add these rows to the shared [device/release evidence packet](12-device-and-release-evidence-packet.md):
+Use the companion [transport contract](../../../meta-wearables-device-capabilities/references/transport-contract.md) and add these rows to the shared [device/release evidence packet](12-device-and-release-evidence-packet.md):
 
 | ID | Level | Operation | Claim supported |
 | --- | --- | --- | --- |

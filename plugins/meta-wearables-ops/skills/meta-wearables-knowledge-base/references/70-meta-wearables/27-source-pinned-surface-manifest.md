@@ -1,7 +1,7 @@
 # Source-pinned Meta Wearables surface manifest
 
 This route makes the “full SDK” claim inspectable by agents and humans. The
-portable [surface manifest](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
+portable [surface manifest](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
 is a machine-readable snapshot of the public DAT iOS, DAT Android, native
 Display, Web Apps, phone-fallback, capability, conflict, generation, and
 evidence surfaces reviewed on 2026-08-22.
@@ -9,25 +9,21 @@ evidence surfaces reviewed on 2026-08-22.
 It is a routing manifest, not a generated API reference or hardware support
 table. The exact selected package/artifact and target runtime always outrank it.
 
-Use the companion [agent-team roster and handoff contract](30-agent-team-roster-and-handoff-contract.md)
-to map each selected upstream plugin role to a local owner and device-claim gate.
-
 ## What the manifest covers
 
 | Layer | Manifest fields | Local authority |
 | --- | --- | --- |
 | Product journeys | Native DAT iOS, native DAT Android, Web Apps, and phone fallback | [route selection](00-platform-and-route-selection.md) |
 | Mobile modules/artifacts | Five iOS package products (four runtime products plus `MWDATMockDeviceTestClient`), four Android Maven artifacts, and iOS index-only conceptual names | [iOS atlas](10-dat-ios-api-surface-atlas.md), [Android atlas](20-dat-android-api-surface-atlas.md) |
-| Source-tree inventory | iOS Package.swift/plugin/sample anchors, Android plugin/sample/artifact/SDK anchors, and Web Apps plugin/reference/example/template anchors | [upstream skill/tooling map](11-upstream-skill-and-tooling-map.md), [source refresh role](../../../meta-wearables-source-refresh/SKILL.md) |
+| Source-tree inventory | iOS Package.swift/plugin/sample anchors, Android plugin/sample/artifact/SDK anchors, and Web Apps plugin/reference/example/template anchors | [upstream skill/tooling map](11-upstream-skill-and-tooling-map.md), [source refresh role](../../../meta-wearables-knowledge-base/SKILL.md) |
 | Agent surfaces | Per-lane root `AGENTS.md`, `README.md`, and `install-skills.sh`, each `.codex-plugin/plugin.json`, native-DAT local Codex installs, Web Apps marketplace install, and the no-auth docs MCP tool split | [upstream skill/tooling map](11-upstream-skill-and-tooling-map.md), portable `agent_surface_contract` |
-| Terminology contract | Machine-checked resolution for “regular SDK,” “full SDK,” Ray-Ban Display, Gen 2, and Gen 3 wording | [device-generation matrix](16-device-generation-and-runtime-support-matrix.md), [portable manifest](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml) |
+| Terminology contract | Machine-checked resolution for “regular SDK,” “full SDK,” Ray-Ban Display, Gen 2, and Gen 3 wording | [device-generation matrix](16-device-generation-and-runtime-support-matrix.md), [portable manifest](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml) |
 | API surface rows | 30 normalized iOS, Android, Web Apps, and conceptual-index rows with symbols, source anchors, status, gates, privacy path, fallback, and migration notes | [iOS atlas](10-dat-ios-api-surface-atlas.md), [Android atlas](20-dat-android-api-surface-atlas.md), [Web Apps route](06-web-apps-display-and-input.md) |
 | Capabilities | Registration, sessions, camera/photo, audio, native Display, Web Apps, sensors, MockDevice, debug, privacy, identity, compliance, and compatibility | [full-SDK matrix](15-full-sdk-capability-and-source-conflict-matrix.md) |
-| Capability/evidence plan | Machine-readable owner roles, implementation route, privacy path, fallback, required evidence levels, preflight tasks, and proof task IDs for all 14 capabilities | [portable plan](../../../meta-wearables-full-sdk-audit/references/capability-evidence-plan.yaml) |
+| Capability/evidence plan | Machine-readable owner roles, implementation route, privacy path, fallback, required evidence levels, preflight tasks, and proof task IDs for all 14 capabilities | [portable plan](../../../meta-wearables-sdk-audit/references/capability-evidence-plan.yaml) |
 | Conflicts | Minimum OS, DAM/camera lifecycle, Android naming, Web App features, Android Wi-Fi parity, and version-table access | [source refresh log](09-source-refresh-and-version-history.md) |
 | Product labels | Gen 2, Gen 2 Optics, Display, Meta Glasses, Gen 3, and “regular SDK” | [device-generation matrix](16-device-generation-and-runtime-support-matrix.md) |
 | Evidence | Source through production ladder, route-specific `*` evidence IDs, and mapped target-preflight `PRE-*` tasks | [evidence packet](12-device-and-release-evidence-packet.md), [target preflight](../../../meta-wearables-device-proof/references/target-preflight.md) |
-| Team ownership | 23 local roles, 32 upstream role handoffs, shared handoff fields, and Ray-Ban Display/Gen 2/Gen 3 claim gates | [team manifest](../../../meta-wearables-agentic-team/references/team-manifest.yaml), [team validator](../../../meta-wearables-agentic-team/scripts/validate_team_manifest.py) |
 
 ## Agent loading protocol
 
@@ -98,20 +94,20 @@ to map each selected upstream plugin role to a local owner and device-claim gate
 
 The manifest is maintained with the [Meta source registry](../sources/meta-wearables-source-registry.md),
 [freshness log](../sources/meta-wearables-source-freshness-log.md), and
-[source-refresh role](../../../meta-wearables-source-refresh/SKILL.md).
+[source-refresh role](../../../meta-wearables-knowledge-base/SKILL.md).
 Keep the mapped [target-preflight packet](../../../meta-wearables-device-proof/references/target-preflight.md)
 and `PRE-*` task IDs aligned with the manifest capability rows.
 The current `manifest_revision` is `6`; increment it when the machine-readable
 source or terminology contract changes without changing the public snapshot date.
-Run the bundled [manifest validator](../../../meta-wearables-full-sdk-audit/scripts/validate_surface_manifest.py)
-and [capability/evidence-plan validator](../../../meta-wearables-full-sdk-audit/scripts/validate_capability_evidence_plan.py)
+Run the bundled [manifest validator](../../../meta-wearables-sdk-audit/scripts/validate_surface_manifest.py)
+and [capability/evidence-plan validator](../../../meta-wearables-sdk-audit/scripts/validate_capability_evidence_plan.py)
 after edits and before rebuilding the portable archive. When a revision changes,
 update the YAML snapshot, affected route/package owners, source-conflict rows,
 capability/evidence-plan entries, evidence IDs, and the refresh receipt together.
 
 ## Sources
 
-- [Portable source-pinned surface manifest](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
+- [Portable source-pinned surface manifest](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
 - [Full Wearables platform reference](https://wearables.developer.meta.com/llms.txt?full=true)
 - [DAT iOS repository](https://github.com/facebook/meta-wearables-dat-ios)
 - [DAT iOS AGENTS.md](https://github.com/facebook/meta-wearables-dat-ios/blob/main/AGENTS.md)

@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = []
+# ///
 """Inspect a workspace for concrete iOS, Android, and Web App targets.
 
 This structural scan is intentionally separate from build and device proof.
@@ -28,8 +32,7 @@ IGNORED_DIRS = {
 
 # The knowledge base keeps copyable Swift/Web App starters inside skill
 # packages. They are assets and fixtures, not a concrete implementation target.
-# Scan a real sibling app by passing its directory as --target-root to the
-# team preflight runner.
+# Scan a real sibling app by passing its directory as the root argument.
 IGNORED_PATH_PREFIXES = {
     ("skills",),
 }

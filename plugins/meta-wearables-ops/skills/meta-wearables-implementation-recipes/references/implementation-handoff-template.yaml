@@ -32,11 +32,11 @@ evidence_tasks:
   - DAT-DISP-01
   - REC-01
 owner_roles:
-  - meta-dat-ios-integration
-  - meta-dat-display
-  - meta-wearables-app-architecture
+  - meta-wearables-dat-integration
+  - meta-wearables-device-capabilities
+  - meta-wearables-route-planner
   - meta-wearables-device-proof
-  - meta-wearables-on-device-compliance
+  - meta-wearables-trust-and-release
 
 data_contract:
   processing_location: phone-local

@@ -38,7 +38,7 @@ lanes. Broader conceptual names in the full reference are discovery/index
 signals, not additional Maven coordinates until an exact target resolves them.
 
 For machine-readable routing, load the Android rows in the [source-pinned API
-surface register](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
+surface register](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
 (`AND-*`). Each row carries artifact/symbol status, source anchors,
 compile/runtime gate, privacy path, fallback, and migration notes; it does not
 replace the resolved Maven artifact or generated API.

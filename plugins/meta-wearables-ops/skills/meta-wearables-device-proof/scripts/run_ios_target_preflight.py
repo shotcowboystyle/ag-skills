@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = []
+# ///
 """Emit a redacted, reproducible iOS target preflight receipt.
 
 This runner inventories an Xcode project/workspace, optionally resolves the

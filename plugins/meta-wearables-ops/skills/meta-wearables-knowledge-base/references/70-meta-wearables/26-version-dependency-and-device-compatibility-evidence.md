@@ -14,11 +14,12 @@ from the broader [device-generation matrix](16-device-generation-and-runtime-sup
 because version dependencies and firmware drift change independently of product
 names.
 
-Use the portable [compatibility evidence-packet template](../../../meta-wearables-device-compatibility/references/compatibility-evidence-packet.yaml)
+Use the portable [compatibility evidence-packet template](../../../meta-wearables-diagnostics/references/compatibility-evidence-packet.yaml)
 for every named-device or generation handoff, then run:
 
 ```bash
-python3 ../skills/packages/meta-wearables-device-compatibility/scripts/validate_compatibility_packet.py <packet.yaml>
+# run from the meta-wearables-ops skills folder
+uv run meta-wearables-diagnostics/scripts/validate_compatibility_packet.py <packet.yaml>
 ```
 
 The validator enforces the complete tuple, per-capability fallback, redaction,
@@ -137,4 +138,4 @@ but cannot establish universal device support.
 - [Full Wearables platform reference](https://wearables.developer.meta.com/llms.txt?full=true)
 - [Device-generation and runtime-support matrix](16-device-generation-and-runtime-support-matrix.md)
 - [Public Gen 2 firmware report](https://github.com/facebook/meta-wearables-dat-ios/issues/265)
-- [Portable compatibility evidence-packet template](../../../meta-wearables-device-compatibility/references/compatibility-evidence-packet.yaml)
+- [Portable compatibility evidence-packet template](../../../meta-wearables-diagnostics/references/compatibility-evidence-packet.yaml)

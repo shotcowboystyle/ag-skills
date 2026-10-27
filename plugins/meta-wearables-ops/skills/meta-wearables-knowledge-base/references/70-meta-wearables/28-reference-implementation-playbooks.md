@@ -5,8 +5,8 @@ handoffs for the most common product shapes: native Display, camera-to-phone
 processing, audio-first Gen 2 fallback, Ray-Ban Display Web Apps, and one
 shared outcome across iOS, Android, native Display, and Web Apps.
 
-The detailed portable playbooks live in the [application-architecture package](../../../meta-wearables-app-architecture/references/vertical-slice-playbooks.md).
-Load the [source-pinned API register](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
+The detailed portable playbooks live in the [application-architecture package](../../../meta-wearables-route-planner/references/vertical-slice-playbooks.md).
+Load the [source-pinned API register](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
 first and filter the exact `IOS-*`, `AND-*`, `WEB-*`, compatibility, and
 evidence rows. A playbook is an implementation plan, not proof that a symbol
 compiles or that a named pair of glasses works.
@@ -48,7 +48,7 @@ The playbooks enforce the same hard boundaries as the rest of the lane:
 
 ## Team handoff
 
-Use the detailed [vertical-slice playbooks reference](../../../meta-wearables-app-architecture/references/vertical-slice-playbooks.md)
+Use the detailed [vertical-slice playbooks reference](../../../meta-wearables-route-planner/references/vertical-slice-playbooks.md)
 for the state machine, adapter map, resource ownership, data path, fallback,
 and proof ladder. Return:
 
@@ -67,9 +67,9 @@ open_gates: <source/build/account/device/privacy/release gaps>
 
 ## Sources
 
-- [Portable vertical-slice playbooks](../../../meta-wearables-app-architecture/references/vertical-slice-playbooks.md)
+- [Portable vertical-slice playbooks](../../../meta-wearables-route-planner/references/vertical-slice-playbooks.md)
 - [Application architecture and platform boundaries](19-application-architecture-and-platform-boundaries.md)
-- [Source-pinned API surface manifest](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
+- [Source-pinned API surface manifest](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
 - [Device and release evidence packet](12-device-and-release-evidence-packet.md)
 - [On-device compliance and runtime contract](17-on-device-compliance-and-runtime-contract.md)
 - [DAT iOS repository](https://github.com/facebook/meta-wearables-dat-ios)

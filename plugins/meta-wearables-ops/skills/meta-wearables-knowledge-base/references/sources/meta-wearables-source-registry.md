@@ -15,7 +15,6 @@ current platform, account, preview, policy, and product claims.
 | DAT Android | `main` `81dfb51b9be26de5cd262bb1dcbb4b8d0d6bd2bc` | Use for current parity/source refresh only until the exact Gradle artifact/tag is recorded. |
 | Web Apps | `main` `a2714f862c61b1ce9c6cb624fc7e4938087102db` | Use the toolkit for implementation guidance, but reconcile it with the full Developer Center index before calling a feature runtime-supported. |
 | Source-pinned surface manifest | Local `meta-wearables-public-surface-2026-08-22`, schema version 1, `manifest_revision: 6`, bundled in the full-SDK audit package | Load for agent routing, terminology resolution, coverage accounting, the machine-checked upstream AI surfaces, and the official agent-surface install/MCP contract; it does not replace the selected package/API reference, authenticated account state, or physical/release proof. |
-| Agent team manifest | Local `meta-wearables-agent-team-2026-08-22`, `manifest_revision: 4`, bundled with the agentic team package | Load for the exact 23-role local roster, 32 upstream role handoffs, source AI surfaces, official agent-surface contract, shared handoff contract, and Ray-Ban Display/Gen 2/Gen 3 gates; validate before delegating. |
 | Source-tree inventory | Live checker `check_source_tree_inventory.py`, run 2026-08-30 with `CHECKS 23 DRIFT 0` | Re-run after the public-ref checker to verify the three root AI files, per-lane `.codex-plugin/plugin.json`, Package.swift products, plugin versions/exact role names and counts, sample roots/toolchains, Android artifacts, and Web Apps reference/example/template anchors. |
 | Version-pinned API surface register | Local `meta-wearables-api-surface-2026-08-22`, 30 normalized rows in the full-SDK audit manifest | Load the journey-specific `IOS-*`, `AND-*`, `WEB-*`, and conceptual-index rows for source anchors, status, compile/runtime gates, privacy paths, fallbacks, and migrations; exact package/API and target evidence still win. |
 
@@ -40,8 +39,7 @@ three changed files: `README.md`, `install-skills.sh`, and
 the simulator name; it does not change the API/runtime rows in the local
 surface manifest.
 
-The current manifest is therefore revision 6 and the team manifest is revision
-4. This is source and routing evidence only. It does not prove a target build,
+The current manifest is therefore revision 6. This is source and routing evidence only. It does not prove a target build,
 authenticated project, connected device, physical Display behavior, signing,
 or release eligibility.
 

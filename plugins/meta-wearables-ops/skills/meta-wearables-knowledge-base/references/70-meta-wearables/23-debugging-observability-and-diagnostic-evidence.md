@@ -127,7 +127,7 @@ unbounded logs. Replace a device identifier with a local label such as
 | `DBG-PHYSICAL-01` | Correlate diagnosis with named hardware | device, firmware, task, physical result | Exact pair/build only |
 | `DBG-RELEASE-01` | Correlate with signed/channel build | project/version/channel/tester/build result | Not general production proof |
 
-Use [the diagnostic contract](../../../meta-wearables-debugging-observability/references/diagnostic-contract.md)
+Use [the diagnostic contract](../../../meta-wearables-diagnostics/references/diagnostic-contract.md)
 for the observation-row schema and handoff template. Use the [device and
 release evidence packet](12-device-and-release-evidence-packet.md) for the
 cross-role run identity and release gates.

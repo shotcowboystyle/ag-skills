@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["pyyaml>=6"]
+# ///
 """Validate a Meta Wearables implementation handoff packet."""
 
 from __future__ import annotations
@@ -13,9 +17,8 @@ import yaml
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MANIFEST = PACKAGE_ROOT.parent / "meta-wearables-full-sdk-audit" / "references" / "surface-manifest.yaml"
-DEFAULT_PLAN = PACKAGE_ROOT.parent / "meta-wearables-full-sdk-audit" / "references" / "capability-evidence-plan.yaml"
-DEFAULT_TEAM = PACKAGE_ROOT.parent / "meta-wearables-agentic-team" / "references" / "team-manifest.yaml"
+DEFAULT_MANIFEST = PACKAGE_ROOT.parent / "meta-wearables-sdk-audit" / "references" / "surface-manifest.yaml"
+DEFAULT_PLAN = PACKAGE_ROOT.parent / "meta-wearables-sdk-audit" / "references" / "capability-evidence-plan.yaml"
 DEFAULT_PACKET = PACKAGE_ROOT / "references" / "implementation-handoff-template.yaml"
 
 ALLOWED_ROUTES = {"native-dat-ios", "native-dat-android", "native-display", "web-app", "phone-fallback"}
@@ -79,7 +82,6 @@ def main() -> int:
     parser.add_argument("packet", nargs="?", type=Path, default=DEFAULT_PACKET)
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--plan", type=Path, default=DEFAULT_PLAN)
-    parser.add_argument("--team-manifest", type=Path, default=DEFAULT_TEAM)
     parser.add_argument("--allow-placeholders", action="store_true")
     args = parser.parse_args()
 
@@ -171,17 +173,11 @@ def main() -> int:
             plan_check = "failed"
             errors.append(f"could not read capability plan: {error}")
 
-    team_check = "not-run"
-    if args.team_manifest.is_file():
-        team_check = "pass"
-        try:
-            role_ids = ids_from(args.team_manifest.resolve(), "team_roles")
-            unknown_roles = sorted(set(data.get("owner_roles", [])) - role_ids)
-            if unknown_roles:
-                errors.append(f"owner_roles not in team manifest: {unknown_roles}")
-        except (OSError, ValueError, yaml.YAMLError) as error:
-            team_check = "failed"
-            errors.append(f"could not read team manifest: {error}")
+    # owner_roles name sibling skills in this plugin.
+    skill_names = {child.name for child in PACKAGE_ROOT.parent.iterdir() if child.is_dir()}
+    unknown_roles = sorted(set(data.get("owner_roles", [])) - skill_names)
+    if unknown_roles:
+        errors.append(f"owner_roles are not skills in this plugin: {unknown_roles}")
 
     text = packet.read_text(encoding="utf-8")
     if any(pattern.search(text) for pattern in SECRET_PATTERNS):
@@ -203,7 +199,7 @@ def main() -> int:
     print(
         f"OK implementation_handoff={packet} route={data['selected_route']} "
         f"api_rows={len(data['api_rows'])} evidence_tasks={len(data['evidence_tasks'])} "
-        f"owner_roles={len(data['owner_roles'])} manifest={manifest_check} plan={plan_check} team={team_check}"
+        f"owner_roles={len(data['owner_roles'])} manifest={manifest_check} plan={plan_check}"
     )
     return 0
 

@@ -9,16 +9,16 @@ copying the upstream instructions wholesale into this repository.
 
 | Upstream skill | Use it for | Local Meta role/handoff |
 | --- | --- | --- |
-| `getting-started` | SPM, target modules, Info.plist, `Wearables.configure()`, callback, registration, first stream | `meta-dat-ios-integration` |
-| `permissions-registration` | Meta AI registration, callback, DAT camera permission, multi-device permission behavior, Developer Mode/release channels | `meta-dat-ios-integration` + privacy |
-| `dat-conventions` | module names, Swift naming, entrypoint/types, async patterns, build/test commands, MCP/docs search | `meta-dat-api-atlas` |
-| `camera-streaming` | `Camera`, `Stream`, `StreamConfiguration`, video/photo publishers, quality/backpressure | `meta-dat-camera-audio` |
-| `display-access` | Display capability, DSL, buttons/icons/images/video, input, link/setup and error gates | `meta-dat-display` |
-| `session-lifecycle` | device-driven session/stream states, pause/resume, availability and teardown | `meta-dat-ios-integration` + device proof |
+| `getting-started` | SPM, target modules, Info.plist, `Wearables.configure()`, callback, registration, first stream | `meta-wearables-dat-integration` |
+| `permissions-registration` | Meta AI registration, callback, DAT camera permission, multi-device permission behavior, Developer Mode/release channels | `meta-wearables-dat-integration` + privacy |
+| `dat-conventions` | module names, Swift naming, entrypoint/types, async patterns, build/test commands, MCP/docs search | `meta-wearables-sdk-audit` |
+| `camera-streaming` | `Camera`, `Stream`, `StreamConfiguration`, video/photo publishers, quality/backpressure | `meta-wearables-device-capabilities` |
+| `display-access` | Display capability, DSL, buttons/icons/images/video, input, link/setup and error gates | `meta-wearables-device-capabilities` |
+| `session-lifecycle` | device-driven session/stream states, pause/resume, availability and teardown | `meta-wearables-dat-integration` + device proof |
 | `mockdevice-testing` | simulated registration/permissions/devices/media/gestures and XCUITest test server | `meta-wearables-device-proof` |
-| `debugging` | Developer Mode, compatibility, state diagnosis, logs, known issues | `meta-dat-api-atlas` + device proof |
-| `live-debugging-mcp` | read-only live DAT Inspector/debug-server diagnosis and redacted diagnostic bundle | `meta-dat-api-atlas` + device proof |
-| `sample-app-guide` | complete CameraAccess-style SwiftUI target architecture and allowed dependencies | `meta-dat-api-atlas` + iOS Apple roles |
+| `debugging` | Developer Mode, compatibility, state diagnosis, logs, known issues | `meta-wearables-sdk-audit` + device proof |
+| `live-debugging-mcp` | read-only live DAT Inspector/debug-server diagnosis and redacted diagnostic bundle | `meta-wearables-sdk-audit` + device proof |
+| `sample-app-guide` | complete CameraAccess-style SwiftUI target architecture and allowed dependencies | `meta-wearables-sdk-audit` + iOS Apple roles |
 
 The repo also contains root `AGENTS.md`, Copilot/Cursor surfaces, plugin
 metadata, and sample apps. Check the upstream commit before treating a role or
@@ -26,8 +26,8 @@ file path as current.
 
 ## Release-anchored source-tree inventory
 
-The portable [surface manifest](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
-and [source-tree checker](../../../meta-wearables-source-refresh/scripts/check_source_tree_inventory.py)
+The portable [surface manifest](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
+and [source-tree checker](../../../meta-wearables-knowledge-base/scripts/check_source_tree_inventory.py)
 keep the repository-level inventory explicit:
 
 | Lane | Inventory anchors at the reviewed revision |
@@ -116,7 +116,7 @@ plugin directories. Their READMEs document the local install commands
 `codex plugin install ./plugins/mwdat-android`, plus the corresponding
 `./install-skills.sh codex` helper. The Web Apps README uses the marketplace
 route (`codex plugin marketplace add ...`, then `/plugins` in Codex) and an
-`install-skills.sh all` fallback. The local [agent-surface contract](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
+`install-skills.sh all` fallback. The local [agent-surface contract](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
 keeps those routes explicit so a native DAT plugin is not mistaken for a Web
 Apps plugin or for an SDK runtime.
 
