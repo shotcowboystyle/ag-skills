@@ -52,12 +52,14 @@ async def test_workflow_replay():
 
 ```python
 import pytest
+from temporalio.client import Client
 from temporalio.worker import Replayer
 
 @pytest.mark.asyncio
 async def test_replay_multiple_workflows():
     """Replay against multiple production histories"""
 
+    client = await Client.connect("localhost:7233")
     replayer = Replayer(workflows=[OrderWorkflow])
 
     # Test against different workflow executions
@@ -142,42 +144,40 @@ class GoodWorkflow:
 
 ### Testing Determinism
 
+Running a workflow twice and comparing outputs proves nothing: `workflow.random()`
+is seeded per execution. Replay the recorded history instead, which is exactly
+what a worker does after a restart.
+
 ```python
+from temporalio.worker import Replayer
+
+# Module level: the SDK rejects @workflow.defn classes defined inside a function
+@workflow.defn
+class DeterministicWorkflow:
+    @workflow.run
+    async def run(self, count: int) -> list[int]:
+        # Use workflow.random() for determinism
+        return [workflow.random().randint(1, 100) for _ in range(count)]
+
 @pytest.mark.asyncio
-async def test_workflow_determinism():
-    """Verify workflow produces same output on multiple runs"""
-
-    @workflow.defn
-    class DeterministicWorkflow:
-        @workflow.run
-        async def run(self, seed: int) -> list[int]:
-            # Use workflow.random() for determinism
-            rng = workflow.random()
-            rng.seed(seed)
-            return [rng.randint(1, 100) for _ in range(10)]
-
-    env = await WorkflowEnvironment.start_time_skipping()
-
-    # Run workflow twice with same input
-    results = []
-    for i in range(2):
-        async with Worker(
-            env.client,
+async def test_workflow_determinism(workflow_env):
+    """Verify workflow replays its own history without divergence"""
+    async with Worker(
+        workflow_env.client,
+        task_queue="test",
+        workflows=[DeterministicWorkflow],
+    ):
+        handle = await workflow_env.client.start_workflow(
+            DeterministicWorkflow.run,
+            10,
+            id="determinism-test",
             task_queue="test",
-            workflows=[DeterministicWorkflow],
-        ):
-            result = await env.client.execute_workflow(
-                DeterministicWorkflow.run,
-                42,  # Same seed
-                id=f"determinism-test-{i}",
-                task_queue="test",
-            )
-            results.append(result)
+        )
+        await handle.result()
 
-    await env.shutdown()
-
-    # Verify identical outputs
-    assert results[0] == results[1]
+    history = await handle.fetch_history()
+    # Raises temporalio.workflow.NondeterminismError on divergence
+    await Replayer(workflows=[DeterministicWorkflow]).replay_workflow(history)
 ```
 
 ## Production History Replay
@@ -196,9 +196,9 @@ async def export_workflow_history(workflow_id: str, output_file: str):
     handle = client.get_workflow_handle(workflow_id)
     history = await handle.fetch_history()
 
-    # Save to file for replay testing
-    with open(output_file, "wb") as f:
-        f.write(history.SerializeToString())
+    # fetch_history() returns a WorkflowHistory; store it as JSON
+    with open(output_file, "w") as f:
+        f.write(history.to_json())
 
     print(f"Exported history to {output_file}")
 ```
@@ -206,15 +206,15 @@ async def export_workflow_history(workflow_id: str, output_file: str):
 ### Replaying from File
 
 ```python
+from temporalio.client import WorkflowHistory
 from temporalio.worker import Replayer
-from temporalio.api.history.v1 import History
 
 async def test_replay_from_file():
     """Replay workflow from exported history file"""
 
-    # Load history from file
-    with open("workflow_histories/order-123.pb", "rb") as f:
-        history = History.FromString(f.read())
+    # Load history from file (JSON, as exported above or by `temporal workflow show -o json`)
+    with open("workflow_histories/order-123.json") as f:
+        history = WorkflowHistory.from_json("order-123", f.read())
 
     # Replay with current workflow code
     replayer = Replayer(workflows=[OrderWorkflow])
@@ -239,10 +239,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -273,32 +273,29 @@ jobs:
 ```python
 # scripts/export_histories.py
 import asyncio
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
 from temporalio.client import Client
-from datetime import datetime, timedelta
 
 async def export_recent_histories():
     """Export recent production workflow histories"""
 
     client = await Client.connect("production.temporal.io:7233")
 
-    # Query recent completed workflows
-    workflows = client.list_workflows(
-        query="WorkflowType='OrderWorkflow' AND CloseTime > '7 days ago'"
-    )
+    # Visibility queries take RFC 3339 timestamps, not relative phrases
+    since = (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    query = f"WorkflowType = 'OrderWorkflow' AND CloseTime > '{since}'"
+
+    out_dir = Path("workflow_histories")
+    out_dir.mkdir(exist_ok=True)
 
     count = 0
-    async for workflow in workflows:
-        # Export history
-        history = await workflow.fetch_history()
-
-        # Save to file
-        filename = f"workflow_histories/{workflow.id}.pb"
-        with open(filename, "wb") as f:
-            f.write(history.SerializeToString())
-
+    async for execution in client.list_workflows(query, limit=100):
+        handle = client.get_workflow_handle(execution.id, run_id=execution.run_id)
+        history = await handle.fetch_history()
+        (out_dir / f"{execution.id}.json").write_text(history.to_json())
         count += 1
-        if count >= 100:  # Limit to 100 most recent
-            break
 
     print(f"Exported {count} workflow histories")
 
@@ -310,10 +307,11 @@ if __name__ == "__main__":
 
 ```python
 # tests/replay/test_workflow_replay.py
+from pathlib import Path
+
 import pytest
-import glob
+from temporalio.client import WorkflowHistory
 from temporalio.worker import Replayer
-from temporalio.api.history.v1 import History
 from workflows import OrderWorkflow, PaymentWorkflow
 
 @pytest.mark.asyncio
@@ -325,13 +323,12 @@ async def test_replay_all_histories():
     )
 
     # Load all history files
-    history_files = glob.glob("workflow_histories/*.pb")
+    history_files = sorted(Path("workflow_histories").glob("*.json"))
 
     failures = []
     for history_file in history_files:
         try:
-            with open(history_file, "rb") as f:
-                history = History.FromString(f.read())
+            history = WorkflowHistory.from_json(history_file.stem, history_file.read_text())
 
             await replayer.replay_workflow(history)
             print(f"✓ {history_file}")
@@ -350,77 +347,83 @@ async def test_replay_all_histories():
 
 ## Version Compatibility Testing
 
+The Python SDK versions workflow code with `workflow.patched(patch_id)`. It returns
+`True` for new executions (and records a marker in history) and `False` when
+replaying a history recorded before the patch existed.
+
 ### Testing Code Evolution
 
+Record a history with the old code, then replay it with the patched code.
+
 ```python
+from temporalio import workflow
+from temporalio.worker import Replayer, Worker
+
+# Both classes register the same workflow type name
+@workflow.defn(name="Evolving")
+class EvolvingWorkflowV1:
+    @workflow.run
+    async def run(self) -> str:
+        return "version-1"
+
+@workflow.defn(name="Evolving")
+class EvolvingWorkflowV2:
+    @workflow.run
+    async def run(self) -> str:
+        if workflow.patched("new-greeting"):
+            return "version-2"  # New executions
+        return "version-1"      # Histories recorded before the patch
+
 @pytest.mark.asyncio
-async def test_workflow_version_compatibility():
-    """Test workflow with version changes"""
+async def test_workflow_version_compatibility(workflow_env):
+    client = workflow_env.client
 
-    @workflow.defn
-    class EvolvingWorkflow:
-        @workflow.run
-        async def run(self) -> str:
-            # Use versioning for safe code evolution
-            version = workflow.get_version("feature-flag", 1, 2)
-
-            if version == 1:
-                # Old behavior
-                return "version-1"
-            else:
-                # New behavior
-                return "version-2"
-
-    env = await WorkflowEnvironment.start_time_skipping()
-
-    # Test version 1 behavior
-    async with Worker(
-        env.client,
-        task_queue="test",
-        workflows=[EvolvingWorkflow],
-    ):
-        result_v1 = await env.client.execute_workflow(
-            EvolvingWorkflow.run,
-            id="evolving-v1",
-            task_queue="test",
+    # Record a history with the old code
+    async with Worker(client, task_queue="test", workflows=[EvolvingWorkflowV1]):
+        handle = await client.start_workflow(
+            EvolvingWorkflowV1.run, id="evolving-old", task_queue="test"
         )
-        assert result_v1 == "version-1"
+        assert await handle.result() == "version-1"
+    old_history = await handle.fetch_history()
 
-        # Simulate workflow executing again with version 2
-        result_v2 = await env.client.execute_workflow(
-            EvolvingWorkflow.run,
-            id="evolving-v2",
-            task_queue="test",
+    # Patched code replays the old history: patched() returns False there
+    await Replayer(workflows=[EvolvingWorkflowV2]).replay_workflow(old_history)
+
+    # New executions take the patched branch
+    async with Worker(client, task_queue="test", workflows=[EvolvingWorkflowV2]):
+        result = await client.execute_workflow(
+            EvolvingWorkflowV2.run, id="evolving-new", task_queue="test"
         )
-        # New workflows use version 2
-        assert result_v2 == "version-2"
-
-    await env.shutdown()
+    assert result == "version-2"
 ```
 
 ### Migration Strategy
 
 ```python
-# Phase 1: Add version check
+# Phase 1: Patch. New executions take the new branch; old ones replay the old one
 @workflow.defn
 class MigratingWorkflow:
     @workflow.run
     async def run(self) -> dict:
-        version = workflow.get_version("new-logic", 1, 2)
-
-        if version == 1:
-            # Old logic (existing workflows)
-            return await self._old_implementation()
-        else:
-            # New logic (new workflows)
+        if workflow.patched("new-logic"):
             return await self._new_implementation()
+        return await self._old_implementation()
 
-# Phase 2: After all old workflows complete, remove old code
+# Phase 2: Once no execution started before the patch is still open, deprecate it.
+# Executions with or without the marker both replay cleanly.
 @workflow.defn
-class MigratedWorkflow:
+class MigratingWorkflow:
     @workflow.run
     async def run(self) -> dict:
-        # Only new logic remains
+        workflow.deprecate_patch("new-logic")
+        return await self._new_implementation()
+
+# Phase 3: Once no execution started before the deprecation is still open,
+# remove the deprecate_patch call
+@workflow.defn
+class MigratingWorkflow:
+    @workflow.run
+    async def run(self) -> dict:
         return await self._new_implementation()
 ```
 
@@ -429,34 +432,26 @@ class MigratedWorkflow:
 1. **Replay Before Deploy**: Always run replay tests before deploying workflow changes
 2. **Export Regularly**: Continuously export production histories for testing
 3. **CI/CD Integration**: Automated replay testing in pull request checks
-4. **Version Tracking**: Use workflow.get_version() for safe code evolution
+4. **Version Tracking**: Use `workflow.patched()` and `workflow.deprecate_patch()` for safe code evolution
 5. **History Retention**: Keep representative workflow histories for regression testing
-6. **Determinism**: Never use random(), datetime.now(), or direct external calls
+6. **Determinism**: Use `workflow.random()`, `workflow.now()` and `workflow.uuid4()`; make external calls from activities
 7. **Comprehensive Testing**: Test against various workflow execution paths
 
 ## Common Replay Errors
 
-**Non-Deterministic Error**:
+Replay divergence raises `temporalio.workflow.NondeterminismError`. The message
+names the event the new code disagreed with, for example an activity scheduled
+where the history recorded a timer.
 
-```
-WorkflowNonDeterministicError: Workflow command mismatch at position 5
-Expected: ScheduleActivityTask(activity_id='activity-1')
-Got: ScheduleActivityTask(activity_id='activity-2')
-```
+**Cause**: A code change altered the sequence of commands the workflow issues
+(added, removed or reordered an activity, timer or child workflow).
 
-**Solution**: Code change altered workflow decision sequence
-
-**Version Mismatch Error**:
-
-```
-WorkflowVersionError: Workflow version changed from 1 to 2 without using get_version()
-```
-
-**Solution**: Use workflow.get_version() for backward-compatible changes
+**Solution**: Guard the change with `workflow.patched("<patch-id>")` so histories
+recorded before the change keep taking the old branch.
 
 ## Additional Resources
 
 - Replay Testing: docs.temporal.io/develop/python/testing-suite#replay-testing
-- Workflow Versioning: docs.temporal.io/workflows#versioning
+- Workflow Versioning: docs.temporal.io/develop/python/versioning
 - Determinism Guide: docs.temporal.io/workflows#deterministic-constraints
 - CI/CD Integration: github.com/temporalio/samples-python/tree/main/.github/workflows

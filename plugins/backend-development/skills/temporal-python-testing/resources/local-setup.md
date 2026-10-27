@@ -80,7 +80,18 @@ docker-compose down -v
 ```python
 # scripts/health_check.py
 import asyncio
+import uuid
+
+from temporalio import workflow
 from temporalio.client import Client
+from temporalio.worker import Worker
+
+# Module level: the SDK rejects @workflow.defn classes defined inside a function
+@workflow.defn
+class HealthCheckWorkflow:
+    @workflow.run
+    async def run(self) -> str:
+        return "healthy"
 
 async def check_temporal_health():
     """Verify Temporal server is accessible"""
@@ -89,14 +100,6 @@ async def check_temporal_health():
         print("✓ Connected to Temporal server")
 
         # Test workflow execution
-        from temporalio.worker import Worker
-
-        @workflow.defn
-        class HealthCheckWorkflow:
-            @workflow.run
-            async def run(self) -> str:
-                return "healthy"
-
         async with Worker(
             client,
             task_queue="health-check",
@@ -104,7 +107,7 @@ async def check_temporal_health():
         ):
             result = await client.execute_workflow(
                 HealthCheckWorkflow.run,
-                id="health-check",
+                id=f"health-check-{uuid.uuid4()}",
                 task_queue="health-check",
             )
             print(f"✓ Workflow execution successful: {result}")
@@ -112,6 +115,7 @@ async def check_temporal_health():
         return True
 
     except Exception as e:
+        # Health check reports any failure instead of raising
         print(f"✗ Health check failed: {e}")
         return False
 
@@ -179,9 +183,16 @@ addopts =
     --cov-report=html
     --cov-fail-under=80
 
-# Async test timeout
-asyncio_default_fixture_loop_scope = function
+# One event loop for the whole session, so session-scoped async fixtures
+# (client, time-skipping environment) can be shared by every test
+asyncio_default_fixture_loop_scope = session
+asyncio_default_test_loop_scope = session
 ```
+
+With `asyncio_mode = auto`, pytest-asyncio treats every `async def` test and
+fixture as asyncio, so plain `@pytest.fixture` works. In the default strict mode,
+decorate async fixtures with `@pytest_asyncio.fixture` and tests with
+`@pytest.mark.asyncio`.
 
 ### Shared Test Fixtures
 
@@ -192,23 +203,15 @@ from temporalio.testing import WorkflowEnvironment
 from temporalio.client import Client
 
 @pytest.fixture(scope="session")
-def event_loop():
-    """Provide event loop for async fixtures"""
-    import asyncio
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
-
-@pytest.fixture(scope="session")
 async def temporal_client():
     """Provide Temporal client connected to local server"""
     client = await Client.connect("localhost:7233")
     yield client
     await client.close()
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 async def workflow_env():
-    """Module-scoped time-skipping environment"""
+    """Session-scoped time-skipping environment"""
     env = await WorkflowEnvironment.start_time_skipping()
     yield env
     await env.shutdown()
@@ -240,7 +243,7 @@ async def test_worker(temporal_client, workflow_env):
 # requirements.txt
 temporalio>=1.5.0
 pytest>=7.4.0
-pytest-asyncio>=0.21.0
+pytest-asyncio>=1.0
 pytest-cov>=4.1.0
 pytest-xdist>=3.3.0  # Parallel test execution
 ```
@@ -249,7 +252,7 @@ pytest-xdist>=3.3.0  # Parallel test execution
 # pyproject.toml
 [build-system]
 requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "temporal-project"
@@ -262,7 +265,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.4.0",
-    "pytest-asyncio>=0.21.0",
+    "pytest-asyncio>=1.0",
     "pytest-cov>=4.1.0",
     "pytest-xdist>=3.3.0",
 ]
@@ -511,7 +514,7 @@ async def test_workflow_with_breakpoint(workflow_env):
 1. **Isolated Environment**: Use Docker Compose for reproducible local setup
 2. **Health Checks**: Always verify Temporal server before running tests
 3. **Fast Feedback**: Use pytest markers to run unit tests quickly
-4. **Coverage Targets**: Maintain ≥80% code coverage
+4. **Coverage Targets**: Pick a `--cov-fail-under` threshold for your team (80% above is an example, not a Temporal requirement)
 5. **Parallel Testing**: Use pytest-xdist for faster test runs
 6. **CI/CD Integration**: Automated testing on every commit
 7. **Cleanup**: Clear Docker volumes between test runs if needed

@@ -326,13 +326,19 @@ service = UserService(
 # BAD: Leaking ORM model to API
 @app.get("/users/{id}")
 def get_user(id: str) -> UserModel:  # SQLAlchemy model
-    return db.query(UserModel).get(id)
+    return db.get(UserModel, id)
 
 # GOOD: Use response schemas
+class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)  # read ORM attributes
+
+    id: str
+    email: str
+
 @app.get("/users/{id}")
 def get_user(id: str) -> UserResponse:
-    user = db.query(UserModel).get(id)
-    return UserResponse.from_orm(user)
+    user = db.get(UserModel, id)
+    return UserResponse.model_validate(user)
 ```
 
 **Don't mix I/O with business logic:**

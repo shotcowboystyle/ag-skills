@@ -1,6 +1,7 @@
 ---
 name: python-performance-optimization
 description: Profile and optimize Python code using cProfile, memory profilers, and performance best practices. Use when debugging slow Python code, optimizing bottlenecks, or improving application performance.
+last_verified: 2026-10-27
 ---
 
 # Python Performance Optimization
@@ -73,7 +74,9 @@ print(f"Average time: {execution_time/100:.6f} seconds")
 
 ## Detailed patterns and worked examples
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+Detailed pattern documentation lives in `references/details.md` (patterns 1-10: profiling tools and core optimization patterns). Read that file when the navigation tier above is insufficient.
+
+`references/advanced-patterns.md` covers patterns 11-20: NumPy, caching, `__slots__`, multiprocessing, async I/O, database batching and queries, memory leaks, weakrefs, and benchmarking with pytest-benchmark.
 
 ## Best Practices
 

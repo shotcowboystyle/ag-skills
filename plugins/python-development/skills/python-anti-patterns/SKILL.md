@@ -1,6 +1,7 @@
 ---
 name: python-anti-patterns
 description: Use this skill when reviewing Python code for common anti-patterns to avoid. Use as a checklist when reviewing code, before finalizing implementations, or when debugging issues that might stem from known bad practices.
+last_verified: 2026-10-27
 ---
 
 # Python Anti-Patterns Checklist
@@ -90,17 +91,23 @@ settings = Settings()
 # BAD: Leaking ORM model to API
 @app.get("/users/{id}")
 def get_user(id: str) -> UserModel:  # SQLAlchemy model
-    return db.query(UserModel).get(id)
+    return db.get(UserModel, id)
 ```
 
 **Fix:** Use DTOs/response models.
 
 ```python
 # GOOD
+class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)  # read ORM attributes
+
+    id: str
+    email: str
+
 @app.get("/users/{id}")
 def get_user(id: str) -> UserResponse:
-    user = db.query(UserModel).get(id)
-    return UserResponse.from_orm(user)
+    user = db.get(UserModel, id)
+    return UserResponse.model_validate(user)
 ```
 
 ### Mixed I/O and Business Logic

@@ -1,6 +1,7 @@
 ---
 name: temporal-python-testing
 description: Test Temporal workflows with pytest, time-skipping, and mocking strategies. Covers unit testing, integration testing, replay testing, and local development setup. Use when implementing Temporal workflow tests or debugging test failures.
+last_verified: 2026-10-27
 ---
 
 # Temporal Python Testing Strategies
@@ -14,7 +15,7 @@ Comprehensive testing approaches for Temporal workflows using pytest, progressiv
 - **Replay testing** - Validate determinism against production histories
 - **Local development** - Set up Temporal server and pytest
 - **CI/CD integration** - Automated testing pipelines
-- **Coverage strategies** - Achieve ≥80% test coverage
+- **Coverage strategies** - Cover every workflow decision path
 
 ## Testing Philosophy
 
@@ -86,12 +87,18 @@ This skill provides detailed guidance through progressive disclosure. Load speci
 
 ### Basic Workflow Test
 
+Verified against temporalio 1.34 and pytest-asyncio 1.x. Workflow classes must be
+defined at module level; the SDK rejects a `@workflow.defn` class inside a function.
+
 ```python
 import pytest
+import pytest_asyncio
 from temporalio.testing import WorkflowEnvironment
 from temporalio.worker import Worker
 
-@pytest.fixture
+# Strict mode (the pytest-asyncio default) needs @pytest_asyncio.fixture for
+# async fixtures; with asyncio_mode = auto, plain @pytest.fixture also works
+@pytest_asyncio.fixture
 async def workflow_env():
     env = await WorkflowEnvironment.start_time_skipping()
     yield env
@@ -119,6 +126,7 @@ async def test_workflow(workflow_env):
 ```python
 from temporalio.testing import ActivityEnvironment
 
+@pytest.mark.asyncio
 async def test_activity():
     env = ActivityEnvironment()
     result = await env.run(your_activity, "test-input")
@@ -127,10 +135,11 @@ async def test_activity():
 
 ## Coverage Targets
 
-**Recommended Coverage** (Source: docs.temporal.io best practices):
+Temporal's docs set no coverage percentage. Pick a `--cov-fail-under` threshold
+for your team, and aim for:
 
-- **Workflows**: ≥80% logic coverage
-- **Activities**: ≥80% logic coverage
+- **Workflows**: every decision branch exercised
+- **Activities**: success, retryable and non-retryable failure paths
 - **Integration**: Critical paths with mocked activities
 - **Replay**: All workflow versions before deployment
 
@@ -139,7 +148,7 @@ async def test_activity():
 1. **Time-Skipping** - Month-long workflows test in seconds
 2. **Mock Activities** - Isolate workflow logic from external dependencies
 3. **Replay Testing** - Validate determinism before deployment
-4. **High Coverage** - ≥80% target for production workflows
+4. **Branch Coverage** - Every path a production workflow can take
 5. **Fast Feedback** - Unit tests run in milliseconds
 
 ## How to Use Resources

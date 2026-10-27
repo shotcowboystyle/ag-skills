@@ -153,7 +153,7 @@ For each step:
 
 **Prohibited in Workflows** (Source: docs.temporal.io/workflows):
 
-- ❌ Threading, locks, synchronization primitives
+- ❌ Threads and thread-based locks (`threading`); in the Python SDK, asyncio primitives on the workflow's event loop are allowed
 - ❌ Random number generation (`random()`)
 - ❌ Global state or static variables
 - ❌ System time (`datetime.now()`)
@@ -173,7 +173,7 @@ For each step:
 
 **Solutions**:
 
-1. **Versioning API**: Use `workflow.get_version()` for safe changes
+1. **Versioning API**: In the Python SDK, branch on `workflow.patched("<patch-id>")`, then retire it with `workflow.deprecate_patch()`
 2. **New Workflow Type**: Create new workflow, route new executions to it
 3. **Backward Compatibility**: Ensure old events replay correctly
 

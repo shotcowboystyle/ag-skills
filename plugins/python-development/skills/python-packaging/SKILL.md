@@ -1,6 +1,7 @@
 ---
 name: python-packaging
 description: Create distributable Python packages with proper project structure, setup.py/pyproject.toml, and publishing to PyPI. Use when packaging Python libraries, creating CLI tools, or distributing Python code.
+last_verified: 2026-10-27
 ---
 
 # Python Packaging
@@ -162,5 +163,7 @@ project/
 
 ## Detailed patterns and worked examples
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+Detailed pattern documentation lives in `references/details.md` (patterns 4-10: full pyproject.toml, dynamic versioning, CLIs, building and publishing). Read that file when the navigation tier above is insufficient.
+
+`references/advanced-patterns.md` covers patterns 11-20: data files, namespace packages, C extensions, version management, install testing, README and file templates, multi-architecture wheels, private indexes, and a publishing checklist.
 

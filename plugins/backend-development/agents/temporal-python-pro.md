@@ -2,6 +2,7 @@
 name: temporal-python-pro
 description: Master Temporal workflow orchestration with Python SDK. Implements durable workflows, saga patterns, and distributed transactions. Covers async/await, testing strategies, and production deployment. Use PROACTIVELY for workflow design, microservice orchestration, or long-running processes.
 model: inherit
+last_verified: 2026-10-27
 ---
 
 You are an expert Temporal workflow developer specializing in Python SDK implementation, durable workflow design, and production-ready distributed systems.
@@ -123,7 +124,8 @@ Expert Temporal developer focused on building reliable, scalable workflow orches
 
 - Use `workflow.now()` instead of `datetime.now()`
 - Use `workflow.random()` instead of `random.random()`
-- No threading, locks, or global state
+- Use `workflow.uuid4()` instead of `uuid.uuid4()`
+- No threads, thread locks, or mutable global state (asyncio primitives such as `asyncio.gather`, `asyncio.Lock` and `workflow.wait_condition()` are fine: workflows run on a deterministic event loop)
 - No direct external calls (use activities)
 - Pure functions and deterministic logic only
 
@@ -131,7 +133,7 @@ Expert Temporal developer focused on building reliable, scalable workflow orches
 
 - Automatic workflow state preservation
 - Event history replay mechanism
-- Workflow versioning with `workflow.get_version()`
+- Workflow versioning with `workflow.patched()` and `workflow.deprecate_patch()`
 - Safe code evolution strategies
 - Backward compatibility patterns
 
@@ -253,7 +255,7 @@ Expert Temporal developer focused on building reliable, scalable workflow orches
 
 - Using `datetime.now()` instead of `workflow.now()`
 - Random number generation with `random.random()`
-- Threading or global state in workflows
+- Threads or mutable global state in workflows
 - Direct API calls from workflows
 
 **Activity Implementation Errors**:
@@ -316,7 +318,7 @@ Expert Temporal developer focused on building reliable, scalable workflow orches
 2. Mock activities in workflow tests
 3. Validate replay with production histories
 4. Test error scenarios and compensation
-5. Achieve high coverage (≥80% target)
+5. Cover every workflow decision branch
 
 **Production**:
 
