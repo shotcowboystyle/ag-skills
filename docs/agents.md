@@ -241,12 +241,12 @@ Reference for 183 local AI agents organized by category. The model column lists 
 | [team-implementer](../plugins/agent-teams/agents/team-implementer.md)                   | opus    | Parallel feature builder within strict file ownership boundaries                             |
 | [team-reviewer](../plugins/agent-teams/agents/team-reviewer.md)                         | opus    | Reviews one assigned dimension (security, performance, architecture, testing, accessibility) |
 | [team-debugger](../plugins/agent-teams/agents/team-debugger.md)                         | opus    | Confirms or falsifies one debugging hypothesis with file:line evidence                       |
-| [orchestrate](../plugins/ship-mate/agents/orchestrate.md)                               | sonnet  | Turns a story file into an unambiguous spec through clarifying questions                     |
-| [architect](../plugins/ship-mate/agents/architect.md)                                   | inherit | Produces a numbered implementation plan and pauses for approval                              |
-| [implement](../plugins/ship-mate/agents/implement.md)                                   | sonnet  | Implements the architect plan step by step with tests                                        |
-| [review](../plugins/ship-mate/agents/review.md)                                         | inherit | PR review with a three-tier severity taxonomy                                                |
-| [qa](../plugins/ship-mate/agents/qa.md)                                                 | sonnet  | Tests acceptance criteria and edge cases, writes a QA report                                 |
-| [playwright](../plugins/ship-mate/agents/playwright.md)                                 | sonnet  | Verifies frontend acceptance criteria in a real browser                                      |
+| [ship-mate-orchestrate](../plugins/ship-mate/agents/orchestrate.md)                               | sonnet  | Turns a story file into an unambiguous spec through clarifying questions                     |
+| [ship-mate-architect](../plugins/ship-mate/agents/architect.md)                                   | inherit | Produces a numbered implementation plan and pauses for approval                              |
+| [ship-mate-implement](../plugins/ship-mate/agents/implement.md)                                   | sonnet  | Implements the architect plan step by step with tests                                        |
+| [ship-mate-review](../plugins/ship-mate/agents/review.md)                                         | inherit | PR review with a three-tier severity taxonomy                                                |
+| [ship-mate-qa](../plugins/ship-mate/agents/qa.md)                                                 | sonnet  | Tests acceptance criteria and edge cases, writes a QA report                                 |
+| [ship-mate-playwright](../plugins/ship-mate/agents/playwright.md)                                 | sonnet  | Verifies frontend acceptance criteria in a real browser                                      |
 | [session-start](../plugins/operating-kit/agents/session-start.md)                       | haiku   | Reads the state doc, verifies live state, and prints a session briefing                      |
 | [session-end](../plugins/operating-kit/agents/session-end.md)                           | haiku   | Records lessons, open issues, and next steps at session end                                  |
 | [code-review-preshipment](../plugins/operating-kit/agents/code-review-preshipment.md)   | sonnet  | Pre-ship review of all changes since the last deploy                                         |

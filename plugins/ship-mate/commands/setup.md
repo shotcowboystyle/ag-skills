@@ -42,11 +42,11 @@ If the user says no, exit cleanly: `Setup cancelled. Run /setup when ready.`
 1. **Git repository** — check if `.git/` exists in the project root. If not:
    ```
    ⚠️  This project is not a git repository.
-   The pipeline uses git diff for delta scans.
+   The pipeline diffs against recorded base commits for delta scans and reviews.
 
    Initialise git now? [y/n]
    ```
-   If yes: run `git init`. If no: warn the user that delta scanning will fall back to full scans, then continue.
+   If yes: run `git init`. If no: warn the user that every scan will be a full scan and that `/ship` review needs a git repository, then continue.
 
 2. **Existing `stories/` folder** — if it already exists, note it and skip creation.
 
@@ -92,8 +92,8 @@ Print:
 
 Invoke the `scan` skill. This will:
 - Perform a full scan of the codebase
-- Write `.claude/pipeline/project-doc.md`
-- Write `AGENTS.md` at the project root
+- Write `.claude/pipeline/project-doc.md` and record the scanned commit in `.claude/pipeline/state.json`
+- Write `AGENTS.md` at the project root if none exists. If one exists, the scan shows a diff of its proposed changes and asks before touching it
 
 ## Step 7: Confirm Setup Complete
 
@@ -112,8 +112,8 @@ Print the completion summary:
 
   1. Review AGENTS.md
      Verify the generated project instructions look correct.
-     Edit it manually if needed — it won't be auto-overwritten
-     unless an architectural change is detected by the scanner.
+     Edit it freely — later scans propose changes as a diff
+     and ask before applying them.
 
   2. Write a story
      Copy stories/_template.md → stories/your-story.md
@@ -142,4 +142,10 @@ Print the completion summary:
   The pipeline also pauses if a 🔴 Critical review issue
   is found. Check .claude/pipeline/review-report.md and
   run /ship resume after resolving.
+
+  Clarifying questions from the orchestrator and architect
+  are asked here, in this session, one at a time.
+
+  The pipeline never commits. Commit between tasks if you
+  want each task reviewed on its own.
 ```
