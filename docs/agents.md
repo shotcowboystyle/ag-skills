@@ -1,6 +1,6 @@
 # Agent Reference
 
-Reference for 183 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
+Reference for 179 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
 
 ## Agent Categories
 
@@ -221,18 +221,14 @@ Reference for 183 local AI agents organized by category. The model column lists 
 
 ### SEO & Content Optimization
 
-| Agent                                                                                                     | Model  | Description                                          |
-| --------------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------- |
-| [seo-content-auditor](../plugins/seo-content-creation/agents/seo-content-auditor.md)                      | sonnet | Content quality analysis, E-E-A-T signals assessment |
-| [seo-meta-optimizer](../plugins/seo-technical-optimization/agents/seo-meta-optimizer.md)                  | haiku  | Meta title and description optimization              |
-| [seo-keyword-strategist](../plugins/seo-technical-optimization/agents/seo-keyword-strategist.md)          | haiku  | Keyword analysis and semantic variations             |
-| [seo-structure-architect](../plugins/seo-technical-optimization/agents/seo-structure-architect.md)        | haiku  | Content structure and schema markup                  |
-| [seo-snippet-hunter](../plugins/seo-technical-optimization/agents/seo-snippet-hunter.md)                  | haiku  | Featured snippet formatting                          |
-| [seo-content-refresher](../plugins/seo-analysis-monitoring/agents/seo-content-refresher.md)               | haiku  | Content freshness analysis                           |
-| [seo-cannibalization-detector](../plugins/seo-analysis-monitoring/agents/seo-cannibalization-detector.md) | haiku  | Keyword overlap detection                            |
-| [seo-authority-builder](../plugins/seo-analysis-monitoring/agents/seo-authority-builder.md)               | sonnet | E-E-A-T signal analysis                              |
-| [seo-content-writer](../plugins/seo-content-creation/agents/seo-content-writer.md)                        | sonnet | SEO-optimized content creation                       |
-| [seo-content-planner](../plugins/seo-content-creation/agents/seo-content-planner.md)                      | haiku  | Content planning and topic clusters                  |
+| Agent                                                                                                     | Model  | Description                                                 |
+| --------------------------------------------------------------------------------------------------------- | ------ | ----------------------------------------------------------- |
+| [seo-content-planner](../plugins/seo-content-creation/agents/seo-content-planner.md)                      | sonnet | Intent map and page briefs for a topic                      |
+| [seo-content-writer](../plugins/seo-content-creation/agents/seo-content-writer.md)                        | sonnet | One page written to its search intent from sourced material |
+| [seo-content-auditor](../plugins/seo-content-creation/agents/seo-content-auditor.md)                      | sonnet | Intent, coverage, E-E-A-T and stale-claim audit of one page |
+| [seo-meta-optimizer](../plugins/seo-technical-optimization/agents/seo-meta-optimizer.md)                  | sonnet | Page-specific titles, descriptions and framework metadata   |
+| [seo-technical-auditor](../plugins/seo-technical-optimization/agents/seo-technical-auditor.md)            | sonnet | Crawling, indexing, rendering and structured-data audit     |
+| [seo-cannibalization-detector](../plugins/seo-analysis-monitoring/agents/seo-cannibalization-detector.md) | sonnet | Pages competing for one query and intent                    |
 
 ### Teams, Workflows & Evaluation
 

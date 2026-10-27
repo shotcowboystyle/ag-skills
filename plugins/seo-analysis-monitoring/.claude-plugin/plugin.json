@@ -1,7 +1,7 @@
 {
   "name": "seo-analysis-monitoring",
-  "version": "1.2.1",
-  "description": "Content freshness analysis, cannibalization detection, and authority building for SEO",
+  "version": "2.0.0",
+  "description": "Keyword cannibalization detection across a site's pages, using Search Console exports for performance data",
   "author": {
     "name": "Curtis Blanton",
     "email": "curtis@shotcowboystyle.com"

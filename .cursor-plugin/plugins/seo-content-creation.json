@@ -1,8 +1,8 @@
 {
   "name": "seo-content-creation",
   "displayName": "Seo Content Creation",
-  "version": "1.2.1",
-  "description": "SEO content writing, planning, and quality auditing with E-E-A-T optimization",
+  "version": "2.0.0",
+  "description": "Search content planning, writing and auditing built around search intent, topic coverage and sourced claims",
   "author": {
     "name": "Curtis Blanton",
     "email": "curtis@shotcowboystyle.com"
