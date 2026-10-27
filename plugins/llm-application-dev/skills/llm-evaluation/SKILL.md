@@ -1,6 +1,7 @@
 ---
 name: llm-evaluation
 description: Implement comprehensive evaluation strategies for LLM applications using automated metrics, human feedback, and benchmarking. Use when testing LLM performance, measuring AI application quality, or establishing evaluation frameworks.
+last_verified: 2026-10-27
 ---
 
 # LLM Evaluation
@@ -71,72 +72,78 @@ Use stronger LLMs to evaluate weaker model outputs.
 
 ## Quick Start
 
+A self-contained harness: plain metric functions with one signature, an async model
+callable, and mean scores per metric. Swap `fake_model` for your chain
+(`lambda q: chain.ainvoke(q)`) and add metrics from `references/details.md`.
+
 ```python
-from dataclasses import dataclass
-from typing import Callable
-import numpy as np
+import asyncio
+import re
+from collections import Counter
+from statistics import mean
+from typing import Awaitable, Callable
 
-@dataclass
-class Metric:
-    name: str
-    fn: Callable
+# Every metric: (prediction, reference, context) -> score in [0, 1]
+Metric = Callable[[str, str | None, str | None], float]
 
-    @staticmethod
-    def accuracy():
-        return Metric("accuracy", calculate_accuracy)
 
-    @staticmethod
-    def bleu():
-        return Metric("bleu", calculate_bleu)
+def _tokens(text: str) -> list[str]:
+    return re.findall(r"\w+", text.lower())
 
-    @staticmethod
-    def bertscore():
-        return Metric("bertscore", calculate_bertscore)
 
-    @staticmethod
-    def custom(name: str, fn: Callable):
-        return Metric(name, fn)
+def exact_match(prediction, reference, context=None) -> float:
+    return float(_tokens(prediction) == _tokens(reference or ""))
 
-class EvaluationSuite:
-    def __init__(self, metrics: list[Metric]):
-        self.metrics = metrics
 
-    async def evaluate(self, model, test_cases: list[dict]) -> dict:
-        results = {m.name: [] for m in self.metrics}
+def token_f1(prediction, reference, context=None) -> float:
+    pred, ref = _tokens(prediction), _tokens(reference or "")
+    common = sum((Counter(pred) & Counter(ref)).values())
+    if not common:
+        return 0.0
+    precision, recall = common / len(pred), common / len(ref)
+    return 2 * precision * recall / (precision + recall)
 
-        for test in test_cases:
-            prediction = await model.predict(test["input"])
 
-            for metric in self.metrics:
-                score = metric.fn(
-                    prediction=prediction,
-                    reference=test.get("expected"),
-                    context=test.get("context")
-                )
-                results[metric.name].append(score)
+def context_overlap(prediction, reference=None, context=None) -> float:
+    """Cheap groundedness proxy: share of answer tokens found in the context.
+    Use an NLI model or LLM judge (references/details.md) for real faithfulness."""
+    pred = _tokens(prediction)
+    return sum(t in set(_tokens(context or "")) for t in pred) / len(pred) if pred else 0.0
 
-        return {
-            "metrics": {k: np.mean(v) for k, v in results.items()},
-            "raw_scores": results
-        }
 
-# Usage
-suite = EvaluationSuite([
-    Metric.accuracy(),
-    Metric.bleu(),
-    Metric.bertscore(),
-    Metric.custom("groundedness", check_groundedness)
-])
+async def evaluate(
+    model: Callable[[str], Awaitable[str]],
+    test_cases: list[dict],
+    metrics: dict[str, Metric],
+) -> dict:
+    predictions = await asyncio.gather(*(model(t["input"]) for t in test_cases))
+    raw = {
+        name: [fn(p, t.get("expected"), t.get("context")) for p, t in zip(predictions, test_cases)]
+        for name, fn in metrics.items()
+    }
+    return {"metrics": {name: mean(scores) for name, scores in raw.items()}, "raw": raw}
+
+
+async def fake_model(question: str) -> str:  # replace with your application
+    return "Paris"
+
 
 test_cases = [
     {
         "input": "What is the capital of France?",
         "expected": "Paris",
-        "context": "France is a country in Europe. Paris is its capital."
+        "context": "France is a country in Europe. Paris is its capital.",
     },
 ]
 
-results = await suite.evaluate(model=your_model, test_cases=test_cases)
+results = asyncio.run(
+    evaluate(
+        fake_model,
+        test_cases,
+        {"exact_match": exact_match, "token_f1": token_f1, "grounded": context_overlap},
+    )
+)
+print(results["metrics"])  # {'exact_match': 1.0, 'token_f1': 1.0, 'grounded': 1.0}
 ```
 
 ## Detailed patterns and worked examples

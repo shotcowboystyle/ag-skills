@@ -1,494 +1,273 @@
 # similarity-search-patterns — templates and worked examples
 
+Client templates for the four common vector stores. Verified against pinecone 10.2,
+qdrant-client 1.20, asyncpg 0.32 and weaviate-client 4.24 (2026-10-27).
+
+Not covered here: index parameters and quantization
+([vector-index-tuning](../../vector-index-tuning/SKILL.md)), hybrid search, fusion and
+reranking ([hybrid-search-implementation](../../hybrid-search-implementation/SKILL.md)),
+chunking ([embedding-strategies](../../embedding-strategies/SKILL.md)).
+
 ## Templates
 
-### Template 1: Pinecone Implementation
+### Template 1: Pinecone (serverless)
 
 ```python
 from pinecone import Pinecone, ServerlessSpec
-from typing import List, Dict, Optional
-import hashlib
 
 class PineconeVectorStore:
     def __init__(
         self,
         api_key: str,
         index_name: str,
-        dimension: int = 1536,
-        metric: str = "cosine"
+        dimension: int,
+        metric: str = "cosine",
     ):
         self.pc = Pinecone(api_key=api_key)
-
-        # Create index if not exists
-        if index_name not in self.pc.list_indexes().names():
+        if not self.pc.has_index(index_name):
             self.pc.create_index(
                 name=index_name,
                 dimension=dimension,
                 metric=metric,
-                spec=ServerlessSpec(cloud="aws", region="us-east-1")
+                spec=ServerlessSpec(cloud="aws", region="us-east-1"),
             )
-
         self.index = self.pc.Index(index_name)
 
-    def upsert(
-        self,
-        vectors: List[Dict],
-        namespace: str = ""
-    ) -> int:
-        """
-        Upsert vectors.
-        vectors: [{"id": str, "values": List[float], "metadata": dict}]
-        """
-        # Batch upsert
-        batch_size = 100
-        total = 0
-
+    def upsert(self, vectors: list[dict], namespace: str = "", batch_size: int = 100) -> int:
+        """vectors: [{"id": str, "values": list[float], "metadata": dict}]"""
         for i in range(0, len(vectors), batch_size):
-            batch = vectors[i:i + batch_size]
-            self.index.upsert(vectors=batch, namespace=namespace)
-            total += len(batch)
-
-        return total
+            self.index.upsert(vectors=vectors[i:i + batch_size], namespace=namespace)
+        return len(vectors)
 
     def search(
         self,
-        query_vector: List[float],
+        query_vector: list[float],
         top_k: int = 10,
         namespace: str = "",
-        filter: Optional[Dict] = None,
-        include_metadata: bool = True
-    ) -> List[Dict]:
-        """Search for similar vectors."""
+        filter: dict | None = None,
+    ) -> list[dict]:
         results = self.index.query(
             vector=query_vector,
             top_k=top_k,
             namespace=namespace,
-            filter=filter,
-            include_metadata=include_metadata
+            filter=filter,  # e.g. {"source": {"$eq": "handbook"}}
+            include_metadata=True,
         )
+        return [{"id": m.id, "score": m.score, "metadata": m.metadata} for m in results.matches]
 
-        return [
-            {
-                "id": match.id,
-                "score": match.score,
-                "metadata": match.metadata
-            }
-            for match in results.matches
-        ]
-
-    def search_with_rerank(
-        self,
-        query: str,
-        query_vector: List[float],
-        top_k: int = 10,
-        rerank_top_n: int = 50,
-        namespace: str = ""
-    ) -> List[Dict]:
-        """Search and rerank results."""
-        # Over-fetch for reranking
-        initial_results = self.search(
-            query_vector,
-            top_k=rerank_top_n,
-            namespace=namespace
-        )
-
-        # Rerank with cross-encoder or LLM
-        reranked = self._rerank(query, initial_results)
-
-        return reranked[:top_k]
-
-    def _rerank(self, query: str, results: List[Dict]) -> List[Dict]:
-        """Rerank results using cross-encoder."""
-        from sentence_transformers import CrossEncoder
-
-        model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
-
-        pairs = [(query, r["metadata"]["text"]) for r in results]
-        scores = model.predict(pairs)
-
-        for result, score in zip(results, scores):
-            result["rerank_score"] = float(score)
-
-        return sorted(results, key=lambda x: x["rerank_score"], reverse=True)
-
-    def delete(self, ids: List[str], namespace: str = ""):
-        """Delete vectors by ID."""
+    def delete(self, ids: list[str], namespace: str = ""):
         self.index.delete(ids=ids, namespace=namespace)
-
-    def delete_by_filter(self, filter: Dict, namespace: str = ""):
-        """Delete vectors matching filter."""
-        self.index.delete(filter=filter, namespace=namespace)
 ```
 
-### Template 2: Qdrant Implementation
+### Template 2: Qdrant
+
+`client.search` was removed from qdrant-client; use `query_points`.
 
 ```python
-from qdrant_client import QdrantClient
-from qdrant_client.http import models
-from typing import List, Dict, Optional
+from qdrant_client import QdrantClient, models
 
 class QdrantVectorStore:
     def __init__(
         self,
-        url: str = "localhost",
-        port: int = 6333,
-        collection_name: str = "documents",
-        vector_size: int = 1536
+        client: QdrantClient,  # QdrantClient(url="http://localhost:6333") or QdrantClient(":memory:")
+        collection_name: str,
+        vector_size: int,
     ):
-        self.client = QdrantClient(url=url, port=port)
+        self.client = client
         self.collection_name = collection_name
-
-        # Create collection if not exists
-        collections = self.client.get_collections().collections
-        if collection_name not in [c.name for c in collections]:
-            self.client.create_collection(
+        if not client.collection_exists(collection_name):
+            client.create_collection(
                 collection_name=collection_name,
                 vectors_config=models.VectorParams(
-                    size=vector_size,
-                    distance=models.Distance.COSINE
+                    size=vector_size, distance=models.Distance.COSINE
                 ),
-                # Optional: enable quantization for memory efficiency
-                quantization_config=models.ScalarQuantization(
-                    scalar=models.ScalarQuantizationConfig(
-                        type=models.ScalarType.INT8,
-                        quantile=0.99,
-                        always_ram=True
-                    )
-                )
+                # HNSW and quantization settings: see vector-index-tuning
             )
 
-    def upsert(self, points: List[Dict]) -> int:
-        """
-        Upsert points.
-        points: [{"id": str/int, "vector": List[float], "payload": dict}]
-        """
-        qdrant_points = [
-            models.PointStruct(
-                id=p["id"],
-                vector=p["vector"],
-                payload=p.get("payload", {})
-            )
-            for p in points
-        ]
-
+    def upsert(self, points: list[dict]) -> int:
+        """points: [{"id": int | uuid-str, "vector": list[float], "payload": dict}]"""
         self.client.upsert(
             collection_name=self.collection_name,
-            points=qdrant_points
+            points=[
+                models.PointStruct(id=p["id"], vector=p["vector"], payload=p.get("payload", {}))
+                for p in points
+            ],
         )
         return len(points)
 
     def search(
         self,
-        query_vector: List[float],
+        query_vector: list[float],
         limit: int = 10,
-        filter: Optional[models.Filter] = None,
-        score_threshold: Optional[float] = None
-    ) -> List[Dict]:
-        """Search for similar vectors."""
-        results = self.client.search(
-            collection_name=self.collection_name,
-            query_vector=query_vector,
-            limit=limit,
-            query_filter=filter,
-            score_threshold=score_threshold
-        )
-
-        return [
-            {
-                "id": r.id,
-                "score": r.score,
-                "payload": r.payload
-            }
-            for r in results
-        ]
-
-    def search_with_filter(
-        self,
-        query_vector: List[float],
-        must_conditions: List[Dict] = None,
-        should_conditions: List[Dict] = None,
-        must_not_conditions: List[Dict] = None,
-        limit: int = 10
-    ) -> List[Dict]:
-        """Search with complex filters."""
-        conditions = []
-
-        if must_conditions:
-            conditions.extend([
-                models.FieldCondition(
-                    key=c["key"],
-                    match=models.MatchValue(value=c["value"])
-                )
-                for c in must_conditions
+        must: dict | None = None,  # {"payload_key": value, ...}, all must match
+        score_threshold: float | None = None,
+    ) -> list[dict]:
+        query_filter = None
+        if must:
+            query_filter = models.Filter(must=[
+                models.FieldCondition(key=k, match=models.MatchValue(value=v))
+                for k, v in must.items()
             ])
-
-        filter = models.Filter(must=conditions) if conditions else None
-
-        return self.search(query_vector, limit=limit, filter=filter)
-
-    def search_with_sparse(
-        self,
-        dense_vector: List[float],
-        sparse_vector: Dict[int, float],
-        limit: int = 10,
-        dense_weight: float = 0.7
-    ) -> List[Dict]:
-        """Hybrid search with dense and sparse vectors."""
-        # Requires collection with named vectors
-        results = self.client.search(
+        response = self.client.query_points(
             collection_name=self.collection_name,
-            query_vector=models.NamedVector(
-                name="dense",
-                vector=dense_vector
-            ),
-            limit=limit
+            query=query_vector,
+            query_filter=query_filter,
+            limit=limit,
+            score_threshold=score_threshold,
+            with_payload=True,
         )
-        return [{"id": r.id, "score": r.score, "payload": r.payload} for r in results]
+        return [{"id": p.id, "score": p.score, "payload": p.payload} for p in response.points]
+
+
+if __name__ == "__main__":
+    store = QdrantVectorStore(QdrantClient(":memory:"), "docs", vector_size=3)
+    store.upsert([
+        {"id": 1, "vector": [1.0, 0.0, 0.0], "payload": {"lang": "en"}},
+        {"id": 2, "vector": [0.0, 1.0, 0.0], "payload": {"lang": "de"}},
+    ])
+    assert store.search([0.9, 0.1, 0.0], limit=1)[0]["id"] == 1
+    assert store.search([0.9, 0.1, 0.0], must={"lang": "de"})[0]["id"] == 2
 ```
 
 ### Template 3: pgvector with PostgreSQL
 
+Metadata keys and values both go in as bind parameters. Never format a caller-supplied key
+into the SQL string.
+
 ```python
+import json
 import asyncpg
-from typing import List, Dict, Optional
-import numpy as np
 
 class PgVectorStore:
-    def __init__(self, connection_string: str):
-        self.connection_string = connection_string
+    def __init__(self, pool: asyncpg.Pool, dimension: int):
+        self.pool = pool
+        self.dimension = int(dimension)
 
     async def init(self):
-        """Initialize connection pool and extension."""
-        self.pool = await asyncpg.create_pool(self.connection_string)
-
         async with self.pool.acquire() as conn:
-            # Enable extension
             await conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
-
-            # Create table
-            await conn.execute("""
+            await conn.execute(f"""
                 CREATE TABLE IF NOT EXISTS documents (
                     id TEXT PRIMARY KEY,
-                    content TEXT,
-                    metadata JSONB,
-                    embedding vector(1536)
+                    content TEXT NOT NULL,
+                    metadata JSONB NOT NULL DEFAULT '{{}}',
+                    embedding vector({self.dimension})
                 )
             """)
-
-            # Create index (HNSW for better performance)
+            # Index choice and m / ef_construction: see vector-index-tuning
             await conn.execute("""
                 CREATE INDEX IF NOT EXISTS documents_embedding_idx
-                ON documents
-                USING hnsw (embedding vector_cosine_ops)
-                WITH (m = 16, ef_construction = 64)
+                ON documents USING hnsw (embedding vector_cosine_ops)
             """)
 
-    async def upsert(self, documents: List[Dict]):
-        """Upsert documents with embeddings."""
+    async def upsert(self, documents: list[dict]):
+        """documents: [{"id", "content", "embedding": list[float], "metadata": dict}]"""
         async with self.pool.acquire() as conn:
             await conn.executemany(
                 """
                 INSERT INTO documents (id, content, metadata, embedding)
-                VALUES ($1, $2, $3, $4)
+                VALUES ($1, $2, $3::jsonb, $4::vector)
                 ON CONFLICT (id) DO UPDATE SET
                     content = EXCLUDED.content,
                     metadata = EXCLUDED.metadata,
                     embedding = EXCLUDED.embedding
                 """,
                 [
-                    (
-                        doc["id"],
-                        doc["content"],
-                        doc.get("metadata", {}),
-                        np.array(doc["embedding"]).tolist()
-                    )
-                    for doc in documents
-                ]
+                    (d["id"], d["content"], json.dumps(d.get("metadata", {})), str(d["embedding"]))
+                    for d in documents
+                ],
             )
 
     async def search(
         self,
-        query_embedding: List[float],
+        query_embedding: list[float],
         limit: int = 10,
-        filter_metadata: Optional[Dict] = None
-    ) -> List[Dict]:
-        """Search for similar documents."""
-        query = """
-            SELECT id, content, metadata,
-                   1 - (embedding <=> $1::vector) as similarity
+        filter_metadata: dict[str, str] | None = None,
+    ) -> list[dict]:
+        params: list = [str(query_embedding), limit]
+        where = []
+        for key, value in (filter_metadata or {}).items():
+            params += [key, value]
+            where.append(f"metadata->>${len(params) - 1} = ${len(params)}")
+        sql = f"""
+            SELECT id, content, metadata, 1 - (embedding <=> $1::vector) AS similarity
             FROM documents
+            {"WHERE " + " AND ".join(where) if where else ""}
+            ORDER BY embedding <=> $1::vector
+            LIMIT $2
         """
-
-        params = [query_embedding]
-
-        if filter_metadata:
-            conditions = []
-            for key, value in filter_metadata.items():
-                params.append(value)
-                conditions.append(f"metadata->>'{key}' = ${len(params)}")
-            query += " WHERE " + " AND ".join(conditions)
-
-        query += f" ORDER BY embedding <=> $1::vector LIMIT ${len(params) + 1}"
-        params.append(limit)
-
         async with self.pool.acquire() as conn:
-            rows = await conn.fetch(query, *params)
-
+            rows = await conn.fetch(sql, *params)
         return [
-            {
-                "id": row["id"],
-                "content": row["content"],
-                "metadata": row["metadata"],
-                "score": row["similarity"]
-            }
-            for row in rows
+            {"id": r["id"], "content": r["content"],
+             "metadata": json.loads(r["metadata"]), "score": r["similarity"]}
+            for r in rows
         ]
-
-    async def hybrid_search(
-        self,
-        query_embedding: List[float],
-        query_text: str,
-        limit: int = 10,
-        vector_weight: float = 0.5
-    ) -> List[Dict]:
-        """Hybrid search combining vector and full-text."""
-        async with self.pool.acquire() as conn:
-            rows = await conn.fetch(
-                """
-                WITH vector_results AS (
-                    SELECT id, content, metadata,
-                           1 - (embedding <=> $1::vector) as vector_score
-                    FROM documents
-                    ORDER BY embedding <=> $1::vector
-                    LIMIT $3 * 2
-                ),
-                text_results AS (
-                    SELECT id, content, metadata,
-                           ts_rank(to_tsvector('english', content),
-                                   plainto_tsquery('english', $2)) as text_score
-                    FROM documents
-                    WHERE to_tsvector('english', content) @@ plainto_tsquery('english', $2)
-                    LIMIT $3 * 2
-                )
-                SELECT
-                    COALESCE(v.id, t.id) as id,
-                    COALESCE(v.content, t.content) as content,
-                    COALESCE(v.metadata, t.metadata) as metadata,
-                    COALESCE(v.vector_score, 0) * $4 +
-                    COALESCE(t.text_score, 0) * (1 - $4) as combined_score
-                FROM vector_results v
-                FULL OUTER JOIN text_results t ON v.id = t.id
-                ORDER BY combined_score DESC
-                LIMIT $3
-                """,
-                query_embedding, query_text, limit, vector_weight
-            )
-
-        return [dict(row) for row in rows]
 ```
 
-### Template 4: Weaviate Implementation
+`str(list_of_floats)` gives `[0.1, 0.2]`, which pgvector accepts as text input. To pass
+numpy arrays directly, register the codec from the `pgvector` package
+(`pgvector.asyncpg.register_vector`) on each connection instead.
+
+### Template 4: Weaviate (client v4)
+
+The v3 `weaviate.Client` and its `.query.get(...).with_near_vector(...)` builder were removed
+in client v4.
 
 ```python
 import weaviate
+from weaviate.classes.config import Configure, DataType, Property
+from weaviate.classes.query import Filter, MetadataQuery
 from weaviate.util import generate_uuid5
-from typing import List, Dict, Optional
 
 class WeaviateVectorStore:
-    def __init__(
-        self,
-        url: str = "http://localhost:8080",
-        class_name: str = "Document"
-    ):
-        self.client = weaviate.Client(url=url)
-        self.class_name = class_name
-        self._ensure_schema()
+    def __init__(self, client: weaviate.WeaviateClient, collection_name: str = "Document"):
+        # client = weaviate.connect_to_local()  (close it with client.close())
+        if not client.collections.exists(collection_name):
+            client.collections.create(
+                collection_name,
+                vector_config=Configure.Vectors.self_provided(),  # we supply vectors
+                properties=[
+                    Property(name="content", data_type=DataType.TEXT),
+                    Property(name="source", data_type=DataType.TEXT),
+                    Property(name="chunk_id", data_type=DataType.INT),
+                ],
+            )
+        self.collection = client.collections.get(collection_name)
 
-    def _ensure_schema(self):
-        """Create schema if not exists."""
-        schema = {
-            "class": self.class_name,
-            "vectorizer": "none",  # We provide vectors
-            "properties": [
-                {"name": "content", "dataType": ["text"]},
-                {"name": "source", "dataType": ["string"]},
-                {"name": "chunk_id", "dataType": ["int"]}
-            ]
-        }
-
-        if not self.client.schema.exists(self.class_name):
-            self.client.schema.create_class(schema)
-
-    def upsert(self, documents: List[Dict]):
-        """Batch upsert documents."""
-        with self.client.batch as batch:
-            batch.batch_size = 100
-
+    def upsert(self, documents: list[dict]):
+        """documents: [{"id", "content", "embedding", "source"?, "chunk_id"?}]"""
+        with self.collection.batch.fixed_size(batch_size=100) as batch:
             for doc in documents:
-                batch.add_data_object(
-                    data_object={
+                batch.add_object(
+                    properties={
                         "content": doc["content"],
                         "source": doc.get("source", ""),
-                        "chunk_id": doc.get("chunk_id", 0)
+                        "chunk_id": doc.get("chunk_id", 0),
                     },
-                    class_name=self.class_name,
                     uuid=generate_uuid5(doc["id"]),
-                    vector=doc["embedding"]
+                    vector=doc["embedding"],
                 )
+        if self.collection.batch.failed_objects:
+            raise RuntimeError(f"{len(self.collection.batch.failed_objects)} objects failed")
 
     def search(
         self,
-        query_vector: List[float],
+        query_vector: list[float],
         limit: int = 10,
-        where_filter: Optional[Dict] = None
-    ) -> List[Dict]:
-        """Vector search."""
-        query = (
-            self.client.query
-            .get(self.class_name, ["content", "source", "chunk_id"])
-            .with_near_vector({"vector": query_vector})
-            .with_limit(limit)
-            .with_additional(["distance", "id"])
+        source: str | None = None,
+    ) -> list[dict]:
+        response = self.collection.query.near_vector(
+            near_vector=query_vector,
+            limit=limit,
+            filters=Filter.by_property("source").equal(source) if source else None,
+            return_metadata=MetadataQuery(distance=True),
         )
-
-        if where_filter:
-            query = query.with_where(where_filter)
-
-        results = query.do()
-
         return [
-            {
-                "id": item["_additional"]["id"],
-                "content": item["content"],
-                "source": item["source"],
-                "score": 1 - item["_additional"]["distance"]
-            }
-            for item in results["data"]["Get"][self.class_name]
-        ]
-
-    def hybrid_search(
-        self,
-        query: str,
-        query_vector: List[float],
-        limit: int = 10,
-        alpha: float = 0.5  # 0 = keyword, 1 = vector
-    ) -> List[Dict]:
-        """Hybrid search combining BM25 and vector."""
-        results = (
-            self.client.query
-            .get(self.class_name, ["content", "source"])
-            .with_hybrid(query=query, vector=query_vector, alpha=alpha)
-            .with_limit(limit)
-            .with_additional(["score"])
-            .do()
-        )
-
-        return [
-            {
-                "content": item["content"],
-                "source": item["source"],
-                "score": item["_additional"]["score"]
-            }
-            for item in results["data"]["Get"][self.class_name]
+            {"id": str(o.uuid), **o.properties, "score": 1 - o.metadata.distance}
+            for o in response.objects
         ]
 ```
+
+For Weaviate's built-in BM25 + vector fusion (`collection.query.hybrid(query=..., vector=...,
+alpha=...)`), see [hybrid-search-implementation](../../hybrid-search-implementation/SKILL.md).

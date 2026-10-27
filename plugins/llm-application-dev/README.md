@@ -2,12 +2,12 @@
 
 Build production-ready LLM applications, advanced RAG systems, and intelligent agents with modern AI patterns.
 
-## Version 2.0.0 Highlights
+## Version 2.1.0 Highlights
 
-- **LangGraph Integration**: Updated from deprecated LangChain patterns to LangGraph StateGraph workflows
-- **Modern Model Support**: Claude Opus 4.8/Sonnet 5/Haiku 4.5 and GPT-5.4/GPT-5-mini
-- **Voyage AI Embeddings**: Recommended embedding models for Claude applications
-- **Structured Outputs**: Pydantic-based structured output patterns
+- **LangChain 1.x agents**: `create_agent` with checkpointers and middleware replaces `create_react_agent` and the legacy memory classes
+- **One owner per vector topic**: chunking, client setup, hybrid search and index tuning each live in one skill; the others link to it
+- **Guarded RAG prompt**: retrieved text is treated as data and answers must cite sources
+- **Model IDs are date-qualified**: examples name models "as of 2026-10"; check provider docs for current IDs
 
 ## Features
 
@@ -29,9 +29,9 @@ Build production-ready LLM applications, advanced RAG systems, and intelligent a
 
 | Agent                      | Description                                                                |
 | -------------------------- | -------------------------------------------------------------------------- |
-| `ai-engineer`              | Production-grade LLM applications, RAG systems, and agent architectures    |
-| `prompt-engineer`          | Advanced prompting techniques, constitutional AI, and model optimization   |
-| `vector-database-engineer` | Vector search implementation, embedding strategies, and semantic retrieval |
+| `ai-engineer`              | Architecture decision for one LLM feature (call, chain, RAG or agent)      |
+| `prompt-engineer`          | Write or revise one production prompt, with test cases                     |
+| `vector-database-engineer` | Vector search setup recommendation for a corpus and query workload         |
 
 ## Skills
 
@@ -62,11 +62,22 @@ Build production-ready LLM applications, advanced RAG systems, and intelligent a
 
 ## Requirements
 
-- LangChain >= 1.2.0
-- LangGraph >= 0.3.0
+- LangChain >= 1.0 (examples verified against 1.4.7)
+- LangGraph >= 1.0 (examples verified against 1.2.18)
+- `langchain-classic` for the legacy retrievers (multi-query, compression, parent-document)
 - Python 3.11+
 
 ## Changelog
+
+### 2.1.0 (October 2026)
+
+- Agents use `langchain.agents.create_agent`; memory via checkpointers, `SummarizationMiddleware` and stores
+- Legacy retrievers import from `langchain_classic.retrievers` (`langchain.retrievers` was removed)
+- RAG prompt guards against prompt injection and requires citations
+- Qdrant examples use `query_points`; Weaviate examples use the v4 client
+- Hybrid search documents the RRF formula and fixes a candidate-limit integer division
+- `ai-engineer`, `prompt-engineer` and `vector-database-engineer` rewritten as single-task agents
+- Model references updated and date-qualified
 
 ### 2.0.0 (January 2026)
 

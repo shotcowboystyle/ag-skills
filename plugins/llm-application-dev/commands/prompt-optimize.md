@@ -1,6 +1,7 @@
 ---
 description: "Optimize prompts for production with CoT, few-shot, and constitutional AI patterns"
 argument-hint: "<prompt-text-or-file>"
+last_verified: 2026-10-27
 ---
 
 # Prompt Optimization
@@ -129,7 +130,9 @@ Final Response: [Refined]
 
 ### 5. Model-Specific Optimization
 
-**GPT-5.4**
+Model names below are as of 2026-10; check each provider's current model list.
+
+**OpenAI (gpt-5.5)**
 
 ````python
 gpt5_optimized = """
@@ -146,15 +149,15 @@ gpt5_optimized = """
 ##OUTPUT FORMAT##
 ```json
 {"structured": "response"}
-````
+```
 
 ##EXAMPLES##
 {few_shot_examples}
 """
-
 ````
 
-**Claude 4.6/4.5**
+**Claude (claude-sonnet-5-5, claude-opus-5-5)**
+
 ```python
 claude_optimized = """
 <context>
@@ -175,9 +178,9 @@ claude_optimized = """
 {xml_structured_response}
 </output_format>
 """
-````
+```
 
-**Gemini Pro/Ultra**
+**Gemini**
 
 ```python
 gemini_optimized = """
@@ -373,19 +376,17 @@ Begin with recognition of customer situation.
 ```
 ````
 
-```
-
 ### Example 2: Data Analysis
 
 **Before**
+
+```
+Analyze this sales data and provide insights.
 ```
 
-Analyze this sales data and provide insights.
-
-````
-
 **After**
-```python
+
+````python
 analysis_prompt = """
 You are a Senior Data Analyst with expertise in sales analytics and statistical analysis.
 
@@ -436,23 +437,21 @@ recommendations:
   immediate: []
   short_term: []
   long_term: []
-````
-
-"""
-
 ```
+"""
+````
 
 ### Example 3: Code Generation
 
 **Before**
+
+```
+Write a Python function to process user data.
 ```
 
-Write a Python function to process user data.
-
-````
-
 **After**
-```python
+
+````python
 code_prompt = """
 You are a Senior Software Engineer with 10+ years Python experience. Follow SOLID principles.
 
@@ -509,7 +508,7 @@ def process_user_data(raw_data: Dict[str, Any]) -> Union[ProcessedUser, Dict[str
         name=sanitize_string(raw_data['name'], 100),
         metadata={k: v for k, v in raw_data.items() if k not in required}
     )
-````
+```
 
 ### Self-Review
 
@@ -568,7 +567,7 @@ ELSE: APPLY hybrid
 Overall: []/50
 Recommendation: use_as_is | iterate | redesign
 """
-````
+```
 
 ## Output Format
 
@@ -611,7 +610,7 @@ testing_recommendations:
   metrics: ["accuracy", "satisfaction", "cost"]
 
 deployment_strategy:
-  model: "GPT-5.4 for quality, Claude 4.6 for safety"
+  model: "<model chosen from the A/B results>"
   temperature: 0.7
   max_tokens: 2000
   monitoring: "Track success, latency, feedback"

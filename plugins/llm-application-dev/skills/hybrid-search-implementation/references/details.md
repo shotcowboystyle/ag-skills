@@ -1,114 +1,99 @@
 # hybrid-search-implementation — templates and worked examples
 
+Verified against asyncpg 0.32, elasticsearch-py 9.5, qdrant-client 1.20 and
+weaviate-client 4.24 (2026-10-27). Store client setup (connections, collections, upserts)
+lives in [similarity-search-patterns](../../similarity-search-patterns/references/details.md).
+
 ## Templates
 
-### Template 1: Reciprocal Rank Fusion
+### Template 1: Fusion functions (pure Python, runnable)
 
 ```python
-from typing import List, Dict, Tuple
 from collections import defaultdict
 
+
 def reciprocal_rank_fusion(
-    result_lists: List[List[Tuple[str, float]]],
+    result_lists: list[list[str]],
     k: int = 60,
-    weights: List[float] = None
-) -> List[Tuple[str, float]]:
+    weights: list[float] | None = None,
+) -> list[tuple[str, float]]:
+    """RRF: score(d) = sum_i w_i / (k + rank_i(d)), rank is 1-based.
+
+    result_lists: one ranked list of doc IDs per retriever, best first.
+    Documents missing from a list contribute nothing for that list.
     """
-    Combine multiple ranked lists using RRF.
-
-    Args:
-        result_lists: List of (doc_id, score) tuples per search method
-        k: RRF constant (higher = more weight to lower ranks)
-        weights: Optional weights per result list
-
-    Returns:
-        Fused ranking as (doc_id, score) tuples
-    """
-    if weights is None:
-        weights = [1.0] * len(result_lists)
-
-    scores = defaultdict(float)
-
-    for result_list, weight in zip(result_lists, weights):
-        for rank, (doc_id, _) in enumerate(result_list):
-            # RRF formula: 1 / (k + rank)
-            scores[doc_id] += weight * (1.0 / (k + rank + 1))
-
-    # Sort by fused score
+    weights = weights or [1.0] * len(result_lists)
+    scores: dict[str, float] = defaultdict(float)
+    for ranked, weight in zip(result_lists, weights, strict=True):
+        for rank, doc_id in enumerate(ranked, start=1):
+            scores[doc_id] += weight / (k + rank)
     return sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
 
 def linear_combination(
-    vector_results: List[Tuple[str, float]],
-    keyword_results: List[Tuple[str, float]],
-    alpha: float = 0.5
-) -> List[Tuple[str, float]]:
-    """
-    Combine results with linear interpolation.
+    vector_results: list[tuple[str, float]],
+    keyword_results: list[tuple[str, float]],
+    alpha: float = 0.5,
+) -> list[tuple[str, float]]:
+    """alpha * norm(vector) + (1 - alpha) * norm(keyword), min-max normalized per list."""
 
-    Args:
-        vector_results: (doc_id, similarity_score) from vector search
-        keyword_results: (doc_id, bm25_score) from keyword search
-        alpha: Weight for vector search (1-alpha for keyword)
-    """
-    # Normalize scores to [0, 1]
     def normalize(results):
         if not results:
             return {}
         scores = [s for _, s in results]
-        min_s, max_s = min(scores), max(scores)
-        range_s = max_s - min_s if max_s != min_s else 1
-        return {doc_id: (score - min_s) / range_s for doc_id, score in results}
+        lo, hi = min(scores), max(scores)
+        span = (hi - lo) or 1.0
+        return {doc_id: (s - lo) / span for doc_id, s in results}
 
-    vector_scores = normalize(vector_results)
-    keyword_scores = normalize(keyword_results)
-
-    # Combine
-    all_docs = set(vector_scores.keys()) | set(keyword_scores.keys())
-    combined = {}
-
-    for doc_id in all_docs:
-        v_score = vector_scores.get(doc_id, 0)
-        k_score = keyword_scores.get(doc_id, 0)
-        combined[doc_id] = alpha * v_score + (1 - alpha) * k_score
-
+    v, kw = normalize(vector_results), normalize(keyword_results)
+    combined = {
+        d: alpha * v.get(d, 0.0) + (1 - alpha) * kw.get(d, 0.0) for d in v.keys() | kw.keys()
+    }
     return sorted(combined.items(), key=lambda x: x[1], reverse=True)
+
+
+if __name__ == "__main__":
+    fused = reciprocal_rank_fusion([["a", "b", "c"], ["b", "c", "d"]])
+    # b: 1/62 + 1/61 beats a: 1/61 alone
+    assert [d for d, _ in fused] == ["b", "c", "a", "d"]
+    assert abs(dict(fused)["a"] - 1 / 61) < 1e-12
+    assert reciprocal_rank_fusion([[], []]) == []
+    lin = linear_combination([("a", 0.9), ("b", 0.1)], [("b", 12.0), ("c", 3.0)], alpha=0.5)
+    assert lin[0][0] == "b"
 ```
 
-### Template 2: PostgreSQL Hybrid Search
+### Template 2: PostgreSQL (pgvector + full-text) with RRF in SQL
+
+Bind parameter positions are fixed (`$1`–`$5`); filter parameters are appended after them,
+so adding a filter never shifts `$4` or `$5`. The candidate count per retriever is its own
+parameter, so no integer division can shrink the final `LIMIT` to 0.
 
 ```python
 import asyncpg
-from typing import List, Dict, Optional
-import numpy as np
+
 
 class PostgresHybridSearch:
-    """Hybrid search with pgvector and full-text search."""
-
     def __init__(self, pool: asyncpg.Pool):
         self.pool = pool
 
-    async def setup_schema(self):
-        """Create tables and indexes."""
+    async def setup_schema(self, dimension: int):
         async with self.pool.acquire() as conn:
-            await conn.execute("""
+            await conn.execute(f"""
                 CREATE EXTENSION IF NOT EXISTS vector;
 
                 CREATE TABLE IF NOT EXISTS documents (
                     id TEXT PRIMARY KEY,
                     content TEXT NOT NULL,
-                    embedding vector(1536),
-                    metadata JSONB DEFAULT '{}',
+                    embedding vector({int(dimension)}),
+                    metadata JSONB NOT NULL DEFAULT '{{}}',
                     ts_content tsvector GENERATED ALWAYS AS (
                         to_tsvector('english', content)
                     ) STORED
                 );
 
-                -- Vector index (HNSW)
                 CREATE INDEX IF NOT EXISTS documents_embedding_idx
                 ON documents USING hnsw (embedding vector_cosine_ops);
 
-                -- Full-text index (GIN)
                 CREATE INDEX IF NOT EXISTS documents_fts_idx
                 ON documents USING gin (ts_content);
             """)
@@ -116,398 +101,236 @@ class PostgresHybridSearch:
     async def hybrid_search(
         self,
         query: str,
-        query_embedding: List[float],
+        query_embedding: list[float],
         limit: int = 10,
+        candidates: int = 50,  # per retriever, >= limit
         vector_weight: float = 0.5,
-        filter_metadata: Optional[Dict] = None
-    ) -> List[Dict]:
-        """
-        Perform hybrid search combining vector and full-text.
+        filter_metadata: dict[str, str] | None = None,
+    ) -> list[dict]:
+        params: list = [str(query_embedding), query, max(candidates, limit), vector_weight, limit]
+        where = ["TRUE"]
+        for key, value in (filter_metadata or {}).items():
+            params += [key, value]
+            where.append(f"metadata->>${len(params) - 1} = ${len(params)}")
+        where_sql = " AND ".join(where)
 
-        Uses RRF fusion for combining results.
-        """
-        async with self.pool.acquire() as conn:
-            # Build filter clause
-            where_clause = "1=1"
-            params = [query_embedding, query, limit * 3]
-
-            if filter_metadata:
-                for key, value in filter_metadata.items():
-                    params.append(value)
-                    where_clause += f" AND metadata->>'{key}' = ${len(params)}"
-
-            results = await conn.fetch(f"""
-                WITH vector_search AS (
-                    SELECT
-                        id,
-                        content,
-                        metadata,
-                        ROW_NUMBER() OVER (ORDER BY embedding <=> $1::vector) as vector_rank,
-                        1 - (embedding <=> $1::vector) as vector_score
-                    FROM documents
-                    WHERE {where_clause}
-                    ORDER BY embedding <=> $1::vector
-                    LIMIT $3
-                ),
-                keyword_search AS (
-                    SELECT
-                        id,
-                        content,
-                        metadata,
-                        ROW_NUMBER() OVER (ORDER BY ts_rank(ts_content, websearch_to_tsquery('english', $2)) DESC) as keyword_rank,
-                        ts_rank(ts_content, websearch_to_tsquery('english', $2)) as keyword_score
-                    FROM documents
-                    WHERE ts_content @@ websearch_to_tsquery('english', $2)
-                      AND {where_clause}
+        sql = f"""
+            WITH vector_search AS (
+                SELECT id, ROW_NUMBER() OVER (ORDER BY embedding <=> $1::vector) AS rnk
+                FROM documents
+                WHERE {where_sql}
+                ORDER BY embedding <=> $1::vector
+                LIMIT $3
+            ),
+            keyword_search AS (
+                SELECT id, ROW_NUMBER() OVER (
                     ORDER BY ts_rank(ts_content, websearch_to_tsquery('english', $2)) DESC
-                    LIMIT $3
-                )
-                SELECT
-                    COALESCE(v.id, k.id) as id,
-                    COALESCE(v.content, k.content) as content,
-                    COALESCE(v.metadata, k.metadata) as metadata,
-                    v.vector_score,
-                    k.keyword_score,
-                    -- RRF fusion
-                    COALESCE(1.0 / (60 + v.vector_rank), 0) * $4::float +
-                    COALESCE(1.0 / (60 + k.keyword_rank), 0) * (1 - $4::float) as rrf_score
+                ) AS rnk
+                FROM documents
+                WHERE ts_content @@ websearch_to_tsquery('english', $2) AND {where_sql}
+                ORDER BY ts_rank(ts_content, websearch_to_tsquery('english', $2)) DESC
+                LIMIT $3
+            ),
+            fused AS (
+                SELECT COALESCE(v.id, k.id) AS id,
+                       v.rnk AS vector_rank,
+                       k.rnk AS keyword_rank,
+                       COALESCE($4::float8 / (60 + v.rnk), 0)
+                     + COALESCE((1 - $4::float8) / (60 + k.rnk), 0) AS rrf_score
                 FROM vector_search v
                 FULL OUTER JOIN keyword_search k ON v.id = k.id
-                ORDER BY rrf_score DESC
-                LIMIT $3 / 3
-            """, *params, vector_weight)
-
-            return [dict(row) for row in results]
-
-    async def search_with_rerank(
-        self,
-        query: str,
-        query_embedding: List[float],
-        limit: int = 10,
-        rerank_candidates: int = 50
-    ) -> List[Dict]:
-        """Hybrid search with cross-encoder reranking."""
-        from sentence_transformers import CrossEncoder
-
-        # Get candidates
-        candidates = await self.hybrid_search(
-            query, query_embedding, limit=rerank_candidates
-        )
-
-        if not candidates:
-            return []
-
-        # Rerank with cross-encoder
-        model = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
-
-        pairs = [(query, c["content"]) for c in candidates]
-        scores = model.predict(pairs)
-
-        for candidate, score in zip(candidates, scores):
-            candidate["rerank_score"] = float(score)
-
-        # Sort by rerank score and return top results
-        reranked = sorted(candidates, key=lambda x: x["rerank_score"], reverse=True)
-        return reranked[:limit]
+            )
+            SELECT d.id, d.content, d.metadata, f.vector_rank, f.keyword_rank, f.rrf_score
+            FROM fused f JOIN documents d USING (id)
+            ORDER BY f.rrf_score DESC
+            LIMIT $5
+        """
+        async with self.pool.acquire() as conn:
+            rows = await conn.fetch(sql, *params)
+        return [dict(r) for r in rows]
 ```
 
-### Template 3: Elasticsearch Hybrid Search
+To rerank, call `hybrid_search(..., limit=candidates)` and pass the rows to a cross-encoder
+(Template 5).
+
+### Template 3: Elasticsearch retrievers (8.16+, 9.x)
+
+The `rrf` retriever replaces the older `sub_searches` + `rank.rrf` request body. Whether RRF
+needs a paid license tier depends on the Elasticsearch version; check your deployment.
 
 ```python
 from elasticsearch import Elasticsearch
-from typing import List, Dict, Optional
+
 
 class ElasticsearchHybridSearch:
-    """Hybrid search with Elasticsearch and dense vectors."""
-
-    def __init__(
-        self,
-        es_client: Elasticsearch,
-        index_name: str = "documents"
-    ):
-        self.es = es_client
+    def __init__(self, es: Elasticsearch, index_name: str = "documents"):
+        self.es = es
         self.index_name = index_name
 
-    def create_index(self, vector_dims: int = 1536):
-        """Create index with dense vector and text fields."""
-        mapping = {
-            "mappings": {
+    def create_index(self, vector_dims: int):
+        if self.es.indices.exists(index=self.index_name):
+            return
+        self.es.indices.create(
+            index=self.index_name,
+            mappings={
                 "properties": {
-                    "content": {
-                        "type": "text",
-                        "analyzer": "english"
-                    },
+                    "content": {"type": "text", "analyzer": "english"},
                     "embedding": {
                         "type": "dense_vector",
                         "dims": vector_dims,
                         "index": True,
-                        "similarity": "cosine"
+                        "similarity": "cosine",
                     },
-                    "metadata": {
-                        "type": "object",
-                        "enabled": True
-                    }
+                    "metadata": {"type": "object"},
                 }
-            }
-        }
-        self.es.indices.create(index=self.index_name, body=mapping, ignore=400)
-
-    def hybrid_search(
-        self,
-        query: str,
-        query_embedding: List[float],
-        limit: int = 10,
-        boost_vector: float = 1.0,
-        boost_text: float = 1.0,
-        filter: Optional[Dict] = None
-    ) -> List[Dict]:
-        """
-        Hybrid search using Elasticsearch's built-in capabilities.
-        """
-        # Build the hybrid query
-        search_body = {
-            "size": limit,
-            "query": {
-                "bool": {
-                    "should": [
-                        # Vector search (kNN)
-                        {
-                            "script_score": {
-                                "query": {"match_all": {}},
-                                "script": {
-                                    "source": f"cosineSimilarity(params.query_vector, 'embedding') * {boost_vector} + 1.0",
-                                    "params": {"query_vector": query_embedding}
-                                }
-                            }
-                        },
-                        # Text search (BM25)
-                        {
-                            "match": {
-                                "content": {
-                                    "query": query,
-                                    "boost": boost_text
-                                }
-                            }
-                        }
-                    ],
-                    "minimum_should_match": 1
-                }
-            }
-        }
-
-        # Add filter if provided
-        if filter:
-            search_body["query"]["bool"]["filter"] = filter
-
-        response = self.es.search(index=self.index_name, body=search_body)
-
-        return [
-            {
-                "id": hit["_id"],
-                "content": hit["_source"]["content"],
-                "metadata": hit["_source"].get("metadata", {}),
-                "score": hit["_score"]
-            }
-            for hit in response["hits"]["hits"]
-        ]
+            },
+        )
 
     def hybrid_search_rrf(
         self,
         query: str,
-        query_embedding: List[float],
+        query_embedding: list[float],
         limit: int = 10,
-        window_size: int = 100
-    ) -> List[Dict]:
-        """
-        Hybrid search using Elasticsearch 8.x RRF.
-        """
-        search_body = {
-            "size": limit,
-            "sub_searches": [
-                {
-                    "query": {
-                        "match": {
-                            "content": query
-                        }
-                    }
-                },
-                {
-                    "query": {
-                        "knn": {
+        rank_window_size: int = 100,
+        filter: list[dict] | None = None,  # e.g. [{"term": {"metadata.source": "kb"}}]
+    ) -> list[dict]:
+        response = self.es.search(
+            index=self.index_name,
+            size=limit,
+            retriever={
+                "rrf": {
+                    "retrievers": [
+                        {"standard": {"query": {"bool": {
+                            "must": {"match": {"content": query}},
+                            "filter": filter or [],
+                        }}}},
+                        {"knn": {
                             "field": "embedding",
                             "query_vector": query_embedding,
-                            "k": window_size,
-                            "num_candidates": window_size * 2
-                        }
-                    }
+                            "k": rank_window_size,
+                            "num_candidates": rank_window_size * 2,
+                            "filter": filter or [],
+                        }},
+                    ],
+                    "rank_window_size": rank_window_size,
+                    "rank_constant": 60,
                 }
-            ],
-            "rank": {
-                "rrf": {
-                    "window_size": window_size,
-                    "rank_constant": 60
-                }
-            }
-        }
-
-        response = self.es.search(index=self.index_name, body=search_body)
-
+            },
+        )
         return [
-            {
-                "id": hit["_id"],
-                "content": hit["_source"]["content"],
-                "score": hit["_score"]
-            }
-            for hit in response["hits"]["hits"]
+            {"id": h["_id"], "content": h["_source"]["content"], "score": h["_score"]}
+            for h in response["hits"]["hits"]
         ]
 ```
 
-### Template 4: Custom Hybrid RAG Pipeline
+### Template 4: Native fusion in Qdrant and Weaviate
 
 ```python
-from typing import List, Dict, Optional, Callable
-from dataclasses import dataclass
+from qdrant_client import QdrantClient, models
+
+# Collection needs a named dense vector and a named sparse vector:
+#   vectors_config={"dense": models.VectorParams(size=DIM, distance=models.Distance.COSINE)},
+#   sparse_vectors_config={"sparse": models.SparseVectorParams()}
+def qdrant_hybrid(
+    client: QdrantClient,
+    collection: str,
+    dense: list[float],
+    sparse: models.SparseVector,  # e.g. from a BM25 / SPLADE encoder
+    limit: int = 10,
+    candidates: int = 50,
+):
+    return client.query_points(
+        collection_name=collection,
+        prefetch=[
+            models.Prefetch(query=dense, using="dense", limit=candidates),
+            models.Prefetch(query=sparse, using="sparse", limit=candidates),
+        ],
+        query=models.FusionQuery(fusion=models.Fusion.RRF),
+        limit=limit,
+    ).points
+```
+
+```python
+import weaviate
+from weaviate.classes.query import HybridFusion, MetadataQuery
+
+
+def weaviate_hybrid(
+    client: weaviate.WeaviateClient,
+    collection: str,
+    query: str,
+    query_vector: list[float],
+    alpha: float = 0.5,  # 0 = pure BM25, 1 = pure vector
+    limit: int = 10,
+):
+    response = client.collections.get(collection).query.hybrid(
+        query=query,
+        vector=query_vector,
+        alpha=alpha,
+        fusion_type=HybridFusion.RANKED,  # RRF-style; RELATIVE_SCORE = normalized linear
+        limit=limit,
+        return_metadata=MetadataQuery(score=True),
+    )
+    return [{"id": str(o.uuid), **o.properties, "score": o.metadata.score}
+            for o in response.objects]
+```
+
+Each engine scales its fused scores differently. Compare ranks across engines, not raw
+scores.
+
+### Template 5: Hybrid RAG pipeline with optional reranking
+
+Retriever objects are duck-typed: each needs an async `search(query_or_vector, limit,
+filter) -> list[dict]` returning dicts with `id` and `content`. The reranker is anything with
+`predict(list[tuple[str, str]]) -> list[float]`, for example
+`sentence_transformers.CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")` loaded once at
+startup.
+
+```python
+import asyncio
+from dataclasses import dataclass, field
+
+# reciprocal_rank_fusion from Template 1
+
 
 @dataclass
 class SearchResult:
     id: str
     content: str
     score: float
-    source: str  # "vector", "keyword", "hybrid"
-    metadata: Dict = None
+    metadata: dict = field(default_factory=dict)
 
 
 class HybridRAGPipeline:
-    """Complete hybrid search pipeline for RAG."""
-
-    def __init__(
-        self,
-        vector_store,
-        keyword_store,
-        embedder,
-        reranker=None,
-        fusion_method: str = "rrf",
-        vector_weight: float = 0.5
-    ):
+    def __init__(self, vector_store, keyword_store, embedder, reranker=None):
         self.vector_store = vector_store
         self.keyword_store = keyword_store
         self.embedder = embedder
         self.reranker = reranker
-        self.fusion_method = fusion_method
-        self.vector_weight = vector_weight
 
-    async def search(
-        self,
-        query: str,
-        top_k: int = 10,
-        filter: Optional[Dict] = None,
-        use_rerank: bool = True
-    ) -> List[SearchResult]:
-        """Execute hybrid search pipeline."""
-
-        # Step 1: Get query embedding
-        query_embedding = self.embedder.embed(query)
-
-        # Step 2: Execute parallel searches
-        vector_results, keyword_results = await asyncio.gather(
-            self._vector_search(query_embedding, top_k * 3, filter),
-            self._keyword_search(query, top_k * 3, filter)
+    async def search(self, query: str, top_k: int = 10, filter: dict | None = None,
+                     candidates: int = 50) -> list[SearchResult]:
+        query_embedding = await self.embedder.aembed_query(query)
+        vector_hits, keyword_hits = await asyncio.gather(
+            self.vector_store.search(query_embedding, candidates, filter),
+            self.keyword_store.search(query, candidates, filter),
         )
-
-        # Step 3: Fuse results
-        if self.fusion_method == "rrf":
-            fused = self._rrf_fusion(vector_results, keyword_results)
-        else:
-            fused = self._linear_fusion(vector_results, keyword_results)
-
-        # Step 4: Rerank if enabled
-        if use_rerank and self.reranker:
-            fused = await self._rerank(query, fused[:top_k * 2])
-
-        return fused[:top_k]
-
-    async def _vector_search(
-        self,
-        embedding: List[float],
-        limit: int,
-        filter: Dict
-    ) -> List[SearchResult]:
-        results = await self.vector_store.search(embedding, limit, filter)
-        return [
-            SearchResult(
-                id=r["id"],
-                content=r["content"],
-                score=r["score"],
-                source="vector",
-                metadata=r.get("metadata")
-            )
-            for r in results
+        by_id = {h["id"]: h for h in keyword_hits} | {h["id"]: h for h in vector_hits}
+        fused = reciprocal_rank_fusion(
+            [[h["id"] for h in vector_hits], [h["id"] for h in keyword_hits]]
+        )
+        results = [
+            SearchResult(id=d, content=by_id[d]["content"], score=s,
+                         metadata=by_id[d].get("metadata", {}))
+            for d, s in fused
         ]
-
-    async def _keyword_search(
-        self,
-        query: str,
-        limit: int,
-        filter: Dict
-    ) -> List[SearchResult]:
-        results = await self.keyword_store.search(query, limit, filter)
-        return [
-            SearchResult(
-                id=r["id"],
-                content=r["content"],
-                score=r["score"],
-                source="keyword",
-                metadata=r.get("metadata")
+        if self.reranker and results:
+            pool = results[: max(top_k * 2, top_k)]
+            scores = await asyncio.to_thread(
+                self.reranker.predict, [(query, r.content) for r in pool]
             )
-            for r in results
-        ]
-
-    def _rrf_fusion(
-        self,
-        vector_results: List[SearchResult],
-        keyword_results: List[SearchResult]
-    ) -> List[SearchResult]:
-        """Fuse with RRF."""
-        k = 60
-        scores = {}
-        content_map = {}
-
-        for rank, result in enumerate(vector_results):
-            scores[result.id] = scores.get(result.id, 0) + 1 / (k + rank + 1)
-            content_map[result.id] = result
-
-        for rank, result in enumerate(keyword_results):
-            scores[result.id] = scores.get(result.id, 0) + 1 / (k + rank + 1)
-            if result.id not in content_map:
-                content_map[result.id] = result
-
-        sorted_ids = sorted(scores.keys(), key=lambda x: scores[x], reverse=True)
-
-        return [
-            SearchResult(
-                id=doc_id,
-                content=content_map[doc_id].content,
-                score=scores[doc_id],
-                source="hybrid",
-                metadata=content_map[doc_id].metadata
-            )
-            for doc_id in sorted_ids
-        ]
-
-    async def _rerank(
-        self,
-        query: str,
-        results: List[SearchResult]
-    ) -> List[SearchResult]:
-        """Rerank with cross-encoder."""
-        if not results:
-            return results
-
-        pairs = [(query, r.content) for r in results]
-        scores = self.reranker.predict(pairs)
-
-        for result, score in zip(results, scores):
-            result.score = float(score)
-
-        return sorted(results, key=lambda x: x.score, reverse=True)
+            for r, s in zip(pool, scores):
+                r.score = float(s)
+            results = sorted(pool, key=lambda r: r.score, reverse=True)
+        return results[:top_k]
 ```

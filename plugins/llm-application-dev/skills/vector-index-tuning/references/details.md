@@ -1,5 +1,9 @@
 # vector-index-tuning — templates and worked examples
 
+Verified against hnswlib 0.8, numpy 2.x and qdrant-client 1.20 (2026-10-27). Every number
+below is a starting point for a benchmark on your own vectors and queries, not a measured
+result.
+
 ## Templates
 
 ### Template 1: HNSW Parameter Tuning
@@ -103,15 +107,29 @@ def recommend_hnsw_params(
         "M": m,
         "ef_construction": ef_construction,
         "ef_search": ef_search,
-        "notes": f"Estimated for {num_vectors:,} vectors, {target_recall:.0%} recall"
+        "notes": "Starting point only; confirm with benchmark_hnsw_parameters on real queries",
     }
+
+
+if __name__ == "__main__":
+    rng = np.random.default_rng(0)
+    vecs = rng.standard_normal((2000, 32)).astype(np.float32)
+    qs = rng.standard_normal((20, 32)).astype(np.float32)
+    # Exact cosine ground truth
+    vn = vecs / np.linalg.norm(vecs, axis=1, keepdims=True)
+    qn = qs / np.linalg.norm(qs, axis=1, keepdims=True)
+    truth = np.argsort(-(qn @ vn.T), axis=1)[:, :10]
+    rows = benchmark_hnsw_parameters(vecs, qs, truth, m_values=[16],
+                                     ef_construction_values=[100], ef_search_values=[10, 200])
+    assert rows[1]["recall@10"] >= rows[0]["recall@10"]
+    assert rows[1]["recall@10"] > 0.9
 ```
 
 ### Template 2: Quantization Strategies
 
 ```python
 import numpy as np
-from typing import Optional
+from typing import Optional, Tuple
 
 class VectorQuantizer:
     """Quantization strategies for vector compression."""
@@ -202,7 +220,8 @@ def estimate_memory_usage(
     dimensions: int,
     quantization: str = "fp32",
     index_type: str = "hnsw",
-    hnsw_m: int = 16
+    hnsw_m: int = 16,
+    ivf_nlist: int = 4096
 ) -> dict:
     """Estimate memory usage for different configurations."""
 
@@ -223,7 +242,7 @@ def estimate_memory_usage(
         index_bytes = num_vectors * hnsw_m * 2 * 4
     elif index_type == "ivf":
         # Inverted lists + centroids
-        index_bytes = num_vectors * 8 + 65536 * dimensions * 4
+        index_bytes = num_vectors * 8 + ivf_nlist * dimensions * 4
     else:
         index_bytes = 0
 
@@ -240,8 +259,7 @@ def estimate_memory_usage(
 ### Template 3: Qdrant Index Configuration
 
 ```python
-from qdrant_client import QdrantClient
-from qdrant_client.http import models
+from qdrant_client import QdrantClient, models
 
 def create_optimized_collection(
     client: QdrantClient,
@@ -321,8 +339,9 @@ def tune_search_parameters(
     client: QdrantClient,
     collection_name: str,
     target_recall: float = 0.95
-) -> dict:
-    """Tune search parameters for target recall."""
+) -> models.SearchParams:
+    """Pick search parameters for a recall target. Verify recall against exact search
+    (SearchParams(exact=True)) on a sample of real queries."""
 
     # Search parameter recommendations
     if target_recall >= 0.99:
@@ -355,6 +374,23 @@ def tune_search_parameters(
         )
 
     return search_params
+
+
+if __name__ == "__main__":
+    import random
+
+    client = QdrantClient(":memory:")
+    create_optimized_collection(client, "docs", vector_size=8, num_vectors=100)
+    client.upsert("docs", points=[
+        models.PointStruct(id=i, vector=[random.random() for _ in range(8)]) for i in range(100)
+    ])
+    query = [random.random() for _ in range(8)]
+    approx = client.query_points("docs", query=query, limit=10,
+                                 search_params=tune_search_parameters(client, "docs")).points
+    exact = client.query_points("docs", query=query, limit=10,
+                                search_params=models.SearchParams(exact=True)).points
+    recall = len({p.id for p in approx} & {p.id for p in exact}) / 10
+    assert recall > 0.9, recall
 ```
 
 ### Template 4: Performance Monitoring

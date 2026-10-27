@@ -393,7 +393,7 @@
     },
     {
       "name": "llm-application-dev",
-      "description": "LLM application development with LangGraph, RAG systems, vector search, and AI agent architectures for Claude 4.6 and GPT-5.4",
+      "description": "LLM application development with LangGraph, RAG systems, vector search, and agents built on LangChain 1.x",
       "source": {
         "source": "local",
         "path": "./plugins/llm-application-dev"
