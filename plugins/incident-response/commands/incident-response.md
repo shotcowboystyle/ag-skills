@@ -622,32 +622,104 @@ Update `state.json`: set `current_step` to 12, add step 11 to `completed_steps`.
 
 ### Step 12: Monitoring Enhancement
 
+Step 12 has three parts: propose the monitoring changes, get approval, then apply them. Nothing changes production monitoring, alerting or SLOs before the approval gate.
+
+#### Step 12a: Monitoring Proposal
+
 Read `.incident-response/05-investigation.md` and `.incident-response/10-postmortem.md`.
 
 ```
 Task:
   subagent_type: "general-purpose"
-  description: "Enhance monitoring for: $INCIDENT prevention"
+  description: "Propose monitoring changes for: $INCIDENT prevention"
   prompt: |
-    You are an observability engineer. Enhance monitoring to prevent recurrence of this incident.
+    You are an observability engineer. Propose monitoring changes to prevent recurrence of
+    this incident. Do not create, edit, silence or delete alerts, SLOs, dashboards or
+    runbooks, and do not run chaos experiments; read-only queries of the current
+    configuration and metrics are fine.
 
     Investigation: [Insert contents of .incident-response/05-investigation.md]
     Postmortem: [Insert contents of .incident-response/10-postmortem.md]
 
-    Implement:
+    Propose:
     1. New alerts for early detection
     2. SLI/SLO adjustments if needed
     3. Dashboard improvements for visibility
     4. Runbook automation opportunities
-    5. Chaos engineering scenarios for testing
+    5. Chaos engineering scenarios for testing (designs only; they are never run by this command)
 
-    Ensure alerts are actionable and reduce noise.
+    Ensure alerts are actionable and reduce noise. For each alert, SLO, dashboard and
+    runbook change, give: its expected effect (including who it pages), how to undo it,
+    and the exact change (config diff or command) to apply it and to undo it.
 
     Provide structured output with: NEW_ALERTS, SLO_ADJUSTMENTS, DASHBOARD_UPDATES,
-    RUNBOOK_AUTOMATION, CHAOS_SCENARIOS.
+    RUNBOOK_AUTOMATION, CHAOS_SCENARIOS, EXPECTED_EFFECT, UNDO_PROCEDURES, CHANGES.
 ```
 
-Save output to `.incident-response/11-monitoring.md`.
+Save output to `.incident-response/11-monitoring.md` under a `## Monitoring Proposal` heading.
+
+Update `state.json`: set `current_step` to "12-approval".
+
+#### MONITORING GATE — User Approval Required
+
+You MUST stop here. Display the proposal from `.incident-response/11-monitoring.md` and ask:
+
+```
+Monitoring proposal ready. Please review .incident-response/11-monitoring.md
+
+Changes: [alerts, SLOs, dashboards, runbooks from proposal]
+Expected effect: [from proposal]
+Undo: [from proposal]
+
+1. Approve — apply these changes to production monitoring
+2. Request changes — revise the proposal
+3. Skip — keep the proposal on file and apply nothing
+4. Pause — save progress and stop here (nothing changed)
+```
+
+Only an explicit approval continues to Step 12b. On approval, ask for the approver's name if you don't already know it, then append to `.incident-response/11-monitoring.md`:
+
+```markdown
+## Approval
+
+- Approved by: [name]
+- Approved at: [ISO timestamp]
+- Proposal approved: Monitoring Proposal above, unchanged
+```
+
+Update `state.json`: set `current_step` to "12-execute".
+
+On skip, append `## Approval` with `- Decision: skipped, nothing applied`, then update `state.json`: set `current_step` to 13, add step 12 to `completed_steps`, and go to Step 13.
+
+Do NOT apply any part of the proposal until this approval is recorded.
+
+#### Step 12b: Apply Monitoring Changes
+
+Read `.incident-response/11-monitoring.md` and confirm it has an `## Approval` section recording an approver. If it doesn't, return to the monitoring gate.
+
+```
+Task:
+  subagent_type: "general-purpose"
+  description: "Apply approved monitoring changes for: $INCIDENT"
+  prompt: |
+    You are an observability engineer. Apply the approved monitoring changes below exactly
+    as written.
+
+    Approved proposal: [Insert contents of .incident-response/11-monitoring.md]
+
+    Rules:
+    1. Apply only the changes in the proposal, in order. If a change needs anything else,
+       stop and report instead of improvising.
+    2. Do not run any chaos scenario. They are designs only.
+    3. After each change, check that it took effect and did not fire unexpected pages.
+    4. If a change misbehaves, apply its undo and stop.
+    5. Record each change, its output and the check result.
+
+    Provide structured output with: APPLIED_CHANGES, VERIFICATION_RESULTS,
+    UNDONE_CHANGES, MONITORING_STATUS_AFTER.
+```
+
+Append the output to `.incident-response/11-monitoring.md` under a `## Execution` heading.
 
 Update `state.json`: set `current_step` to 13, add step 12 to `completed_steps`.
 
@@ -715,7 +787,7 @@ Incident response complete: $INCIDENT
 ## Immediate Follow-ups
 1. Verify service stability over the next 24 hours
 2. Complete all postmortem action items
-3. Deploy monitoring enhancements within 1 week
+3. Apply any monitoring changes skipped at the monitoring gate within 1 week
 4. Schedule system hardening work
 5. Conduct team learning session on lessons learned
 
