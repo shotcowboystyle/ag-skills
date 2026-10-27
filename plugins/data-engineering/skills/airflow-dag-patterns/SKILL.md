@@ -1,115 +1,112 @@
 ---
 name: airflow-dag-patterns
-description: Build production Apache Airflow DAGs with best practices for operators, sensors, testing, and deployment. Use when creating data pipelines, orchestrating workflows, or scheduling batch jobs.
+description: Write, test or upgrade Apache Airflow 3 DAGs with the Task SDK (`airflow.sdk`), TaskFlow tasks, timetables and asset scheduling, dynamic task mapping, deferrable sensors, retries and failure callbacks. Use when the task is an Airflow DAG, an Airflow operator or sensor, or an Airflow 2 to 3 migration. For SQL models built inside the warehouse use dbt-transformation-patterns; for slow Spark jobs use spark-optimization.
+last_verified: 2026-10-27
 ---
 
-# Apache Airflow DAG Patterns
+# Airflow DAG Patterns
 
-Production-ready patterns for Apache Airflow including DAG design, operators, sensors, testing, and deployment strategies.
+Write Airflow 3 DAGs that are idempotent, cheap to parse, and tested before deploy. Examples
+are checked against Airflow 3.3.
 
-## When to Use This Skill
+## Procedure
 
-- Creating data pipeline orchestration with Airflow
-- Designing DAG structures and dependencies
-- Implementing custom operators and sensors
-- Testing Airflow DAGs locally
-- Setting up Airflow in production
-- Debugging failed DAG runs
+1. **Check the version.** Run `airflow version`. This skill targets 3.x. On 2.x, upgrade first:
+   install `apache-airflow-providers-standard`, then run `ruff check dags/ --select AIR301,AIR302`
+   (ruff 0.13.1 or later) and fix what it reports. `--fix` applies the safe rewrites.
+2. **Pick the trigger.** Use a cron string or timetable when the DAG runs on a clock. Use
+   `schedule=[Asset(...)]` when it should run after another DAG writes data, instead of an
+   `ExternalTaskSensor`. Use `schedule=None` for DAGs that are only triggered manually or by API.
+3. **Decide what a run processes.** In Airflow 3 a plain cron string uses
+   `CronTriggerTimetable`, so `data_interval_start == data_interval_end == logical_date` and
+   `ds` is the day the run fires, not the day before. If each run processes the period that just
+   closed, use `CronDataIntervalTimetable` (quick start below) and read `data_interval_start` and
+   `data_interval_end`. Manual and asset-triggered runs can have no `logical_date`.
+4. **Write tasks with TaskFlow** (`@task`). Keep task bodies short and import the real logic
+   from a module. Pass small values between tasks (paths, IDs, row counts). XCom is stored in
+   the metadata database, so write datasets to storage and pass their location.
+5. **Make every task idempotent.** A retry or a backfill of the same interval must leave the
+   same result: overwrite or merge the interval's partition, never append blindly.
+6. **Set failure behavior.** In `default_args`, set `retries`, `retry_delay` and
+   `execution_timeout`. Add an `on_failure_callback` (a provider notifier such as
+   `SlackNotifier`) at the DAG level. For a sensor, set `timeout` and `deferrable=True` where
+   the sensor supports it, otherwise `mode="reschedule"`.
+7. **Keep top-level code cheap.** The DAG processor re-parses every file. No network calls, no
+   database queries and no `Variable.get()` at module level. Use templates such as
+   `{{ var.value.name }}` or read variables inside a task.
+8. **Test before you deploy.** Run `python dags/<file>.py` to catch import errors, a DagBag test
+   for every file in `dags/`, and `dag.test()` or `airflow dags test <dag_id> <date>` for one full
+   run. See `references/details.md` for the test file.
+9. **Stop when** the DagBag test has no import errors, one `dag.test()` run succeeds, and a
+   second run of the same interval leaves the target unchanged.
 
-## Core Concepts
+Report back with the DAG IDs, their schedule and what each run processes, the retry and alert
+settings, and the test commands with their results.
 
-### 1. DAG Design Principles
+## Airflow 2 to 3 changes that break DAGs
 
-| Principle       | Description                         |
-| --------------- | ----------------------------------- |
-| **Idempotent**  | Running twice produces same result  |
-| **Atomic**      | Tasks succeed or fail completely    |
-| **Incremental** | Process only new/changed data       |
-| **Observable**  | Logs, metrics, alerts at every step |
-
-### 2. Task Dependencies
-
-```python
-# Linear
-task1 >> task2 >> task3
-
-# Fan-out
-task1 >> [task2, task3, task4]
-
-# Fan-in
-[task1, task2, task3] >> task4
-
-# Complex
-task1 >> task2 >> task4
-task1 >> task3 >> task4
-```
+| Airflow 2 | Airflow 3 |
+| --- | --- |
+| `from airflow.decorators import dag, task` | `from airflow.sdk import dag, task` |
+| `from airflow import DAG`, `airflow.models.dag.DAG` | `from airflow.sdk import DAG` |
+| `airflow.models.Variable`, `airflow.hooks.base.BaseHook` | `airflow.sdk.Variable`, `airflow.sdk.BaseHook` |
+| `airflow.datasets.Dataset` | `airflow.sdk.Asset` |
+| `airflow.operators.python.PythonOperator`, `airflow.operators.empty.EmptyOperator`, `airflow.sensors.external_task.ExternalTaskSensor` | same names under `airflow.providers.standard.operators.*` and `airflow.providers.standard.sensors.*` |
+| `execution_date`, `next_ds`, `prev_ds`, `yesterday_ds`, `tomorrow_ds` in the context | `logical_date`, `data_interval_start`, `data_interval_end` |
+| `schedule_interval=` | `schedule=` |
+| `catchup` defaults to `True` | defaults to `False` |
+| SubDAGs, `sla=` | task groups, Deadline Alerts |
+| `from airflow.settings import Session` or ORM models in a task | not allowed; use the REST API (`apache-airflow-client`) |
 
 ## Quick Start
 
 ```python
-# dags/example_dag.py
-from datetime import datetime, timedelta
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.operators.empty import EmptyOperator
+# dags/orders_daily.py
+from datetime import timedelta
 
-default_args = {
-    'owner': 'data-team',
-    'depends_on_past': False,
-    'email_on_failure': True,
-    'email_on_retry': False,
-    'retries': 3,
-    'retry_delay': timedelta(minutes=5),
-    'retry_exponential_backoff': True,
-    'max_retry_delay': timedelta(hours=1),
-}
+import pendulum
+from airflow.sdk import CronDataIntervalTimetable, dag, task
 
-with DAG(
-    dag_id='example_etl',
-    default_args=default_args,
-    description='Example ETL pipeline',
-    schedule='0 6 * * *',  # Daily at 6 AM
-    start_date=datetime(2024, 1, 1),
+
+@dag(
+    schedule=CronDataIntervalTimetable("0 6 * * *", timezone="UTC"),
+    start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
     catchup=False,
-    tags=['etl', 'example'],
     max_active_runs=1,
-) as dag:
+    default_args={
+        "retries": 3,
+        "retry_delay": timedelta(minutes=5),
+        "retry_exponential_backoff": True,
+        "execution_timeout": timedelta(hours=1),
+    },
+    tags=["orders"],
+)
+def orders_daily():
+    @task
+    def extract(data_interval_start=None) -> str:
+        # Context values are injected by parameter name.
+        day = data_interval_start.strftime("%Y-%m-%d")
+        return f"s3://raw/orders/dt={day}/"
 
-    start = EmptyOperator(task_id='start')
+    @task
+    def transform(path: str) -> str:
+        return path.replace("/raw/", "/clean/")
 
-    def extract_data(**context):
-        execution_date = context['ds']
-        # Extract logic here
-        return {'records': 1000}
+    @task
+    def load(path: str) -> None:
+        print(f"merging {path} into analytics.orders")
 
-    extract = PythonOperator(
-        task_id='extract',
-        python_callable=extract_data,
-    )
+    load(transform(extract()))
 
-    end = EmptyOperator(task_id='end')
 
-    start >> extract >> end
+orders_daily()
 ```
 
-## Detailed patterns and worked examples
+Each run fires at 06:00 UTC and processes the previous day: `data_interval_start` is 06:00 the
+day before.
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+## References
 
-## Best Practices
-
-### Do's
-
-- **Use TaskFlow API** - Cleaner code, automatic XCom
-- **Set timeouts** - Prevent zombie tasks
-- **Use `mode='reschedule'`** - For sensors, free up workers
-- **Test DAGs** - Unit tests and integration tests
-- **Idempotent tasks** - Safe to retry
-
-### Don'ts
-
-- **Don't use `depends_on_past=True`** - Creates bottlenecks
-- **Don't hardcode dates** - Use `{{ ds }}` macros
-- **Don't use global state** - Tasks should be stateless
-- **Don't skip catchup blindly** - Understand implications
-- **Don't put heavy logic in DAG file** - Import from modules
+- `references/details.md`: asset scheduling, dynamic task mapping, branching, deferrable and
+  custom sensors, failure callbacks, a classic-operator DAG, DagBag and task tests, and the
+  project layout.
