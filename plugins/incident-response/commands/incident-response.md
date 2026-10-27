@@ -126,32 +126,98 @@ Update `state.json`: set `current_step` to 3, add step 2 to `completed_steps`.
 
 ### Step 3: Initial Mitigation
 
+Step 3 has three parts: propose the mitigation, get approval, then execute. Nothing touches production before the approval gate.
+
+#### Step 3a: Mitigation Proposal
+
 Read `.incident-response/01-classification.md` and `.incident-response/02-observability.md`.
 
 ```
 Task:
   subagent_type: "incident-response-incident-responder"
-  description: "Immediate mitigation for: $INCIDENT"
+  description: "Propose mitigation for: $INCIDENT"
   prompt: |
-    Implement immediate mitigation for this incident.
+    Propose immediate mitigation for this incident. Do not throttle, reroute, flip flags,
+    trip circuit breakers, roll back, restart or scale anything; read-only checks of the
+    current state are fine.
 
     Classification: [Insert contents of .incident-response/01-classification.md]
     Observability: [Insert contents of .incident-response/02-observability.md]
 
-    Actions to evaluate and implement:
+    Actions to evaluate:
     1. Traffic throttling/rerouting if needed
     2. Feature flag disabling for affected features
     3. Circuit breaker activation
-    4. Rollback assessment for recent deployments
+    4. Rollback of recent deployments
     5. Scale resources if capacity-related
 
-    Prioritize user experience restoration.
+    Prioritize user experience restoration. For each action you recommend, give:
+    the order to run it in, its expected effect, its blast radius, how to undo it,
+    and the exact commands to run it and to undo it.
+
+    Provide structured output with: MITIGATION_ACTIONS, EXPECTED_EFFECT, BLAST_RADIUS,
+    UNDO_PROCEDURES, COMMANDS.
+```
+
+Save output to `.incident-response/03-mitigation.md` under a `## Mitigation Proposal` heading.
+
+Update `state.json`: set `current_step` to "3-approval".
+
+#### MITIGATION GATE — User Approval Required
+
+You MUST stop here. Display the proposal from `.incident-response/03-mitigation.md` and ask:
+
+```
+Mitigation proposal ready. Please review .incident-response/03-mitigation.md
+
+Actions (in order): [from proposal]
+Expected effect: [from proposal]
+Undo: [from proposal]
+
+1. Approve — run this mitigation in production
+2. Request changes — revise the proposal
+3. Pause — save progress and stop here (nothing changed)
+```
+
+Only an explicit approval continues. On approval, ask for the approver's name if you don't already know it, then append to `.incident-response/03-mitigation.md`:
+
+```markdown
+## Approval
+
+- Approved by: [name]
+- Approved at: [ISO timestamp]
+- Proposal approved: Mitigation Proposal above, unchanged
+```
+
+Update `state.json`: set `current_step` to "3-execute".
+
+Do NOT run any part of the mitigation until this approval is recorded.
+
+#### Step 3b: Execute and Verify
+
+Read `.incident-response/03-mitigation.md` and confirm it has an `## Approval` section. If it doesn't, return to the mitigation gate.
+
+```
+Task:
+  subagent_type: "general-purpose"
+  description: "Execute approved mitigation for: $INCIDENT"
+  prompt: |
+    You are an SRE on incident duty. Execute the approved mitigation below exactly as written.
+
+    Approved mitigation: [Insert contents of .incident-response/03-mitigation.md]
+
+    Rules:
+    1. Run only the commands in the proposal, in order. If a step needs anything else, stop
+       and report instead of improvising.
+    2. After each action, check that it had the expected effect.
+    3. If an action makes things worse, run its undo command and stop.
+    4. Record each command, its output and the check result.
 
     Provide structured output with: MITIGATION_ACTIONS, TEMPORARY_FIXES,
     ROLLBACK_DECISIONS, SERVICE_STATUS_AFTER, USER_IMPACT_REDUCTION.
 ```
 
-Save output to `.incident-response/03-mitigation.md`.
+Append the output to `.incident-response/03-mitigation.md` under a `## Execution` heading.
 
 Update `state.json`: set `current_step` to "checkpoint-1", add step 3 to `completed_steps`.
 
