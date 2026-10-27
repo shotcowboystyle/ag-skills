@@ -334,7 +334,7 @@
     {
       "name": "developer-essentials",
       "source": "./plugins/developer-essentials",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "description": "Essential developer skills including Git workflows, SQL optimization, error handling, code review, E2E testing, authentication, debugging, and monorepo management",
       "author": {
         "name": "Curtis Blanton",

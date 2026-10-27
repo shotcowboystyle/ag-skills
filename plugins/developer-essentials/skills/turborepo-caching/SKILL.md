@@ -1,131 +1,155 @@
 ---
 name: turborepo-caching
-description: Configure Turborepo for efficient monorepo builds with local and remote caching. Use when setting up Turborepo, optimizing build pipelines, or implementing distributed caching.
+description: Configure Turborepo 2 for efficient monorepo builds with local and remote caching. Use when setting up Turborepo, writing turbo.json tasks, debugging cache misses, or wiring a remote cache into CI.
+last_verified: 2026-10-27
 ---
 
 # Turborepo Caching
 
-Production patterns for Turborepo build optimization.
+Patterns for Turborepo 2.x (`turbo` 2.11 at last check). Monorepo layout and
+pnpm workspaces are covered by the `monorepo-management` skill.
 
 ## When to Use This Skill
 
-- Setting up new Turborepo projects
-- Configuring build pipelines
-- Implementing remote caching
-- Optimizing CI/CD performance
-- Migrating from other monorepo tools
+- Writing or migrating `turbo.json`
+- Enabling remote caching locally and in CI
+- Running only affected packages in CI
 - Debugging cache misses
 
-## Core Concepts
+## Turborepo 1.x → 2.x
 
-### 1. Turborepo Architecture
+Turborepo 2 renamed the top-level `pipeline` key to `tasks` and rejects a
+`turbo.json` that still uses `pipeline`. Environment variables run in strict
+mode by default: a task only sees variables listed in `env`, `globalEnv` or
+`passThroughEnv`. Upgrade a 1.x repo with:
 
-```
-Workspace Root/
-├── apps/
-│   ├── web/
-│   │   └── package.json
-│   └── docs/
-│       └── package.json
-├── packages/
-│   ├── ui/
-│   │   └── package.json
-│   └── config/
-│       └── package.json
-├── turbo.json
-└── package.json
+```bash
+npx @turbo/codemod migrate
 ```
 
-### 2. Pipeline Concepts
+## Task Options
 
-| Concept        | Description                      |
-| -------------- | -------------------------------- |
-| **dependsOn**  | Tasks that must complete first   |
-| **cache**      | Whether to cache outputs         |
-| **outputs**    | Files to cache                   |
-| **inputs**     | Files that affect cache key      |
-| **persistent** | Long-running tasks (dev servers) |
+| Option           | Meaning                                                        |
+| ---------------- | -------------------------------------------------------------- |
+| `dependsOn`      | `^build` = build dependencies first; `build` = same package    |
+| `outputs`        | Files to cache. Omit for tasks that only produce logs          |
+| `inputs`         | Files that affect the hash. `$TURBO_DEFAULT$` = git-tracked    |
+| `env`            | Env vars that affect the hash and are passed to the task       |
+| `cache`          | `false` for tasks with side effects (deploy, db push)          |
+| `persistent`     | Long-running task (dev server); nothing can depend on it       |
 
-## Templates
-
-### Template 1: turbo.json Configuration
+## Root turbo.json
 
 ```json
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [".env", ".env.local"],
-  "globalEnv": ["NODE_ENV", "VERCEL_URL"],
-  "pipeline": {
+  "$schema": "https://turborepo.dev/schema.json",
+  "globalDependencies": [".env"],
+  "globalEnv": ["NODE_ENV"],
+  "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "!**/*.md", "!**/*.test.*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
       "env": ["API_URL", "NEXT_PUBLIC_*"]
     },
     "test": {
-      "dependsOn": ["build"],
-      "outputs": ["coverage/**"],
-      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts"]
-    },
-    "lint": {
-      "outputs": [],
-      "cache": true
-    },
-    "typecheck": {
       "dependsOn": ["^build"],
-      "outputs": []
+      "outputs": ["coverage/**"],
+      "env": ["CI"]
+    },
+    "lint": {},
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "@repo/web#build": {
+      "dependsOn": ["^build", "@repo/db#db:generate"]
+    },
+    "deploy": {
+      "dependsOn": ["build", "test", "lint"],
+      "cache": false
     },
     "dev": {
       "cache": false,
       "persistent": true
-    },
-    "clean": {
-      "cache": false
     }
   }
 }
 ```
 
-### Template 2: Package-Specific Pipeline
+## Package Configuration
+
+A `turbo.json` inside a package overrides the root for that package only.
+`extends` must start with `"//"` (the root).
 
 ```json
-// apps/web/turbo.json
 {
-  "$schema": "https://turbo.build/schema.json",
+  "$schema": "https://turborepo.dev/schema.json",
   "extends": ["//"],
-  "pipeline": {
+  "tasks": {
     "build": {
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["NEXT_PUBLIC_API_URL", "NEXT_PUBLIC_ANALYTICS_ID"]
-    },
-    "test": {
-      "outputs": ["coverage/**"],
-      "inputs": ["src/**", "tests/**", "jest.config.js"]
+      "env": ["NEXT_PUBLIC_API_URL"]
     }
   }
 }
 ```
 
-### Template 3: Remote Caching with Vercel
+## Remote Caching
+
+### Vercel Remote Cache
 
 ```bash
-# Login to Vercel
 npx turbo login
-
-# Link to Vercel project
 npx turbo link
-
-# Run with remote cache
-turbo build --remote-only
-
-# CI environment variables
-TURBO_TOKEN=your-token
-TURBO_TEAM=your-team
 ```
 
-```yaml
-# .github/workflows/ci.yml
-name: CI
+In CI, set `TURBO_TOKEN` (secret) and `TURBO_TEAM` (team slug). Control cache
+sources with `--cache` (default `local:rw,remote:rw`); `--remote-only` is
+deprecated.
 
+```bash
+# CI that reads the remote cache but never writes it (e.g. fork PRs)
+turbo run build --cache=local:rw,remote:r
+
+# Skip the local cache, use only the remote cache
+turbo run build --cache=remote:rw
+```
+
+### Self-hosted Remote Cache
+
+Turborepo talks to any server that implements its Remote Cache HTTP API. Run a
+maintained implementation (for example `ducktors/turborepo-remote-cache`) rather
+than writing one: a cache server stores executable build output, so it needs
+authentication, path validation and access control. Point Turborepo at it:
+
+```bash
+export TURBO_API="https://turbo-cache.internal.example.com"
+export TURBO_TOKEN="$CACHE_TOKEN"   # bearer token the server checks
+export TURBO_TEAM="my-team"
+turbo run build
+```
+
+Or set `remoteCache.apiUrl` in `turbo.json`. Enable artifact signing so
+corrupted or partial uploads are rejected:
+
+```json
+{
+  "remoteCache": { "signature": true }
+}
+```
+
+With `signature: true`, Turborepo signs uploads with HMAC-SHA256 using
+`TURBO_REMOTE_CACHE_SIGNATURE_KEY` (use at least 32 bytes) and rejects artifacts
+with a missing or bad signature. This checks integrity; it does not replace
+server authentication.
+
+## CI (GitHub Actions)
+
+```yaml
+name: CI
 on:
   push:
     branches: [main]
@@ -139,233 +163,51 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
         with:
-          node-version: 20
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npx turbo build --filter='...[origin/main]'
-
-      - name: Test
-        run: npx turbo test --filter='...[origin/main]'
+          fetch-depth: 0 # --affected needs history back to the base branch
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run build test lint --affected
 ```
 
-### Template 4: Self-Hosted Remote Cache
+`--affected` equals `--filter=...[main...HEAD]`. Override the base with
+`TURBO_SCM_BASE`. A shallow checkout makes every package look changed.
 
-```typescript
-// Custom remote cache server (Express)
-import express from "express";
-import { createReadStream, createWriteStream } from "fs";
-import { mkdir } from "fs/promises";
-import { join } from "path";
-
-const app = express();
-const CACHE_DIR = "./cache";
-
-// Get artifact
-app.get("/v8/artifacts/:hash", async (req, res) => {
-  const { hash } = req.params;
-  const team = req.query.teamId || "default";
-  const filePath = join(CACHE_DIR, team, hash);
-
-  try {
-    const stream = createReadStream(filePath);
-    stream.pipe(res);
-  } catch {
-    res.status(404).send("Not found");
-  }
-});
-
-// Put artifact
-app.put("/v8/artifacts/:hash", async (req, res) => {
-  const { hash } = req.params;
-  const team = req.query.teamId || "default";
-  const dir = join(CACHE_DIR, team);
-  const filePath = join(dir, hash);
-
-  await mkdir(dir, { recursive: true });
-
-  const stream = createWriteStream(filePath);
-  req.pipe(stream);
-
-  stream.on("finish", () => {
-    res.json({
-      urls: [`${req.protocol}://${req.get("host")}/v8/artifacts/${hash}`],
-    });
-  });
-});
-
-// Check artifact exists
-app.head("/v8/artifacts/:hash", async (req, res) => {
-  const { hash } = req.params;
-  const team = req.query.teamId || "default";
-  const filePath = join(CACHE_DIR, team, hash);
-
-  try {
-    await fs.access(filePath);
-    res.status(200).end();
-  } catch {
-    res.status(404).end();
-  }
-});
-
-app.listen(3000, "127.0.0.1");
-```
-
-```json
-// turbo.json for the local cache demo
-{
-  "remoteCache": {
-    "signature": false
-  }
-}
-```
+## Filtering
 
 ```bash
-# This local demo does not authenticate the dummy token.
-# Use only disposable artifacts on a trusted machine; do not expose the server.
-turbo build --api="http://127.0.0.1:3000" --token="my-token" --team="my-team"
+turbo run build --filter=@repo/web        # one package
+turbo run build --filter=@repo/web...     # package and its dependencies
+turbo run build --filter=...@repo/ui      # package and its dependents
+turbo run build --filter='./apps/*'       # by directory
+turbo run build --filter='!@repo/docs'    # exclude
+turbo run build --filter='...[HEAD^1]'    # changed since a commit, plus dependents
 ```
 
-### Template 5: Filtering and Scoping
+## Debugging Cache Misses
 
 ```bash
-# Build specific package
-turbo build --filter=@myorg/web
-
-# Build package and its dependencies
-turbo build --filter=@myorg/web...
-
-# Build package and its dependents
-turbo build --filter=...@myorg/ui
-
-# Build changed packages since main
-turbo build --filter='...[origin/main]'
-
-# Build packages in directory
-turbo build --filter='./apps/*'
-
-# Combine filters
-turbo build --filter=@myorg/web --filter=@myorg/docs
-
-# Exclude package
-turbo build --filter='!@myorg/docs'
-
-# Include dependencies of changed
-turbo build --filter='...[HEAD^1]...'
+turbo run build --dry=json        # hashes and inputs without running
+turbo run build --summarize       # writes .turbo/runs/<id>.json; diff two runs
+turbo run build --graph=graph.svg # task graph (svg, html, mermaid, dot)
+turbo run build --force           # ignore cache reads
+turbo run build -vv               # debug logging
 ```
 
-### Template 6: Advanced Pipeline Configuration
-
-```json
-{
-  "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
-      "inputs": ["$TURBO_DEFAULT$", "!**/*.md", "!**/*.test.*"]
-    },
-    "test": {
-      "dependsOn": ["^build"],
-      "outputs": ["coverage/**"],
-      "inputs": ["src/**", "tests/**", "*.config.*"],
-      "env": ["CI", "NODE_ENV"]
-    },
-    "test:e2e": {
-      "dependsOn": ["build"],
-      "outputs": [],
-      "cache": false
-    },
-    "deploy": {
-      "dependsOn": ["build", "test", "lint"],
-      "outputs": [],
-      "cache": false
-    },
-    "db:generate": {
-      "cache": false
-    },
-    "db:push": {
-      "cache": false,
-      "dependsOn": ["db:generate"]
-    },
-    "@myorg/web#build": {
-      "dependsOn": ["^build", "@myorg/db#db:generate"],
-      "outputs": [".next/**"],
-      "env": ["NEXT_PUBLIC_*"]
-    }
-  }
-}
-```
-
-### Template 7: Root package.json Setup
-
-```json
-{
-  "name": "my-turborepo",
-  "private": true,
-  "workspaces": ["apps/*", "packages/*"],
-  "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "test": "turbo test",
-    "clean": "turbo clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "changeset": "changeset",
-    "version-packages": "changeset version",
-    "release": "turbo build --filter=./packages/* && changeset publish"
-  },
-  "devDependencies": {
-    "turbo": "^1.10.0",
-    "prettier": "^3.0.0",
-    "@changesets/cli": "^2.26.0"
-  },
-  "packageManager": "npm@10.0.0"
-}
-```
-
-## Debugging Cache
-
-```bash
-# Dry run to see what would run
-turbo build --dry-run
-
-# Verbose output with hashes
-turbo build --verbosity=2
-
-# Show task graph
-turbo build --graph
-
-# Force no cache
-turbo build --force
-
-# Show cache status
-turbo build --summarize
-
-# Debug specific task
-TURBO_LOG_VERBOSITY=debug turbo build --filter=@myorg/web
-```
+Common causes: an env var missing from `env` (strict mode hides it and it
+doesn't affect the hash), a generated file inside `inputs`, `outputs` that
+don't match where the tool writes, and lockfile changes (which affect every
+package that depends on the changed entries).
 
 ## Best Practices
 
-### Do's
-
-- **Define explicit inputs** - Avoid cache invalidation
-- **Use workspace protocol** - `"@myorg/ui": "workspace:*"`
-- **Enable remote caching** - Share across CI and local
-- **Filter in CI** - Build only affected packages
-- **Cache build outputs** - Not source files
-
-### Don'ts
-
-- **Don't cache dev servers** - Use `persistent: true`
-- **Don't include secrets in env** - Use runtime env vars
-- **Don't ignore dependsOn** - Causes race conditions
-- **Don't over-filter** - May miss dependencies
+- Declare every env var a task reads in `env` or `globalEnv`.
+- Give tasks that write nothing no `outputs`; give side-effect tasks `cache: false`.
+- Use `workspace:*` for internal dependencies so the graph is correct.
+- Read-only remote cache for untrusted PRs; write from trusted branches only.
+- Never commit `TURBO_TOKEN` or the signature key.

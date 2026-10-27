@@ -1,107 +1,64 @@
 ---
 name: monorepo-management
-description: Master monorepo management with Turborepo, Nx, and pnpm workspaces to build efficient, scalable multi-package repositories with optimized builds and dependency management. Use when setting up monorepos, optimizing builds, or managing shared dependencies.
+description: Master monorepo management with pnpm workspaces, Turborepo, and Nx to build efficient, scalable multi-package repositories with shared dependencies, shared configs, and package publishing. Use when setting up monorepos, structuring packages, or managing shared dependencies.
+last_verified: 2026-10-27
 ---
 
 # Monorepo Management
 
-Build efficient, scalable monorepos that enable code sharing, consistent tooling, and atomic changes across multiple packages and applications.
+Build monorepos that share code, tooling and atomic changes across packages and
+applications. This skill covers layout, workspaces, internal packages and
+publishing. For task configuration and caching, use the `turborepo-caching`,
+`nx-workspace-patterns` or `bazel-build-optimization` skill.
 
 ## When to Use This Skill
 
 - Setting up new monorepo projects
 - Migrating from multi-repo to monorepo
-- Optimizing build and test performance
 - Managing shared dependencies
 - Implementing code sharing strategies
 - Setting up CI/CD for monorepos
 - Versioning and publishing packages
-- Debugging monorepo-specific issues
 
 ## Core Concepts
 
 ### 1. Why Monorepos?
 
-**Advantages:**
+**Advantages:** shared code and dependencies, atomic commits across projects,
+consistent tooling, easier refactoring, better code visibility.
 
-- Shared code and dependencies
-- Atomic commits across projects
-- Consistent tooling and standards
-- Easier refactoring
-- Simplified dependency management
-- Better code visibility
-
-**Challenges:**
-
-- Build performance at scale
-- CI/CD complexity
-- Access control
-- Large Git repository
+**Challenges:** build performance at scale, CI complexity, access control,
+large Git history.
 
 ### 2. Monorepo Tools
 
-**Package Managers:**
+**Package managers** (workspaces): pnpm (recommended), npm, Yarn Berry.
 
-- pnpm workspaces (recommended)
-- npm workspaces
-- Yarn workspaces
+**Task runners and build systems:**
 
-**Build Systems:**
+- Turborepo — simple task graph and caching on top of package scripts
+- Nx — task graph plus generators, inferred tasks and module boundaries
+- Bazel — hermetic, multi-language builds for very large repos
+- Lerna — now maintained by the Nx team; use it only for its publishing commands
 
-- Turborepo (recommended for most)
-- Nx (feature-rich, complex)
-- Lerna (older, maintenance mode)
-
-## Turborepo Setup
-
-### Initial Setup
+## Setup
 
 ```bash
-# Create new monorepo
-npx create-turbo@latest my-monorepo
-cd my-monorepo
-
-# Structure:
-# apps/
-#   web/          - Next.js app
-#   docs/         - Documentation site
-# packages/
-#   ui/           - Shared UI components
-#   config/       - Shared configurations
-#   tsconfig/     - Shared TypeScript configs
-# turbo.json      - Turborepo configuration
-# package.json    - Root package.json
+npx create-turbo@latest my-monorepo --package-manager pnpm
+# or: npx create-nx-workspace@latest my-org
 ```
 
-### Configuration
-
-```json
-// turbo.json
-{
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
-  "tasks": {
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
-    },
-    "test": {
-      "dependsOn": ["build"],
-      "outputs": ["coverage/**"]
-    },
-    "lint": {
-      "outputs": []
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "type-check": {
-      "dependsOn": ["^build"],
-      "outputs": []
-    }
-  }
-}
+```
+apps/
+  web/          # Next.js app
+  docs/         # Documentation site
+packages/
+  ui/           # Shared UI components
+  tsconfig/     # Shared TypeScript configs
+  eslint-config/
+pnpm-workspace.yaml
+turbo.json      # or nx.json
+package.json
 ```
 
 ```json
@@ -114,21 +71,22 @@ cd my-monorepo
     "dev": "turbo run dev",
     "test": "turbo run test",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "clean": "turbo run clean && rm -rf node_modules"
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.0.0"
+    "prettier": "^3.6.0",
+    "turbo": "^2.11.0",
+    "typescript": "^7.0.0"
   },
-  "packageManager": "pnpm@8.0.0"
+  "packageManager": "pnpm@12.15.0"
 }
 ```
 
-pnpm reads workspace packages only from `pnpm-workspace.yaml`, so declare them there (see `references/details.md`). Turborepo 2 renamed `pipeline` to `tasks` and rejects a `turbo.json` that still uses `pipeline`; run `npx @turbo/codemod migrate` to upgrade a 1.x config.
+pnpm reads workspace packages and pnpm settings only from
+`pnpm-workspace.yaml` (see `references/details.md`); `.npmrc` holds registry
+auth only.
 
-### Package Structure
+### Internal Package
 
 ```json
 // packages/ui/package.json
@@ -136,82 +94,82 @@ pnpm reads workspace packages only from `pnpm-workspace.yaml`, so declare them t
   "name": "@repo/ui",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./button": {
-      "import": "./dist/button.js",
-      "types": "./dist/button.d.ts"
+      "types": "./dist/button.d.ts",
+      "default": "./dist/button.js"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "dev": "tsup src/index.ts --format esm,cjs --dts --watch",
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch",
     "lint": "eslint src/",
-    "type-check": "tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "tsup": "^7.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^7.0.0"
   },
-  "dependencies": {
-    "react": "^18.2.0"
+  "peerDependencies": {
+    "react": "^19.0.0"
   }
 }
 ```
 
+`types` must come first in each `exports` entry: TypeScript takes the first
+condition that matches, so a `types` entry after `import` or `default` is never
+read. `tsc` emits one `.js` and one `.d.ts` per source file, so the paths
+above are exact. To bundle or ship ESM and CJS together, use `tsdown`; `tsup`
+is no longer maintained.
+
 ## Detailed patterns and worked examples
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+`references/details.md` covers pnpm workspace settings and commands, shared
+TypeScript and ESLint configs, code-sharing patterns and CI.
 
 ## Best Practices
 
-1. **Consistent Versioning**: Lock dependency versions across workspace
-2. **Shared Configs**: Centralize ESLint, TypeScript, Prettier configs
-3. **Dependency Graph**: Keep it acyclic, avoid circular dependencies
-4. **Cache Effectively**: Configure inputs/outputs correctly
-5. **Type Safety**: Share types between frontend/backend
-6. **Testing Strategy**: Unit tests in packages, E2E in apps
-7. **Documentation**: README in each package
-8. **Release Strategy**: Use changesets for versioning
+1. **Consistent versions**: one version per dependency, via pnpm catalogs
+2. **Shared configs**: centralize ESLint, TypeScript and Prettier configs
+3. **Acyclic graph**: no circular dependencies between packages
+4. **Correct cache inputs**: declare inputs, outputs and env vars per task
+5. **Shared types**: one package for types used by frontend and backend
+6. **Testing**: unit tests in packages, end-to-end tests in apps
+7. **Documentation**: a README in each package
+8. **Releases**: changesets for versioning and changelogs
 
 ## Common Pitfalls
 
-- **Circular Dependencies**: A depends on B, B depends on A
-- **Phantom Dependencies**: Using deps not in package.json
-- **Incorrect Cache Inputs**: Missing files in Turborepo inputs
-- **Over-Sharing**: Sharing code that should be separate
-- **Under-Sharing**: Duplicating code across packages
-- **Large Monorepos**: Without proper tooling, builds slow down
+- **Circular dependencies**: A depends on B, B depends on A
+- **Phantom dependencies**: importing a package not in your `package.json`
+- **Wrong cache inputs**: missing files or env vars in task inputs
+- **Over-sharing**: sharing code that should stay separate
+- **Under-sharing**: duplicating code across packages
 
 ## Publishing Packages
 
 ```bash
-# Using Changesets
 pnpm add -Dw @changesets/cli
 pnpm changeset init
-
-# Create changeset
-pnpm changeset
-
-# Version packages
-pnpm changeset version
-
-# Publish
+pnpm changeset          # describe a change
+pnpm changeset version  # bump versions and changelogs (exits 1 if none pending)
 pnpm changeset publish
 ```
 
+Changesets 3 needs Node 22.11+ and no longer versions private packages unless
+`privatePackages` is set in `.changeset/config.json`.
+
 ```yaml
-# .github/workflows/release.yml
+# .github/workflows/release.yml (step)
 - name: Create Release Pull Request or Publish
-  uses: changesets/action@v1
+  uses: changesets/action@v2
   with:
-    publish: pnpm release
+    publish: pnpm changeset publish
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
