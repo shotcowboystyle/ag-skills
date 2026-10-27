@@ -586,7 +586,7 @@ Measure whether users' trust in the AI matches its actual reliability. Survey us
 - For AI safety guardrails, trust tiers, and harmful content handling, reference `agentic-ai-generative-ux/ai-safety-trust-guardrails`.
 - For interaction motion and animation patterns for typing indicators and transitions, reference `interaction-motion-design`.
 - For accessibility standards and inclusive design principles, reference `accessibility-inclusive-design`.
-- For voice and spatial interface patterns, reference `ai-spatial-voice-ux`.
+- For voice and spatial interface patterns, reference `spatial-voice-ux`.
 
 ## Key Sources
 

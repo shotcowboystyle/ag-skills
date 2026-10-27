@@ -37,7 +37,7 @@ Design technology that attends to people instead of demanding their attention: m
 
 ## Cross-References to Other Skills
 
-- **ai-spatial-voice-ux**: Voice interaction is a primary modality for zero-UI systems. Spatial audio is a key ambient communication channel.
+- **spatial-voice-ux**: Voice interaction is a primary modality for zero-UI systems. Spatial audio is a key ambient communication channel.
 - **interaction-motion-design**: Motion and animation serve as peripheral communication channels. Micro-interactions provide feedback in ambient displays. Gesture design is fundamental to screenless interaction.
 - **accessibility-inclusive-design**: Ambient interfaces must serve users with visual, auditory, motor, and cognitive differences. Multi-sensory communication (visual + auditory + haptic) is both an ambient design principle and an accessibility requirement. Universal design and calm design share the same goal: technology that works for everyone without demanding special effort.
 - **agentic-ai-generative-ux**: AI agents that act autonomously face the same discoverability and trust challenges as ambient systems. Transparency patterns, approval gates, and progressive autonomy models apply to both domains.

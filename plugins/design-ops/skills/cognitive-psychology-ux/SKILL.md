@@ -40,4 +40,4 @@ Interfaces fail when they exceed how human cognition works: overloaded working m
 - **interaction-motion-design**: Motion is an attention-direction tool. Easing curves map to expectation (mental models of physics). Animation duration thresholds relate to the Doherty Threshold and perceptual timing.
 - **design-systems-architecture**: Consistent design tokens and component APIs create the predictability that supports schema formation (germane load) and reduces learning cost (Jakob's Law).
 - **ux-ethics-content-strategy**: Dark patterns are cognitive bias exploits. Understanding the bias is the prerequisite for recognizing and refusing to implement its exploitation.
-- **ai-spatial-voice-ux**: Conversational and spatial interfaces introduce novel cognitive challenges — working memory demands of voice, spatial navigation mental models, and attention management in 3D environments.
+- **spatial-voice-ux**: Conversational and spatial interfaces introduce novel cognitive challenges — working memory demands of voice, spatial navigation mental models, and attention management in 3D environments.

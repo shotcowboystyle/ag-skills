@@ -857,7 +857,7 @@
   "design-ops/agentic-ai-generative-ux": {
     "badge": "bronze",
     "composite": 67.19696969696969,
-    "digest": "b0f3cc94009c9c4a45149eb5db2c249029e367d6b74376d81f77601fdc55e1b5",
+    "digest": "56357503389b9649fd78ee41ccaf096532323f98396154673a1b11d0e9b0cf86",
     "static_score": 0.6599999999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -884,25 +884,10 @@
       "token_efficiency": 1.0
     }
   },
-  "design-ops/ai-spatial-voice-ux": {
-    "badge": "bronze",
-    "composite": 67.95454545454544,
-    "digest": "7b40023977b8a49c858d4f497fa4313e618e3579c954fea0b04232f8c6647769",
-    "static_score": 0.6675,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.2,
-      "token_efficiency": 1.0
-    }
-  },
   "design-ops/ambient-calm-zero-ui": {
     "badge": "bronze",
     "composite": 63.1060606060606,
-    "digest": "f7d1826a4f7b3f1b33e9fdc6d51f9331c4ac1aca7f5ab3f27ca7f7a2f403416a",
+    "digest": "0789db27394f41a8f0e34d5984577358f2c50a447b0fe9dbaa5110a88d77c53c",
     "static_score": 0.628,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -947,7 +932,7 @@
   "design-ops/cognitive-psychology-ux": {
     "badge": "bronze",
     "composite": 63.40909090909091,
-    "digest": "6a1e4b8091ada740df81403cae187a305de73aa3f5c695e86cfd6444f9ad3422",
+    "digest": "7ca235ad77ef171eded172f579cbdebdebe7e1744bb2cb17d0e175f0cd208faf",
     "static_score": 0.633,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
@@ -1067,7 +1052,7 @@
   "design-ops/design-ops-orchestrator": {
     "badge": "bronze",
     "composite": 61.43939393939394,
-    "digest": "a1c07888790aa6b721cf659ea0cb606e909feff1e833dd0b909ae373fef02625",
+    "digest": "ea5124b1a133f98ee535e6afa417dbaebe67447c579d2563077ca6867b570fb1",
     "static_score": 0.6232,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1202,7 +1187,7 @@
   "design-ops/interaction-motion-design": {
     "badge": "bronze",
     "composite": 68.01400076716531,
-    "digest": "511054a5006686e0b8084dc91e5ab23438934b683475b40ee4c06cf81e8c4fb0",
+    "digest": "8072b869911b3daea5f6ba9eae1d09378534d28691d9867f6f1cb24518be49c9",
     "static_score": 0.6790886075949367,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
@@ -1452,6 +1437,21 @@
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.45,
       "token_efficiency": 0.9967741935483871
+    }
+  },
+  "design-ops/spatial-voice-ux": {
+    "badge": "bronze",
+    "composite": 67.95454545454544,
+    "digest": "6c63ac2568fefc5444ad0861c24620df1885fdacf0d05ab1cda0a916dd11f73f",
+    "static_score": 0.6675,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.6499999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.2,
+      "token_efficiency": 1.0
     }
   },
   "design-ops/typography-pairing-recipes": {

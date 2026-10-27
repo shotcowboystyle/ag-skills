@@ -540,7 +540,7 @@ Track the refinement history so users can navigate back to any previous version.
 
 ## Cross-Referencing
 
-- For voice interaction mechanics and spatial/multimodal AI surfaces, reference `ai-spatial-voice-ux`.
+- For voice interaction mechanics and spatial/multimodal AI surfaces, reference `spatial-voice-ux`.
 - For AI ethics, dark pattern avoidance, and content strategy, reference `ux-ethics-content-strategy`.
 - For accessibility requirements in agent interfaces, reference `accessibility-inclusive-design`.
 - For design system integration with generative and agent-driven UI, reference `design-systems-architecture`.

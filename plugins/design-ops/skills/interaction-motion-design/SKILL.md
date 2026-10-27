@@ -96,7 +96,7 @@ For **the haptic feedback system** — iOS Core Haptics, Android haptics, Apple 
 - For performance impact on mobile, reference `mobile-ux-design`.
 - For accessibility requirements, reference `accessibility-inclusive-design`.
 - For visual design integration, reference `visual-design-mastery`.
-- For spatial and XR motion, reference `ai-spatial-voice-ux`.
+- For spatial and XR motion, reference `spatial-voice-ux`.
 
 ## Key Sources
 

@@ -166,7 +166,7 @@ a liability.
 ### AI Surface — designing an AI or agent feature
 
 1. `agentic-ai-generative-ux` — agent patterns, confidence, guardrails
-2. `ai-spatial-voice-ux` — voice and multimodal patterns (conversational dialogue lives in `agentic-ai-generative-ux`)
+2. `spatial-voice-ux` — voice and multimodal patterns (conversational dialogue lives in `agentic-ai-generative-ux`)
 3. `micro-copy-intelligence` — an agent's trustworthiness is almost entirely its
    strings
 4. `ux-ethics-content-strategy` — consent, control, accountability

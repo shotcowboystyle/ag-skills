@@ -178,7 +178,7 @@ Skills activate automatically when relevant. You never need to call them directl
 
 **Core UX**: design-process-methods, nng-ux-heuristics, ux-research-methods, cognitive-psychology-ux, ux-metrics-measurement, ux-ethics-content-strategy
 
-**Platform**: mobile-ux-design, desktop-app-design, platform-visual-standards, cross-cultural-i18n-ux, ai-spatial-voice-ux
+**Platform**: mobile-ux-design, desktop-app-design, platform-visual-standards, cross-cultural-i18n-ux, spatial-voice-ux
 
 **Visual**: reference-intelligence, visual-design-mastery, color-palette-library, typography-pairing-recipes, shadow-elevation-density, image-media-patterns, icon-illustration-systems
 

@@ -1,5 +1,5 @@
 ---
-name: ai-spatial-voice-ux
+name: spatial-voice-ux
 description: Spatial computing (AR/VR/MR), voice interaction, and multimodal input design. Use when designing headset or mixed-reality UI, a voice-first or voice-assistant flow, or combining speech, gaze, gesture, and touch input.
 allowed-tools: Read, Grep, Glob
 ---

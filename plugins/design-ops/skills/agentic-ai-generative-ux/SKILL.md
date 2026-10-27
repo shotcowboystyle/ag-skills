@@ -85,7 +85,7 @@ AI is not always the answer. Prefer direct manipulation for: binary choices, sim
 
 ## Cross-Referencing
 
-- Voice interaction mechanics, spatial and multimodal AI surfaces: `ai-spatial-voice-ux`.
+- Voice interaction mechanics, spatial and multimodal AI surfaces: `spatial-voice-ux`.
 - For AI content quality and ethics, reference `ux-ethics-content-strategy`.
 - For AI feature accessibility, reference `accessibility-inclusive-design`.
 - For AI metrics and measurement, reference `ux-metrics-measurement`.
