@@ -34,10 +34,16 @@ The following commands use the standard AWS CLI to configure true WORM storage o
 
 ```bash
 # 1. Create an S3 bucket with Object Lock enabled at creation
-# Note: Object Lock must typically be enabled at bucket creation time
 aws s3api create-bucket \
     --bucket my-evidence-bucket \
     --object-lock-enabled-for-bucket
+
+# 1b. Or enable Object Lock on an existing bucket (supported since November 2023).
+#     Versioning must already be enabled; existing objects stay unlocked until a
+#     retention is set on each of them.
+aws s3api put-object-lock-configuration \
+    --bucket my-existing-bucket \
+    --object-lock-configuration '{ "ObjectLockEnabled": "Enabled" }'
 
 # 2. Enable bucket versioning (a strict hard prerequisite for Object Lock)
 aws s3api put-bucket-versioning \
@@ -73,6 +79,7 @@ aws s3api get-object-retention \
 
 - **Using GOVERNANCE instead of COMPLIANCE:** Using GOVERNANCE mode provides a false sense of security for digital evidence. Because it can be bypassed by privileged IAM users, it does not meet the strict immutability requirements of forensic WORM storage. Always use COMPLIANCE mode.
 - **Forgetting Bucket Versioning:** Object Lock relies on versioning. If versioning is suspended, Object Lock operations will fail, and data may be exposed to overwrite attacks.
+- **Testing in COMPLIANCE mode:** A compliance-mode test object cannot be deleted until its retention expires. Test a lock with GOVERNANCE mode or a retention of a day, never with the production retention.
 - **Infinite Lock Traps:** Accidentally setting a retention period that is excessively long (e.g., 100 years) in COMPLIANCE mode will lock the bucket. The infrastructure provider will continue to bill for this storage, and neither you nor their support team can delete it.
 - **Per-Object Negligence:** Assuming Object Lock automatically applies to all objects uploaded. Unless a default bucket retention policy is configured and verified, immutability must be applied manually per-object during upload.
 

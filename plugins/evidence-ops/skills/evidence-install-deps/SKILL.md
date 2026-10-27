@@ -25,7 +25,8 @@ PLUGIN_DATA_DIR="${CLAUDE_USER_DATA:-${XDG_DATA_HOME:-$HOME/.local/share}/claude
 VENV_DIR="$PLUGIN_DATA_DIR/venv"
 ```
 
-Every Python tool is afterwards invoked as `"$VENV_DIR/bin/<tool>"`. This keeps the
+Skills call the venv tools by bare name after putting `$VENV_DIR/bin` first on `PATH`,
+using the one line in [tool resolution](references/tool-resolution.md). This keeps the
 plugin working on systems where the system Python is externally managed and refuses
 `pip install`.
 
@@ -81,7 +82,9 @@ If `uv` is unavailable, fall back to `python3 -m venv "$VENV_DIR"` followed by
 
 ### 6. Verify
 
-Re-probe every tool that was just installed and confirm it now resolves. Report the
+Re-probe every tool that was just installed and confirm it now resolves. Probe the venv
+tools with `command -v` after the tool-resolution line, so the check sees what the
+skills will see. Report the
 resolved path for each. If a tool still does not resolve, report the exact install
 command and its exact error output — do not describe the install as successful.
 

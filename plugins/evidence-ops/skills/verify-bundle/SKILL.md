@@ -1,7 +1,7 @@
 ---
 name: verify-bundle
 description: Use when integrity must be confirmed rather than assumed — recomputes every hash, validates bags and timestamp proofs, and reports an explicit pass or fail naming each diverging file. Triggers - "verify this evidence", "has anything changed", "check the bag is still valid".
-allowed-tools: Bash(shasum *), Bash(sha256sum *), Bash(b3sum *), Bash(bagit.py *), Bash(ots *), Bash(command *), Bash(find *), Bash(mkdir *), Bash(date *), Read, Write
+allowed-tools: Bash(shasum *), Bash(sha256sum *), Bash(b3sum *), Bash(bagit.py *), Bash(ots *), Bash(export PATH=*), Bash(command *), Bash(cd *), Bash(find *), Bash(mkdir *), Bash(date *), Read, Write
 ---
 
 # Verify Bundle
@@ -30,10 +30,18 @@ Detect the target type and use the matching check. A directory may need more tha
 - A directory containing `bagit.txt` — validate the bag.
 - Any `.ots` proofs found — verify each.
 
+`bagit.py` and `ots` live in the plugin virtual environment. Start every command that
+calls them with the line from
+[tool resolution](../evidence-install-deps/references/tool-resolution.md).
+
 ### 2. Check a manifest
 
+Manifest entries are relative to the directory that was hashed, and hash-evidence names
+that directory in its report. Run the check from there, with the manifest's absolute
+path. If the hashed directory is not known, ask; do not guess.
+
 ```bash
-shasum -a 256 -c manifests/batch.sha256
+(cd "$HASHED_DIR" && shasum -a 256 -c "$MANIFEST")
 ```
 
 On GNU systems the equivalent is `sha256sum -c`. Both print `OK` or `FAILED` per line
@@ -41,8 +49,13 @@ and exit non-zero if any entry failed. Capture the exit status; do not judge by 
 
 ### 3. Check the register
 
-For every record, recompute the hash of the file at its recorded path and compare with
-the recorded digest. Three distinct outcomes, all of which must be reported separately:
+Records follow the
+[register schema](../evidence-reference-lookup/references/custody/register-schema.md).
+The store root is the directory that contains `evidence/`. For every current
+`acquisition` record — one that no later record names in `supersedes` — recompute the
+SHA-256 of `<store root>/<stored_path>` and compare it with the record's `sha256`. List
+superseded record ids separately; they are history, not failures. Three distinct
+outcomes, all of which must be reported separately:
 
 - **Match** — the item is intact.
 - **Mismatch** — the file at that path is no longer the file that was logged.
@@ -60,11 +73,21 @@ bagit.py --validate "$BAG_DIR"
 ### 5. Verify timestamp proofs
 
 ```bash
-ots verify "$PROOF"
+ots verify -f "$ITEM" "$PROOF"
 ```
 
-Distinguish three results: verified, pending upgrade, and failed. A pending proof is
-not a failure — it means the attestation has not landed yet.
+The proof for a register item is `chain-of-custody/<basename of stored_path>.ots`.
+`ots verify` checks a Bitcoin attestation against a local Bitcoin Core node (a pruned
+node is enough, reached over RPC). Distinguish four results:
+
+- **Verified** — the node confirmed the attestation. Report the attested time.
+- **Not checked** — the proof carries a Bitcoin attestation but no node was reachable.
+  Neither a pass nor a failure; say verification needs a node and was not done.
+- **Pending** — the attestation has not landed or the proof was not upgraded yet. Not a
+  failure; name timestamp-evidence's upgrade step.
+- **Failed** — the proof does not match the file.
+
+Only a failed proof turns the verdict to FAIL.
 
 ### 6. Report
 

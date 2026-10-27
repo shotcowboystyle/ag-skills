@@ -1,7 +1,7 @@
 ---
 name: log-custody
 description: Use when an item must enter the custody record — hashes it, captures who handed it over and how, copies the original into immutable storage under its own name, and appends one record to the append-only register. Triggers - "log this evidence", "add to the custody register", "record chain of custody for this file".
-allowed-tools: Bash(shasum *), Bash(sha256sum *), Bash(b3sum *), Bash(command *), Bash(file *), Bash(stat *), Bash(exiftool *), Bash(cp *), Bash(mkdir *), Bash(date *), Bash(grep *), Bash(wc *), Read, Write
+allowed-tools: Bash(shasum *), Bash(sha256sum *), Bash(b3sum *), Bash(command *), Bash(file *), Bash(stat *), Bash(exiftool *), Bash(cp *), Bash(mkdir *), Bash(date *), Bash(grep *), Bash(wc *), Bash(printf *), Read, Write
 ---
 
 # Log Custody
@@ -27,6 +27,9 @@ written here.
 Search upward from the working directory and downward from the workspace root for
 `evidence/register.jsonl`. If none exists, say so and name the init-evidence-store
 skill. Do not create a register as a side effect of logging.
+
+The directory that contains `evidence/` is the store root. Run every later command from
+it, so the paths below match the paths written into the record.
 
 ### 2. Hash first, before anything else touches the file
 
@@ -85,7 +88,13 @@ any kind belong in `evidence/derived/`.
 Append exactly one JSON object on one line. Never rewrite an earlier line. A correction
 is a new record whose `supersedes` field names the id of the record it replaces.
 
+The fields, the id scheme, and the path base are defined in the
+[register schema](../evidence-reference-lookup/references/custody/register-schema.md).
+Take the next id from the line count, and write `stored_path` relative to the store root
+(the directory that contains `evidence/`), never as an absolute path:
+
 ```bash
+printf 'EV-%06d\n' "$(( $(wc -l < evidence/register.jsonl) + 1 ))"
 printf '%s\n' "$RECORD_JSON" >> evidence/register.jsonl
 ```
 

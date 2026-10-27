@@ -23,7 +23,9 @@ Ask which of these applies, because they fail differently:
 
 - **Object storage with a retention lock** — S3 Object Lock or an equivalent. Objects
   cannot be deleted or overwritten until their retention expires. Requires versioning
-  to be enabled on the bucket first.
+  on the bucket. Since November 2023 S3 can enable Object Lock on an existing bucket, so
+  a new bucket is not required; objects already in it are not locked until a retention
+  is set on each.
 - **Append-only or immutable-tier storage** — provider-enforced, no client cooperation
   needed.
 - **Physical write-once media** — an optical disc or a WORM cartridge. Immutable by
@@ -36,14 +38,18 @@ careful habits is not immutable storage.
 
 ### 2. Define the remote
 
+Create the remote non-interactively, with credentials taken from the environment or the
+AWS credential chain rather than stored in the remote:
+
 ```bash
-rclone config
+rclone config create "$REMOTE" s3 provider=AWS env_auth=true region="$REGION" --non-interactive
 rclone listremotes
 ```
 
-`rclone` reads credentials from its own configuration or from the environment. Never
-ask for a secret in conversation, never echo one, and never write one into the
-workspace.
+Do not run bare `rclone config`: it is an interactive wizard that prompts for access
+keys. Never ask for a secret in conversation, never echo one, and never write one into
+the workspace. If no credentials are available in the environment, stop and tell the
+user to set them up themselves (for example `aws configure` in their own terminal).
 
 ### 3. Confirm the bucket's actual settings
 
@@ -52,9 +58,11 @@ aws s3api get-bucket-versioning --bucket "$BUCKET"
 aws s3api get-object-lock-configuration --bucket "$BUCKET"
 ```
 
-Report what these return rather than what was intended. Object Lock cannot be enabled
-on an existing bucket that was created without it, and versioning must be on for it to
-work at all — check, do not assume.
+Report what these return rather than what was intended. An empty or missing
+Object Lock configuration means no lock, whatever the bucket was meant to have. Object
+Lock can be enabled on an existing bucket (versioning must be on first), but that is a
+change to the user's storage: state it and get agreement before running
+`put-object-lock-configuration`. Check, do not assume.
 
 Note which retention mode is configured. Governance mode can be bypassed by a
 sufficiently privileged user; compliance mode cannot be bypassed by anyone, including
@@ -63,9 +71,23 @@ is also irreversible — say so before anyone chooses compliance mode.
 
 ### 4. Test with a throwaway object
 
-Write a small file, read it back, then attempt to delete it. Under a working retention
-lock the delete must fail. If it succeeds, the destination is not immutable, whatever
-the configuration claims.
+Write a small file with an explicit **governance-mode** retention of one day, read it
+back, then attempt to delete that object version. Under a working lock the delete must
+fail. If it succeeds, the destination is not immutable, whatever the configuration
+claims.
+
+```bash
+aws s3api put-object --bucket "$BUCKET" --key "_lock-test/$STAMP" --body "$TEST_FILE" \
+  --object-lock-mode GOVERNANCE --object-lock-retain-until-date "$TOMORROW"
+aws s3api delete-object --bucket "$BUCKET" --key "_lock-test/$STAMP" --version-id "$VERSION_ID"
+```
+
+Never test with compliance mode or a long retention: a compliance-mode test object
+cannot be deleted by anyone until it expires, and it is billed until then. The governance
+test object expires after a day; deleting it sooner needs
+`--bypass-governance-retention` and the matching permission. An explicit retention on
+the object overrides the bucket's default, so this tests the lock mechanism without
+leaving an undeletable object.
 
 ### 5. Record the policy
 
