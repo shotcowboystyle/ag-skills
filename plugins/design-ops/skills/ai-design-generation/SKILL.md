@@ -76,30 +76,25 @@ User Request → Agent (Design Ops skill) → MCP Server → External API → Ge
 
 All MCP servers are configured in your coding tool's MCP settings. Each server requires an API key for its respective service. For example: project `.mcp.json` (Claude Code, Cursor), `~/.codex/config.toml` (Codex), `opencode.json` (OpenCode).
 
-**Example Configuration:**
+**Example configuration** (servers checked against each publisher's docs; see `references/mcp-design-tools.md`):
+
+```bash
+claude mcp add --transport http figma https://mcp.figma.com/mcp           # Figma, OAuth
+claude mcp add --transport http --scope user fal https://mcp.fal.ai/mcp-relay  # fal, OAuth
+```
 
 ```json
 {
   "mcpServers": {
-    "stitch": {
-      "command": "npx",
-      "args": ["@anthropic/stitch-mcp"],
-      "env": { "STITCH_API_KEY": "sk-..." }
-    },
-    "fal": {
-      "command": "npx",
-      "args": ["@fal-ai/mcp"],
-      "env": { "FAL_KEY": "key-..." }
-    },
     "recraft": {
       "command": "npx",
-      "args": ["recraft-mcp"],
-      "env": { "RECRAFT_API_KEY": "rc-..." }
+      "args": ["-y", "@recraft-ai/mcp-recraft-server"],
+      "env": { "RECRAFT_API_KEY": "<key>" }
     },
-    "figma": {
+    "replicate": {
       "command": "npx",
-      "args": ["@anthropic/figma-mcp"],
-      "env": { "FIGMA_ACCESS_TOKEN": "figd_..." }
+      "args": ["-y", "replicate-mcp"],
+      "env": { "REPLICATE_API_TOKEN": "<token>" }
     }
   }
 }
@@ -107,13 +102,15 @@ All MCP servers are configured in your coding tool's MCP settings. Each server r
 
 ### Supported MCP Servers (All Optional)
 
-| Server            | What It Does                                                  | Install                          | Key Required  |
-| ----------------- | ------------------------------------------------------------- | -------------------------------- | ------------- |
-| stitch-mcp        | Generate UI screens from text descriptions                    | `npm i -g @anthropic/stitch-mcp` | Stitch API    |
-| @fal-ai/mcp       | 600+ image/video models (Imagen 4, FLUX, Veo 3.1, Recraft V3) | `npm i -g @fal-ai/mcp`           | Fal.ai API    |
-| replicate-mcp     | Open-source model access                                      | `npm i -g replicate-mcp`         | Replicate API |
-| openai-images-mcp | GPT-Image / DALL-E 3                                          | `npm i -g openai-images-mcp`     | OpenAI API    |
-| figma-mcp         | Read/write Figma files (official)                             | `npm i -g @anthropic/figma-mcp`  | Figma token   |
+| Server    | What It Does                                         | Connect                                         | Auth              |
+| --------- | ---------------------------------------------------- | ----------------------------------------------- | ----------------- |
+| Stitch    | UI screens and flows from text or an image           | Google's MCP route (see Stitch docs) or the web | Google account    |
+| fal       | FLUX, Imagen, Recraft, Veo and more through one API  | `https://mcp.fal.ai/mcp-relay`                  | OAuth             |
+| Recraft   | Raster and SVG generation, vectorize, cut-outs       | `npx -y @recraft-ai/mcp-recraft-server`         | Recraft API key   |
+| Replicate | Public and fine-tuned open models                    | `npx -y replicate-mcp`                          | Replicate token   |
+| Figma     | Read specs/variables/screenshots; write to files     | `https://mcp.figma.com/mcp` or desktop `:3845`  | OAuth / Dev Mode  |
+
+OpenAI image models have no official MCP server; call the Images API directly or hand the user the prompt.
 
 This skill enhances Design Ops when MCP servers are available but does NOT require them. Without MCP servers, Design Ops provides detailed specifications and prompts that users can use manually with any generation tool.
 
@@ -192,7 +189,7 @@ Style: [reference product], [color palette], [typography]
 
 ### Fal.ai — The Multi-Model Platform
 
-Fal.ai provides access to 600+ models through a single API, making it the most versatile generation platform available. Key models for design work:
+fal provides access to a large model catalogue through a single API, making it the most versatile generation platform available. Key models for design work:
 
 **FLUX Pro / FLUX.1 Dev:**
 
@@ -205,7 +202,7 @@ Fal.ai provides access to 600+ models through a single API, making it the most v
 **FLUX Schnell:**
 
 - Best for: Rapid iteration, concept exploration, batch generation
-- Strengths: 4x faster than FLUX Pro, good quality for drafts
+- Strengths: much faster and cheaper than FLUX Pro, good quality for drafts
 - Use case: Quick visual explorations before committing to high-fidelity generation
 
 **Imagen 4 (via Fal):**
@@ -793,10 +790,10 @@ _Costs vary by model, resolution, and number of iterations. Estimates assume 2-3
 
 | File                                       | Contents                                                                                                                                                                                                                                                                                                                                            | Use When                                                                                                                                                |
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `references/mcp-design-tools.md`           | Complete catalog of MCP servers for design generation: Stitch (UI screens from text), Fal.ai (600+ models — Imagen 4, FLUX Pro, Veo 3.1, Recraft V3), Replicate (open-source models), OpenAI GPT-Image, Figma MCP (official). Per tool: capabilities, MCP configuration, tool names, parameters, pricing, strengths, limitations, best use cases.   | Selecting the right MCP tool for a task. Configuring MCP servers. Understanding tool capabilities and limitations.                                      |
+| `references/mcp-design-tools.md`           | Complete catalog of MCP servers for design generation: Stitch (UI screens from text), fal (model catalogue — Imagen 4, FLUX Pro, Veo 3.1, Recraft V3), Replicate (open-source models), OpenAI GPT-Image, Figma MCP (official). Per tool: capabilities, MCP configuration, tool names, parameters, pricing, strengths, limitations, best use cases.   | Selecting the right MCP tool for a task. Configuring MCP servers. Understanding tool capabilities and limitations.                                      |
 | `references/prompt-engineering-visual.md`  | How to write effective prompts for UI design generation. Prompt anatomy for each tool (Stitch, Imagen, FLUX, DALL-E). Style transfer techniques. Design token injection into prompts. Sector-aware prompting. Platform-specific prompting (iOS, Android, web). Negative prompting. Prompt templates for common UI screens.                          | Crafting effective generation prompts. Converting design specifications into tool-specific prompts. Ensuring generated output matches design direction. |
 | `references/generation-pipelines.md`       | Multi-step generation workflows: text to wireframe to high-fidelity to code. Single-tool pipelines vs. multi-tool pipelines. Iterative refinement loops. Design system consistency across multiple generations. Batch generation for screen families. Pipeline templates for common scenarios (landing page, dashboard, mobile app, design system). | Running multi-step generation workflows. Ensuring consistency across multiple generated screens. Planning generation projects.                          |
-| `references/asset-generation-guide.md`     | Generating design assets: icons (SVG via Recraft V3 — the only vector-capable model), illustrations (Fal.ai, DALL-E), photographs (Imagen 4, FLUX), video/motion (Veo 3.1), patterns/textures, brand assets. Per asset type: best tool, prompt strategy, output format, quality requirements, production-readiness checklist.                       | Generating specific design assets. Choosing the right tool for icons vs. illustrations vs. photos vs. video.                                            |
+| `references/asset-generation-guide.md`     | Generating design assets: icons (SVG via Recraft V3), illustrations (Fal.ai, DALL-E), photographs (Imagen 4, FLUX), video/motion (Veo 3.1), patterns/textures, brand assets. Per asset type: best tool, prompt strategy, output format, quality requirements, production-readiness checklist.                       | Generating specific design assets. Choosing the right tool for icons vs. illustrations vs. photos vs. video.                                            |
 | `references/quality-control-generation.md` | Scoring generated designs against the visual-design-mastery framework. Automated quality checks. Human-in-the-loop review process. Iteration strategies (what to change in prompts when output is poor). Common generation failures and fixes. When to stop iterating and hand-craft instead.                                                       | Evaluating AI-generated output quality. Deciding whether to iterate, change tools, or hand-craft. Quality gates for generated designs.                  |
 
 ## Cross-References

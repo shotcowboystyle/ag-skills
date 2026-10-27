@@ -452,7 +452,7 @@ Frame the design system's value in terms leadership cares about:
 
 2. **Consistency and brand compliance:** Quantify the cost of design inconsistency in terms of redesign cycles, QA effort, and customer confusion. Track the reduction in design-related bug reports.
 
-3. **Accessibility risk reduction:** Calculate the cost of remediation versus prevention. Industry data shows that fixing accessibility issues post-launch costs 10-100x more than building accessibly from the start.
+3. **Accessibility risk reduction:** Calculate the cost of remediation versus prevention. Fixing accessibility issues post-launch usually costs far more than building accessibly from the start.
 
 4. **Onboarding acceleration:** Measure the reduction in ramp-up time for new hires. A well-documented design system reduces the time a new front-end developer needs to become productive.
 

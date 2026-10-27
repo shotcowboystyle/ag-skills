@@ -515,7 +515,7 @@ Strategy: When hues become confusable under simulation, ensure each color has a 
 
 When generating palettes, draw knowledge from:
 
-- `color-palette-library` skill for 500+ curated palette references and industry conventions
+- `color-palette-library` skill for 180+ curated palette references and industry conventions
 - `ui-visual-design-system` skill for color theory, harmony models, and perceptual principles
 - `visual-design-mastery` skill for color scoring, canonical color rules, and design critique
 - `accessibility-inclusive-design` skill for WCAG 2.2/3.0, APCA methodology, and colorblind design

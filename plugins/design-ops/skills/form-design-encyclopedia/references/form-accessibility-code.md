@@ -1013,7 +1013,7 @@ For the form:
 | 2.4.3 Focus Order | A | Tab order matches visual order |
 | 2.4.6 Headings and Labels | AA | Labels describe the purpose of the field |
 | 2.4.7 Focus Visible | AA | Focus indicator visible on all form controls |
-| 2.5.8 Target Size | AA | Touch targets at least 24x24px (44px recommended) |
+| 2.5.8 Target Size | AA | Touch targets at least 24x24px, or spaced apart (44x44px is 2.5.5, AAA) |
 | 3.2.2 On Input | A | No unexpected behavior on input (no auto-submit) |
 | 3.3.1 Error Identification | A | Errors identified and described in text |
 | 3.3.2 Labels or Instructions | A | Labels or instructions provided for user input |

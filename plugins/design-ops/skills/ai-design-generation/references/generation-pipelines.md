@@ -51,9 +51,9 @@ Not every pipeline uses all six stages. Wireframe exploration might stop at Stag
 Best for: rapid prototyping, landing pages, multi-screen apps.
 
 ```
-1. [Optional] extract_design_context from existing design or URL
+1. [Optional] Summarize the existing design's tokens (Figma `get_variable_defs`, or a captured reference)
 2. Write detailed screen description (see prompt-engineering-visual.md)
-3. generate_screen_from_text with description + design context
+3. Generate the screen in Stitch from the description + token summary
 4. Review generated HTML/CSS in browser
 5. Identify issues (layout, colors, content, spacing)
 6. Adjust description and regenerate (max 3 iterations)
@@ -64,7 +64,7 @@ Best for: rapid prototyping, landing pages, multi-screen apps.
 
 - Always provide design context for style consistency
 - Start with a single screen before generating multi-page sites
-- Use build_site only after you have established style with a single screen
+- Generate further screens only after you have established style with a single screen
 - Review on multiple viewport widths if responsive is enabled
 
 ### Fal.ai FLUX-Only Pipeline
@@ -86,9 +86,9 @@ Best for: hero images, product photography, illustrations.
 Best for: design system analysis, spec extraction, design audit.
 
 ```
-1. get_file to retrieve Figma file structure
-2. get_file_styles to extract color and text styles
-3. get_file_components to map component library
+1. `get_metadata` to outline the Figma file structure
+2. `get_variable_defs` to extract color, type and spacing variables
+3. `search_design_system` to map the component library
 4. Analyze design system for consistency and completeness
 5. get_images to export specific frames as images
 6. Generate report with findings and recommendations
@@ -106,8 +106,8 @@ Best for: complete screen with custom assets.
 
 ```
 Step 1: Context (Figma MCP or Stitch)
-  - If Figma file exists: extract design context from Figma via get_file_styles
-  - If no Figma file: use Stitch extract_design_context from reference URL
+  - If Figma file exists: extract design context from Figma via `get_design_context` and `get_variable_defs`
+  - If no Figma file: capture the reference URL with `reference-intelligence` and use its measured DNA
   - Output: design context document with colors, typography, spacing, patterns
 
 Step 2: Screen Layout (Stitch)
@@ -190,8 +190,8 @@ Best for: generating new screens that match an existing design system.
 
 ```
 Step 1: Extract from Figma
-  - get_file_styles: all color styles, text styles, effect styles
-  - get_file_components: all components with properties and variants
+  - `get_variable_defs`: color, text and effect variables and styles
+  - `search_design_system`: components with properties and variants
   - get_images: export key screens as reference images
 
 Step 2: Build Design Context

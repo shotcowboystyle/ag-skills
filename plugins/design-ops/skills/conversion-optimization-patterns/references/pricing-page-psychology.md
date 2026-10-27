@@ -120,7 +120,7 @@ The monthly/annual toggle is one of the most impactful pricing page elements bec
 
 **Design patterns that increase annual selection:**
 
-1. **Default to annual:** Make annual billing the pre-selected toggle state. Default effects account for 70-90% of users sticking with the presented option. This is the single highest-impact change for most pricing pages.
+1. **Default to annual:** Make annual billing the pre-selected toggle state. Most users stick with the presented default. This is the single highest-impact change for most pricing pages.
 
 2. **Show savings prominently:** Display the savings amount, not just the prices.
    - "Save 20%" is good
@@ -129,7 +129,7 @@ The monthly/annual toggle is one of the most impactful pricing page elements bec
 
 3. **Visual design of the toggle:**
    - The annual option should have more visual weight (bolder text, highlighted background)
-   - A "savings badge" (green pill with "Save 20%") attached to the annual option increases selection by 15-25%
+   - A "savings badge" (green pill with "Save 20%") attached to the annual option increases selection of that option
    - Animate the price change when toggling to make the savings visceral
 
 4. **Monthly price display under annual:** Show both the annual total and the monthly equivalent: "$588/year ($49/mo)" — this allows direct comparison with the monthly price and makes the savings tangible.
@@ -176,7 +176,7 @@ The feature comparison table is where users make the final tier selection. Its d
 
 2. **Emphasizing what lower tiers lack:** A column of red X marks (feature not included) creates a negative emotional frame. Instead, show what each tier includes. Empty cells or dashes are less negative than explicit "Not included" markers.
 
-3. **No clear recommendation:** Without a "Most Popular" or "Recommended" indicator, users must evaluate all options equally, increasing cognitive load. Research shows that recommended badging increases selection of the badged tier by 20-30%.
+3. **No clear recommendation:** Without a "Most Popular" or "Recommended" indicator, users must evaluate all options equally, increasing cognitive load. Recommended badging increases selection of the badged tier.
 
 4. **Identical-looking columns:** If all three columns have the same visual weight, the user's eye has no entry point. The recommended tier should have a distinct background color, larger card size, or elevated shadow.
 
@@ -335,8 +335,8 @@ Research from the Journal of Retailing (2007) found that longer guarantee period
 - "Love it or get your money back within 60 days"
 
 **Guarantee types by effectiveness:**
-1. Full money-back, no questions asked (highest conversion impact, ~5-15% lift)
-2. Full money-back with reason required (moderate impact, ~3-8% lift)
+1. Full money-back, no questions asked (highest conversion impact)
+2. Full money-back with reason required (moderate impact)
 3. Partial refund/credit (low impact, can feel stingy)
 4. "Satisfaction guaranteed" without specifics (minimal impact, too vague)
 
@@ -364,7 +364,7 @@ Offering lower prices in lower-income countries increases global conversion with
 
 Companies like Notion, Spotify, and many indie SaaS products have reported 2-5x conversion increases in PPP-adjusted markets without meaningful revenue cannibalization in primary markets.
 
-## 30+ Pricing Page Layout Patterns with Conversion Data
+## 11 Pricing Page Layout Patterns
 
 ### Layout 1: Classic 3-Column Grid
 - **Structure:** Three equal-width columns, center highlighted
@@ -375,13 +375,13 @@ Companies like Notion, Spotify, and many indie SaaS products have reported 2-5x 
 ### Layout 2: Asymmetric Grid (Large Center)
 - **Structure:** Center column 110-120% width of side columns
 - **Best for:** Products pushing users toward the mid-tier
-- **Conversion data:** 8-15% increase in mid-tier selection vs. equal columns
+- **Expected effect:** more mid-tier selection than equal columns (needs measurement)
 - **Optimization tip:** Use this when the mid-tier has the highest LTV:CAC
 
 ### Layout 3: Slider/Calculator
 - **Structure:** Interactive slider that adjusts price based on usage inputs
 - **Best for:** Usage-based pricing (API calls, contacts, storage)
-- **Conversion data:** 10-20% improvement in pricing page-to-signup when users can model their exact cost
+- **Expected effect:** better pricing page-to-signup when users can model their exact cost (needs measurement)
 - **Optimization tip:** Default slider to a position that produces a mid-range price, not the minimum
 
 ### Layout 4: Feature-First with Tiers Below
@@ -399,7 +399,7 @@ Companies like Notion, Spotify, and many indie SaaS products have reported 2-5x 
 ### Layout 6: Per-Seat with Volume Discount
 - **Structure:** Single per-seat price with volume discount tiers
 - **Best for:** Collaboration tools where team size is the primary variable
-- **Conversion data:** Volume discounts starting at 10+ seats increase enterprise inquiry rate by 20-30%
+- **Expected effect:** volume discounts starting at 10+ seats can raise enterprise inquiry rate (needs measurement)
 - **Optimization tip:** Show a seat calculator with annual savings at each threshold
 
 ### Layout 7: Freemium + Single Paid Tier
@@ -417,7 +417,7 @@ Companies like Notion, Spotify, and many indie SaaS products have reported 2-5x 
 ### Layout 9: Toggle Between User Types
 - **Structure:** Toggle or tabs at top: "For Individuals" / "For Teams" / "For Enterprise"
 - **Best for:** Products serving fundamentally different segments
-- **Conversion data:** Segment-specific pricing pages convert 15-25% better than one-size-fits-all pages
+- **Conversion data:** Segment-specific pricing pages can convert better than one-size-fits-all pages (needs measurement)
 - **Optimization tip:** Auto-detect segment where possible (logged-in user's team size, referral source)
 
 ### Layout 10: Comparison with Competitor

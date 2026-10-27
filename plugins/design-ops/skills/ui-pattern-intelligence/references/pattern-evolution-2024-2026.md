@@ -33,7 +33,7 @@ These patterns were once standard but are now actively declining. Using them mak
 ### Carousel/Slider Auto-Advance → Static Content or User-Controlled
 
 **Status**: Dying for hero carousels. Still used for product image galleries (user-controlled).
-**Why it's dying**: Auto-advancing carousels have terrible engagement rates. Users can't control the pace. Accessibility issues (auto-advancing content violates WCAG 2.2.2). Content in slides 2+ is seen by < 1% of users (NNG research). The "hero carousel" is one of the most debunked patterns in UX.
+**Why it's dying**: Auto-advancing carousels have terrible engagement rates. Users can't control the pace. Accessibility issues (auto-advancing content violates WCAG 2.2.2). Content in slides 2+ is seen by very few users. The "hero carousel" is one of the most debunked patterns in UX.
 **Replace with**: Single hero with strong messaging. Or static bento grid of features. For product images: user-controlled gallery.
 
 ### Pagination for Feeds → Infinite Scroll (with caveats)

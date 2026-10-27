@@ -228,7 +228,7 @@ The `opsz` axis adjusts icon detail for different rendered sizes:
 | Convention | Apple (SF Symbols) | Google (Material Symbols) | Web (Lucide/Phosphor) |
 |------------|-------------------|--------------------------|----------------------|
 | Tab bar style | Outline default, fill on select | Outline default, fill on select | Outline default, fill or color on select |
-| Minimum touch target | 44x44pt | 48x48dp | 44x44px (WCAG) |
+| Minimum touch target | 44x44pt | 48x48dp | 24x24px (WCAG 2.5.8 AA); 44x44px (2.5.5 AAA) |
 | Icon sizing | Scales with Dynamic Type | Fixed dp sizes + opsz | Fixed px with rem scaling |
 | Color theming | symbolRenderingMode | Variable font axes | currentColor CSS |
 | Animation | symbolEffect API | CSS font-variation-settings | CSS/Framer Motion |

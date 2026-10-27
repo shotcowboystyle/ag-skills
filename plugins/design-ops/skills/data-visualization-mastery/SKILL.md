@@ -169,8 +169,8 @@ Example (Red-Blue diverging):
 **Categorical** (distinct groups): Maximally distinct hues at similar lightness. Use for nominal categories (product lines, regions, user segments). Maximum 8-10 colors before confusion.
 ```
 Colorblind-safe categorical (8 colors):
-#4e79a7  #f28e2b  #e15759  #76b7b2  #59a14f  #edc948  #b07aa1  #ff9da7
-(Tableau 10 subset -- optimized for distinguishability including colorblind viewers)
+#E69F00  #56B4E9  #009E73  #F0E442  #0072B2  #D55E00  #CC79A7  #000000
+(Okabe-Ito -- designed for distinguishability under color vision deficiency. Tableau 10 is NOT colorblind-safe; Tableau ships a separate "Color Blind" palette)
 ```
 
 ### 3.2 Colorblind-Safe Design Rules
@@ -179,7 +179,7 @@ Colorblind-safe categorical (8 colors):
 2. **Use lightness variation** in addition to hue -- colorblind viewers can still distinguish light from dark
 3. **Add redundant encoding** -- patterns, labels, icons, or position in addition to color
 4. **Test with simulation** -- Sim Daltonism (macOS), Color Oracle, or Figma colorblind plugins
-5. **Use pre-tested palettes** -- see `references/dataviz-accessibility.md` for 8 verified palettes
+5. **Use pre-tested palettes** -- see `references/dataviz-accessibility.md` for tested palettes
 
 ### 3.3 Color Assignment Rules
 

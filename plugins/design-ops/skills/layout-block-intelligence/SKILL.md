@@ -1,10 +1,10 @@
 ---
 name: layout-block-intelligence
-description: 500+ individual section patterns — heroes, feature grids, pricing tables, testimonials, CTAs, footers, FAQs, stats, timelines — each with specs, spacing, and code. Use when choosing or building one section. For ordering sections into a whole page, use page-composition-engine.
+description: ~300 individual section patterns — heroes, feature grids, pricing tables, testimonials, CTAs, footers, FAQs, stats, timelines — each with specs, spacing, and code. Use when choosing or building one section. For ordering sections into a whole page, use page-composition-engine.
 allowed-tools: Read, Grep, Glob
 ---
 
-# Layout Block Intelligence — 500+ Production Section Patterns
+# Layout Block Intelligence — ~300 Production Section Patterns
 
 ## Mental model
 
@@ -85,7 +85,7 @@ card rows and data-widget variants: read `references/dashboard-data-patterns.md`
 
 - **component-patterns-code** — Individual component implementation (buttons, inputs, modals, cards)
 - **screen-flow-patterns** — Full page types and navigation flows between pages
-- **ui-pattern-intelligence** — 200+ UI interaction patterns with benchmarks
+- **ui-pattern-intelligence** — 190+ UI interaction patterns with benchmarks
 - **visual-design-mastery** — Color, typography, and composition scoring
 - **platform-visual-standards** — Platform-specific adaptations (iOS 26, Material 3, CSS)
 - **performance-states-patterns** — Loading, error, skeleton states for every block
@@ -112,7 +112,7 @@ interface SectionProps {
 
 const paddingMap = { sm: 'py-8 md:py-12 lg:py-16', md: 'py-12 md:py-16 lg:py-20', lg: 'py-16 md:py-20 lg:py-24', xl: 'py-20 md:py-28 lg:py-32' };
 const maxWidthMap = { narrow: 'max-w-3xl', standard: 'max-w-6xl', wide: 'max-w-7xl', full: 'max-w-full' };
-const bgMap = { white: 'bg-white text-gray-900', gray: 'bg-gray-50 text-gray-900', dark: 'bg-gray-900 text-white', brand: 'bg-blue-600 text-white', gradient: 'bg-gradient-to-br from-blue-600 to-purple-700 text-white' };
+const bgMap = { white: 'bg-white text-gray-900', gray: 'bg-gray-50 text-gray-900', dark: 'bg-gray-900 text-white', brand: 'bg-primary text-primary-foreground', gradient: 'bg-gradient-to-br from-primary to-primary/80 text-primary-foreground' }; // brand tokens from /style, never a stock blue→purple
 
 export function Section({ children, background = 'white', padding = 'lg', maxWidth = 'standard', id }: SectionProps) {
   return (

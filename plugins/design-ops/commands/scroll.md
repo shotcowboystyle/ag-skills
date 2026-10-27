@@ -23,7 +23,7 @@ Resolve the plugin scripts once:
 
 ```bash
 DESIGN_OPS="${DESIGN_OPS:-$(dirname "$(dirname "$(find . ~/.claude ~/.codex ~/.agents ~/.config/opencode ~/.copilot ~/.gemini ~/.pi -path '*reference-intelligence/scripts/capture.mjs' -print -quit 2>/dev/null)")")}"
-KIE="$DESIGN_OPS/skills/scroll-experience-direction/scripts/kie.mjs"
+KIE="${KIE:-$(find . ~/.claude ~/.codex ~/.agents ~/.config/opencode ~/.copilot ~/.gemini ~/.pi -path '*scroll-experience-direction/scripts/kie.mjs' -print -quit 2>/dev/null)}"
 ```
 
 **Flags in `$ARGUMENTS`:**

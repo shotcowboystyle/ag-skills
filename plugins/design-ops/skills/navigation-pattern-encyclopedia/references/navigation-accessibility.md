@@ -954,7 +954,7 @@ function AccessibleDropdown({ label, items, currentPath }: DropdownProps) {
 
 | Platform | Minimum Target | Recommended Target | Spacing |
 |----------|---------------|-------------------|---------|
-| WCAG 2.2 Level AA | 24x24 CSS px | 44x44 CSS px | 8px |
+| WCAG 2.2 (2.5.8 AA; 2.5.5 AAA) | 24x24 CSS px (AA) | 44x44 CSS px (AAA) | Undersized targets: 24px-diameter circles must not overlap |
 | Apple HIG | 44x44 pt | 44x44 pt | 8pt |
 | Material Design | 48x48 dp | 48x48 dp | 8dp |
 

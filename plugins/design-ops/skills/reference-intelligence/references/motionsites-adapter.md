@@ -4,7 +4,7 @@ MotionSites is a library of motion-led website build prompts. Its prompts are im
 recipes, not screenshots, so use it for **how to build a motion idea** once the board has
 chosen that idea.
 
-## Tools (load with ToolSearch `+motionsites`)
+## Tools (Claude Code: load with ToolSearch `+motionsites`; other harnesses list them directly)
 
 | Tool                  | Use                                                                        |
 | --------------------- | -------------------------------------------------------------------------- |

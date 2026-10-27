@@ -725,7 +725,7 @@ Calming, accessible, high contrast, professional. Blues and greens for trust and
   --space-16: 64px;
   --space-20: 80px;
   --space-24: 96px;
-  --touch-target-min: 44px;   /* WCAG minimum */
+  --touch-target-min: 44px;   /* Apple HIG; WCAG 2.5.5 AAA (2.5.8 AA is 24px) */
   --touch-target-comfortable: 48px;
 
   /* --- Border Radius --- */
@@ -1450,7 +1450,7 @@ Apply syntax tokens to code blocks:
 
 ### Healthcare Accessibility Checklist
 - All text must meet APCA Lc 60+ for body, Lc 75+ for small text
-- Touch targets minimum 44px (WCAG 2.2 Level AA)
+- Touch targets minimum 44px (WCAG 2.5.5, Level AAA; the AA minimum in 2.5.8 is 24px)
 - Color must never be the only indicator of state
 - Error states require icon + text + color
 - Use `--leading-relaxed` for body text (1.75)

@@ -1,6 +1,6 @@
 # Agent Reference
 
-Reference for 179 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
+Reference for 176 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
 
 ## Agent Categories
 
@@ -25,13 +25,10 @@ Reference for 179 local AI agents organized by category. The model column lists 
 
 | Agent                                                                                    | Model   | Description                                             |
 | ---------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------- |
-| [ui-designer](../plugins/design-ops/agents/ui-designer.md)                               | inherit | UI/UX design for mobile and web with modern patterns    |
-| [accessibility-expert](../plugins/design-ops/agents/accessibility-expert.md)             | inherit | WCAG compliance, accessibility audits, inclusive design |
-| [design-system-architect](../plugins/design-ops/agents/design-system-architect.md)       | inherit | Design tokens, component libraries, theming systems     |
-| [design-ops-art-director](../plugins/design-ops/agents/art-director.md)                  | inherit | Reference Board direction from captured design DNA      |
-| [design-ops-critic](../plugins/design-ops/agents/critic.md)                              | inherit | Side-by-side grading of a build against the board       |
-| [design-ops-scout](../plugins/design-ops/agents/scout.md)                                | inherit | Live Awwwards/Mobbin/MotionSites reference sourcing     |
-| [design-ops-ux-architect](../plugins/design-ops/agents/ux-architect.md)                  | inherit | Flows, screen inventory, IA from real app patterns      |
+| [design-ops-art-director](../plugins/design-ops/agents/art-director.md)                  | sonnet  | Reference Board direction from captured design DNA      |
+| [design-ops-critic](../plugins/design-ops/agents/critic.md)                              | sonnet  | Side-by-side grading of a build against the board       |
+| [design-ops-scout](../plugins/design-ops/agents/scout.md)                                | sonnet  | Live Awwwards/Mobbin/MotionSites reference sourcing     |
+| [design-ops-ux-architect](../plugins/design-ops/agents/ux-architect.md)                  | sonnet  | Flows, screen inventory, IA from real app patterns      |
 | [ui-ux-designer](../plugins/multi-platform-apps/agents/ui-ux-designer.md)                | sonnet  | Interface design, wireframes, design systems            |
 | [ui-visual-validator](../plugins/accessibility-compliance/agents/ui-visual-validator.md) | sonnet  | Visual regression testing and UI verification           |
 | [mobile-developer](../plugins/frontend-mobile-development/agents/mobile-developer.md)    | inherit | React Native and Expo application development           |

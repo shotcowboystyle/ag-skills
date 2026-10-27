@@ -1,8 +1,8 @@
-# Validation & Error Patterns — Timing, Anatomy, 100+ Message Templates, and Accessibility
+# Validation & Error Patterns — Timing, Anatomy, 90+ Message Templates, and Accessibility
 
 ## How to Use This Reference
 
-This file covers the complete validation and error handling system for forms. It includes: when to validate, how to display errors, 100+ pre-written error message templates organized by field type and error type, async validation patterns, cross-field validation, and full accessibility implementation. When designing or coding any form, use this as your error handling playbook.
+This file covers the complete validation and error handling system for forms. It includes: when to validate, how to display errors, 90+ pre-written error message templates organized by field type and error type, async validation patterns, cross-field validation, and full accessibility implementation. When designing or coding any form, use this as your error handling playbook.
 
 ---
 
@@ -157,7 +157,7 @@ function ErrorSummary({ errors }: { errors: { field: string; message: string }[]
 
 ---
 
-## 100+ Error Message Templates
+## 90+ Error Message Templates
 
 ### Text Fields (Name, Title, Generic)
 

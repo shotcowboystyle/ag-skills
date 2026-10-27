@@ -6,7 +6,7 @@ Every UI pattern in digital product design belongs to one of 10 categories. Each
 
 Patterns are not opinions. They are empirically validated solutions to recurring design problems. When Shopify, Stripe, Linear, Airbnb, and Apple converge on the same solution independently, that convergence is a pattern. When a designer deviates from a pattern, the burden of proof is on the deviation.
 
-This taxonomy covers 200+ patterns across 10 categories. Each entry is structured for pattern matching: given a piece of code or a screenshot, Claude can identify which pattern is being attempted, score how well it is executed, and recommend the canonical or best-in-class version.
+This taxonomy covers 190+ patterns across 10 categories. Each entry is structured for pattern matching: given a piece of code or a screenshot, Claude can identify which pattern is being attempted, score how well it is executed, and recommend the canonical or best-in-class version.
 
 ---
 
@@ -1151,7 +1151,7 @@ SSL badge, secure payment icons, money-back guarantee badge, customer count, pre
 Paywall shown during onboarding, typically after demonstrating value. "Your report is ready — subscribe to view it." Effective when the user has invested effort. Must offer a way to cancel/go back.
 
 ### 6.14 Subscription Management
-Current plan display + upgrade/downgrade options + billing history + cancel flow. Cancel must be as easy as subscribe (FTC requirement). Retention offer on cancellation attempt (ethical: discount, not dark pattern maze).
+Current plan display + upgrade/downgrade options + billing history + cancel flow. Cancel must be as easy as subscribe (California's auto-renewal law requires online cancellation for online signups; the FTC click-to-cancel rule was vacated in July 2025). Retention offer on cancellation attempt (ethical: discount, not dark pattern maze).
 
 ### 6.15 Referral / Invite System
 Share link/code + reward display + invite tracking. "Give $10, get $10." Simple copy-to-clipboard link. Social share buttons. Status tracking for pending/completed referrals.

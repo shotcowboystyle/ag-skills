@@ -1,6 +1,6 @@
 ---
 name: form-design-encyclopedia
-description: 200+ form patterns covering every input type, layout, validation strategy, multi-step wizard, and error state, with production React and CSS, accessibility requirements, and mobile optimization. Use when building or fixing a form, choosing a validation approach, or reducing abandonment on signup and checkout.
+description: Form patterns covering 50+ input types, 30+ layouts, validation strategies, multi-step wizards, and error states, with production React and CSS, accessibility requirements, and mobile optimization. Use when building or fixing a form, choosing a validation approach, or reducing abandonment on signup and checkout.
 allowed-tools: Read, Grep, Glob
 ---
 
@@ -48,7 +48,7 @@ Error text sits directly beneath its field, never floating.
 | Single column, two column, card-based, inline layouts | `form-layout-patterns.md` |
 | Login, signup, contact, payment, address, settings, survey forms | `form-layout-patterns.md` |
 | When to validate and what to say | `validation-error-patterns.md` |
-| 100+ ready error message templates | `validation-error-patterns.md` |
+| 90+ ready error message templates | `validation-error-patterns.md` |
 | Splitting a long form into steps | `multi-step-form-patterns.md` |
 | Step indicators, back navigation, data persistence | `multi-step-form-patterns.md` |
 | Labels, required marking, error association, group labels | `form-accessibility-code.md` |
@@ -62,7 +62,7 @@ Error text sits directly beneath its field, never floating.
 | `references/input-field-catalog.md` | 55 input types, all states | 1539 |
 | `references/multi-step-form-patterns.md` | wizards, steppers, persistence | 1151 |
 | `references/form-accessibility-code.md` | semantic HTML, ARIA, errors | 1025 |
-| `references/validation-error-patterns.md` | timing, anatomy, 100+ templates | 780 |
+| `references/validation-error-patterns.md` | timing, anatomy, 90+ templates | 780 |
 | `references/form-analytics.md` | measuring form performance | 69 |
 
 ## What every reference file contains

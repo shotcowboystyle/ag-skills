@@ -204,7 +204,7 @@ padding: clamp(0.75rem, 2vw, 2rem);
 
 ### Touch Target Minimums
 
-Per WCAG 2.5.8 (Target Size), interactive elements must be at least 24x24 CSS pixels, with a recommendation of 44x44 pixels. Apple HIG specifies 44pt minimum. Material Design specifies 48dp. Always err on the side of larger targets on touch devices.
+Per WCAG 2.5.8 (Target Size), interactive elements must be at least 24x24 CSS pixels (AA), or have enough spacing; 44x44 CSS pixels is 2.5.5 Target Size (Enhanced), Level AAA. Apple HIG specifies 44pt minimum. Material Design specifies 48dp. Always err on the side of larger targets on touch devices.
 
 This is directly informed by Fitts's Law (see `cognitive-psychology-ux`): the time to reach a target is a function of distance and target size. Smaller targets increase error rates and frustration, especially under mobile conditions (one-handed use, walking, glare).
 

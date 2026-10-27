@@ -20,8 +20,8 @@ the gate, hand off the named artifact, and name the command that produces it.
 
 Not every skill is a stage. A **stage** is a decision that gates the next
 decision. A **depth skill** is a library you open once you already know what you
-are building — 500+ layout blocks, 1000+ microcopy templates, 200+ animation
-recipes, 500+ palettes. Loading a library before you have a decision to make just
+are building — ~300 layout blocks, 1000+ microcopy templates, 200+ animation
+recipes, 180+ palettes. Loading a library before you have a decision to make just
 burns context.
 
 So each pipeline below lists its core stages in order, then the depth skills to

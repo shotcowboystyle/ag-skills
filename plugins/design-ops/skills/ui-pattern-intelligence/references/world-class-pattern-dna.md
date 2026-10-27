@@ -2,7 +2,7 @@
 
 ## How to Use This File
 
-This file goes deep into 30+ world-class products, extracting not what they look like but what specific patterns they use and why those patterns work. Each product profile documents 5-10 signature patterns with the underlying psychology/UX principle and how to apply the principle to any product (without copying the design).
+This file goes deep into 20 world-class products, extracting not what they look like but what specific patterns they use and why those patterns work. Each product profile documents 5-10 signature patterns with the underlying psychology/UX principle and how to apply the principle to any product (without copying the design).
 
 This is different from `designer-benchmark-dna.md` which provides scoring and broad design principles. This file provides extractable pattern DNA — the specific decisions you can study, understand, and adapt.
 

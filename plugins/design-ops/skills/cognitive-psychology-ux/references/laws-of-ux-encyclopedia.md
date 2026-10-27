@@ -1206,7 +1206,7 @@ function PaymentForm() {
 
 ## 25. Pareto Principle (80/20 Rule)
 
-**Definition:** Roughly 80% of effects come from 20% of causes. In product design, approximately 80% of users use only 20% of features.
+**Definition:** Roughly 80% of effects come from 20% of causes. In product design, a small share of features usually accounts for most usage.
 
 **Principle:** Identify the 20% of features that serve 80% of user needs and make those features prominent, fast, and frictionless. The remaining 80% of features should be accessible but not competing for attention with the core set.
 

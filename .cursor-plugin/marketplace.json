@@ -323,7 +323,7 @@
     {
       "name": "design-ops",
       "source": "./plugins/design-ops",
-      "version": "1.3.1",
+      "version": "1.4.0",
       "description": "UX/UI design ops \u2014 briefs, tokens, components, screens and pages graded against live Awwwards and Mobbin references, plus Material 3/Compose, React Native, and web component design. Absorbs the former ui-design plugin.",
       "author": {
         "name": "Curtis Blanton",

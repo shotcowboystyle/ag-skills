@@ -211,7 +211,7 @@ Use this rubric for structured evaluations, design portfolio reviews, or systema
 
 - **1 (Poor):** Fails basic contrast ratios. No keyboard navigation support. No alt text. Color is the only information differentiator.
 - **2 (Below Average):** Some contrast compliance. Partial keyboard support. Screen reader experience is broken or nonsensical.
-- **3 (Adequate):** Meets WCAG AA for contrast. Keyboard navigation works for primary flows. Basic alt text present. Touch targets meet minimum 44px recommendation.
+- **3 (Adequate):** Meets WCAG AA for contrast. Keyboard navigation works for primary flows. Basic alt text present. Touch targets meet the 44px Apple HIG recommendation.
 - **4 (Strong):** Full WCAG AA compliance. Logical focus order. Meaningful alt text. ARIA labels where needed. Works with major screen readers. Multiple input modalities supported.
 - **5 (Exceptional):** Exceeds WCAG AA, approaching AAA where practical. Inclusive design principles evident — not just compliance but genuine consideration for diverse abilities. Motion-reduced alternatives exist. Cognitive load is managed for neurodiverse users. Accessibility is a design driver, not an afterthought.
 

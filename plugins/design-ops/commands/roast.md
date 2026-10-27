@@ -56,112 +56,9 @@ The second sentence is an opinion wearing a question mark. If a question can onl
 
 ### Step 2: Score 10 Dimensions
 
-Score each dimension 1-10. Be honest — most production designs score 4-7. An 8+ is genuinely impressive. A 3 or below means fundamental problems.
+Score the 10 dimensions in `visual-design-mastery/references/visual-scoring-framework.md`, 1-10 each, using its per-score descriptors. It is the one Design Ops rubric, shared with `/grade` and the critic. Be honest — most production designs score 4-7. An 8+ is genuinely impressive. A 3 or below means fundamental problems.
 
-| # | Dimension | What It Measures | Score Criteria |
-|---|-----------|-----------------|----------------|
-| 1 | **Clarity** | Can users understand what to do without instruction? | 10: Self-explanatory, zero confusion. 5: Some labels unclear. 1: Users have no idea what to do |
-| 2 | **Hierarchy** | Is information prioritized visually and structurally? | 10: Crystal clear what matters most. 5: Competing elements. 1: Everything screams equally |
-| 3 | **Consistency** | Does it follow established patterns and conventions? | 10: Every element follows the system. 5: Some deviations. 1: Every screen feels like a different app |
-| 4 | **Spacing** | Is whitespace used purposefully? Breathing room appropriate? | 10: Perfect rhythm. 5: Inconsistent but functional. 1: Cramped or wasteful |
-| 5 | **Color** | Is the palette harmonious, semantic, and accessible? | 10: Cohesive palette with clear semantic meaning. 5: Works but generic. 1: Clashing or inaccessible |
-| 6 | **Typography** | Is the type system clear, readable, and hierarchical? | 10: Beautiful type scale, perfect readability. 5: Functional but bland. 1: Unreadable or chaotic |
-| 7 | **Interaction** | Do interactive elements provide clear feedback and feel responsive? | 10: Every click/tap feels intentional and responsive. 5: Basic hover states. 1: Dead clicks, no feedback |
-| 8 | **Accessibility** | Does it work for users of all abilities? | 10: WCAG AAA, keyboard perfect, screen reader tested. 5: Basic AA compliance. 1: Inaccessible |
-| 9 | **Innovation** | Does it solve problems in novel, valuable ways? | 10: Genuinely new approach that works. 5: Solid execution of known patterns. 1: Outdated or copied |
-| 10 | **Polish** | Is the craft quality and attention to detail high? | 10: Every pixel intentional, all states covered. 5: Mostly done. 1: Clearly unfinished |
-
-**Scoring guidance per dimension**:
-
-#### 1. Clarity (Can they figure it out?)
-- Check: Primary CTA is immediately identifiable
-- Check: Labels describe what will happen, not internal jargon
-- Check: Information architecture is self-evident (no "Where do I go?")
-- Check: Empty states tell users what to do, not just "Nothing here"
-- Check: Onboarding is unnecessary because the UI explains itself
-- Red flag: Any moment where the user must guess what a button or link does
-- Principle: Don't Make Me Think (Krug). If users have to think, clarity has failed
-
-#### 2. Hierarchy (What matters most?)
-- Check: One primary action per screen dominates visually
-- Check: Size, weight, color, and position all reinforce the same priority order
-- Check: Secondary content recedes — it is present but does not compete
-- Check: F-pattern or Z-pattern reading flow is respected for the content type
-- Check: Visual hierarchy matches task hierarchy (most important task = most prominent element)
-- Red flag: Multiple elements compete for attention with equal visual weight
-- Principle: Von Restorff Effect — the distinct item is remembered. If everything is distinct, nothing is
-
-#### 3. Consistency (Same thing, same way?)
-- Check: Same action looks the same everywhere (all "Save" buttons are identical)
-- Check: Platform conventions respected (iOS back chevron, Android back arrow)
-- Check: Spacing tokens used consistently (not 12px here, 14px there)
-- Check: Interaction patterns are predictable (swipe does the same thing everywhere)
-- Check: Terminology is consistent (not "Save" in one place and "Update" in another for the same action)
-- Red flag: A component that looks different from its siblings for no reason
-- Principle: Jakob's Law — users spend most of their time on other products and expect yours to work the same
-
-#### 4. Spacing (Does it breathe?)
-- Check: Consistent spacing scale (4, 8, 12, 16, 24, 32, 48, 64)
-- Check: Related items are closer together than unrelated items (Gestalt proximity)
-- Check: Touch targets have enough surrounding space (no accidental taps)
-- Check: Content density is appropriate for the sector (dashboard vs. landing page)
-- Check: Vertical rhythm is maintained (consistent line-height multiples)
-- Red flag: Arbitrary spacing values that break the rhythm
-- Principle: Proximity is the strongest Gestalt grouping principle. Spacing IS meaning
-
-#### 5. Color (Harmonious and meaningful?)
-- Check: 60-30-10 color distribution (dominant, secondary, accent)
-- Check: Semantic colors are consistent (red = destructive everywhere, not sometimes warning)
-- Check: Palette has at most 5-6 distinct hues (excluding neutrals)
-- Check: Contrast meets WCAG AA minimums (4.5:1 text, 3:1 UI components)
-- Check: Color is not the only way information is conveyed (use icons, text, patterns too)
-- Red flag: More than 2 accent colors competing, or semantic confusion (green delete button)
-- Principle: Color is emotional first, informational second. Wrong color creates wrong feeling
-
-#### 6. Typography (Readable and structured?)
-- Check: Maximum 2 font families (one display, one body — or a single versatile family)
-- Check: Clear type scale with consistent ratios (1.2, 1.25, 1.333, 1.5, or 1.618)
-- Check: Body text >= 16px, line-height >= 1.5
-- Check: Line length between 45-75 characters for readability
-- Check: Weight usage is disciplined (Regular, Medium, Semibold — not all 9 weights)
-- Red flag: More than 5 distinct text styles, or font sizes that don't follow a scale
-- Principle: Typography is 95% of web design (Oliver Reichenstein). Get type right and the design follows
-
-#### 7. Interaction (Does it respond?)
-- Check: Every interactive element has hover, focus, and active states
-- Check: Feedback is immediate (< 100ms for direct manipulation, < 400ms for system response)
-- Check: Transitions are purposeful (communicate state change, not just decoration)
-- Check: Loading states present for any action > 300ms
-- Check: Error states provide recovery paths (not dead ends)
-- Red flag: Click/tap with no visual response, or states that appear identical
-- Principle: Doherty Threshold — response within 400ms or the user's attention breaks
-
-#### 8. Accessibility (Does it work for everyone?)
-- Check: Keyboard navigation reaches all interactive elements
-- Check: Focus indicators are visible and high-contrast
-- Check: Color contrast meets WCAG AA (4.5:1 text, 3:1 UI)
-- Check: Images have alt text, icons have labels
-- Check: Form inputs have associated labels
-- Red flag: Any interactive element unreachable by keyboard, or invisible focus
-- Principle: Accessibility is not a feature — it is a quality requirement. 1 in 4 adults has a disability
-
-#### 9. Innovation (Is it novel and valuable?)
-- Check: Solves a real problem in a way competitors do not
-- Check: Innovation serves the user (not just the business or the designer's portfolio)
-- Check: Novel patterns are learnable (innovation without usability is decoration)
-- Check: Familiar patterns are used for familiar tasks (innovate where it matters)
-- Check: The innovation is defensible (would users miss it if removed?)
-- Red flag: Innovation for its own sake, or copying a trend without understanding why it works
-- Principle: Innovation is earned by first mastering convention. Break rules only when you understand them
-
-#### 10. Polish (Is the craft high?)
-- Check: All UI states implemented (default, hover, focus, active, disabled, loading, error, empty, skeleton)
-- Check: Pixel-level alignment — elements on grid, consistent spacing, no 1px offsets
-- Check: Smooth transitions between states (no jarring jumps)
-- Check: Edge cases handled (long text, empty data, slow connections, large datasets)
-- Check: Micro-interactions add delight without slowing users down
-- Red flag: Missing states, inconsistent border-radius, mixed icon sizes, orphaned styles
-- Principle: God is in the details (Mies van der Rohe). Polish is what separates professional from amateur
+Clarity, interaction feedback and accessibility are not separate dimensions here. Raise problems with them as must-fix items (Step 4), and send deep accessibility work to `/a11y`.
 
 ### Step 2.5: AI Slop Detection
 
@@ -209,9 +106,9 @@ Count the number of checks that apply:
 
 Add a **Slop Score** to the final output alongside the letter grade. Format: `Slop Score: X/23 ([Severity]) — run /fix to transform this into visual cuisine`
 
-### Step 3: Calculate Total Score
+### Step 3: Calculate DQS
 
-**Total**: Sum of all 10 dimensions (out of 100)
+**Total**: DQS — the framework's weighted overall × 10, rounded (0-100). The same number `/grade` reports.
 
 **Letter Grade**:
 - **A** (90-100): Exceptional. Ship it and submit to Awwwards
@@ -292,18 +189,18 @@ A single sentence that captures the essence of this design's quality. Be direct.
 
 | # | Dimension | Score | Observation |
 |---|-----------|-------|-------------|
-| 1 | Clarity | X/10 | [one-line observation] |
-| 2 | Hierarchy | X/10 | [one-line observation] |
-| 3 | Consistency | X/10 | [one-line observation] |
-| 4 | Spacing | X/10 | [one-line observation] |
-| 5 | Color | X/10 | [one-line observation] |
-| 6 | Typography | X/10 | [one-line observation] |
-| 7 | Interaction | X/10 | [one-line observation] |
-| 8 | Accessibility | X/10 | [one-line observation] |
-| 9 | Innovation | X/10 | [one-line observation] |
-| 10 | Polish | X/10 | [one-line observation] |
+| 1 | Typography | X/10 | [one-line observation] |
+| 2 | Color | X/10 | [one-line observation] |
+| 3 | Spacing | X/10 | [one-line observation] |
+| 4 | Composition | X/10 | [one-line observation] |
+| 5 | Imagery | X/10 | [one-line observation] |
+| 6 | Iconography | X/10 | [one-line observation] |
+| 7 | Motion | X/10 | [one-line observation] |
+| 8 | Polish | X/10 | [one-line observation] |
+| 9 | Coherence | X/10 | [one-line observation] |
+| 10 | Craft | X/10 | [one-line observation] |
 
-**Total: [X/100] — Grade: [Letter]**
+**DQS: [X/100] — Grade: [Letter]**
 **Slop Score: [X/23] ([Clean/Mild/Moderate/Full]) — run `/fix` to transform this into visual cuisine**
 
 ---
@@ -365,7 +262,7 @@ A single sentence that captures the essence of this design's quality. Be direct.
 The output MUST include:
 - [ ] 3-5 genuine strengths identified before any criticism (Liz Lerman process)
 - [ ] All 10 dimensions scored with one-line observation per dimension
-- [ ] Total score calculated correctly (sum of 10 dimensions)
+- [ ] DQS calculated correctly (weighted overall × 10, per the framework)
 - [ ] Letter grade assigned correctly from the scale
 - [ ] Top 3 must-fix items with specific location, principle grounding, and actionable fix
 - [ ] Top 3 strengths with what would break them during iteration

@@ -66,7 +66,7 @@ Users should not have to wonder whether different words, situations, or actions 
 - AI behavior consistency: same prompt patterns should produce predictably similar interaction styles
 - Cross-device consistency: the experience must feel unified across mobile, desktop, and wearable
 
-**Severity when violated:** Medium — inconsistency increases learning time by 25-50% and erodes trust.
+**Severity when violated:** Medium — inconsistency increases learning time and erodes trust.
 
 ### H5: Error Prevention
 
@@ -118,7 +118,7 @@ Dialogues should not contain information which is irrelevant or rarely needed. E
 - Information density must match user expertise — dashboards for analysts, simplified views for casual users
 - AI interfaces should show results first, process second
 
-**Severity when violated:** Medium — cluttered interfaces reduce task completion by 20% and user satisfaction by 40%.
+**Severity when violated:** Medium — cluttered interfaces reduce task completion and user satisfaction.
 
 ### H9: Help Users Recognize, Diagnose, and Recover from Errors
 

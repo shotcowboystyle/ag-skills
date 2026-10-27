@@ -1059,7 +1059,7 @@ When building screens, draw patterns and best practices from:
 - `cognitive-psychology-ux` — Fitts's Law, Hick's Law, Miller's Law, Von Restorff, Peak-End Rule
 - `nng-ux-heuristics` — Heuristic grounding of screen-level decisions
 - `screen-flow-patterns` — Screen type catalog, flow patterns, UI element patterns
-- `ui-pattern-intelligence` — 200+ UI patterns, anti-pattern encyclopedia
+- `ui-pattern-intelligence` — 190+ UI patterns, anti-pattern encyclopedia
 - `visual-design-mastery` — Composition rules, visual scoring, color/typography mastery
 - `platform-visual-standards` — iOS 26, M3 Expressive, modern CSS 2025-2026
 - `design-token-presets` — Ready-to-deploy token systems by industry

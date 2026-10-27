@@ -119,7 +119,7 @@ The flywheel operates in six steps:
 5. **Iterate** — Designer updates the component in Figma. The MCP read detects changes. Claude generates an incremental code update. Visual regression catches any drift.
 6. **Ship** — CI/CD pipeline deploys validated components. Token pipeline syncs updated variables. Consuming applications pull the latest version.
 
-Each cycle gets faster. The first pass through the flywheel for a new component might save 50% of development time compared to manual implementation. Subsequent iterations on existing components save 70-80% because the structure, tests, and stories already exist and only need updating.
+Each cycle gets faster. Later passes over an existing component are cheaper than the first, because the structure, tests, and stories already exist and only need updating. Measure the saving on your own components before quoting a number.
 
 ## Routing
 

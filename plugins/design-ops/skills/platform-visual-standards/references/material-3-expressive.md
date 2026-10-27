@@ -236,7 +236,7 @@ HCT is Google's perceptually accurate color space developed specifically for Mat
 - 50 = medium (perceptual midpoint)
 - 100 = pure white
 - A tone difference of 40+ between foreground and background guarantees WCAG AA contrast (4.5:1)
-- A tone difference of 50+ guarantees WCAG AAA contrast (7:1)
+- A tone difference of 50+ guarantees 4.5:1 contrast (WCAG AA for normal text); 40+ guarantees 3:1
 
 ### Why HCT Over HSL
 

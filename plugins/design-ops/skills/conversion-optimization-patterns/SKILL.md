@@ -36,20 +36,20 @@ Robert Cialdini's framework, published in "Influence: The Psychology of Persuasi
 
 In "Pre-Suasion" (2016), Cialdini added a seventh principle: **Unity** — the shared identity between influencer and audience. "We are the same tribe" is more powerful than any of the original six principles. In product design, unity manifests as community features, shared identity markers ("Built by developers, for developers"), and language that positions the product and user as part of the same in-group.
 
-### The Fogg Behavior Model (B=MAT)
+### The Fogg Behavior Model (B=MAP)
 
 BJ Fogg's Behavior Model, developed at Stanford's Persuasive Technology Lab, provides the most actionable framework for conversion optimization. It states that behavior occurs when three elements converge simultaneously:
 
-**B = M + A + T** (Behavior = Motivation + Ability + Trigger)
+**B = MAP** (Behavior happens when Motivation, Ability, and a Prompt converge at the same moment)
 
 - **Motivation**: The user's desire to complete the action. Motivation is driven by pleasure/pain, hope/fear, and social acceptance/rejection.
 - **Ability**: How easy the action is to complete. Ability is a function of time, money, physical effort, cognitive effort, social deviance, and non-routine-ness.
-- **Trigger**: The prompt that tells the user to act now. Triggers include calls to action, notifications, visual cues, and environmental prompts.
+- **Prompt**: The cue that tells the user to act now (Fogg called this the "trigger" in earlier versions). Prompts include calls to action, notifications, visual cues, and environmental prompts.
 
 The critical insight: **if motivation is high, ability can be lower (people will work harder). If ability is high (the action is trivially easy), motivation can be lower.** The conversion equation plays out on a curve, not a threshold.
 
 For designers, the Fogg model reframes every conversion problem:
-- Low conversion despite clear CTAs? Diagnose motivation or ability, not the trigger.
+- Low conversion despite clear CTAs? Diagnose motivation or ability, not the prompt.
 - Users start but don't complete flows? Ability drops mid-flow (friction spike).
 - Users complete flows but don't return? Motivation was artificially inflated (urgency/scarcity) rather than intrinsic.
 
@@ -86,7 +86,7 @@ The equation reveals three design truths:
 
 Richard Thaler and Cass Sunstein's "Nudge" (2008) established that the way choices are presented profoundly affects which choice people make — even when all options remain available. Designers are choice architects whether they intend to be or not.
 
-**Default Effects.** Defaults are the most powerful nudge. Research across domains shows that 70-90% of users stick with the default option. In product design, defaults determine:
+**Default Effects.** Defaults are the most powerful nudge. Research across domains shows that most people stick with the default option. In product design, defaults determine:
 - Which pricing plan is pre-selected (the one you highlight will get the most signups)
 - Whether annual or monthly billing is the default toggle position
 - Which notification settings are on by default
@@ -144,7 +144,7 @@ Already covered under Cialdini, but specific conversion applications deserve emp
 Beyond Cialdini's principle, scarcity has specific conversion mechanics:
 - Quantity scarcity ("Only 3 seats left") outperforms time scarcity ("Sale ends tonight") for immediate action
 - Scarcity combined with social proof ("Only 3 seats left — 47 people viewing") amplifies urgency
-- Artificial scarcity that users detect reduces trust and conversion by 15-30% (based on multiple e-commerce studies)
+- Artificial scarcity that users detect reduces trust and conversion
 - "Exclusive" framing works only when exclusivity is genuine
 
 ### The Bandwagon Effect
@@ -162,7 +162,7 @@ Once users have invested time, effort, or data, they are reluctant to abandon th
 ### The IKEA Effect
 
 People overvalue things they helped create. In conversion design:
-- Interactive product configurators increase purchase intent by 20-40%
+- Interactive product configurators can increase purchase intent (test it)
 - "Build your plan" interfaces outperform "Pick a plan" interfaces
 - Templates that users customize convert better than pre-built solutions
 - Personalization during trials (custom dashboards, imported data) increases paid conversion
@@ -238,7 +238,7 @@ The relationship between micro and macro conversions reveals funnel health. A pr
 Never optimize for aggregate conversion rate. Always segment by:
 - **Traffic source** (organic, paid, referral, direct — each has different intent levels)
 - **Device** (mobile vs. desktop conversion rates differ by 2-3x in most categories)
-- **New vs. returning** visitors (returning visitors convert 2-5x higher)
+- **New vs. returning** visitors (returning visitors usually convert higher)
 - **Geography** (cultural differences in trust signals, payment preferences, form tolerance)
 - **User intent** (informational vs. transactional — mixing them pollutes your data)
 - **Company size / user persona** (enterprise vs. SMB have fundamentally different conversion journeys)
@@ -255,7 +255,7 @@ The majority of A/B tests reported in blog posts and case studies are statistica
 
 **Insufficient sample size.** Running a test for "one week" regardless of traffic volume. A test needs a minimum detectable effect (MDE) calculation before launch. For most SaaS products, detecting a 10% relative improvement in conversion requires 3,000-10,000 visitors per variation.
 
-**Survivorship bias in case studies.** Published A/B test results skew heavily toward positive outcomes. The true base rate for A/B tests producing statistically significant improvements is approximately 20-30%. Most tests produce no significant difference — and that is useful information that should update your model.
+**Survivorship bias in case studies.** Published A/B test results skew heavily toward positive outcomes. Only a minority of A/B tests produce statistically significant improvements. Most tests produce no significant difference — and that is useful information that should update your model.
 
 **Day-of-week and seasonality effects.** Tests must run for full weeks to capture weekly cycles. A test that runs Monday through Thursday will not capture weekend behavior, which often differs substantially.
 
@@ -383,12 +383,12 @@ the numbers to a client until they are checked.
 
 - **cognitive-psychology-ux**: Deep coverage of Laws of UX, cognitive biases, and mental models that underpin conversion behavior
 - **ux-metrics-measurement**: Comprehensive measurement frameworks, analytics setup, and statistical methods for tracking conversion impact
-- **ui-pattern-intelligence**: 200+ UI patterns including form, pricing, and checkout component patterns with implementation guidance
+- **ui-pattern-intelligence**: 190+ UI patterns including form, pricing, and checkout component patterns with implementation guidance
 - **screen-flow-patterns**: User flow design including signup, onboarding, and checkout flow architecture
 - **ux-ethics-content-strategy**: Detailed coverage of dark pattern taxonomy and ethical design frameworks
 - **ux-research-methods**: User research methods for qualitative conversion research (usability testing, surveys, interviews)
 - **performance-states-patterns**: Loading states, skeleton screens, and performance optimization that directly impacts conversion rates
-- **accessibility-inclusive-design**: Accessible conversion flows reach 15-20% more potential customers
+- **accessibility-inclusive-design**: Accessible conversion flows reach the roughly 16% of people worldwide living with significant disability (WHO, 2023)
 - **form-design-encyclopedia**: Detailed form patterns, input types, and validation strategies
 - **micro-copy-intelligence**: CTA copy templates and error message patterns
 - **layout-block-intelligence**: CTA, pricing, and testimonial block patterns
@@ -398,7 +398,7 @@ the numbers to a client until they are checked.
 This skill includes five comprehensive reference files:
 
 1. **cta-optimization.md** — Button copy psychology, 50+ CTA templates, color/size/placement research, personalization patterns, and A/B test results from major companies
-2. **pricing-page-psychology.md** — Anchoring, decoy effects, price framing, tier design, feature matrices, freemium strategy, and 30+ pricing layouts with conversion data
+2. **pricing-page-psychology.md** — Anchoring, decoy effects, price framing, tier design, feature matrices, freemium strategy, and 11 pricing layouts with conversion data
 3. **form-conversion.md** — Field reduction research, progressive disclosure, multi-step vs. single-page forms, validation UX, mobile optimization, and field-level analytics
 4. **trust-persuasion-patterns.md** — Trust signal taxonomy, testimonial design, social proof patterns, security indicators, guarantee placement, and real-time activity notifications
 5. **funnel-optimization.md** — AIDA and AARRR frameworks, stage-by-stage optimization, checkout funnels, cart abandonment recovery, retention hooks, and multi-touch attribution

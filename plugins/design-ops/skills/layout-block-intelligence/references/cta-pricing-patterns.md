@@ -61,7 +61,7 @@ export function CTABanner({ title, subtitle, cta, secondaryCta, background = 'da
   const bgClasses = {
     dark: 'bg-gray-900',
     brand: 'bg-blue-600',
-    gradient: 'bg-gradient-to-r from-blue-600 to-purple-600',
+    gradient: 'bg-gradient-to-r from-primary to-primary/80',
   };
 
   return (
@@ -622,7 +622,7 @@ Input field for promo/coupon codes. Validate in real-time. Show: original price 
 
 ## Conversion Optimization Best Practices
 
-1. **Reduce form fields** — every field reduces conversion by 5-10%. Ask for the minimum.
+1. **Reduce form fields** — every extra field costs conversion. Ask for the minimum.
 2. **Use social proof near CTAs** — "Join 10,000+ users" increases conversion 12-34%.
 3. **Default to annual billing** — higher LTV, and the savings message reinforces value.
 4. **Highlight one plan** — the paradox of choice is real. Guide the decision.

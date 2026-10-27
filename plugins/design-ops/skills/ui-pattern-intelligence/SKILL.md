@@ -1,6 +1,6 @@
 ---
 name: ui-pattern-intelligence
-description: 200+ UI patterns across 10 categories, benchmark DNA from 50+ world-class products, sector pattern matrices, a matcher for code and screenshots, and a 100+ entry anti-pattern encyclopedia. Use when detecting AI slop, judging whether a pattern is standard, or matching how a known product feels.
+description: 190+ UI patterns across 10 categories, benchmark DNA from 25+ world-class products, sector pattern matrices, a matcher for code and screenshots, and a 43-entry anti-pattern encyclopedia. Use when detecting AI slop, judging whether a pattern is standard, or matching how a known product feels.
 allowed-tools: Read, Grep, Glob
 ---
 
@@ -31,9 +31,9 @@ mistake wearing a new coat of paint.
 | ---------------------------------------------------- | -------------------------------- |
 | Find a pattern by category                           | `pattern-quick-lookup.md`        |
 | Choose between candidate patterns                    | `pattern-decision-engine.md`     |
-| The full taxonomy, 200+ patterns                     | `pattern-taxonomy-complete.md`   |
+| The full taxonomy, 190+ patterns                     | `pattern-taxonomy-complete.md`   |
 | Detect AI slop in code or a screenshot               | `anti-pattern-encyclopedia.md`   |
-| 100+ anti-patterns with the fix                      | `anti-pattern-encyclopedia.md`   |
+| 43 anti-patterns with the fix                         | `anti-pattern-encyclopedia.md`   |
 | Match how Linear, Stripe, Notion feel                | `world-class-pattern-dna.md`     |
 | What is arriving: AI-native, spatial, voice, ambient | `emerging-patterns-2025-2026.md` |
 | What died recently and why                           | `pattern-evolution-2024-2026.md` |
@@ -46,11 +46,11 @@ mistake wearing a new coat of paint.
 | File                                        | Covers                          | Lines |
 | ------------------------------------------- | ------------------------------- | ----- |
 | `references/pattern-quick-lookup.md`        | indexed lookup, all categories  | 2481  |
-| `references/pattern-taxonomy-complete.md`   | 200+ patterns, 10 categories    | 1878  |
+| `references/pattern-taxonomy-complete.md`   | 190+ patterns, 10 categories    | 1878  |
 | `references/emerging-patterns-2025-2026.md` | what is arriving                | 914   |
 | `references/pattern-decision-engine.md`     | decision trees                  | 905   |
-| `references/world-class-pattern-dna.md`     | 50+ products deconstructed      | 618   |
-| `references/anti-pattern-encyclopedia.md`   | 100+ anti-patterns              | 328   |
+| `references/world-class-pattern-dna.md`     | 20 products deconstructed       | 618   |
+| `references/anti-pattern-encyclopedia.md`   | 43 anti-patterns                | 328   |
 | `references/pattern-evolution-2024-2026.md` | what died and why               | —     |
 | `references/sector-pattern-matrix.md`       | pattern expectations per sector | 417   |
 | `references/pattern-matching-engine.md`     | identify, benchmark, sector-fit | 412   |

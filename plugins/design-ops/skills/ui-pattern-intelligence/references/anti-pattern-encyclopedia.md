@@ -4,7 +4,7 @@
 
 An anti-pattern is not just "bad design." It is a pattern that appears to solve a problem but actually creates worse problems. Anti-patterns are dangerous precisely because they look reasonable — a dropdown with 200 countries seems like it solves "select your country," but it creates a 30-second interaction for a 2-second task. The correct pattern is a searchable combobox.
 
-This encyclopedia catalogs 100+ anti-patterns organized by category, each with: what it looks like, why it seems reasonable, why it actually fails, what to use instead, and the cognitive science behind the failure.
+This encyclopedia catalogs 43 anti-patterns organized by category, each with: what it looks like, why it seems reasonable, why it actually fails, what to use instead, and the cognitive science behind the failure.
 
 ---
 
@@ -27,7 +27,7 @@ This encyclopedia catalogs 100+ anti-patterns organized by category, each with: 
 
 ### N3. Mystery Navigation Icons
 **What it looks like**: Icon-only navigation without labels. A gear icon, a person icon, a chart icon — no text.
-**Why it fails**: Icons are ambiguous. A gear could mean Settings, Preferences, Configuration, or Tools. Google's own research showed that adding text labels to icons increased usage by 40%. Icons are recognition aids, not replacements for labels.
+**Why it fails**: Icons are ambiguous. A gear could mean Settings, Preferences, Configuration, or Tools. Adding text labels to icons makes them easier to recognise and use. Icons are recognition aids, not replacements for labels.
 **Use instead**: Icons WITH labels. Always. The only exception is universally understood icons (home, search, close) in space-constrained contexts.
 **Cognitive principle**: Recognition over recall. Ambiguous icons force guessing.
 **Severity**: Medium — reduces efficiency, increases cognitive load.
@@ -78,7 +78,7 @@ This encyclopedia catalogs 100+ anti-patterns organized by category, each with: 
 **What it looks like**: A pie chart with many small slices, some barely visible, some overlapping in the legend.
 **Why it fails**: Humans are poor at comparing angles. Beyond 5-7 segments, pie charts become unreadable. Small slices (< 5%) are indistinguishable.
 **Use instead**: Horizontal bar chart for comparison. Donut chart for max 5 segments. Table for exact values.
-**Cognitive principle**: Perceptual accuracy. Length (bar charts) is decoded ~5x more accurately than angle (pie charts).
+**Cognitive principle**: Perceptual accuracy. Length (bar charts) is decoded more accurately than angle (pie charts) (Cleveland & McGill, 1984).
 **Severity**: Medium — misleading data presentation.
 
 ### D4. Blank Empty State
@@ -90,7 +90,7 @@ This encyclopedia catalogs 100+ anti-patterns organized by category, each with: 
 
 ### D5. Auto-Advancing Carousel on Homepage
 **What it looks like**: Hero section with 3-5 slides auto-advancing every 3-5 seconds.
-**Why it fails**: < 1% of users interact with slides beyond the first (NNG data). Auto-advance violates user control (H3). Accessibility failure (WCAG 2.2.2 requires pause/stop control). Content in later slides is effectively hidden.
+**Why it fails**: Very few users interact with slides beyond the first. Auto-advance violates user control (H3). Accessibility failure (WCAG 2.2.2 requires pause/stop control). Content in later slides is effectively hidden.
 **Use instead**: Single hero with strong messaging. Or a static grid/bento layout.
 **Severity**: High — wastes prime real estate, accessibility failure, false sense of content coverage.
 
@@ -212,7 +212,7 @@ This encyclopedia catalogs 100+ anti-patterns organized by category, each with: 
 
 ### C4. Dark Pattern Subscription Cancellation
 **What it looks like**: Subscribe with one click. Cancel requires: Settings → Account → Billing → Subscription → Cancel → "Are you sure?" → "Here's a discount" → "Tell us why" → "Are you REALLY sure?" → "Processing..." → "Your cancellation will take effect..."
-**Why it fails**: FTC's "Click-to-Cancel" rule (2024) requires cancellation to be as easy as subscription. This is now a legal liability. Beyond legality, it breeds resentment and negative reviews.
+**Why it fails**: Obstructed cancellation is a legal liability under ROSCA, FTC Act enforcement, and state auto-renewal laws such as California's (the FTC's 2024 "Click-to-Cancel" rule was vacated by the 8th Circuit in July 2025). Beyond legality, it breeds resentment and negative reviews.
 **Use instead**: Cancel in the same place you subscribe. One confirmation step maximum. Retention offer is OK (one screen, one offer), but must include a clear "Cancel anyway" button.
 **Severity**: Critical — legal violation, brand damage.
 

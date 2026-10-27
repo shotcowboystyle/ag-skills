@@ -79,6 +79,6 @@ How screens move between each other, and what each platform expects.
 2. **Platform-native navigation patterns**. Do not put a bottom tab bar on web or a hamburger menu on iOS.
 3. **Shared design tokens** for colors, typography scales, spacing. Platform-specific adjustments for density and touch targets.
 4. **Feature parity by intent, not by implementation**. Swipe-to-delete on iOS, long-press menu on Android, right-click on web all achieve the same goal.
-5. **Minimum touch target**: 44x44pt (iOS), 48x48dp (Android), 44x44px (Web WCAG).
+5. **Minimum touch target**: 44x44pt (iOS), 48x48dp (Android), 24x24px (Web, WCAG 2.5.8 AA; 44x44px is 2.5.5 AAA).
 
 ---

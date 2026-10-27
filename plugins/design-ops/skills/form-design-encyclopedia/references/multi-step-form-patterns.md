@@ -25,7 +25,7 @@ This file covers everything about multi-step forms: when to use them, step indic
 
 ### Completion Rate Impact
 - Single-page forms with many fields: completion drops significantly after 6-8 visible fields
-- Multi-step forms: each step loses 10-20% of users, BUT the initial perceived simplicity brings more users into step 1
+- Multi-step forms: each step loses some users, BUT the initial perceived simplicity brings more users into step 1
 - Net effect: multi-step often wins for 7+ field forms because the lower per-step drop-off rate outweighs the multi-step friction
 - Exception: do not add unnecessary steps just to make each step shorter — extra clicks add friction too
 

@@ -12,7 +12,7 @@ The paper "AI-Assisted Software Development: Implications for Developer Producti
 
 #### Risk 1: Pseudo-Productivity
 
-**Finding**: Developers using AI assistants report feeling 2-3x more productive, but measurable output quality (bug rate, user satisfaction, code maintainability) shows minimal improvement — and sometimes degradation.
+**Finding**: Developers using AI assistants often report feeling much more productive, but measurable output quality (bug rate, user satisfaction, code maintainability) shows minimal improvement — and sometimes degradation.
 
 **UX parallel**: A developer using AI to generate 10 screens in an hour feels enormously productive. But if none of the screens solve the actual user problem, the real productivity is zero. Volume of output ≠ quality of outcomes.
 

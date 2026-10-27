@@ -22,7 +22,7 @@
 
 | Element | Purpose | HTML Role |
 |---------|---------|-----------|
-| **Table container** | Scrollable wrapper | `<div role="grid">` or `<table>` |
+| **Table container** | Scrollable wrapper | `<table>` (`<div role="grid">` only for interactive grids with arrow-key cell navigation) |
 | **Header row** | Column labels, sort controls | `<thead>` / `role="columnheader"` |
 | **Data row** | One record per row | `<tr>` / `role="row"` |
 | **Cell** | Individual data point | `<td>` / `role="gridcell"` |
@@ -1121,6 +1121,8 @@ function formatDate(date: Date, style: string): string {
 
 ### 15.1 Semantic HTML
 
+Default to a native `<table>` with `<th scope="col">` headers; put `aria-sort` on the `<th>` and a `<button>` inside it for sorting. Switch to `role="grid"` only when the table is an interactive widget that implements the arrow-key cell navigation in 15.3, as below. A read-only data table marked `role="grid"` makes screen readers expect that keyboard model.
+
 ```html
 <div role="grid" aria-label="Customer data table" aria-rowcount="342">
   <div role="row" aria-rowindex="1">
@@ -1262,7 +1264,7 @@ This interface defines a production-ready data table component. Implementation s
 - [ ] Expandable rows have clear expand/collapse affordance
 
 ### Accessibility
-- [ ] Proper `role="grid"` with `aria-label`
+- [ ] Native `<table>` with labelled headers, or `role="grid"` with `aria-label` only if arrow-key cell navigation is implemented
 - [ ] `aria-sort` on sortable column headers
 - [ ] Keyboard navigation works (arrow keys between cells)
 - [ ] Focus ring visible on active cell
