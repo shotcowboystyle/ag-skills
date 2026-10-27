@@ -1,6 +1,6 @@
 # Agent Reference
 
-Reference for 176 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
+Reference for 165 local AI agents organized by category. The model column lists aliases in the shared Claude Code source format. Adapters provide agent formats and model mappings for other tools. See the [capability matrix](./harnesses.md) for setup and tool-specific limits.
 
 ## Agent Categories
 
@@ -10,13 +10,13 @@ Reference for 176 local AI agents organized by category. The model column lists 
 
 | Agent                                                                                         | Model   | Description                                                            |
 | --------------------------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------- |
-| [backend-architect](../plugins/backend-development/agents/backend-architect.md)               | inherit | RESTful API design, microservice boundaries, database schemas          |
+| [backend-architect](../plugins/backend-development/agents/backend-architect.md) | opus | Backend design: service boundaries, API contracts, failure handling |
 | [frontend-developer](../plugins/multi-platform-apps/agents/frontend-developer.md)             | inherit | React components, responsive layouts, client-side state management     |
-| [graphql-architect](../plugins/backend-development/agents/graphql-architect.md)               | opus    | GraphQL schemas, resolvers, federation architecture                    |
+| [graphql-architect](../plugins/backend-development/agents/graphql-architect.md) | opus | GraphQL schema design, breaking-change checks, query cost limits |
 | [architect-review](../plugins/comprehensive-review/agents/architect-review.md)                | opus    | Architectural consistency analysis and pattern validation              |
-| [cloud-architect](../plugins/cloud-infrastructure/agents/cloud-architect.md)                  | opus    | AWS/Azure/GCP infrastructure design and cost optimization              |
-| [hybrid-cloud-architect](../plugins/cloud-infrastructure/agents/hybrid-cloud-architect.md)    | opus    | Multi-cloud strategies across cloud and on-premises environments       |
-| [kubernetes-architect](../plugins/kubernetes-operations/agents/kubernetes-architect.md)       | opus    | Cloud-native infrastructure with Kubernetes and GitOps                 |
+| [cloud-architect](../plugins/cloud-infrastructure/agents/cloud-architect.md) | opus | Cloud workload design and review with cited pricing |
+| [hybrid-cloud-architect](../plugins/cloud-infrastructure/agents/hybrid-cloud-architect.md) | opus | On-premises and multi-cloud connectivity, placement, failover |
+| [kubernetes-architect](../plugins/kubernetes-operations/agents/kubernetes-architect.md) | opus | Kubernetes platform layout, tenancy, security, GitOps delivery |
 | [service-mesh-expert](../plugins/cloud-infrastructure/agents/service-mesh-expert.md)          | opus    | Istio/Linkerd service mesh architecture, mTLS, and traffic management  |
 | [event-sourcing-architect](../plugins/backend-development/agents/event-sourcing-architect.md) | inherit | Event sourcing, CQRS patterns, event stores, and saga orchestration    |
 | [monorepo-architect](../plugins/developer-essentials/agents/monorepo-architect.md)            | opus    | Monorepo tooling with Nx, Turborepo, Bazel, and workspace optimization |
@@ -79,25 +79,25 @@ Reference for 176 local AI agents organized by category. The model column lists 
 
 | Agent                                                                                  | Model  | Description                                                        |
 | -------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------ |
-| [devops-troubleshooter](../plugins/incident-response/agents/devops-troubleshooter.md)  | sonnet | Production debugging, log analysis, deployment troubleshooting     |
-| [deployment-engineer](../plugins/cloud-infrastructure/agents/deployment-engineer.md)   | haiku  | CI/CD pipelines, containerization, cloud deployments               |
-| [terraform-specialist](../plugins/cloud-infrastructure/agents/terraform-specialist.md) | opus   | Infrastructure as Code with Terraform modules and state management |
+| [devops-troubleshooter](../plugins/incident-response/agents/devops-troubleshooter.md) | sonnet | Root-cause diagnosis from logs, metrics and recent changes |
+| [deployment-engineer](../plugins/cicd-automation/agents/deployment-engineer.md) | sonnet | CI/CD pipelines with gated production rollout and rollback |
+| [terraform-specialist](../plugins/cloud-infrastructure/agents/terraform-specialist.md) | sonnet | Terraform/OpenTofu modules checked with fmt, validate and plan |
 | [dx-optimizer](../plugins/team-collaboration/agents/dx-optimizer.md)                   | sonnet | Developer experience optimization and tooling improvements         |
 
 #### Database Management
 
 | Agent                                                                                  | Model   | Description                                                         |
 | -------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------- |
-| [database-optimizer](../plugins/observability-monitoring/agents/database-optimizer.md) | inherit | Query optimization, index design, migration strategies              |
+| [database-optimizer](../plugins/database-cloud-optimization/agents/database-optimizer.md) | sonnet | Slow-query diagnosis with plans and before/after measurement |
 | [database-admin](../plugins/database-migrations/agents/database-admin.md)              | sonnet  | Database operations, backup, replication, monitoring                |
-| [database-architect](../plugins/database-design/agents/database-architect.md)          | opus    | Database design from scratch, technology selection, schema modeling |
+| [database-architect](../plugins/database-design/agents/database-architect.md) | opus | Data model and database choice from access patterns |
 
 #### Incident Response & Network
 
 | Agent                                                                              | Model  | Description                                         |
 | ---------------------------------------------------------------------------------- | ------ | --------------------------------------------------- |
-| [incident-responder](../plugins/incident-response/agents/incident-responder.md)    | sonnet | Production incident management and resolution       |
-| [network-engineer](../plugins/observability-monitoring/agents/network-engineer.md) | sonnet | Network debugging, load balancing, traffic analysis |
+| [incident-responder](../plugins/incident-response/agents/incident-responder.md) | sonnet | Incident command: severity, approved mitigation, updates |
+| [network-engineer](../plugins/cloud-infrastructure/agents/network-engineer.md) | sonnet | Network design, review and layer-by-layer connectivity debugging |
 
 #### Project Management
 
@@ -143,7 +143,7 @@ Reference for 176 local AI agents organized by category. The model column lists 
 | Agent                                                                                          | Model   | Description                                                    |
 | ---------------------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------- |
 | [performance-engineer](../plugins/observability-monitoring/agents/performance-engineer.md)     | inherit | Application profiling and optimization                         |
-| [observability-engineer](../plugins/observability-monitoring/agents/observability-engineer.md) | inherit | Production monitoring, distributed tracing, SLI/SLO management |
+| [observability-engineer](../plugins/observability-monitoring/agents/observability-engineer.md) | sonnet | Instrumentation, SLOs and burn-rate alerts for one service |
 
 ### Data & AI
 

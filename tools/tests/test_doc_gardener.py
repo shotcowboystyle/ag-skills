@@ -1587,6 +1587,12 @@ class TestDuplicateAgentBodies:
         _write(tmp_path, "b/agents/x.md", "---\nname: b-x\n---\r\nSame body.\r\n")
         assert _audit_run(tmp_path, monkeypatch, "agent-duplicates") == ["AGENT_BODY_DUPLICATE"]
 
+    def test_shared_agent_copies_skipped(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        generated = "---\n# Generated from shared/agents/x.md by `make generate-all`.\n"
+        _write(tmp_path, "a/agents/x.md", generated + "name: a-x\n---\nSame body.\n")
+        _write(tmp_path, "b/agents/x.md", generated + "name: b-x\n---\nSame body.\n")
+        assert _audit_run(tmp_path, monkeypatch, "agent-duplicates") == []
+
     def test_distinct_bodies(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
         _write(tmp_path, "a/agents/x.md", "---\nname: a-x\n---\nOne body.\n")
         _write(tmp_path, "b/agents/x.md", "---\nname: b-x\n---\nOther body.\n")

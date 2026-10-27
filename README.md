@@ -4,7 +4,7 @@ Agents, skills, and commands for seven coding tools: Claude Code, OpenAI Codex C
 Cursor, OpenCode, Google Antigravity CLI (`agy`), GitHub Copilot, and Pi.
 
 The marketplace (`claude-code-workflows`) holds 81 plugins (80 local + 1 external),
-176 agents, 299 skills, and 189 commands. Sources live under `plugins/` in Claude Code
+165 agents, 299 skills, and 189 commands. Sources live under `plugins/` in Claude Code
 format; adapters in `tools/adapters/` emit each other tool's format. Skills follow the
 [Agent Skills](https://agentskills.io/specification) `SKILL.md` spec.
 

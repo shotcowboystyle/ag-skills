@@ -262,7 +262,7 @@ code-reviewer (Sonnet) validates architecture
 ### Component Coverage
 
 - **Full component coverage** - every plugin includes at least one agent, command, or skill
-- **100% component availability** - all 176 local agents accessible across plugins
+- **100% component availability** - all 165 local agents accessible across plugins
 - **Efficient distribution** - 5.9 components per plugin average
 
 ### Discoverability

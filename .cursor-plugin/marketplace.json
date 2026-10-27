@@ -57,7 +57,7 @@
     {
       "name": "api-scaffolding",
       "source": "./plugins/api-scaffolding",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "description": "REST and GraphQL API scaffolding, framework selection, backend architecture, and API generation",
       "author": {
         "name": "Curtis Blanton",
@@ -79,7 +79,7 @@
     {
       "name": "application-performance",
       "source": "./plugins/application-performance",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "description": "Application profiling, performance optimization, and observability for frontend and backend systems",
       "author": {
         "name": "Curtis Blanton",
@@ -103,7 +103,7 @@
     {
       "name": "backend-api-security",
       "source": "./plugins/backend-api-security",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "API security hardening, authentication implementation, authorization patterns, rate limiting, and input validation",
       "author": {
         "name": "Curtis Blanton",
@@ -114,7 +114,7 @@
     {
       "name": "backend-development",
       "source": "./plugins/backend-development",
-      "version": "1.3.3",
+      "version": "1.4.0",
       "description": "Backend API design, GraphQL architecture, workflow orchestration with Temporal, and test-driven backend development",
       "author": {
         "name": "Curtis Blanton",
@@ -169,7 +169,7 @@
     {
       "name": "cicd-automation",
       "source": "./plugins/cicd-automation",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "description": "CI/CD pipeline configuration, GitHub Actions/GitLab CI workflow setup, and automated deployment pipeline orchestration",
       "author": {
         "name": "Curtis Blanton",
@@ -180,7 +180,7 @@
     {
       "name": "cloud-infrastructure",
       "source": "./plugins/cloud-infrastructure",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "description": "Cloud architecture design for AWS/Azure/GCP/OCI, Kubernetes cluster configuration, Terraform infrastructure-as-code, hybrid cloud networking, and multi-cloud cost optimization",
       "author": {
         "name": "Curtis Blanton",
@@ -246,7 +246,7 @@
     {
       "name": "data-engineering",
       "source": "./plugins/data-engineering",
-      "version": "1.3.3",
+      "version": "1.4.0",
       "description": "ETL pipeline construction, data warehouse design, batch processing workflows, and data-driven feature development",
       "author": {
         "name": "Curtis Blanton",
@@ -257,7 +257,7 @@
     {
       "name": "database-cloud-optimization",
       "source": "./plugins/database-cloud-optimization",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "Database query optimization, cloud cost optimization, and scalability improvements",
       "author": {
         "name": "Curtis Blanton",
@@ -268,7 +268,7 @@
     {
       "name": "database-design",
       "source": "./plugins/database-design",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "Database architecture, schema design, and SQL optimization for production systems",
       "author": {
         "name": "Curtis Blanton",
@@ -279,7 +279,7 @@
     {
       "name": "database-migrations",
       "source": "./plugins/database-migrations",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "Database migration automation, observability, and cross-database migration strategies",
       "author": {
         "name": "Curtis Blanton",
@@ -301,7 +301,7 @@
     {
       "name": "deployment-strategies",
       "source": "./plugins/deployment-strategies",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "Deployment patterns, rollback automation, and infrastructure templates",
       "author": {
         "name": "Curtis Blanton",
@@ -312,7 +312,7 @@
     {
       "name": "deployment-validation",
       "source": "./plugins/deployment-validation",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "Pre-deployment checks, configuration validation, and deployment readiness assessment",
       "author": {
         "name": "Curtis Blanton",
@@ -356,7 +356,7 @@
     {
       "name": "distributed-debugging",
       "source": "./plugins/distributed-debugging",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "Distributed system tracing and debugging across microservices",
       "author": {
         "name": "Curtis Blanton",
@@ -456,7 +456,7 @@
     {
       "name": "full-stack-orchestration",
       "source": "./plugins/full-stack-orchestration",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "description": "End-to-end feature orchestration with testing, security, performance, and deployment",
       "author": {
         "name": "Curtis Blanton",
@@ -511,7 +511,7 @@
     {
       "name": "incident-response",
       "source": "./plugins/incident-response",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "description": "Production incident management, triage workflows, and automated incident resolution",
       "author": {
         "name": "Curtis Blanton",
@@ -544,7 +544,7 @@
     {
       "name": "kubernetes-operations",
       "source": "./plugins/kubernetes-operations",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "description": "Kubernetes manifest generation, networking configuration, security policies, observability setup, GitOps workflows, and auto-scaling",
       "author": {
         "name": "Curtis Blanton",
@@ -610,7 +610,7 @@
     {
       "name": "multi-platform-apps",
       "source": "./plugins/multi-platform-apps",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "description": "Cross-platform application development coordinating web, iOS, Android, and desktop implementations",
       "author": {
         "name": "Curtis Blanton",
@@ -621,7 +621,7 @@
     {
       "name": "observability-monitoring",
       "source": "./plugins/observability-monitoring",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "description": "Metrics collection, logging infrastructure, distributed tracing, SLO implementation, and monitoring dashboards",
       "author": {
         "name": "Curtis Blanton",
