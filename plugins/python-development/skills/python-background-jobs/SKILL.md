@@ -1,6 +1,7 @@
 ---
 name: python-background-jobs
 description: Python background job patterns including task queues, workers, and event-driven architecture. Use when implementing async task processing, job queues, long-running operations, or decoupling work from request/response cycles.
+last_verified: 2026-10-27
 ---
 
 # Python Background Jobs & Task Queues
@@ -62,7 +63,7 @@ For operations exceeding a few seconds, return a job ID and process asynchronous
 from uuid import uuid4
 from dataclasses import dataclass
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 
 class JobStatus(Enum):
     PENDING = "pending"
@@ -89,7 +90,7 @@ async def start_export(request: ExportRequest) -> JobResponse:
     await jobs_repo.create(Job(
         id=job_id,
         status=JobStatus.PENDING,
-        created_at=datetime.utcnow(),
+        created_at=datetime.now(timezone.utc),
     ))
 
     # Enqueue task for background processing
@@ -207,9 +208,9 @@ class JobRepository:
         updates = {"status": status.value, **fields}
 
         if status == JobStatus.RUNNING:
-            updates["started_at"] = datetime.utcnow()
+            updates["started_at"] = datetime.now(timezone.utc)
         elif status in (JobStatus.SUCCEEDED, JobStatus.FAILED):
-            updates["completed_at"] = datetime.utcnow()
+            updates["completed_at"] = datetime.now(timezone.utc)
 
         await self._db.execute(
             "UPDATE jobs SET status = $1, ... WHERE id = $2",

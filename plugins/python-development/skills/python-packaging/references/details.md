@@ -6,7 +6,7 @@
 
 ```toml
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=77.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -15,7 +15,7 @@ version = "1.0.0"
 description = "An awesome Python package"
 readme = "README.md"
 requires-python = ">=3.8"
-license = {text = "MIT"}
+license = "MIT"  # SPDX expression (PEP 639); table form is deprecated
 authors = [
     {name = "Your Name", email = "you@example.com"},
 ]
@@ -26,7 +26,6 @@ keywords = ["example", "package", "awesome"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -141,10 +140,10 @@ version = {attr = "my_package.__version__"}
 
 # Or use setuptools-scm for git-based versioning
 [tool.setuptools_scm]
-write_to = "src/my_package/_version.py"
+version_file = "src/my_package/_version.py"
 ```
 
-**In **init**.py:**
+**In `__init__.py`:**
 
 ```python
 # src/my_package/__init__.py

@@ -146,7 +146,7 @@ name = "my-package"
 dynamic = ["version"]
 
 [tool.setuptools_scm]
-write_to = "src/my_package/_version.py"
+version_file = "src/my_package/_version.py"
 version_scheme = "post-release"
 local_scheme = "dirty-tag"
 ```

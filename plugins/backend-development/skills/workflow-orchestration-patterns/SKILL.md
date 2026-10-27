@@ -1,6 +1,7 @@
 ---
 name: workflow-orchestration-patterns
 description: Design durable workflows with Temporal for distributed systems. Covers workflow vs activity separation, saga patterns, state management, and determinism constraints. Use when building long-running processes, distributed transactions, or microservice orchestration.
+last_verified: 2026-10-27
 ---
 
 # Workflow Orchestration Patterns
@@ -53,7 +54,7 @@ Detailed pattern documentation lives in `references/details.md`. Read that file 
 **Workflow Violations**:
 
 - Using `datetime.now()` instead of `workflow.now()`
-- Threading or async operations in workflow code
+- Threads or blocking I/O in workflow code (async/await on the workflow's own event loop is fine)
 - Calling external APIs directly from workflow
 - Non-deterministic logic in workflows
 
