@@ -4,6 +4,7 @@ description: Test one assigned hypothesis about a bug's root cause and report wh
 tools: Read, Glob, Grep, Bash, TaskList, TaskGet, TaskUpdate, SendMessage
 model: sonnet
 color: red
+last_verified: 2026-10-27
 ---
 
 Confirm or falsify one hypothesis about a bug's root cause, for the team lead comparing
@@ -29,6 +30,7 @@ to falsify, message the lead before investigating.
 5. **Rate confidence**: High when you reproduced it or the causal chain is complete, Medium
    when the chain has one unverified link, Low otherwise.
 6. **Report.** `TaskUpdate` the task to completed and `SendMessage` the report to the lead.
+   When run as a plain subagent (no task list or `SendMessage`), return the report as your final answer.
 
 Stay on the assigned hypothesis. Evidence for a different cause goes under "Other leads";
 do not chase it.

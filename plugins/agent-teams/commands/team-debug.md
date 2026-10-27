@@ -1,6 +1,7 @@
 ---
 description: "Debug issues using competing hypotheses with parallel investigation by multiple agents"
 argument-hint: "<error-description-or-file> [--hypotheses N] [--scope files|module|project]"
+last_verified: 2026-10-27
 ---
 
 # Team Debug
@@ -9,7 +10,9 @@ Debug complex issues using the Analysis of Competing Hypotheses (ACH) methodolog
 
 ## Pre-flight Checks
 
-1. Verify `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is set
+1. Pick the mode. Run `echo "${CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS:-}"`:
+   - `1` in an interactive session → **team mode**: teammates share a task list and message you.
+   - Anything else, or `claude -p` → **subagent mode**: tell the user "Agent Teams is off; running the roles as plain subagents." Spawn each role with `Agent` and no `name`, in parallel where the work allows, and use each returned answer as that role's result. Skip `TaskCreate`, `TaskList` and shutdown.
 2. Parse `$ARGUMENTS`:
    - `<error-description-or-file>`: description of the bug, error message, or path to a file exhibiting the issue
    - `--hypotheses N`: number of hypotheses to generate (default: 3)
@@ -38,18 +41,19 @@ Present hypotheses to user: "Generated {N} hypotheses. Spawning investigators...
 
 ## Phase 3: Investigation
 
-1. Use `TeamCreate` tool to create the team with `team_name: "debug-{timestamp}"` and `description`
-2. For each hypothesis, use `Agent` tool to spawn a teammate:
-   - `name`: `investigator-{n}` (e.g., "investigator-1")
+In team mode the session's team already exists and you are its lead.
+
+1. For each hypothesis, use the `Agent` tool to spawn an investigator:
+   - `name`: `investigator-{n}` (e.g., "investigator-1"); team mode only
    - `subagent_type`: "agent-teams:team-debugger"
-   - `prompt`: Include the hypothesis, investigation scope, and relevant context
-3. Use `TaskCreate` for each investigator's task:
+   - `prompt`: Include the hypothesis, investigation scope, and relevant context. Investigators don't see your conversation.
+2. Team mode: use `TaskCreate` for each investigator's task:
    - Subject: "Investigate hypothesis: {hypothesis summary}"
    - Description: Full hypothesis statement, scope boundaries, evidence criteria
 
 ## Phase 4: Evidence Collection
 
-1. Monitor TaskList for completion
+1. Wait for every investigator. Team mode: messages and idle notifications arrive on their own; read `TaskList` when one arrives. Subagent mode: each `Agent` call returns the report.
 2. As investigators complete, collect their evidence reports
 3. Track: "{completed}/{total} investigations complete"
 
@@ -87,5 +91,4 @@ Present hypotheses to user: "Generated {N} hypotheses. Spawning investigators...
 
 ## Phase 6: Cleanup
 
-1. Send `shutdown_request` to all investigators
-2. Call `TeamDelete` to remove team resources
+Team mode: ask each investigator by name to shut down. Claude Code removes the team when the session ends.

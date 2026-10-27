@@ -6,5 +6,6 @@
     "name": "Tom Farley",
     "email": "tommy@scopeblind.com"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "harnesses": ["claude-code"]
 }

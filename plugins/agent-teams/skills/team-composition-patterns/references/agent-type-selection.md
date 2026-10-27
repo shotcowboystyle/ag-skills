@@ -7,7 +7,6 @@ Decision matrix for choosing the right `subagent_type` when spawning teammates.
 ```
 Does the teammate need a specialized Agent Teams role?
 ├── YES → Which role?
-│         ├── Team coordination → agent-teams:team-lead
 │         ├── Feature building → agent-teams:team-implementer
 │         ├── Code review → agent-teams:team-reviewer
 │         └── Bug investigation → agent-teams:team-debugger
@@ -25,7 +24,6 @@ Does the teammate need a specialized Agent Teams role?
 | general-purpose              | Yes      | Yes       | Yes      | Yes      | No         | No                 |
 | Explore                      | Yes      | No        | No       | No       | No         | Search/explore     |
 | Plan                         | Yes      | No        | No       | No       | No         | Architecture       |
-| agent-teams:team-lead        | Yes      | No        | No       | Yes      | Yes        | Team orchestration |
 | agent-teams:team-reviewer    | Yes      | No        | No       | Yes      | Yes        | Code review        |
 | agent-teams:team-debugger    | Yes      | No        | No       | Yes      | Yes        | Bug investigation  |
 | agent-teams:team-implementer | Yes      | Yes       | Yes      | Yes      | Yes        | Feature building   |
@@ -61,9 +59,11 @@ Does the teammate need a specialized Agent Teams role?
 
 ### team-lead
 
-- Coordinating multiple teammates
-- Decomposing work and managing tasks
-- Synthesizing results from parallel work
+Not a teammate type: teammates can't spawn teammates. Run it as the main session with `claude --agent agent-teams:team-lead` to:
+
+- Coordinate multiple teammates
+- Decompose work and manage tasks
+- Synthesize results from parallel work
 
 ### team-reviewer
 

@@ -1,21 +1,19 @@
 ---
 description: "Spawn an agent team using presets (review, debug, feature, fullstack, research, security, migration) or custom composition"
-argument-hint: "<preset|custom> [--name team-name] [--members N] [--delegate]"
+argument-hint: "<preset|custom> [--members N] [--delegate]"
+last_verified: 2026-10-27
 ---
 
 # Team Spawn
 
-Spawn a multi-agent team using preset configurations or custom composition. Handles team creation, teammate spawning, and initial task setup.
+Spawn a multi-agent team using preset configurations or custom composition. Spawns the teammates into the session's team and sets up their initial tasks. The session running this command is the lead.
 
 ## Pre-flight Checks
 
-1. Verify that `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is set:
-   - If not set, inform the user: "Agent Teams requires the experimental feature flag. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in your environment."
-   - Stop execution if not enabled
+1. Run `echo "${CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS:-}"`. If it isn't `1`, or the session is non-interactive (`claude -p`), no team can form. Tell the user: "Agent Teams is off. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in your environment or settings.json `env`, or run `/team-review`, `/team-debug` or `/team-feature`, which fall back to plain subagents." Then stop.
 
 2. Parse arguments from `$ARGUMENTS`:
    - First positional arg: preset name or "custom"
-   - `--name`: team name (default: auto-generated from preset)
    - `--members N`: override default member count
    - `--delegate`: enter delegation mode after spawning
 
@@ -28,65 +26,58 @@ If a preset is specified, use these configurations:
 **`review`** — Multi-dimensional code review (default: 3 members)
 
 - Spawn 3 `team-reviewer` agents with dimensions: security, performance, architecture
-- Team name default: `review-team`
 
 **`debug`** — Competing hypotheses debugging (default: 3 members)
 
 - Spawn 3 `team-debugger` agents, each assigned a different hypothesis
-- Team name default: `debug-team`
 
-**`feature`** — Parallel feature development (default: 3 members)
+**`feature`** — Parallel feature development (default: 2 members)
 
-- Spawn 1 `team-lead` agent + 2 `team-implementer` agents
-- Team name default: `feature-team`
+- Spawn 2 `team-implementer` agents; you coordinate as lead
 
-**`fullstack`** — Full-stack development (default: 4 members)
+**`fullstack`** — Full-stack development (default: 3 members)
 
-- Spawn 1 `team-implementer` (frontend), 1 `team-implementer` (backend), 1 `team-implementer` (tests), 1 `team-lead`
-- Team name default: `fullstack-team`
+- Spawn 1 `team-implementer` (frontend), 1 `team-implementer` (backend), 1 `team-implementer` (tests); you coordinate as lead
 
 **`research`** — Parallel codebase, web, and documentation research (default: 3 members)
 
 - Spawn 3 `general-purpose` agents, each assigned a different research question or area
 - Agents have access to codebase search (Grep, Glob, Read) and web search (WebSearch, WebFetch)
-- Team name default: `research-team`
 
 **`security`** — Comprehensive security audit (default: 4 members)
 
 - Spawn 1 `team-reviewer` (OWASP/vulnerabilities), 1 `team-reviewer` (auth/access control), 1 `team-reviewer` (dependencies/supply chain), 1 `team-reviewer` (secrets/configuration)
-- Team name default: `security-team`
 
-**`migration`** — Codebase migration or large refactor (default: 4 members)
+**`migration`** — Codebase migration or large refactor (default: 3 members)
 
-- Spawn 1 `team-lead` (coordination + migration plan), 2 `team-implementer` (parallel migration streams), 1 `team-reviewer` (verify migration correctness)
-- Team name default: `migration-team`
+- You write the migration plan and coordinate as lead
+- Spawn 2 `team-implementer` (parallel migration streams), 1 `team-reviewer` (verify migration correctness)
 
 ### Custom Composition
 
 If "custom" is specified:
 
 1. Use AskUserQuestion to prompt for team size (2-5 members)
-2. For each member, ask for role selection: team-lead, team-reviewer, team-debugger, team-implementer
-3. Ask for team name if not provided via `--name`
+2. For each member, ask for role selection: team-reviewer, team-debugger, team-implementer, or general-purpose. Teammates can't spawn teammates, so `team-lead` is not a teammate role.
 
-## Phase 2: Team Creation
+## Phase 2: Spawn Teammates
 
-1. Use the `TeamCreate` tool to create the team with `team_name` and `description`
-2. For each team member, use the `Agent` tool with:
-   - `team_name`: the team name
-   - `name`: unique descriptive member name (e.g., "fullstack-lead", "frontend-impl", "security-reviewer")
-   - `subagent_type`: the selected role (for example, `agent-teams:team-lead`, `agent-teams:team-implementer`, `agent-teams:team-reviewer`, `agent-teams:team-debugger`, or `general-purpose` for research)
-   - `prompt`: Role-specific instructions referencing the appropriate agent definition
-3. Do not use the role name `team-lead` as the spawned member name. Team creation can reserve role-like names, so use a unique member name and address the teammate by the actual name returned by `Agent` or listed in `~/.claude/teams/{team-name}/config.json`.
+The session's team already exists, named after the session. There is one team per session.
+
+1. For each team member, use the `Agent` tool with:
+   - `name`: unique descriptive member name (e.g., "frontend-impl", "security-reviewer"). A named `Agent` call is what makes it a teammate.
+   - `subagent_type`: the selected role (`agent-teams:team-implementer`, `agent-teams:team-reviewer`, `agent-teams:team-debugger`, or `general-purpose` for research)
+   - `prompt`: Role-specific instructions and all the context the teammate needs; it doesn't see your conversation
+2. Don't name a teammate `team-lead`: the lead's own entry in the team config carries that agent type. Address each teammate by the name returned by `Agent` or listed in `~/.claude/teams/{team-name}/config.json`.
 
 ## Phase 3: Initial Setup
 
 1. Use `TaskCreate` to create initial placeholder tasks for each teammate
 2. Display team summary:
-   - Team name
+   - Team name (from `~/.claude/teams/`)
    - Member names and roles
-   - Display mode (tmux/iTerm2/in-process)
-3. If `--delegate` flag is set, transition to delegation mode
+   - Display mode (`teammateMode` from `~/.claude/settings.json`; `in-process` when unset)
+3. If `--delegate` flag is set, show the `/team-delegate` dashboard
 
 ## Output
 
@@ -102,5 +93,5 @@ Members:
 
 Use /team-status to monitor progress
 Use /team-delegate to assign tasks
-Use /team-shutdown to clean up
+Use /team-shutdown to stop the teammates
 ```

@@ -142,7 +142,8 @@ def prune_orphans(harness_id: str, output_root: Path, written: set[Path]) -> lis
     output tree that we know how to identify as adapter output but is NOT in `written` is
     orphaned (source was deleted or renamed). Returns list of removed paths.
 
-    Only operates on files under per-harness gitignored output paths — never touches `plugins/`.
+    Only operates on files under per-harness output paths. Inside `plugins/` it touches only
+    Codex's `.codex-plugin/plugin.json` manifests.
     """
     removed: list[Path] = []
     written_resolved = {p.resolve() for p in written}
@@ -158,6 +159,9 @@ def prune_orphans(harness_id: str, output_root: Path, written: set[Path]) -> lis
             # references mirrored verbatim) — anything the adapter wrote should be in
             # the `written` set; anything else under .codex/ is orphaned.
             candidates.extend(p for p in d.rglob("*") if p.is_file())
+        # The one adapter-owned file inside `plugins/`: the committed per-plugin manifest.
+        # It goes stale when a plugin's `harnesses` drops codex.
+        candidates.extend(output_root.glob("plugins/*/.codex-plugin/plugin.json"))
     elif harness_id == "opencode":
         d = output_root / ".opencode"
         if d.is_dir():

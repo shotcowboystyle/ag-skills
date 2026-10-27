@@ -1,6 +1,7 @@
 ---
 description: "Develop features in parallel with multiple agents using file ownership boundaries and dependency management"
 argument-hint: "<feature-description> [--team-size N] [--branch feature/name] [--plan-first]"
+last_verified: 2026-10-27
 ---
 
 # Team Feature
@@ -9,7 +10,9 @@ Orchestrate parallel feature development with multiple implementer agents. Decom
 
 ## Pre-flight Checks
 
-1. Verify `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is set
+1. Pick the mode. Run `echo "${CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS:-}"`:
+   - `1` in an interactive session → **team mode**: teammates share a task list and message you.
+   - Anything else, or `claude -p` → **subagent mode**: tell the user "Agent Teams is off; running the roles as plain subagents." Spawn each role with `Agent` and no `name`, in parallel where the work allows, and use each returned answer as that role's result. Skip `TaskCreate`, `TaskList` and shutdown.
 2. Parse `$ARGUMENTS`:
    - `<feature-description>`: description of the feature to build
    - `--team-size N`: number of implementers (default: 2)
@@ -62,14 +65,14 @@ Orchestrate parallel feature development with multiple implementer agents. Decom
    ```
    git checkout -b {branch-name}
    ```
-2. Use `TeamCreate` tool to create the team with `team_name: "feature-{timestamp}"` and `description`
-3. Spawn a `team-lead` agent to coordinate
-4. For each work stream, use `Agent` tool to spawn a `team-implementer`:
-   - `name`: `implementer-{n}`
+2. You are the lead: in team mode the session's team already exists, and teammates can't spawn teammates, so don't spawn a `team-lead`.
+3. For each work stream, use the `Agent` tool to spawn a `team-implementer`:
+   - `name`: `implementer-{n}`; team mode only
    - `subagent_type`: "agent-teams:team-implementer"
-   - `prompt`: Include owned files, interface contracts, and implementation requirements
+   - `prompt`: Include owned files, interface contracts, and implementation requirements. Implementers don't see your conversation.
+   - Subagent mode: spawn streams with no dependencies in parallel; spawn a dependent stream after the streams it is blocked by have returned, and pass it their summaries.
 
-## Phase 4: Task Creation
+## Phase 4: Task Creation (team mode)
 
 1. Use `TaskCreate` for each work stream:
    - Subject: "{stream name}"
@@ -79,7 +82,7 @@ Orchestrate parallel feature development with multiple implementer agents. Decom
 
 ## Phase 5: Monitor and Coordinate
 
-1. Monitor `TaskList` for progress
+1. Team mode: messages and idle notifications arrive on their own; read `TaskList` when one arrives, not on a timer. Subagent mode: each `Agent` call returns that stream's summary.
 2. As implementers complete tasks:
    - Check for integration issues
    - Unblock dependent tasks
@@ -93,7 +96,7 @@ After all tasks complete:
 
 1. Use Bash to verify the code compiles/builds: run appropriate build command
 2. Use Bash to run tests: run appropriate test command
-3. If issues found, create fix tasks and assign to appropriate implementers
+3. If issues found, create fix tasks and assign them to the owning implementers (subagent mode: spawn the owning role again with the failure)
 4. Report integration status to user
 
 ## Phase 7: Cleanup
@@ -110,5 +113,4 @@ After all tasks complete:
    Changes are on branch: {branch-name}
    ```
 
-2. Send `shutdown_request` to all teammates
-3. Call `TeamDelete` to remove team resources
+2. Team mode: ask each teammate by name to shut down. Claude Code removes the team when the session ends.

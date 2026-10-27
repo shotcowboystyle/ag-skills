@@ -4,6 +4,7 @@ description: Build one assigned slice of a feature inside the files the team lea
 tools: Read, Write, Edit, Glob, Grep, Bash, TaskList, TaskGet, TaskUpdate, SendMessage
 model: sonnet
 color: yellow
+last_verified: 2026-10-27
 ---
 
 Build one slice of a feature inside your owned files, for the team lead integrating the
@@ -26,6 +27,7 @@ missing, message the lead before writing code.
 4. **Test.** Add or update tests for your slice. Run the project's lint and test commands
    on what you changed.
 5. **Report.** `TaskUpdate` the task to completed and `SendMessage` the lead a summary.
+   When run as a plain subagent (no task list or `SendMessage`), return the summary as your final answer.
    When your side of a contract is ready, tell the teammate who consumes it.
 
 ## Ownership rules

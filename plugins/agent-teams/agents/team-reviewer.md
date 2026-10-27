@@ -38,6 +38,7 @@ the lead.
 4. **Verify before reporting.** Each finding needs a file:line and the code that proves it.
    Mark unproven ones as "potential".
 5. **Report.** `TaskUpdate` the task to completed and `SendMessage` the findings to the lead.
+   When run as a plain subagent (no task list or `SendMessage`), return the findings as your final answer.
    Report "no findings" plainly when there are none.
 
 ## Output

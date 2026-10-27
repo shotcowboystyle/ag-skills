@@ -5,5 +5,6 @@
   "author": {
     "name": "cskwork"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "harnesses": ["claude-code"]
 }

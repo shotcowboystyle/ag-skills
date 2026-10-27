@@ -10,7 +10,7 @@ Detailed preset team configurations with task templates for common workflows.
 
 - **Team Size**: 3
 - **Agent Type**: `agent-teams:team-reviewer`
-- **Display Mode**: tmux recommended
+- **Display Mode**: any; split panes (`auto`, `tmux`) help when watching several teammates
 
 ### Members
 
@@ -45,7 +45,7 @@ Description:
 
 - **Team Size**: 3 (default) or N with `--hypotheses N`
 - **Agent Type**: `agent-teams:team-debugger`
-- **Display Mode**: tmux recommended
+- **Display Mode**: any; split panes (`auto`, `tmux`) help when watching several teammates
 
 ### Members
 
@@ -74,15 +74,14 @@ Description:
 
 ### Configuration
 
-- **Team Size**: 3 (1 lead + 2 implementers)
-- **Agent Types**: `agent-teams:team-lead` + `agent-teams:team-implementer`
-- **Display Mode**: tmux recommended
+- **Team Size**: 2 implementers; the session is the lead (decomposition, coordination, integration)
+- **Agent Types**: 2x `agent-teams:team-implementer`
+- **Display Mode**: any; split panes (`auto`, `tmux`) help when watching several teammates
 
 ### Members
 
 | Name          | Role             | Responsibility                           |
 | ------------- | ---------------- | ---------------------------------------- |
-| feature-lead  | team-lead        | Decomposition, coordination, integration |
 | implementer-1 | team-implementer | Work stream 1 (assigned files)           |
 | implementer-2 | team-implementer | Work stream 2 (assigned files)           |
 
@@ -104,15 +103,14 @@ Description:
 
 ### Configuration
 
-- **Team Size**: 4 (1 lead + 3 implementers)
-- **Agent Types**: `agent-teams:team-lead` + 3x `agent-teams:team-implementer`
-- **Display Mode**: tmux recommended
+- **Team Size**: 3 implementers; the session is the lead (coordination, integration)
+- **Agent Types**: 3x `agent-teams:team-implementer`
+- **Display Mode**: any; split panes (`auto`, `tmux`) help when watching several teammates
 
 ### Members
 
 | Name           | Role             | Layer                            |
 | -------------- | ---------------- | -------------------------------- |
-| fullstack-lead | team-lead        | Coordination, integration        |
 | frontend-dev   | team-implementer | UI components, client-side logic |
 | backend-dev    | team-implementer | API endpoints, business logic    |
 | test-dev       | team-implementer | Unit, integration, e2e tests     |
@@ -133,7 +131,7 @@ backend-dev  ──┘
 
 - **Team Size**: 3
 - **Agent Type**: `general-purpose`
-- **Display Mode**: tmux recommended
+- **Display Mode**: any; split panes (`auto`, `tmux`) help when watching several teammates
 
 ### Members
 
@@ -187,7 +185,7 @@ Researcher 3 (docs): "Look up the latest NextAuth.js v5 API docs. How does it ha
 
 - **Team Size**: 4
 - **Agent Type**: `agent-teams:team-reviewer`
-- **Display Mode**: tmux recommended
+- **Display Mode**: any; split panes (`auto`, `tmux`) help when watching several teammates
 
 ### Members
 
@@ -222,15 +220,14 @@ Description:
 
 ### Configuration
 
-- **Team Size**: 4 (1 lead + 2 implementers + 1 reviewer)
-- **Agent Types**: `agent-teams:team-lead` + 2x `agent-teams:team-implementer` + `agent-teams:team-reviewer`
-- **Display Mode**: tmux recommended
+- **Team Size**: 3 (2 implementers + 1 reviewer); the session is the lead (migration plan, coordination, conflict handling)
+- **Agent Types**: 2x `agent-teams:team-implementer` + `agent-teams:team-reviewer`
+- **Display Mode**: any; split panes (`auto`, `tmux`) help when watching several teammates
 
 ### Members
 
 | Name             | Role             | Responsibility                                  |
 | ---------------- | ---------------- | ----------------------------------------------- |
-| migration-lead   | team-lead        | Migration plan, coordination, conflict handling |
 | migrator-1       | team-implementer | Migration stream 1 (assigned files/modules)     |
 | migrator-2       | team-implementer | Migration stream 2 (assigned files/modules)     |
 | migration-verify | team-reviewer    | Verify migrated code correctness and patterns   |
@@ -251,9 +248,9 @@ Description:
 ### Dependency Pattern
 
 ```
-migration-lead (plan) → migrator-1 ──┐
-                      → migrator-2 ──┼→ migration-verify
-                                     ┘
+lead plan (session) → migrator-1 ──┐
+                    → migrator-2 ──┼→ migration-verify
+                                   ┘
 ```
 
 ### Use Cases
