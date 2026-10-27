@@ -120,7 +120,9 @@ def test_validator_track_id_pattern_matches_command_ids() -> None:
     meta, body = _frontmatter(path), path.read_text()
     assert meta["model"] in {"haiku", "sonnet"}
     assert "<type>_<name>_<YYYYMMDD>" not in body
-    pattern = re.search(r"grep -E '(.+?)'", body).group(1)
+    match = re.search(r"grep -E '(.+?)'", body)
+    assert match, "validator gives no track-ID grep pattern"
+    pattern = match.group(1)
     ids = {
         m
         for cmd in (CONDUCTOR / "commands").glob("*.md")
