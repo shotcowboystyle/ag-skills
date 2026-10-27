@@ -113,20 +113,15 @@ TDD with trunk-based development.
 
 ## tracks.md
 
+The format `/conductor:setup` writes and `/conductor:new-track` appends to:
+
 ```markdown
-# Tracks
+# Tracks Registry
 
-## Active
-
-| ID        | Title        | Status      | Priority | Assignee |
-| --------- | ------------ | ----------- | -------- | -------- |
-| TRACK-001 | Feature name | in-progress | high     | @person  |
-
-## Completed
-
-| ID        | Title         | Completed  |
-| --------- | ------------- | ---------- |
-| TRACK-000 | Initial setup | 2024-01-15 |
+| Status | Track ID | Title | Created | Updated |
+| ------ | -------- | ----- | ------- | ------- |
+| [~] | user-auth_20250115 | User Authentication | 2025-01-15 | 2025-01-16 |
+| [x] | setup-ci_20250110 | CI Pipeline | 2025-01-10 | 2025-01-12 |
 ```
 
 ## product-guidelines.md

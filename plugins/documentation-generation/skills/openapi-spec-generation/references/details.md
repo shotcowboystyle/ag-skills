@@ -15,8 +15,8 @@ info:
     All endpoints require Bearer token authentication.
 
     ## Rate Limiting
-    - 1000 requests per minute for standard tier
-    - 10000 requests per minute for enterprise tier
+    Limits per tier come from the gateway config. Responses over the limit
+    return 429 with a `Retry-After` header.
   version: 2.0.0
   contact:
     name: API Support
@@ -140,6 +140,7 @@ paths:
     get:
       operationId: getUser
       summary: Get user by ID
+      description: Returns one user. Responds 404 when the ID doesn't exist.
       tags:
         - Users
       responses:
@@ -157,6 +158,7 @@ paths:
     patch:
       operationId: updateUser
       summary: Update user
+      description: Updates the fields sent in the body and leaves the others unchanged.
       tags:
         - Users
       requestBody:
@@ -182,6 +184,7 @@ paths:
     delete:
       operationId: deleteUser
       summary: Delete user
+      description: Deletes the user. Needs a bearer token and an API key.
       tags:
         - Users
         - Admin
@@ -226,9 +229,9 @@ components:
           enum: [user, moderator, admin]
           default: user
         avatar:
-          type: string
+          type: [string, "null"]
           format: uri
-          nullable: true
+          description: Avatar URL, or null when the user has none
         metadata:
           type: object
           additionalProperties: true

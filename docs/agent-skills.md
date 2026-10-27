@@ -217,7 +217,7 @@ Skills provide domain guidance that coding agents can load when relevant. Each s
 
 | Skill                             | Description                                                         |
 | --------------------------------- | ------------------------------------------------------------------- |
-| **openapi-spec-generation**       | Generate OpenAPI 3.1 specifications from code with complete schemas |
+| **openapi-spec-generation**       | Write and lint OpenAPI 3.1 specs (Redocly, Spectral), design-first or from code |
 | **changelog-automation**          | Automate changelog generation from conventional commits             |
 | **architecture-decision-records** | Write ADRs documenting architectural decisions and trade-offs       |
 

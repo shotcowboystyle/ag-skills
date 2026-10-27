@@ -380,57 +380,43 @@ export class UsersController extends Controller {
 
 ## Template 4: Validation & Linting
 
-```bash
-# Install validation tools
-npm install -g @stoplight/spectral-cli
-npm install -g @redocly/cli
+Both linters read OpenAPI 3.1. Run them through `npx` so nothing is installed globally.
 
-# Spectral ruleset (.spectral.yaml)
-cat > .spectral.yaml << 'EOF'
-extends: ["spectral:oas", "spectral:asyncapi"]
+Spectral ruleset, `.spectral.yaml`:
+
+```yaml
+extends: ["spectral:oas"]
 
 rules:
-  # Enforce operation IDs
   operation-operationId: error
-
-  # Require descriptions
   operation-description: warn
   info-description: error
-
-  # Naming conventions
-  operation-operationId-valid-in-url: true
-
-  # Security
-  operation-security-defined: error
-
-  # Response codes
+  operation-operationId-valid-in-url: error
+  oas3-operation-security-defined: error
   operation-success-response: error
 
-  # Custom rules
-  path-params-snake-case:
-    description: Path parameters should be snake_case
+  path-params-camel-case:
+    description: Path parameters are camelCase, like the schema properties
     severity: warn
-    given: "$.paths[*].parameters[?(@.in == 'path')].name"
+    given: "$.paths[*]..parameters[?(@.in == 'path')].name"
     then:
-      function: pattern
+      function: casing
       functionOptions:
-        match: "^[a-z][a-z0-9_]*$"
+        type: camel
 
-  schema-properties-camelCase:
-    description: Schema properties should be camelCase
+  schema-properties-camel-case:
+    description: Schema properties are camelCase
     severity: warn
     given: "$.components.schemas[*].properties[*]~"
     then:
       function: casing
       functionOptions:
         type: camel
-EOF
+```
 
-# Run Spectral
-spectral lint openapi.yaml
+Redocly config, `redocly.yaml`:
 
-# Redocly config (redocly.yaml)
-cat > redocly.yaml << 'EOF'
+```yaml
 extends:
   - recommended
 
@@ -447,21 +433,17 @@ rules:
     allowedValues:
       - application/json
       - application/problem+json
-
-theme:
-  openapi:
-    generateCodeSamples:
-      languages:
-        - lang: curl
-        - lang: python
-        - lang: javascript
-EOF
-
-# Run Redocly
-redocly lint openapi.yaml
-redocly bundle openapi.yaml -o bundled.yaml
-redocly preview-docs openapi.yaml
 ```
+
+```bash
+npx @stoplight/spectral-cli@6 lint openapi.yaml --fail-severity=warn
+npx @redocly/cli@2 lint openapi.yaml
+npx @redocly/cli@2 bundle openapi.yaml -o dist/openapi.yaml
+npx @redocly/cli@2 build-docs openapi.yaml -o dist/index.html
+```
+
+Redocly's `no-server-example.com` warning fires on the placeholder `example.com` and
+`localhost` servers in Template 1. Replace them with real hosts; don't turn the rule off.
 
 ## SDK Generation
 

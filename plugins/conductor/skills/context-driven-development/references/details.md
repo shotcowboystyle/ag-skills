@@ -1,4 +1,6 @@
-# context-driven-development — detailed patterns and worked examples
+# context-driven-development: artifacts, checklist and integration
+
+The setup, validation and sync procedures are in `SKILL.md`. This file has the detail behind them.
 
 ## Core Philosophy
 
@@ -117,75 +119,6 @@ Update when:
 - Tracks are completed or archived
 
 See [references/artifact-templates.md](./artifact-templates.md) for copy-paste starter templates.
-
-## Context Maintenance Principles
-
-### Keep Artifacts Synchronized
-
-Ensure changes in one artifact reflect in related documents:
-
-- New feature in product.md → Update tech-stack.md if new dependencies needed
-- Completed track → Update product.md to reflect new capabilities
-- Workflow change → Update all affected track plans
-
-### Update tech-stack.md When Adding Dependencies
-
-Before adding any new dependency:
-
-1. Check if existing dependencies solve the need
-2. Document the rationale for new dependencies
-3. Add version constraints
-4. Note any configuration requirements
-
-### Update product.md When Features Complete
-
-After completing a feature track:
-
-1. Move feature from "planned" to "implemented" in product.md
-2. Update any affected success metrics
-3. Document any scope changes from original plan
-
-### Verify Context Before Implementation
-
-Before starting any track:
-
-1. Read all context artifacts
-2. Flag any outdated information
-3. Propose updates before proceeding
-4. Confirm context accuracy with stakeholders
-
-## Greenfield vs Brownfield Handling
-
-### Greenfield Projects (New)
-
-For new projects:
-
-1. Run `/conductor:setup` to create all artifacts interactively
-2. Answer questions about product vision, tech preferences, and workflow
-3. Generate initial style guides for chosen languages
-4. Create empty tracks registry
-
-Characteristics:
-
-- Full control over context structure
-- Define standards before code exists
-- Establish patterns early
-
-### Brownfield Projects (Existing)
-
-For existing codebases:
-
-1. Run `/conductor:setup` with existing codebase detection
-2. System analyzes existing code, configs, and documentation
-3. Pre-populate artifacts based on discovered patterns
-4. Review and refine generated context
-
-Characteristics:
-
-- Extract implicit context from existing code
-- Reconcile existing patterns with desired patterns
-- Document technical debt and modernization plans
-- Preserve working patterns while establishing standards
 
 ## Benefits
 
@@ -329,29 +262,3 @@ Include context validation in pipelines:
 - Check tech-stack.md matches actual dependencies
 - Verify links in context documents resolve
 - Ensure tracks.md status matches git branch state
-
-## Session Continuity
-
-Conductor supports multi-session development through context persistence:
-
-### Starting a New Session
-
-1. Read index.md to orient yourself
-2. Check tracks.md for active work
-3. Review relevant track's plan.md for current task
-4. Verify context artifacts are current
-
-### Ending a Session
-
-1. Update plan.md with current progress
-2. Note any blockers or decisions made
-3. Commit in-progress work with clear status
-4. Update tracks.md if status changed
-
-### Handling Interruptions
-
-If interrupted mid-task:
-
-1. Mark task as `[~]` with note about stopping point
-2. Commit work-in-progress to feature branch
-3. Document any uncommitted decisions in plan.md

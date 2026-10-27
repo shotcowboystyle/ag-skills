@@ -156,7 +156,7 @@ def extract_pydantic_schemas(file_path):
 **OpenAPI Template**
 
 ```yaml
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: ${API_TITLE}
   version: ${VERSION}

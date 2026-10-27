@@ -370,7 +370,18 @@ After each successful file creation:
 When all files are created:
 
 1. Set `setup_state.json` status to "complete"
-2. Display summary:
+2. Validate the artifacts:
+
+   <Task>
+   subagent_type: conductor-validator
+   prompt: |
+     Mode: setup. Check the conductor/ directory in the project root.
+   </Task>
+
+   On FAIL, show the CRITICAL findings, fix them, and validate again before the summary.
+   On WARN, list the warnings in the summary.
+
+3. Display summary:
 
    ```
    Conductor setup complete!

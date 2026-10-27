@@ -77,7 +77,7 @@ Expert API documentation specialist focusing on creating world-class developer e
 - Documentation-driven testing with contract validation
 - Automated testing of code examples and curl commands
 - Response validation against schema definitions
-- Performance testing documentation and benchmarks
+- How to run the performance tests, reporting only measured results
 - Error simulation and troubleshooting guides
 - Mock server generation from documentation
 - Integration testing scenarios and examples

@@ -1,4 +1,7 @@
-# track-management — detailed patterns and worked examples
+# track-management: templates, checklists and patterns
+
+The procedure and the file formats are in `SKILL.md`. This file has the templates and the
+checklists to run against them.
 
 ## Track Concept
 
@@ -53,88 +56,6 @@ Code improvement without behavior change. Use for:
 - Pattern adoption
 - Technical debt reduction
 - Performance optimization (same behavior, better performance)
-
-## Track ID Format
-
-Track IDs follow the pattern: `{shortname}_{YYYYMMDD}`
-
-- **shortname**: 2-4 word kebab-case description (e.g., `user-auth`, `api-rate-limit`)
-- **YYYYMMDD**: Creation date in ISO format
-
-Examples:
-
-- `user-auth_20250115`
-- `fix-login-error_20250115`
-- `upgrade-deps_20250115`
-- `refactor-api-client_20250115`
-
-## Track Lifecycle
-
-### 1. Creation (newTrack)
-
-**Define Requirements**
-
-1. Gather requirements through interactive Q&A
-2. Identify acceptance criteria
-3. Determine scope boundaries
-4. Identify dependencies
-
-**Generate Specification**
-
-1. Create `spec.md` with structured requirements
-2. Document functional and non-functional requirements
-3. Define acceptance criteria
-4. List dependencies and constraints
-
-**Generate Plan**
-
-1. Create `plan.md` with phased task breakdown
-2. Organize tasks into logical phases
-3. Add verification tasks after phases
-4. Estimate effort and complexity
-
-**Register Track**
-
-1. Add entry to `tracks.md` registry
-2. Create track directory structure
-3. Generate `metadata.json`
-4. Create track `index.md`
-
-### 2. Implementation
-
-**Execute Tasks**
-
-1. Select next pending task from plan
-2. Mark task as in-progress
-3. Implement following workflow (TDD)
-4. Mark task complete with commit SHA
-
-**Update Status**
-
-1. Update task markers in plan.md
-2. Record commit SHAs for traceability
-3. Update phase progress
-4. Update track status in tracks.md
-
-**Verify Progress**
-
-1. Complete verification tasks
-2. Wait for checkpoint approval
-3. Record checkpoint commits
-
-### 3. Completion
-
-**Sync Documentation**
-
-1. Update product.md if features added
-2. Update tech-stack.md if dependencies changed
-3. Verify all acceptance criteria met
-
-**Archive or Delete**
-
-1. Mark track as completed in tracks.md
-2. Record completion date
-3. Archive or retain track directory
 
 ## Specification (spec.md) Structure
 
@@ -227,37 +148,37 @@ Brief description of implementation approach.
 
 ### Tasks
 
-- [ ] **Task 1.1**: Task description
+- [ ] Task 1.1: Task description
   - Sub-task or detail
   - Sub-task or detail
-- [ ] **Task 1.2**: Task description
-- [ ] **Task 1.3**: Task description
+- [ ] Task 1.2: Task description
+- [ ] Task 1.3: Task description
 
 ### Verification
 
-- [ ] **Verify 1.1**: Verification step for phase
+- [ ] Verify 1.1: Verification step for phase
 
 ## Phase 2: {Phase Name}
 
 ### Tasks
 
-- [ ] **Task 2.1**: Task description
-- [ ] **Task 2.2**: Task description
+- [ ] Task 2.1: Task description
+- [ ] Task 2.2: Task description
 
 ### Verification
 
-- [ ] **Verify 2.1**: Verification step for phase
+- [ ] Verify 2.1: Verification step for phase
 
 ## Phase 3: Finalization
 
 ### Tasks
 
-- [ ] **Task 3.1**: Update documentation
-- [ ] **Task 3.2**: Final integration test
+- [ ] Task 3.1: Update documentation
+- [ ] Task 3.2: Final integration test
 
 ### Verification
 
-- [ ] **Verify 3.1**: All acceptance criteria met
+- [ ] Verify 3.1: All acceptance criteria met
 
 ## Checkpoints
 
@@ -267,131 +188,6 @@ Brief description of implementation approach.
 | Phase 2 |                |      | pending |
 | Phase 3 |                |      | pending |
 ```
-
-## Status Marker Conventions
-
-Use consistent markers in plan.md:
-
-| Marker | Meaning     | Usage                       |
-| ------ | ----------- | --------------------------- |
-| `[ ]`  | Pending     | Task not started            |
-| `[~]`  | In Progress | Currently being worked      |
-| `[x]`  | Complete    | Task finished (include SHA) |
-| `[-]`  | Skipped     | Intentionally not done      |
-| `[!]`  | Blocked     | Waiting on dependency       |
-
-Example:
-
-```markdown
-- [x] **Task 1.1**: Set up database schema `abc1234`
-- [~] **Task 1.2**: Implement user model
-- [ ] **Task 1.3**: Add validation logic
-- [!] **Task 1.4**: Integrate auth service (blocked: waiting for API key)
-- [-] **Task 1.5**: Legacy migration (skipped: not needed)
-```
-
-## Track Registry (tracks.md) Format
-
-```markdown
-# Track Registry
-
-## Active Tracks
-
-| Track ID                                         | Type    | Status      | Phase | Started    | Assignee   |
-| ------------------------------------------------ | ------- | ----------- | ----- | ---------- | ---------- |
-| [user-auth_20250115](tracks/user-auth_20250115/) | feature | in-progress | 2/3   | 2025-01-15 | @developer |
-| [fix-login_20250114](tracks/fix-login_20250114/) | bug     | pending     | 0/2   | 2025-01-14 | -          |
-
-## Completed Tracks
-
-| Track ID                                       | Type  | Completed  | Duration |
-| ---------------------------------------------- | ----- | ---------- | -------- |
-| [setup-ci_20250110](tracks/setup-ci_20250110/) | chore | 2025-01-12 | 2 days   |
-
-## Archived Tracks
-
-| Track ID                                             | Reason     | Archived   |
-| ---------------------------------------------------- | ---------- | ---------- |
-| [old-feature_20241201](tracks/old-feature_20241201/) | Superseded | 2025-01-05 |
-```
-
-## Metadata (metadata.json) Fields
-
-```json
-{
-  "id": "user-auth_20250115",
-  "title": "User Authentication System",
-  "type": "feature",
-  "status": "in-progress",
-  "priority": "high",
-  "created": "2025-01-15T10:30:00Z",
-  "updated": "2025-01-15T14:45:00Z",
-  "started": "2025-01-15T11:00:00Z",
-  "completed": null,
-  "assignee": "@developer",
-  "phases": {
-    "total": 3,
-    "current": 2,
-    "completed": 1
-  },
-  "tasks": {
-    "total": 12,
-    "completed": 5,
-    "in_progress": 1,
-    "pending": 6
-  },
-  "checkpoints": [
-    {
-      "phase": 1,
-      "sha": "abc1234",
-      "date": "2025-01-15T13:00:00Z"
-    }
-  ],
-  "dependencies": [],
-  "tags": ["auth", "security"]
-}
-```
-
-## Track Operations
-
-### Creating a Track
-
-1. Run `/conductor:new-track`
-2. Answer interactive questions
-3. Review generated spec.md
-4. Review generated plan.md
-5. Confirm track creation
-
-### Starting Implementation
-
-1. Read spec.md and plan.md
-2. Verify context artifacts are current
-3. Mark first task as `[~]`
-4. Begin TDD workflow
-
-### Completing a Phase
-
-1. Ensure all phase tasks are `[x]`
-2. Complete verification tasks
-3. Wait for checkpoint approval
-4. Record checkpoint SHA
-5. Proceed to next phase
-
-### Completing a Track
-
-1. Verify all phases complete
-2. Verify all acceptance criteria met
-3. Update product.md if needed
-4. Mark track completed in tracks.md
-5. Update metadata.json
-
-### Reverting a Track
-
-1. Run `/conductor:revert`
-2. Select track to revert
-3. Choose granularity (track/phase/task)
-4. Confirm revert operation
-5. Update status markers
 
 ## Handling Track Dependencies
 

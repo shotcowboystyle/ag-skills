@@ -47,6 +47,20 @@ Execute tasks from a track's implementation plan, following the workflow rules d
    Enter number or track ID:
    ```
 
+## Validate the Track
+
+Before loading context or changing any status marker, validate the selected track:
+
+<Task>
+subagent_type: conductor-validator
+prompt: |
+  Mode: track {trackId}. Check the conductor/ directory in the project root.
+</Task>
+
+- **FAIL**: show the CRITICAL findings and stop. Don't mark the track in progress.
+- **WARN**: show the warnings and ask whether to continue.
+- **PASS**: continue.
+
 ## Context Loading
 
 Load all relevant context for implementation:
@@ -259,7 +273,7 @@ In `conductor/tracks.md`:
 
 In `conductor/tracks/{trackId}/metadata.json`:
 
-- Set `status: "complete"`
+- Set `status: "completed"`
 - Set `phases.completed` to total
 - Set `tasks.completed` to total
 - Update `updated` timestamp

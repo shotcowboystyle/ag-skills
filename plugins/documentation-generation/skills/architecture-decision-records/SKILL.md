@@ -38,11 +38,22 @@ An Architecture Decision Record captures:
 
 ### 3. ADR Lifecycle
 
+```mermaid
+stateDiagram-v2
+    [*] --> Proposed
+    Proposed --> Accepted: approved
+    Proposed --> Rejected: declined
+    Accepted --> Deprecated: no longer applies
+    Accepted --> Superseded: replaced by a newer ADR
+    Rejected --> [*]
+    Deprecated --> [*]
+    Superseded --> [*]
 ```
-Proposed → Accepted → Deprecated → Superseded
-              ↓
-           Rejected
-```
+
+Rejected, Deprecated and Superseded are end states. Deprecated and Superseded are
+alternatives, not steps: an accepted ADR is superseded when a newer ADR replaces it
+(link both ways), and deprecated when the decision stops applying with no replacement.
+Never edit an accepted ADR's decision; write a new one.
 
 Before drafting a standard, lightweight, or Y-statement ADR, read [decision templates](references/decision-templates.md).
 
@@ -59,7 +70,7 @@ docs/
 │   ├── template.md         # Team's ADR template
 │   ├── 0001-use-postgresql.md
 │   ├── 0002-caching-strategy.md
-│   ├── 0003-mongodb-user-profiles.md  # [DEPRECATED]
+│   ├── 0003-mongodb-user-profiles.md  # Superseded by 0020
 │   └── 0020-deprecate-mongodb.md      # Supersedes 0003
 ```
 
@@ -76,7 +87,7 @@ This directory contains Architecture Decision Records (ADRs) for [Project Name].
 | ------------------------------------- | ---------------------------------- | ---------- | ---------- |
 | [0001](0001-use-postgresql.md)        | Use PostgreSQL as Primary Database | Accepted   | 2024-01-10 |
 | [0002](0002-caching-strategy.md)      | Caching Strategy with Redis        | Accepted   | 2024-01-12 |
-| [0003](0003-mongodb-user-profiles.md) | MongoDB for User Profiles          | Deprecated | 2023-06-15 |
+| [0003](0003-mongodb-user-profiles.md) | MongoDB for User Profiles          | Superseded | 2023-06-15 |
 | [0020](0020-deprecate-mongodb.md)     | Deprecate MongoDB                  | Accepted   | 2024-01-15 |
 
 ## Creating a New ADR

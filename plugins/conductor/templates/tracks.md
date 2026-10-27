@@ -56,7 +56,7 @@ When creating a new track:
 
 ## Notes
 
-- Track IDs should be lowercase with hyphens (e.g., `user-auth`, `api-v2`)
+- Track IDs are `{shortname}_{YYYYMMDD}`: a lowercase, hyphenated shortname and the creation date (e.g., `user-auth_20250115`)
 - Keep descriptions concise (one line)
 - Prioritize tracks as: critical, high, medium, low
 - Archive completed tracks quarterly

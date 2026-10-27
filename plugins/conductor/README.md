@@ -63,6 +63,7 @@ Interactive initialization that creates foundational project documentation:
 - Asks sequential questions about product, tech stack, workflow preferences
 - Generates style guides for selected languages
 - Creates tracks registry
+- Runs `conductor-validator` on the new artifacts
 
 ### 2. Create Track (`/conductor:new-track`)
 
@@ -77,6 +78,7 @@ Start a new feature or bug fix:
 
 Execute the plan systematically:
 
+- Runs `conductor-validator` on the track first and stops on a critical finding
 - Follows TDD red-green-refactor cycle
 - Updates task status markers
 - Includes manual verification checkpoints
