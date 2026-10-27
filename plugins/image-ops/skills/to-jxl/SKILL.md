@@ -1,7 +1,7 @@
 ---
 name: to-jxl
 description: Use when the user wants to encode images of any raster format (PNG, GIF, WebP, TIFF, JPEG) to JPEG XL (.jxl) with a chosen quality preset — lossless, visually lossless, or web. General-purpose JXL encoder. For a JPEG-only archive where the goal is a byte-exact-recoverable lossless transcode with a savings report, use `transcode-jpeg-to-jxl-lossless` instead. Triggers - "convert these PNGs to JXL", "encode this folder as JPEG XL", "make JXL versions at web quality".
-allowed-tools: Bash(cjxl *), Bash(command *), Bash(find *), Bash(sh *), Bash(wc *), Bash(du *), Read, Write
+allowed-tools: Bash(cjxl *), Bash(magick *), Bash(command *), Bash(find *), Bash(sh *), Bash(wc *), Bash(du *), Read, Write
 ---
 
 # Convert Images to JPEG XL
@@ -35,9 +35,15 @@ command -v cjxl >/dev/null || {
 
 ### 2. Map quality presets to distance
 
-- `lossless` → `-d 0`
-- `visually-lossless` → `-d 1.0`
-- `web` → `-d 3.0`
+| Preset | Non-JPEG source | JPEG source |
+|---|---|---|
+| `lossless` | `-d 0` | `-d 0` (lossless transcode, recoverable bit-exact) |
+| `visually-lossless` | `-d 1.0` | `--lossless_jpeg=0 -d 1.0` |
+| `web` | `-d 3.0` | `--lossless_jpeg=0 -d 3.0` |
+
+`cjxl` turns on `--lossless_jpeg=1` by default for JPEG input. It then refuses any non-zero distance ("Must not set non-zero distance in combination with --lossless_jpeg=1"), so the lossy presets fail on every JPEG unless they pass `--lossless_jpeg=0`. That flag decodes the JPEG to pixels and re-encodes lossily, so there is no bit-exact recovery.
+
+`cjxl` reads PNG, APNG, GIF, JPEG, PPM/PGM/PFM and EXR. It cannot read TIFF or WebP ("Getting pixel data failed"). Decode those through ImageMagick and pipe PNG into `cjxl -`, which reads from stdin.
 
 Set `effort=7` unless the user overrides.
 
@@ -59,21 +65,37 @@ maxdepth=""              # recursive — omit the flag entirely
 **Single file:**
 
 ```bash
-cjxl -d "$distance" -e "$effort" "$input" "${input%.*}.jxl"
+case "$input" in
+  *.[jJ][pP][gG]|*.[jJ][pP][eE][gG])
+    [ "$distance" = 0 ] && jpeg_flag="" || jpeg_flag="--lossless_jpeg=0"
+    cjxl $jpeg_flag -d "$distance" -e "$effort" "$input" "${input%.*}.jxl" ;;
+  *.[tT][iI][fF]|*.[tT][iI][fF][fF]|*.[wW][eE][bB][pP])
+    magick "$input" png:- | cjxl -d "$distance" -e "$effort" - "${input%.*}.jxl" ;;
+  *)
+    cjxl -d "$distance" -e "$effort" "$input" "${input%.*}.jxl" ;;
+esac
 ```
 
 **Batch (folder or recursive):**
 
-`find` substitutes only the literal token `{}`. It has **no** `{.}` "strip the extension" placeholder — that is GNU parallel syntax. Passing `{.}.jxl` writes every single file to one literal output named `{.}.jxl`, so each conversion overwrites the last. Derive the output name inside a shell instead:
+`find` substitutes only the literal token `{}`. It has **no** `{.}` "strip the extension" placeholder — that is GNU parallel syntax. Passing `{.}.jxl` writes every single file to one literal output named `{.}.jxl`, so each conversion overwrites the last. Derive the output name inside a shell instead. The values after the script fill `$0`, `$1`, `$2`, and so on, and `for f do` walks `$1` onwards. Shift the settings off first, or the loop tries to convert the effort value and the log file too:
 
 ```bash
 find "$target" $maxdepth -type f \
   \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \
-     -o -iname '*.gif' -o -iname '*.webp' -o -iname '*.tif' \) \
+     -o -iname '*.gif' -o -iname '*.webp' -o -iname '*.tif' -o -iname '*.tiff' \) \
   -exec sh -c '
+    d="$0" e="$1" log="$2"; shift 2   # what is left in "$@" is the file list
     for f do
-      cjxl -d "$0" -e "$1" "$f" "${f%.*}.jxl" \
-        || echo "FAILED: $f" >> "$2"
+      out="${f%.*}.jxl"
+      case "$f" in
+        *.[jJ][pP][gG]|*.[jJ][pP][eE][gG])
+          if [ "$d" = 0 ]; then cjxl -d 0 -e "$e" "$f" "$out"
+          else cjxl --lossless_jpeg=0 -d "$d" -e "$e" "$f" "$out"; fi ;;
+        *.[tT][iI][fF]|*.[tT][iI][fF][fF]|*.[wW][eE][bB][pP])
+          magick "$f" png:- | cjxl -d "$d" -e "$e" - "$out" ;;
+        *) cjxl -d "$d" -e "$e" "$f" "$out" ;;
+      esac || { echo "FAILED: $f" >> "$log"; rm -f "$out"; }
     done
   ' "$distance" "$effort" "$failed_log" {} +
 ```

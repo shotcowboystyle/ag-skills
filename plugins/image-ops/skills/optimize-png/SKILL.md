@@ -51,9 +51,16 @@ Do **not** use this skill when:
 
    ```bash
    pngquant --quality "$min-$max" --skip-if-larger --strip --force \
-     --output "$output" "$input" \
-     || echo "FAILED: $input" >> "$failed_log"
+     --output "$output" "$input"
+   case $? in
+     0)  ;;
+     98) echo "SKIPPED (would grow): $input" >> "$skipped_log" ;;
+     99) echo "SKIPPED (below quality floor $min): $input" >> "$skipped_log" ;;
+     *)  echo "FAILED: $input" >> "$failed_log" ;;
+   esac
    ```
+
+   Exit codes 98 and 99 are pngquant declining to write, by design, and the input is left untouched. 98 means the result would have been larger (`--skip-if-larger`). 99 means it could not reach the `--quality` floor. Count them as skipped. Logging them as failures makes an already-optimised folder look broken.
 
    `--skip-if-larger` is critical — pngquant occasionally produces a larger file on already-quantised inputs; this prevents inflation.
    `--strip` removes optional chunks (default off in pngquant — explicitly enable for web-prep).
@@ -68,7 +75,7 @@ Do **not** use this skill when:
    }
    ```
 
-   Capture `total` before the run and again after, then report the difference. Read `$failed_log` for the failure list; report it next to the savings, never the savings alone.
+   Capture `total` before the run and again after, then report the difference. Read `$failed_log` for the failure list and `$skipped_log` for the skips. Report both next to the savings, never the savings alone.
 
 ## Output
 
@@ -83,4 +90,4 @@ Do **not** use this skill when:
 - `oxipng` lossless on a typical screenshot: 20–40% reduction. On already-optimised PNGs (e.g. via Photoshop "Save for Web"): often 1–5%.
 - `pngquant` is irreversible. Keep originals if there's any chance the file will need further editing.
 - For *animated* PNGs (APNG): both tools handle them but check output visually first.
-- Combining lossy then lossless (`pngquant` → `oxipng`) gets a few extra % off — the orchestrator (`web-ready`) does this automatically; this skill keeps it as separate modes for explicit control.
+- Combining lossy then lossless (`pngquant` → `oxipng`) gets a few extra % off. Run the lossy mode, then the lossless mode on its output. This skill keeps them as separate modes for explicit control.

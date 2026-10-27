@@ -79,7 +79,8 @@ For Codex CLI, Cursor, OpenCode, Antigravity CLI, GitHub Copilot, and Pi, see
 - **fdupes** (optional) — fast exact-duplicate detection
 - **libvips** (optional, recommended >500 images) — `fast-resize`, `fast-thumbnail`
 - **poppler-utils** (optional) — `pdf-to-images`, `pdf-extract-embedded-images`
-- **libjxl-tools**, **libavif**, **oxipng**, **pngquant**, **jpegoptim**, **mozjpeg** (optional) — the compression and conversion skills
+- **libjxl-tools**, **libavif**, **webp** (`cwebp`), **oxipng**, **pngquant**, **jpegoptim**, **mozjpeg** (optional) — the compression and conversion skills
+- **Upscayl** or **realesrgan-ncnn-vulkan** (optional) — `upscale-image`
 - **darktable-cli** (optional) — RAW ingestion in `web-ready`
 
 Run the `image-ops-install-deps` skill rather than installing these by hand — it detects the host package manager and provisions the plugin-owned venv without touching system Python.

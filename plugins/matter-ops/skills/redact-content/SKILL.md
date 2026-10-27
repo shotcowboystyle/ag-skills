@@ -38,8 +38,9 @@ is safe to release:
 - **True visual redaction** removes the underlying content, normally by rasterising the
   page or by using a tool built for the purpose.
 
-This skill does the first. It does not guarantee the second. Where the stakes require
-irreversible removal, say so and recommend rasterisation or a purpose-built tool.
+This skill does the first, and for PDFs it never writes a PDF at all (step 4). It does not
+produce visually redacted PDFs. Where the stakes require a PDF with content irreversibly
+removed, say so and recommend a purpose-built redaction tool.
 
 ### 2. Choose the mode deliberately
 
@@ -63,8 +64,25 @@ documents, and say so if the workspace has a remote.
 Text and markdown: replace with word-boundary matching, and check for the value
 appearing in a different case or with different spacing before declaring completeness.
 
-PDFs: extract the text layer, apply replacements, and re-render. Report that the output
-is a re-rendered document, not the original with boxes drawn on it.
+PDFs: this skill does **not** re-render a PDF and does not edit one. It extracts the
+text layer and applies the replacements to that, and the output is a plain-text file:
+
+```bash
+pdftotext -layout "$INPUT" "$OUT_DIR/$(basename "${INPUT%.*}").redacted.txt"
+```
+
+Say this plainly in the report: the output is a text rendering of the PDF's text layer.
+It is not a PDF, and layout, images, signatures, annotations, attachments and form
+fields are not carried over. A page that yields no text (a scan, or text drawn as
+vector outlines) produces nothing. List those pages as unredacted, never as clean.
+Never write replacements back into the original PDF's content streams. The original
+text survives in fonts, object streams and earlier revisions, and the result looks
+redacted when it is not.
+
+If the recipient needs a PDF, the redaction has to be done in a purpose-built tool that
+removes the content under each box. After that, flatten the result to page images
+(`pdftoppm` then `img2pdf`) so no text layer remains. This skill does neither of those
+steps. Recommend them and stop.
 
 Images: no visual redaction is attempted. A cropped or blurred image can often be
 reversed, and shipping the original alongside a redacted copy defeats the exercise
@@ -72,12 +90,31 @@ entirely. Say what would need to happen instead.
 
 ### 5. Scrub metadata if asked
 
+Use `mat2` first. It rewrites the file and does not leave the old metadata recoverable:
+
 ```bash
-exiftool -all= "$OUTPUT"
 mat2 --inplace "$OUTPUT"
 ```
 
-Only ever on outputs. Never on an input, and never on anything under an originals
+If `mat2` is missing, fall back to `exiftool`. For a PDF, also force a full rewrite with
+`qpdf`:
+
+```bash
+exiftool -all:all= "$OUTPUT" && rm -f "${OUTPUT}_original"
+case "$OUTPUT" in *.pdf|*.PDF) qpdf --linearize --replace-input "$OUTPUT" ;; esac
+```
+
+There are two traps here:
+
+- exiftool edits a PDF as an *incremental update*. It appends a new revision and leaves
+  the old metadata in the file, so anyone can recover it with
+  `exiftool -PDF-update:all= file.pdf`. Only a full rewrite, such as `qpdf` above,
+  removes it.
+- exiftool keeps the unscrubbed file beside the output as `<name>_original`. Delete it,
+  as above, or it puts the metadata straight back into the release set.
+
+After scrubbing, run `exiftool -a -G1 "$OUTPUT"` and confirm that nothing identifying
+remains. Only ever on outputs. Never on an input, and never on anything under an originals
 directory.
 
 ### 6. Log every run

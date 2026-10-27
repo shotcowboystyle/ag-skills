@@ -79,8 +79,9 @@ Check for reconstruction data before promising byte-exact recovery on a batch â€
 
 find "$target" $maxdepth -type f -iname '*.jxl' \
   -exec sh -c '
+    log="$1"; shift   # otherwise "for f" also walks the log path
     for f do
-      djxl "$f" "${f%.jxl}.$0" || echo "$f" >> "$1"
+      djxl "$f" "${f%.jxl}.$0" || echo "$f" >> "$log"
     done
   ' "$format" "$failed_log" {} +
 ```

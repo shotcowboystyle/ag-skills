@@ -26,7 +26,7 @@ For the narrow case of stamping the *same* copyright, artist, and rights across 
   - `Description` / `ImageDescription` — image description text.
   - `Keywords` — comma-separated keywords.
   - `LensModel` — lens description (if not auto-detected).
-  - `GPSLatitude` / `GPSLongitude` / `GPSAltitude` — GPS coordinates.
+  - `GPSLatitude` / `GPSLongitude` / `GPSAltitude` — GPS coordinates, as signed decimal degrees (negative = south / west) and metres (negative = below sea level).
   - `DateTimeOriginal` — capture date/time (format: `YYYY:MM:DD HH:MM:SS`).
 - **Backup before write?** Default: **yes**. exiftool creates `_original` sidecars; offer an explicit backup copy for safety.
 
@@ -51,7 +51,7 @@ Ask the user to confirm the exiftool tag names. Common mappings:
 | Creator | Creator |
 | Copyright | Copyright |
 | Description | ImageDescription |
-| Keywords | Keywords |
+| Keywords | IPTC:Keywords + XMP-dc:Subject (list tags, see step 5) |
 | Lens | LensModel |
 | Camera model | Model |
 
@@ -99,8 +99,13 @@ Build the tag list once as an array, so the same set can be reused for the singl
 ```bash
 ARGS=( -Artist="$ARTIST" -Copyright="$COPYRIGHT" )
 [ -n "$DESC" ]     && ARGS+=( -ImageDescription="$DESC" )
-[ -n "$KEYWORDS" ] && ARGS+=( -Keywords="$KEYWORDS" )
+[ -n "$KEYWORDS" ] && ARGS+=( -sep ", " -IPTC:Keywords="$KEYWORDS" -XMP-dc:Subject="$KEYWORDS" )
+[ -n "$LAT" ]      && ARGS+=( "-GPSLatitude*=$LAT" "-GPSLongitude*=$LON" )
+[ -n "$ALT" ]      && ARGS+=( "-GPSAltitude*=$ALT" )
 ```
+
+- **Keywords** are list tags. Without `-sep ", "`, exiftool stores `"travel, beach, 2024"` as one keyword containing commas. IPTC `Keywords` alone is invisible in PNG, WebP and HEIC, which have no IPTC block, so write XMP `dc:subject` as well.
+- **GPS** in EXIF stores the magnitude and the hemisphere separately. `-GPSLatitude=-33.86` writes 33.86 with no `GPSLatitudeRef`, which reads as *north*, so a Sydney photo ends up in the Pacific off Japan. The trailing `*` writes the matching `Ref` tag (`N`/`S`, `E`/`W`, above/below sea level) from the same signed value, plus the XMP equivalent.
 
 **Single file:**
 
@@ -132,7 +137,7 @@ Append `-overwrite_original` to `ARGS` to discard `_original` sidecars, but only
 Sample a few output files and confirm the metadata was written:
 
 ```bash
-exiftool -Artist -Copyright -ImageDescription "$sample"
+exiftool -Artist -Copyright -ImageDescription -Keywords -Subject -n -GPSLatitude -GPSLatitudeRef -GPSLongitude -GPSLongitudeRef "$sample"
 ```
 
 Also report the contents of `$failed_log` — say "none" only when it is empty.

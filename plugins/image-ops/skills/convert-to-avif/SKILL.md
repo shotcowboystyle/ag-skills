@@ -1,7 +1,7 @@
 ---
 name: convert-to-avif
 description: Use when the user wants AVIF output — modern web format with ~30% better compression than WebP at the same visual quality, and ~50% better than JPEG. Wraps `avifenc`. Companion to the `/convert-to-webp` command. Best target for new web work; check browser support if delivering to ancient clients. Triggers - "convert these to AVIF", "encode this folder as AVIF for the web".
-allowed-tools: Bash(avifenc *), Bash(command *), Bash(which *), Bash(exiftool *), Bash(find *), Bash(xargs *), Bash(sh *), Bash(getconf *), Bash(basename *), Bash(mkdir *), Bash(rm *), Bash(wc *), Read, Write
+allowed-tools: Bash(avifenc *), Bash(command *), Bash(which *), Bash(find *), Bash(xargs *), Bash(sh *), Bash(getconf *), Bash(basename *), Bash(mkdir *), Bash(rm *), Bash(wc *), Read, Write
 ---
 
 # Convert to AVIF
@@ -28,7 +28,7 @@ Do **not** use this skill when:
 5. **Bit depth** — `--depth 8|10|12`. Default `8`. Use `10` for HDR or 16-bit source.
 6. **Output dir** — default: `<input-dir>/avif/`. Skill never overwrites originals.
 7. **Recursive** — `--recursive` for directory descent.
-8. **Preserve EXIF** — default off (web-prep assumption). `--keep-exif` to copy EXIF over via `exiftool`.
+8. **Preserve EXIF** — default off (web-prep assumption). `avifenc` copies EXIF and XMP from the source unless told not to, and that includes GPS location. The default therefore passes `--ignore-exif --ignore-xmp`. `--keep-exif` drops those two flags. The ICC profile is kept in both cases.
 
 ## Procedure
 
@@ -39,7 +39,8 @@ Do **not** use this skill when:
 3. For each file:
 
    ```bash
-   avifenc -q "$quality" -s "$speed" ${lossless:+--lossless} ${depth:+--depth "$depth"} \
+   meta="--ignore-exif --ignore-xmp"; [ "$keep_exif" = yes ] && meta=""
+   avifenc -q "$quality" -s "$speed" $meta ${lossless:+--lossless} ${depth:+--depth "$depth"} \
      "$input" "$output" \
      || { echo "FAILED: $input" >> "$failed_log"; rm -f "$output"; continue; }
    ```
@@ -52,18 +53,13 @@ Do **not** use this skill when:
    find "$indir" -type f \( -iname '*.jpg' -o -iname '*.jpeg' \
         -o -iname '*.png' -o -iname '*.tif' -o -iname '*.tiff' \) -print0 |
    xargs -0 -P "$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4)" -I{} \
-     sh -c 'avifenc -q "$0" -s "$1" "$2" "$3/$(basename "${2%.*}").avif" \
-            || echo "FAILED: $2" >> "$4"' \
-     "$quality" "$speed" {} "$outdir" "$failed_log"
+     sh -c 'out="$3/$(basename "${2%.*}").avif"
+            avifenc -q "$0" -s "$1" $5 "$2" "$out" \
+            || { echo "FAILED: $2" >> "$4"; rm -f "$out"; }' \
+     "$quality" "$speed" {} "$outdir" "$failed_log" "$meta"
    ```
 
-4. If `--keep-exif` was set, post-process:
-
-   ```bash
-   exiftool -tagsfromfile "$input" -all:all "$output" -overwrite_original
-   ```
-
-5. Track size deltas, and report the contents of `$failed_log` alongside them.
+4. Track size deltas, and report the contents of `$failed_log` alongside them.
 
 ## Output
 

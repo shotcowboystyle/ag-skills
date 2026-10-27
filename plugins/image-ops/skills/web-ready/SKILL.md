@@ -1,7 +1,7 @@
 ---
 name: web-ready
 description: Use when the user wants to take a folder of images (any mix of HEIC, RAW, PNG, JPEG, TIFF, WebP) and produce a web-ready set — EXIF stripped, resized to a sensible max dimension, encoded in modern formats (AVIF + WebP, with JPEG fallback), and optimized for size. End-to-end orchestrator over the single-purpose skills in this plugin. Triggers - "make this folder web-ready", "prep these photos for upload", "get these images ready for my blog".
-allowed-tools: Bash(which *), Bash(command *), Bash(test *), Bash(brew *), Bash(magick *), Bash(convert *), Bash(identify *), Bash(exiftool *), Bash(vips *), Bash(vipsthumbnail *), Bash(vipsheader *), Bash(heif-convert *), Bash(darktable-cli *), Bash(avifenc *), Bash(cwebp *), Bash(cjpeg *), Bash(jpegoptim *), Bash(oxipng *), Bash(mkdir *), Bash(mv *), Bash(rm *), Bash(find *), Bash(wc *), Read, Write
+allowed-tools: Bash(which *), Bash(command *), Bash(test *), Bash(brew *), Bash(magick *), Bash(convert *), Bash(identify *), Bash(exiftool *), Bash(vips *), Bash(vipsthumbnail *), Bash(vipsheader *), Bash(heif-convert *), Bash(darktable-cli *), Bash(avifenc *), Bash(cwebp *), Bash(cjpeg *), Bash(jpegoptim *), Bash(oxipng *), Bash(mkdir *), Bash(mktemp *), Bash(cp *), Bash(mv *), Bash(rm *), Bash(find *), Bash(wc *), Read, Write
 ---
 
 # Web-Ready (orchestrator)
@@ -48,19 +48,26 @@ Do **not** use this skill when:
 
    For the mozjpeg-quality JPEG fallback, resolve `$MOZ_BIN` as described in `optimize-jpeg` step 1 — a bare `cjpeg` on PATH is libjpeg-turbo, not mozjpeg.
 
-2. **Stage 1: Decode/normalise inputs.** Walk the input tree; classify each file:
-   - JPEG/PNG/WebP/TIFF → pass through.
-   - HEIC → decode to PNG via `heif-convert` (or via `vipsthumbnail` if libvips has libheif). Fail loud if neither is available.
-   - RAW (CR2, ARW, NEF, DNG, ORF, RAF) → decode via `darktable-cli "$input" "$staged.tiff"`. There is no libvips fallback here: libvips ships no camera-RAW decoder for these formats (a DNG that happens to be TIFF-wrapped may partially load via tiffload, but CR2/ARW/NEF/ORF/RAF will not). If `darktable-cli` is missing, skip the file with a flagged warning naming the format, and tell the user in the summary that RAW ingestion needs `darktable-cli` installed.
-   - Anything else (BMP, GIF, etc.) → pass through.
-
-3. **Stage 2: Strip EXIF.** Unless `--keep-exif` set:
+2. **Stage 1: Stage and decode inputs.** Every later stage works on files in a private staging directory, never the input tree:
 
    ```bash
-   exiftool -all= -tagsfromfile @ -Orientation -ColorSpace -overwrite_original "$staged"
+   stage="$(mktemp -d "${TMPDIR:-/tmp}/web-ready.XXXXXX")"
    ```
 
-   Preserve `Orientation` and `ColorSpace` (rotation handling and colour fidelity) even in strip mode.
+   Each file gets a staged copy at `$stage/<relative-path>` (mirroring subdirectories avoids name collisions):
+   - JPEG/PNG/WebP/TIFF → copy: `mkdir -p "$(dirname "$staged")" && cp -p "$input" "$staged"`. Never pass the original itself through: stage 2 rewrites `$staged` in place.
+   - HEIC → decode to PNG via `heif-convert` (or via `vipsthumbnail` if libvips has libheif). Fail loud if neither is available.
+   - RAW (CR2, ARW, NEF, DNG, ORF, RAF) → decode via `darktable-cli "$input" "$staged.tiff"`. There is no libvips fallback here: libvips ships no camera-RAW decoder for these formats (a DNG that happens to be TIFF-wrapped may partially load via tiffload, but CR2/ARW/NEF/ORF/RAF will not). If `darktable-cli` is missing, skip the file with a flagged warning naming the format, and tell the user in the summary that RAW ingestion needs `darktable-cli` installed.
+   - Anything else (BMP, GIF, etc.) → copy, as for JPEG/PNG.
+
+3. **Stage 2: Strip EXIF.** Unless `--keep-exif` set, on the staged copy only:
+
+   ```bash
+   case "$staged" in "$stage"/*) ;; *) echo "refusing to strip outside staging: $staged" >&2; exit 1 ;; esac
+   exiftool -all= --ICC_Profile:all -tagsfromfile @ -Orientation -ColorSpace "$staged"
+   ```
+
+   This rewrites `$staged` in place, which is safe only because it is a copy. The `case` guard enforces that. exiftool's `<file>_original` backup stays in `$stage` and goes at cleanup. Keep `Orientation`, `ColorSpace` and the ICC profile (`--ICC_Profile:all` excludes it from `-all=`). Without the profile, colours in a Display P3 or Adobe RGB photo shift.
 
 4. **Stage 3: Resize.** Per file, fit within `<max-side>` box preserving aspect:
 
@@ -72,7 +79,7 @@ Do **not** use this skill when:
 
 5. **Stage 4: Encode.** For each survivor, produce up to three outputs:
 
-   - **AVIF:** `avifenc -q "$avif_q" -s 6 "$resized.png" "$out/avif/$basename.avif"`
+   - **AVIF:** `avifenc -q "$avif_q" -s 6 "$resized.png" "$out/avif/$basename.avif"`. `avifenc` copies the source's EXIF/XMP, and stage 2 has already removed them unless `--keep-exif` is set.
    - **WebP:** `cwebp -q "$webp_q" "$resized.png" -o "$out/webp/$basename.webp"`
    - **JPEG fallback** (unless `--no-jpeg-fallback`): `cjpeg` cannot read PNG — it decodes PPM/PGM/BMP/Targa only — so the stage-3 PNG must be decoded first:
 
@@ -91,11 +98,11 @@ Do **not** use this skill when:
    Run encodes in parallel — they're independent. Check each encoder's exit status and record failures per file and per format; a format that fails for one file must not abort the other two or the rest of the batch.
 
 6. **Stage 5: Optimize (final squeeze).**
-   - JPEGs: `jpegoptim --strip-all --all-progressive` in-place on `web/jpg/`.
+   - JPEGs: `jpegoptim --strip-com --strip-exif --strip-iptc --strip-xmp --all-progressive` in-place on `web/jpg/`. Avoid `--strip-all`, which also removes the ICC profile. With `--keep-exif`, drop the `--strip-*` flags.
    - PNGs (only if any survived as PNG, e.g. with `--no-jpeg-fallback`): `oxipng -o 4 --strip safe`.
    - AVIF / WebP: avifenc and cwebp already produce near-optimal output; no second pass.
 
-7. **Cleanup:** delete `<staged>` intermediates. Write a manifest at `<output>/manifest.json` mapping `<original-path> → {avif, webp, jpg}` plus per-file size deltas.
+7. **Cleanup:** `rm -rf "$stage"` (only the staging directory). Write a manifest at `<output>/manifest.json` mapping `<original-path> → {avif, webp, jpg}` plus per-file size deltas.
 
 ## Output
 
@@ -109,6 +116,5 @@ Do **not** use this skill when:
 ## Notes
 
 - Defaults are tuned for the `blog` profile. `gallery` and `archival-web` raise quality for slower-but-better output.
-- The orchestrator never modifies originals. The output tree is fully separate.
-- For very large input trees (>10k files), the stage-by-stage design is intentional — early failure of one stage doesn't waste the others' work; intermediates persist until cleanup.
+- The orchestrator never modifies originals. Every destructive step runs on a copy in `$stage`, and the output tree is separate.
 - Companion skills: `convert-to-avif` (single-format), `optimize-png`, `optimize-jpeg`, `fast-resize`; plus the `/convert-to-webp` command for single-format WebP. This orchestrator composes the same tools; the user is welcome to use the components directly when they want finer control.

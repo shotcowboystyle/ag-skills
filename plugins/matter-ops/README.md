@@ -82,7 +82,7 @@ it. Facts are filled in at provisioning time so later work does not have to re-a
 | `libreoffice` | office document conversion |
 | `typst` | typesetting briefs and reports |
 | `exiftool`, `mat2` | metadata scrubbing on redacted outputs |
-| `qpdf` | PDF structure work |
+| `qpdf` | PDF structure work, and the full rewrite that makes an `exiftool` PDF scrub irreversible |
 | `git`, `gh` | workspace version control and optional publishing |
 
 None is required to provision a workspace. Each skill reports what it cannot do rather

@@ -97,7 +97,7 @@ Two patterns — pick based on scope:
 **Folder (non-recursive):**
 
 ```bash
-exiftool -all= -tagsFromFile @ -Orientation \
+exiftool -all= --ICC_Profile:all -tagsFromFile @ -Orientation \
   -ext jpg -ext jpeg -ext png -ext heic -ext webp -ext tif -ext tiff \
   "$TARGET"
 ```
@@ -105,14 +105,16 @@ exiftool -all= -tagsFromFile @ -Orientation \
 **Recursive tree:**
 
 ```bash
-exiftool -r -all= -tagsFromFile @ -Orientation \
+exiftool -r -all= --ICC_Profile:all -tagsFromFile @ -Orientation \
   -ext jpg -ext jpeg -ext png -ext heic -ext webp -ext tif -ext tiff \
   "$TARGET"
 ```
 
+`--ICC_Profile:all` keeps the colour profile out of the delete. The pixels of a Display P3 or Adobe RGB photo only render correctly with their profile attached, and a plain `-all=` removes it. A profile identifies a colour space, not a person, though some carry a device or vendor name in the description. Drop the `--ICC_Profile:all` only for a full nuke, and warn that colours will shift.
+
 The recursive form is why the step 4 backup has to sit outside `$TARGET`: `-r` descends into every subdirectory, including one named `backup/`.
 
-If the user asked to keep additional fields, extend the `-tagsFromFile @ -Field1 -Field2 ...` list. If the user asked to preserve **nothing** (full nuke), drop the `-tagsFromFile` clause — just `-all=`.
+If the user asked to keep additional fields, extend the `-tagsFromFile @ -Field1 -Field2 ...` list. If the user asked to preserve **nothing** (full nuke), drop the `-tagsFromFile` clause and `--ICC_Profile:all`, leaving just `-all=`.
 
 To discard the `_original` sidecars in the same run, append `-overwrite_original`. Only do this if a backup was made in step 4, or if the user explicitly waived backup.
 
