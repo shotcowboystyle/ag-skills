@@ -144,21 +144,27 @@ eval/
 │   ├── exact_match.py
 │   └── rubric_judge.py
 ├── drift-suite.yaml        # frozen benchmarks + 200-500 domain-adjacent items
-└── baseline-<model>.json   # gate token: harness + drift suite vs the base model
+├── baseline-<model>.json   # gate token: harness + drift suite vs the base model
+└── baseline-<model>-results.json  # the base model's per-item records
 runs/
-└── <run-id>/
-    └── results.json         # per-run harness output, one per checkpoint
+└── <date>-<slug>/           # the training run directory
+    └── results.json         # the checkpoint's per-item records
 ```
 
 `eval/` persists across runs and lives outside
 `runs/` — the fixed measuring stick, not a run
 artifact. `runs/` is disposable; `eval/` is not.
-Never let a run script write into `eval/`. **Canonical
-location:** every per-trace `results.json` — the
-Phase 0 baseline included — lives at
-`runs/<run-id>/results.json`, never under
-`eval/runs/...`; an instruction requesting the
-latter is wrong, not this contract.
+Never let a run script write into `eval/`; only the
+Phase 0 baseline run writes there. **Canonical
+locations:** the base model's per-item records live
+at `eval/baseline-<model>-results.json`, beside the
+baseline they produced. Each checkpoint's records
+live at `runs/<date>-<slug>/results.json`, inside
+the same run directory as its training config and
+`promotion-report.md`. Both files hold one record
+per golden and drift-suite item, keyed by
+`task_id`, so stage 2 can pair them. Never write
+results under `eval/runs/...`.
 
 ### Phase 0 Exit Checklist
 
@@ -175,7 +181,7 @@ Before `finetuning-method-selection`, confirm:
    different family (**N/A when no bucket routes to
    an LLM-judge**; state that explicitly).
 5. `eval/drift-suite.yaml` frozen.
-6. `eval/baseline-<model>.json` written.
+6. `eval/baseline-<model>.json` and `eval/baseline-<model>-results.json` written.
 
 Missing any of the six (or its stated N/A)? Not
 Phase 0 complete — `/finetune` checks the baseline

@@ -29,14 +29,17 @@ consumes directly.
 
 | Data shape | Method | Key parameters |
 |---|---|---|
-| Preference pairs, default case | **DPO** | β=0.1, LR 5e-7–1e-6, 1–2 epochs |
+| Preference pairs, default case | **DPO** | β=0.1, LR 5e-7–1e-6 full FT / 5e-6–1e-5 LoRA, 1–2 epochs |
 | Memory-bound or no SFT checkpoint | **ORPO** | reference-free, fused SFT+preference in one loss |
 | Unpaired thumbs-up/down | **KTO** | binary label per example, no pairing needed |
 | Length bias observed, sweep budget available | **SimPO** | reference-free; see sweep grid below |
 
-- **DPO is the safe default.** Use β=0.1 and a
-  learning rate of 5e-7 to 1e-6 for 1–2 epochs.
-  This LR is *lower* than the SFT LR that produced
+- **DPO is the safe default.** Use β=0.1 for 1–2
+  epochs, at 5e-7 to 1e-6 for a full fine-tune or
+  5e-6 to 1e-5 for a LoRA/QLoRA adapter (the 10x
+  rule; every method's split is in
+  `lora-qlora-recipes`'s hyperparameter table).
+  Either way the LR is *lower* than the SFT LR that produced
   the checkpoint being aligned — porting an SFT-
   scale LR into a DPO run is the most common
   misconfiguration here, not an edge case.

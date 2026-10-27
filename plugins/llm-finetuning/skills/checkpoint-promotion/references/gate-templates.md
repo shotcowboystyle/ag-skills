@@ -1,4 +1,4 @@
-Last verified: 2026-07-14
+Last verified: 2026-10-27
 
 # Gate Templates
 
@@ -24,7 +24,8 @@ still documents the full gate.
 # Promotion Report: CHECKPOINT
 
 **Run date:** YYYY-MM-DD
-**Baseline:** eval/baseline-BASE_MODEL.json
+**Baseline:** eval/baseline-BASE_MODEL.json (per-item: eval/baseline-BASE_MODEL-results.json)
+**Checkpoint results:** runs/<date>-<slug>/results.json
 **Drift suite:** eval/drift-suite.yaml (frozen)
 **Goldens fingerprint:** <sha256 of eval/goldens.jsonl, first 12 hex chars>
 <!-- re-gates compare this field to detect goldens changes since this gate -->
@@ -39,12 +40,14 @@ still documents the full gate.
 
 ## Stage 2: Capability Drift
 
-| Benchmark | Baseline | Checkpoint | Delta | Budget verdict |
-|---|---|---|---|---|
-| mmlu-subset | 68.2 | 67.5 | -0.7 | noise |
-| gsm8k-subset | 81.0 | 78.4 | -2.6 | rerun-seed |
-| ifeval | 74.1 | 74.3 | +0.2 | noise |
-| domain-adjacent | 62.0 | 55.8 | -6.2 | HARD FAIL |
+| Benchmark | n | Baseline | Checkpoint | d (pts) | Flips b / c | Paired 95% CI hi | Budget verdict |
+|---|---|---|---|---|---|---|---|
+| mmlu-subset | 500 | 68.2 | 67.6 | 0.6 | 17 / 14 | 2.8 | noise |
+| gsm8k-subset | 250 | 81.2 | 78.4 | 2.8 | 12 / 5 | 6.0 | rerun-seed |
+| ifeval | 300 | 74.0 | 74.3 | -0.3 | 8 / 9 | 2.4 | noise |
+| domain-adjacent | 200 | 62.0 | 55.5 | 6.5 | 19 / 6 | 11.3 | HARD FAIL |
+
+`d` = baseline − checkpoint (positive = regression); `b` = base passed, checkpoint failed; `c` = the reverse.
 
 **Stage verdict:** PASS / RERUN / HARD FAIL
 (worst-benchmark delta governs — one HARD FAIL
@@ -56,11 +59,10 @@ RERUN is a mid-report state, not a terminal one —
 `## Verdict` below may never show `PROMOTE` or
 `REJECT` while this line still reads `RERUN`.
 Complete the seed-variation rerun first, then
-overwrite this line with the outcome: PASS (rerun
-landed ≤1pt) or HARD FAIL (rerun still >1pt, in
-either the 2–5pt band or beyond) — this stage
-resolves to PASS or HARD FAIL, never RERUN, before
-the report reaches a verdict.
+overwrite this line with the outcome: PASS (pooled
+d ≤ 1 and paired CI hi ≤ 5) or REJECT (anything
+else) — this stage resolves to PASS or REJECT,
+never RERUN, before the report reaches a verdict.
 
 ## Stage 3: Paired Arena
 
@@ -110,11 +112,12 @@ against the same frozen numbers that skill's
 baseline file recorded:
 
 ```yaml
-# scored against eval/drift-suite.yaml
+# scored against eval/drift-suite.yaml; d = baseline - checkpoint, in pts
 drift_budget:
-  noise_tolerance_pts: 1        # <=1pt: noise, proceed
-  rerun_seed_variation_pts: [2, 5]   # 2-5pt: rerun before deciding
-  hard_fail_threshold_pts: 5    # >5pt: HARD FAIL, no exceptions
+  noise_tolerance_pts: 1        # d <= 1: noise, proceed
+                                # 1 < d <= 5: rerun with seed variation before deciding
+  hard_fail_threshold_pts: 5    # d > 5: HARD FAIL, no exceptions
+  ci: paired                    # PASS also needs the paired 95% CI upper bound <= 5
 ```
 
 Score every row in the frozen suite (general
@@ -125,55 +128,45 @@ even if every general benchmark stayed within
 noise, and even if the checkpoint's target-task
 metric improved substantially in the same run.
 
-### Sizing the Suite: The Honest Math, Then the Pragmatic Floor
+### Sizing the Suite: Paired Difference, Not Two Scores
 
-The exact formula for a binomial accuracy metric's
-95% CI half-width: `n ≈ 1.96² · p(1-p) / h²`, where
-`h` is the target half-width (as a fraction, e.g.
-0.025 for 2.5pt) and `p` is the benchmark's expected
-accuracy. `SKILL.md`'s Drift Budget section calls for
-sizing `n` so the half-width sits comfortably under
-half the hard-fail threshold — for the 5pt budget
-here, `h=2.5pt` (0.025). Worked at a typical
-GSM8K-style accuracy of `p≈0.7`:
+Base and checkpoint answer the same frozen items, so drift is a **paired** difference. Most items get the same verdict from both models and add no uncertainty; only the flipped items do. Per benchmark, from the per-item verdicts in `eval/baseline-BASE_MODEL-results.json` and `runs/<date>-<slug>/results.json` (joined on `task_id`):
 
 ```
-n ≈ 1.96² × 0.7×0.3 / 0.025² ≈ 3.8416 × 0.21 / 0.000625 ≈ 1,290
+b  = items the base passed and the checkpoint failed
+c  = items the checkpoint passed and the base failed
+d  = (b - c) / n
+SE = sqrt(b + c - (b - c)^2 / n) / n
+hi = d + 1.96 * SE          # 95% CI upper bound on the regression
 ```
 
-**The strict n for a 2.5pt half-width at p≈0.7 is
-~1,300 — not 200.** A 200-item suite at that same `p`
-only achieves:
+```python
+from math import sqrt
 
+def paired_drift(b: int, c: int, n: int) -> tuple[float, float]:
+    """Return (d, hi) in percentage points."""
+    d = (b - c) / n
+    se = sqrt(b + c - (b - c) ** 2 / n) / n
+    return 100 * d, 100 * (d + 1.96 * se)
+
+assert [round(x, 1) for x in paired_drift(13, 13, 200)] == [0.0, 5.0]
 ```
-half-width = 1.96 × sqrt(0.7×0.3 / 200) ≈ 1.96 × 0.0324 ≈ 6.3pt
-```
 
-**n=200 is a pragmatic floor, not a suite that meets
-the strict 2.5pt target.** Use it when a ~1,300-item
-domain-adjacent pool doesn't exist for the task (the
-common case), but with three rules attached:
+Stage 2 rules, applied per benchmark:
 
-- **Report the actual CI half-width alongside every
-  Stage 2 verdict** — at n=200, p≈0.7 that's ≈±6pt;
-  recompute per benchmark since `p` varies row to row.
-- **A hard-fail margin smaller than the reported CI
-  half-width makes the verdict `REJECT (uncertain)`,
-  never PASS or HARD FAIL.** A delta that clears or
-  breaches the 5pt budget by less than the half-width
-  has not actually been distinguished from noise at
-  200 items. Resolve `REJECT (uncertain)` with either
-  a larger suite (build the domain-adjacent pool
-  toward the ~1,300-item strict number) or a
-  same-config seed-repeat (worked example below)
-  before promoting — do not round an uncertain result
-  to whichever verdict is more convenient.
-- **200 is a floor to derive from the budget, never a
-  fixed constant to copy.** A tighter hard-fail
-  threshold than 5pt needs the formula re-run at the
-  new `h`, and n=50 is well below even the pragmatic
-  floor: at `p≈0.7-0.8`, n=50 carries a half-width
-  around ±13pt, wider than the entire hard-fail band.
+- `d ≤ 1` and `hi ≤ 5` → noise, PASS.
+- `d ≤ 1` and `hi > 5` → `REJECT (uncertain)`. The suite can't rule out a breach. Resolve with more items, never by rounding to the convenient verdict.
+- `1 < d ≤ 5` → RERUN with seed variation, then re-score on the pooled items: PASS only if pooled `d ≤ 1` and `hi ≤ 5`, otherwise REJECT.
+- `d > 5` → HARD FAIL, whatever the CI says.
+
+**Why the paired form is the gate.** Treating the two scores as independent puts ±6.3pt on *each* score at n=200, p≈0.7 (`1.96 × sqrt(0.7×0.3/200)`), so no margin under the 5pt budget could ever be resolved and PROMOTE would be unreachable at the floor. Paired, the half-width depends only on the flip fraction `r = (b + c) / n`:
+
+| n | max flip fraction for PASS at d=0 | at d=1pt |
+|---|---|---|
+| 200 | 13% (26 items) | 8% (16 items) |
+| 500 | 32% | 21% |
+
+**Sizing rule:** `n ≥ 1.96² · r / (0.05 − d)²`, using `r` and `d` from a pilot run or the previous checkpoint. A fine-tune that flips many items needs a larger suite. **n=200 is the floor**: below it a single flipped item moves `d` by more than 0.5pt, and n=50 (±13pt on unpaired scores) is not a drift suite at all.
 
 ### Cautionary Worked Example: A Real 5-Run Trajectory That Was Mostly Noise
 
@@ -218,16 +211,17 @@ until a same-config seed pair confirms it.
 - **N items:** 200 minimum, drawn from the same
   domain-adjacent pool used in Stage 2 (not the
   training set, not the goldens used to build the
-  checkpoint). **This is the same pragmatic floor as
-  Stage 2's sizing rule above, not a suite proven to
-  resolve the margin below at 95% CI:** near the 50%
+  checkpoint). **This is the same floor as Stage 2, but an arena
+  win rate is not a paired difference, so the CI is
+  wider:** near the 50%
   boundary, n=200's half-width is `1.96 ×
   sqrt(0.25/200) ≈ 6.9pt`, wider than the 5pt margin
-  threshold. Report the CI half-width alongside the
-  win rate; if the margin is smaller than the
-  reported half-width, the stage verdict is `REJECT
-  (uncertain)` — same rule as Stage 2 — resolved with
-  a larger arena or a same-config seed-repeat before
+  threshold. A PASS is still reachable at n=200 — it
+  needs an observed win rate of roughly 57% or more
+  so the CI clears 50% — but a 55% result is not one.
+  Report the CI half-width alongside the win rate; if
+  the CI includes 50%, the stage verdict is `REJECT
+  (uncertain)`, resolved with a larger arena before
   promoting. **This 200-item minimum is for the
   LLM-judge protocol.** The deterministic variant
   below has its own, smaller floor because it isn't
@@ -243,7 +237,8 @@ judge-scored arena:
 - **Pairing:** for each item in `eval/goldens.jsonl`,
   compare the checkpoint's graded verdict against the
   baseline's verdict on the identical prompt (from
-  `runs/baseline/results.json`, paired by `task_id`).
+  `eval/baseline-BASE_MODEL-results.json`, paired by
+  `task_id`).
   Win = checkpoint passed where baseline failed; loss
   = the reverse; tie = same verdict either way.
 - **N items:** every golden, not a 200-item minimum —
@@ -260,6 +255,9 @@ judge-scored arena:
 - **Tie handling and win-rate threshold:** same as the
   judge protocol below (ties count half a win each;
   50% + margin, CI excludes 50%).
+
+### Judge Protocol
+
 - **Position randomization:** for each item, flip a
   coin on which of {CHECKPOINT, BASE_MODEL} appears
   first in the judge's prompt; log the raw

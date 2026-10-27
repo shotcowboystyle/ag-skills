@@ -63,16 +63,20 @@ it sees.
   instead.
 
 ```python
-# freeze tower + projector; LoRA on LLM only
-for name, param in model.named_parameters():
-    if "vision_tower" in name or "projector" in name:
-        param.requires_grad = False
+from peft import LoraConfig, get_peft_model
 
-target_modules = [
-    "q_proj", "k_proj", "v_proj", "o_proj",
-    "gate_proj", "up_proj", "down_proj",
-]  # LLM-only, all-linear — r=8-16, alpha=16-32
+# PEFT freezes every base weight, so tower + projector stay frozen
+# whatever the architecture calls them. Scope LoRA by module path.
+config = LoraConfig(r=16, lora_alpha=32, target_modules=(
+    r".*language_model.*\.(q_proj|k_proj|v_proj|o_proj|gate_proj|up_proj|down_proj)"))
+model = get_peft_model(model, config)
+
+leaked = [n for n, p in model.named_parameters()
+          if p.requires_grad and "language_model" not in n]
+assert not leaked, leaked[:5]  # nothing trainable outside the LLM
 ```
+
+- **Don't freeze by name match.** Vision module names differ per architecture: `vision_tower` + `multi_modal_projector` (LLaVA, Gemma), `visual` + `merger` (Qwen-VL), `vision_model` + `connector` (Idefics/SmolVLM). A `"vision_tower" in name` loop freezes nothing on Qwen-VL, and bare `q_proj`/`gate_proj` targets also hit Qwen's ViT blocks. On Unsloth, `FastVisionModel.get_peft_model(finetune_vision_layers=False)` does the same scoping.
 
 ## When to Unfreeze
 
@@ -182,13 +186,10 @@ fine-tuning.
 
 ## Failure Modes
 
-The recurring mistake across every section above
-is treating a clean loss curve as proof the run
-is healthy. A normal-looking curve is consistent
-with **both** a working run **and** either silent
-killer, since the model trains on *something*
-either way — just not the aligned image-text
-signal when a killer is present. A flat eval score
+The recurring mistake is treating a clean loss
+curve as proof the run is healthy: either silent
+killer still produces a normal curve, because the
+model trains on *something*. A flat eval score
 next to a normal loss curve means re-run the
 checklist in `references/collators-and-pitfalls.md`
 before touching any hyperparameter.

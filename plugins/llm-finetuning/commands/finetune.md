@@ -51,7 +51,8 @@ prompt: |
      LLM-judge bucket, and a frozen `drift-suite.yaml`.
   3. Only if `eval/baseline-<model>.json` is missing, run the full
      harness plus drift suite against the unmodified base model and
-     write it. If it already exists, preserve it as-is — it is the
+     write it, with the per-item records at
+     `eval/baseline-<model>-results.json`. If it already exists, preserve it as-is — it is the
      measuring stick every later run's checkpoint gets diffed
      against, and rewriting it on a later run would change what
      "PROMOTE" means between runs.
@@ -204,7 +205,8 @@ prompt: |
      check against `eval/goldens.jsonl`.
   2. Stage 2 — capability drift: re-run the identical harness plus
      frozen drift suite used in Phase 0 — not a looser or expanded
-     one — diff against `eval/baseline-<model>.json`, and apply the
+     one — write `runs/<date>-<slug>/results.json`, pair it item by
+     item with `eval/baseline-<model>-results.json`, and apply the
      drift budget by pointer to `checkpoint-promotion`'s Drift Budget
      table.
   3. Stage 3 — paired arena vs. base model, position-randomized

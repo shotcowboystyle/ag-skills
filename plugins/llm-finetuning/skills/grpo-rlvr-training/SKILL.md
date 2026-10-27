@@ -71,7 +71,7 @@ grpo_args = GRPOConfig(
     use_vllm=True,
     vllm_mode="colocate",       # single GPU; "server" for multi-GPU
     num_generations=8,          # floor — fewer starves the group-relative baseline
-    learning_rate=5e-7,         # settled range for GRPO
+    learning_rate=5e-7,         # full FT; a LoRA adapter starts at 5e-6
     beta=0.01,                  # KL coefficient vs the reference policy
     per_device_train_batch_size=8,
     gradient_accumulation_steps=4,
@@ -110,9 +110,13 @@ trainer.train()
   identically; correctness alone loses that
   signal.
 - **`learning_rate=5e-7`** and **`beta=0.01`** are
-  the settled starting point; deviate only after
-  the base run is stable and reward-inspected
-  (below).
+  the settled full-fine-tune starting point. A
+  LoRA/QLoRA adapter (`peft_config`, or an Unsloth
+  `get_peft_model` policy) starts at **5e-6** (range
+  5e-6–1e-5), per the 10x rule in
+  `lora-qlora-recipes`'s hyperparameter table.
+  Deviate only after the base run is stable and
+  reward-inspected (below).
 
 Memory sizing for this recipe by target size
 class: `references/grpo-memory.md`.

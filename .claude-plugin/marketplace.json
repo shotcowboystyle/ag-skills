@@ -750,7 +750,7 @@
     {
       "name": "llm-finetuning",
       "description": "Eval-gated LLM fine-tuning lifecycle (LoRA/QLoRA, DPO, GRPO/RLVR, vision SFT, quantized export). Use when fine-tuning an open-weights model end-to-end: building the eval harness first, selecting method and model, preparing data, training with Unsloth or TRL, gating checkpoints, and exporting GGUF/FP8.",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"

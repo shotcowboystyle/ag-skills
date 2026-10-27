@@ -38,6 +38,28 @@ Treat these as starting points to sweep around,
 not fixed constants — but start here rather than
 porting a full-FT LR unchanged.
 
+### Post-SFT Methods, by Adapter Type
+
+The same 10x rule applies after SFT. Preference and
+RL methods publish full-fine-tune learning rates;
+an adapter run needs the LoRA column. This table is
+the one place these values live —
+`preference-optimization` and `grpo-rlvr-training`
+point here.
+
+| Method | Full fine-tune | LoRA / QLoRA |
+|---|---|---|
+| DPO, KTO | 5e-7 – 1e-6 (start 7e-7) | 5e-6 – 1e-5 (start 5e-6) |
+| SimPO | 3e-7 – 1e-6 (sweep) | 3e-6 – 1e-5 (sweep) |
+| ORPO (fused SFT + preference) | 8e-6 – 5e-5 (start 2e-5) | 8e-5 – 2e-4 (start 1e-4) |
+| GRPO / RLVR | 5e-7 – 1e-6 (start 5e-7) | 5e-6 – 1e-5 (start 5e-6) |
+
+Each LoRA column is derived from the 10x rule, not
+measured per method. Sweep around it, and recheck
+it whenever the adapter rank changes a lot. Every
+preference and RL value still sits below the SFT
+LR at the same adapter type.
+
 ## rsLoRA Note
 
 Rank-stabilized LoRA (rsLoRA) rescales the

@@ -169,10 +169,10 @@ describe models by size class only (for example,
 
 The catalog is dated on purpose — model rankings
 turn over quarterly. It carries a "last verified"
-date and a refresh checklist. Before trusting a
-row, check that date; if stale, work the refresh
-checklist in the catalog before recommending a
-model from it.
+date, a refresh checklist, and a staleness rule:
+over 90 days since that date, refresh before naming
+any model, or recommend a size class only and say
+the catalog is stale.
 
 **Precedence when the catalog and a method skill
 disagree:** the catalog's per-row Notes column
