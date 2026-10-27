@@ -1,6 +1,7 @@
 ---
 description: "Launch a multi-reviewer parallel code review with specialized review dimensions"
 argument-hint: "<target> [--reviewers security,performance,architecture,testing,accessibility] [--base-branch main]"
+last_verified: 2026-10-27
 ---
 
 # Team Review
@@ -9,7 +10,9 @@ Orchestrate a multi-reviewer parallel code review where each reviewer focuses on
 
 ## Pre-flight Checks
 
-1. Verify `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is set
+1. Pick the mode. Run `echo "${CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS:-}"`:
+   - `1` in an interactive session → **team mode**: teammates share a task list and message you.
+   - Anything else, or `claude -p` → **subagent mode**: tell the user "Agent Teams is off; running the roles as plain subagents." Spawn each role with `Agent` and no `name`, in parallel where the work allows, and use each returned answer as that role's result. Skip `TaskCreate`, `TaskList` and shutdown.
 2. Parse `$ARGUMENTS`:
    - `<target>`: file path, directory, git diff range (e.g., `main...HEAD`), or PR number (e.g., `#123`)
    - `--reviewers`: comma-separated dimensions (default: `security,performance,architecture`)
@@ -26,18 +29,19 @@ Orchestrate a multi-reviewer parallel code review where each reviewer focuses on
 
 ## Phase 2: Team Spawn
 
-1. Use `TeamCreate` tool to create the team with `team_name: "review-{timestamp}"` and `description`
-2. For each requested dimension, use `Agent` tool to spawn a teammate:
-   - `name`: `{dimension}-reviewer` (e.g., "security-reviewer")
+In team mode the session's team already exists and you are its lead.
+
+1. For each requested dimension, use the `Agent` tool to spawn a reviewer:
+   - `name`: `{dimension}-reviewer` (e.g., "security-reviewer"); team mode only
    - `subagent_type`: "agent-teams:team-reviewer"
-   - `prompt`: Include the dimension assignment, target files, and diff content
-3. Use `TaskCreate` for each reviewer's task:
+   - `prompt`: Include the dimension assignment, target files, and diff content. Reviewers don't see your conversation.
+2. Team mode: use `TaskCreate` for each reviewer's task:
    - Subject: "Review {target} for {dimension} issues"
    - Description: Include file list, diff content, and dimension-specific checklist
 
 ## Phase 3: Monitor and Collect
 
-1. Wait for all review tasks to complete (check `TaskList` periodically)
+1. Wait for every reviewer. Team mode: reviewer messages and idle notifications arrive on their own; read `TaskList` when one arrives, not on a timer. Subagent mode: each `Agent` call returns the findings.
 2. As each reviewer completes, collect their structured findings
 3. Track progress: "{completed}/{total} reviews complete"
 
@@ -74,5 +78,4 @@ Orchestrate a multi-reviewer parallel code review where each reviewer focuses on
    Total findings: {count} (Critical: N, High: N, Medium: N, Low: N)
    ```
 
-2. Send `shutdown_request` to all reviewers
-3. Call `TeamDelete` to remove team resources
+2. Team mode: ask each reviewer by name to shut down. Claude Code removes the team when the session ends.

@@ -122,7 +122,7 @@ class TestOpenCodeSmoke:
         expected = set()
         for plugin_name in list_plugins():
             plugin = load_plugin(plugin_name)
-            if plugin:
+            if plugin and plugin.runs_on("opencode"):
                 expected.update(f"{plugin.name}__{a.name}" for a in plugin.agents)
 
         missing = expected - listed

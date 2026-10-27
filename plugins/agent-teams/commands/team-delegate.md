@@ -1,6 +1,7 @@
 ---
 description: "Task delegation dashboard for managing team workload, assignments, and rebalancing"
-argument-hint: "[team-name] [--assign task-id=member-name] [--message member-name 'content'] [--rebalance]"
+argument-hint: "[--assign task-id=member-name] [--message member-name 'content'] [--rebalance]"
+last_verified: 2026-10-27
 ---
 
 # Team Delegate
@@ -9,12 +10,12 @@ Manage task assignments and team workload. Provides a delegation dashboard showi
 
 ## Pre-flight Checks
 
-1. Parse `$ARGUMENTS` for team name and action flags:
+1. Parse `$ARGUMENTS` for action flags:
    - `--assign task-id=member-name`: assign a specific task to a member
    - `--message member-name 'content'`: send a message to a specific member
    - `--rebalance`: analyze and rebalance workload distribution
 
-2. Read team config from `~/.claude/teams/{team-name}/config.json` using the Read tool
+2. Read the session's team config from `~/.claude/teams/{team-name}/config.json` (list `~/.claude/teams/` to find it)
 3. Call `TaskList` to get current state
 
 ## Action: Assign Task
@@ -23,9 +24,7 @@ If `--assign` flag is provided:
 
 1. Parse task ID and member name from `task-id=member-name` format
 2. Use `TaskUpdate` to set the task owner
-3. Use `SendMessage` with `type: "message"` to notify the member:
-   - recipient: member name
-   - content: "You've been assigned task #{id}: {subject}. {task description}"
+3. Use `SendMessage` to the member's name: "You've been assigned task #{id}: {subject}. {task description}"
 4. Confirm: "Task #{id} assigned to {member-name}"
 
 ## Action: Send Message
@@ -33,9 +32,7 @@ If `--assign` flag is provided:
 If `--message` flag is provided:
 
 1. Parse member name and message content
-2. Use `SendMessage` with `type: "message"`:
-   - recipient: member name
-   - content: the message content
+2. Use `SendMessage` to the member's name with the message content
 3. Confirm: "Message sent to {member-name}"
 
 ## Action: Rebalance
@@ -90,5 +87,3 @@ If no action flag is provided, display the full delegation dashboard:
   - Assign #5 to implementer-3 (idle)
   - Assign #7 to implementer-2 (low workload)
 ```
-
-**Tip**: Use Shift+Tab to enter Claude Code's built-in delegate mode for ad-hoc task delegation.

@@ -31,32 +31,26 @@ from tools.adapters.base import (  # noqa: E402
 )
 
 
-def _source_agent_count() -> int:
-    """Count agents across all local plugins."""
-    n = 0
-    for name in list_plugins():
-        plugin = load_plugin(name)
-        if plugin:
-            n += len(plugin.agents)
-    return n
+def _plugins(harness: str) -> list[str]:
+    """Local plugins the generator emits for `harness` (plugin.json `harnesses` allows it)."""
+    return [
+        name
+        for name in list_plugins()
+        if (plugin := load_plugin(name)) and plugin.runs_on(harness)
+    ]
 
 
-def _source_skill_count() -> int:
-    n = 0
-    for name in list_plugins():
-        plugin = load_plugin(name)
-        if plugin:
-            n += len(plugin.skills)
-    return n
+def _source_agent_count(harness: str) -> int:
+    """Count agents across the local plugins emitted for `harness`."""
+    return sum(len(load_plugin(name).agents) for name in _plugins(harness))
 
 
-def _source_command_count() -> int:
-    n = 0
-    for name in list_plugins():
-        plugin = load_plugin(name)
-        if plugin:
-            n += len(plugin.commands)
-    return n
+def _source_skill_count(harness: str) -> int:
+    return sum(len(load_plugin(name).skills) for name in _plugins(harness))
+
+
+def _source_command_count(harness: str) -> int:
+    return sum(len(load_plugin(name).commands) for name in _plugins(harness))
 
 
 # ── Per-harness output checks ────────────────────────────────────────────────
@@ -69,8 +63,8 @@ def _source_command_count() -> int:
 class TestCodexRoundTrip:
     def test_codex_agent_count_matches_source(self):
         codex_agents = list((WORKTREE / ".codex" / "agents").glob("*.toml"))
-        assert len(codex_agents) == _source_agent_count(), (
-            f"agent count mismatch: source={_source_agent_count()} codex={len(codex_agents)}"
+        assert len(codex_agents) == _source_agent_count("codex"), (
+            f"agent count mismatch: source={_source_agent_count('codex')} codex={len(codex_agents)}"
         )
 
     def test_every_codex_skill_under_8kb(self):
@@ -118,20 +112,20 @@ class TestCodexRoundTrip:
 class TestOpenCodeRoundTrip:
     def test_opencode_agent_count_matches_source(self):
         n = len(list((WORKTREE / ".opencode" / "agents").glob("*.md")))
-        assert n == _source_agent_count(), (
-            f"agent count mismatch: source={_source_agent_count()} opencode={n}"
+        assert n == _source_agent_count("opencode"), (
+            f"agent count mismatch: source={_source_agent_count('opencode')} opencode={n}"
         )
 
     def test_opencode_command_count_matches_source(self):
         n = len(list((WORKTREE / ".opencode" / "commands").glob("*.md")))
-        assert n == _source_command_count(), (
-            f"command count mismatch: source={_source_command_count()} opencode={n}"
+        assert n == _source_command_count("opencode"), (
+            f"command count mismatch: source={_source_command_count('opencode')} opencode={n}"
         )
 
     def test_opencode_skill_count_matches_source(self):
         n = len(list((WORKTREE / ".opencode" / "skills").glob("*/SKILL.md")))
-        assert n == _source_skill_count(), (
-            f"skill count mismatch: source={_source_skill_count()} opencode={n}"
+        assert n == _source_skill_count("opencode"), (
+            f"skill count mismatch: source={_source_skill_count('opencode')} opencode={n}"
         )
 
     def test_every_opencode_agent_has_required_frontmatter(self):
@@ -153,7 +147,7 @@ class TestOpenCodeRoundTrip:
         """Source agents with `tools: []` MUST emit a deny-everything permission block
         (with skill/task base capabilities allowed). Regression guard for PR #541 P1."""
         problems = []
-        for plugin_name in list_plugins():
+        for plugin_name in _plugins("opencode"):
             plugin = load_plugin(plugin_name)
             if not plugin:
                 continue
@@ -207,7 +201,7 @@ class TestCursorRoundTrip:
         marketplace = WORKTREE / ".cursor-plugin" / "marketplace.json"
         data = json.loads(marketplace.read_text())
         cursor_names = {p["name"] for p in data["plugins"]}
-        local_plugins = set(list_plugins())
+        local_plugins = set(_plugins("cursor"))
         # Cursor marketplace mirrors the Claude marketplace, so it should include the
         # external git-subdir plugin (pensyve) too.
         assert local_plugins.issubset(cursor_names), (
@@ -219,7 +213,7 @@ class TestCursorRoundTrip:
         if not per_plugin.is_dir():
             pytest.skip("per-plugin manifests not generated")
         manifest_names = {p.stem for p in per_plugin.glob("*.json")}
-        local_plugins = set(list_plugins())
+        local_plugins = set(_plugins("cursor"))
         missing = local_plugins - manifest_names
         assert not missing, f"Cursor per-plugin manifests missing for: {sorted(missing)}"
 
@@ -244,29 +238,29 @@ class TestCursorRoundTrip:
 class TestCopilotRoundTrip:
     def test_copilot_agent_count_matches_source(self):
         n = len(list((WORKTREE / ".copilot" / "agents").glob("*.agent.md")))
-        assert n == _source_agent_count(), (
-            f"agent count mismatch: source={_source_agent_count()} copilot={n}"
+        assert n == _source_agent_count("copilot"), (
+            f"agent count mismatch: source={_source_agent_count('copilot')} copilot={n}"
         )
 
     def test_copilot_skill_count_matches_source(self):
         n = len(list((WORKTREE / ".copilot" / "skills").glob("*/SKILL.md")))
-        expected = _source_skill_count() + _source_command_count()
+        expected = _source_skill_count("copilot") + _source_command_count("copilot")
         assert n == expected, (
-            f"skill count mismatch: source_skills={_source_skill_count()} "
-            f"source_commands={_source_command_count()} expected={expected} copilot={n}"
+            f"skill count mismatch: source_skills={_source_skill_count('copilot')} "
+            f"source_commands={_source_command_count('copilot')} expected={expected} copilot={n}"
         )
 
     def test_copilot_command_count_matches_source(self):
         n = len(
             [p for p in (WORKTREE / ".copilot" / "commands").rglob("*.md") if p.name != "index.md"]
         )
-        assert n == _source_command_count(), (
-            f"command count mismatch: source={_source_command_count()} copilot={n}"
+        assert n == _source_command_count("copilot"), (
+            f"command count mismatch: source={_source_command_count('copilot')} copilot={n}"
         )
 
     def test_copilot_command_entrypoints_exist_for_every_plugin(self):
         missing = []
-        for plugin_name in list_plugins():
+        for plugin_name in _plugins("copilot"):
             entry = WORKTREE / ".copilot" / "commands" / plugin_name / "index.md"
             if not entry.is_file():
                 missing.append(plugin_name)
@@ -293,31 +287,31 @@ class TestCopilotRoundTrip:
 class TestAntigravityRoundTrip:
     def test_antigravity_plugin_count_matches_source(self):
         n = len(list((WORKTREE / ".antigravity" / "plugins").iterdir()))
-        assert n == len(list_plugins()), (
-            f"plugin dir count mismatch: source={len(list_plugins())} antigravity={n}"
+        assert n == len(_plugins("antigravity")), (
+            f"plugin dir count mismatch: source={len(_plugins('antigravity'))} antigravity={n}"
         )
 
     def test_antigravity_skill_count_matches_source(self):
         n = len(list((WORKTREE / ".antigravity" / "plugins").glob("*/skills/*/SKILL.md")))
-        assert n == _source_skill_count(), (
-            f"skill count mismatch: source={_source_skill_count()} antigravity={n}"
+        assert n == _source_skill_count("antigravity"), (
+            f"skill count mismatch: source={_source_skill_count('antigravity')} antigravity={n}"
         )
 
     def test_antigravity_agent_count_matches_source(self):
         n = len(list((WORKTREE / ".antigravity" / "plugins").glob("*/agents/*.md")))
-        assert n == _source_agent_count(), (
-            f"agent count mismatch: source={_source_agent_count()} antigravity={n}"
+        assert n == _source_agent_count("antigravity"), (
+            f"agent count mismatch: source={_source_agent_count('antigravity')} antigravity={n}"
         )
 
     def test_antigravity_command_count_matches_source(self):
         n = len(list((WORKTREE / ".antigravity" / "plugins").glob("*/commands/*/*.toml")))
-        assert n == _source_command_count(), (
-            f"command count mismatch: source={_source_command_count()} antigravity={n}"
+        assert n == _source_command_count("antigravity"), (
+            f"command count mismatch: source={_source_command_count('antigravity')} antigravity={n}"
         )
 
     def test_every_antigravity_plugin_json_matches_source_plugin(self):
         problems = []
-        for plugin_name in list_plugins():
+        for plugin_name in _plugins("antigravity"):
             plugin_json = WORKTREE / ".antigravity" / "plugins" / plugin_name / "plugin.json"
             if not plugin_json.is_file():
                 problems.append(f"{plugin_name}: missing plugin.json")
@@ -377,20 +371,20 @@ class TestAntigravityRoundTrip:
 class TestPiRoundTrip:
     def test_pi_skill_count_matches_source(self):
         n = len(list((WORKTREE / ".pi" / "skills").glob("*/*/SKILL.md")))
-        assert n == _source_skill_count(), (
-            f"skill count mismatch: source={_source_skill_count()} pi={n}"
+        assert n == _source_skill_count("pi"), (
+            f"skill count mismatch: source={_source_skill_count('pi')} pi={n}"
         )
 
     def test_pi_prompt_count_matches_source_commands(self):
         n = len(list((WORKTREE / ".pi" / "prompts").glob("*.md")))
-        assert n == _source_command_count(), (
-            f"prompt count mismatch: source={_source_command_count()} pi={n}"
+        assert n == _source_command_count("pi"), (
+            f"prompt count mismatch: source={_source_command_count('pi')} pi={n}"
         )
 
     def test_pi_agent_count_matches_source(self):
         n = len(list((WORKTREE / ".pi" / "agents").glob("*.md")))
-        assert n == _source_agent_count(), (
-            f"agent count mismatch: source={_source_agent_count()} pi={n}"
+        assert n == _source_agent_count("pi"), (
+            f"agent count mismatch: source={_source_agent_count('pi')} pi={n}"
         )
 
     def test_every_pi_prompt_maps_back_to_a_source_command(self):
@@ -437,7 +431,7 @@ class TestNativeInstallManifests:
         data = json.loads(marketplace.read_text())
         names = {p["name"] for p in data["plugins"]}
         eligible = {
-            name for name in list_plugins() if (plugin := load_plugin(name)) and plugin.skills
+            name for name in _plugins("codex") if load_plugin(name).skills
         }
         assert names == eligible, (
             f"Codex marketplace mismatch: missing={eligible - names}, extra={names - eligible}"
@@ -454,8 +448,8 @@ class TestNativeInstallManifests:
             manifest = WORKTREE / "plugins" / name / ".codex-plugin" / "plugin.json"
             plugin = load_plugin(name)
             assert plugin is not None
-            if not plugin.skills:
-                assert not manifest.exists(), f"{name}: native manifest without source skills"
+            if not plugin.skills or not plugin.runs_on("codex"):
+                assert not manifest.exists(), f"{name}: native manifest Codex can't use"
                 continue
             if not manifest.is_file():
                 problems.append(f"{name}: plugins/{name}/.codex-plugin/plugin.json missing")

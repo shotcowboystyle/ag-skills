@@ -184,7 +184,7 @@ it in `.claude-plugin/plugin.json`:
 
 ```json
 {
-  "name": "block-no-verify-hook",
+  "name": "block-no-verify",
   "version": "1.0.0",
   "harnesses": ["claude-code"]
 }
@@ -196,6 +196,10 @@ skips a plugin for any harness not in the list, and `--prune` removes what it em
 before. Leave the field out when the plugin runs everywhere. Don't use it for features
 that only degrade (see [What translates poorly](#what-translates-poorly)); document those
 in the body instead.
+
+The skills-only installers (`gh skill`, `npx skills`) read `plugins/*/skills/` straight from
+GitHub and don't see the field, so a Claude-only plugin's skill body should still say what it
+needs.
 
 `claude plugin validate` warns `Unknown field 'harnesses'` and Claude Code ignores it at
 load time. The warning is expected. A malformed list fails `make garden` (`BAD_HARNESSES`).

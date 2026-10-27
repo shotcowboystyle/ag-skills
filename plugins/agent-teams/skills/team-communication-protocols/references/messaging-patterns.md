@@ -100,7 +100,7 @@ Full report attached to task #{id}.
 
 ## Shutdown Acknowledgment
 
-When you receive a shutdown request, respond with the shutdown_response tool. But you may also want to send a final status message:
+When the lead asks you to shut down, approve or reject with a reason. Before approving, you may also send a final status message:
 
 ```
 Wrapping up. Current status:

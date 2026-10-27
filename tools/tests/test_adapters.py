@@ -2412,6 +2412,24 @@ def test_generate_skips_plugins_that_exclude_the_harness(
     assert not (out / ".pi" / "prompts" / "cc-only__go.md").exists()
 
 
+def test_prune_removes_codex_manifest_of_a_skipped_plugin(output_root: Path):
+    """A plugin that drops codex from `harnesses` keeps no committed `.codex-plugin/`."""
+    from tools.generate import prune_orphans
+
+    plugin_dir = output_root / "plugins" / "cc-only"
+    (plugin_dir / ".claude-plugin").mkdir(parents=True)
+    (plugin_dir / ".claude-plugin" / "plugin.json").write_text('{"name": "cc-only"}\n')
+    stale = plugin_dir / ".codex-plugin" / "plugin.json"
+    stale.parent.mkdir()
+    stale.write_text('{"name": "cc-only"}\n')
+
+    removed = prune_orphans("codex", output_root, written=set())
+
+    assert stale.resolve() in {p.resolve() for p in removed}
+    assert not stale.parent.exists()
+    assert (plugin_dir / ".claude-plugin" / "plugin.json").is_file()
+
+
 # ── Links between skills ─────────────────────────────────────────────────────
 
 

@@ -15,19 +15,6 @@
       "category": "Coding"
     },
     {
-      "name": "agent-teams",
-      "description": "Orchestrate multi-agent teams for parallel code review, hypothesis-driven debugging, and coordinated feature development using Claude Code's Agent Teams",
-      "source": {
-        "source": "local",
-        "path": "./plugins/agent-teams"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_USE"
-      },
-      "category": "Coding"
-    },
-    {
       "name": "ai-video-producer",
       "description": "Drive an AI-generated video project end to end \u2014 brief, model selection, characters, script, storyboard, generation pipelines (text-to-image, image-to-video, voice, lip-sync), GPU-aware assembly, ComfyUI import/export, budgets, export \u2014 plus a curated index of agent-callable video and audio tooling.",
       "source": {
@@ -85,19 +72,6 @@
       "source": {
         "source": "local",
         "path": "./plugins/before-you-build"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_USE"
-      },
-      "category": "Coding"
-    },
-    {
-      "name": "block-no-verify",
-      "description": "PreToolUse hook that prevents AI agents from using --no-verify, --no-gpg-sign, and other bypass flags that skip git hooks",
-      "source": {
-        "source": "local",
-        "path": "./plugins/block-no-verify"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -496,19 +470,6 @@
       "category": "Coding"
     },
     {
-      "name": "protect-mcp",
-      "description": "Cedar policy enforcement + Ed25519 signed, hash-chained receipts for every Claude Code tool call. Claude Code only: it runs in PreToolUse and PostToolUse hooks.",
-      "source": {
-        "source": "local",
-        "path": "./plugins/protect-mcp"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_USE"
-      },
-      "category": "Coding"
-    },
-    {
       "name": "python-development",
       "description": "Modern Python development with Python 3.12+, Django, FastAPI, async patterns, and production best practices",
       "source": {
@@ -527,19 +488,6 @@
       "source": {
         "source": "local",
         "path": "./plugins/reverse-engineering"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_USE"
-      },
-      "category": "Coding"
-    },
-    {
-      "name": "review-agent-governance",
-      "description": "Require a human approval signal before an AI agent can post PR reviews, comments, merges, or writes to CI config. Cedar-gated, receipt-signed, designed for the Hermes-style failure mode where a review bot posts without oversight.",
-      "source": {
-        "source": "local",
-        "path": "./plugins/review-agent-governance"
       },
       "policy": {
         "installation": "AVAILABLE",

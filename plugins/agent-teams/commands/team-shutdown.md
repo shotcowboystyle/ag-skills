@@ -1,22 +1,19 @@
 ---
-description: "Gracefully shut down an agent team, collect final results, and clean up resources"
-argument-hint: "[team-name] [--force] [--keep-tasks]"
+description: "Gracefully shut down the session's agent teammates and summarize their results"
+argument-hint: "[--force]"
+last_verified: 2026-10-27
 ---
 
 # Team Shutdown
 
-Gracefully shut down an active agent team by sending shutdown requests to all teammates, collecting final results, and cleaning up team resources.
+Ask every teammate in the session's team to shut down, then summarize what the team finished. Claude Code removes the team config when the session ends and keeps the task list on disk, so there is no cleanup step.
 
 ## Phase 1: Pre-Shutdown
 
-1. Parse `$ARGUMENTS` for team name and flags:
-   - If no team name, check for active teams (same discovery as team-status)
-   - `--force`: skip waiting for graceful shutdown responses
-   - `--keep-tasks`: preserve task list after cleanup
-
-2. Read team config from `~/.claude/teams/{team-name}/config.json` using the Read tool
-3. Call `TaskList` to check for in-progress tasks
-
+1. Parse `$ARGUMENTS`:
+   - `--force`: don't wait for teammates to approve the shutdown
+2. Find the team: list `~/.claude/teams/` and read `~/.claude/teams/{team-name}/config.json`. No team directory means no teammates are running; say so and stop.
+3. Call `TaskList` to check for in-progress tasks.
 4. If there are in-progress tasks and `--force` is not set:
    - Display warning: "Warning: {N} tasks are still in progress"
    - List the in-progress tasks
@@ -24,27 +21,20 @@ Gracefully shut down an active agent team by sending shutdown requests to all te
 
 ## Phase 2: Graceful Shutdown
 
-For each teammate in the team:
+For each teammate in the config's `members` (skip the lead's own entry):
 
-1. Use `SendMessage` with `type: "shutdown_request"` to request graceful shutdown
-   - Include content: "Team shutdown requested. Please finish current work and save state."
-2. Wait for shutdown responses
-   - If teammate approves: mark as shut down
-   - If teammate rejects: report to user with reason
-   - If `--force`: don't wait for responses
+1. Ask the teammate by name to shut down: "Team shutdown requested. Please finish current work and report your status."
+2. Wait for each answer. A teammate approves and exits, or rejects with a reason; report rejections to the user. A teammate finishes its current tool call first, so this can take time.
+3. With `--force`, don't wait. The user can stop an in-process teammate by selecting it in the agent panel and pressing `x`.
 
-## Phase 3: Cleanup
+## Phase 3: Summary
 
-1. Display shutdown summary:
+```
+Team "{team-name}" shutdown complete.
 
-   ```
-   Team "{team-name}" shutdown complete.
+Members shut down: {N}/{total}
+Tasks completed: {completed}/{total}
+Tasks remaining: {remaining}
 
-   Members shut down: {N}/{total}
-   Tasks completed: {completed}/{total}
-   Tasks remaining: {remaining}
-   ```
-
-2. Unless `--keep-tasks` is set, call `TeamDelete` to remove team and task directories
-
-3. If `--keep-tasks` is set, inform user: "Task list preserved at ~/.claude/tasks/{team-name}/"
+Task list kept at ~/.claude/tasks/{team-name}/
+```

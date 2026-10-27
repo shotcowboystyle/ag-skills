@@ -1,6 +1,7 @@
 ---
 description: "Display team members, task status, and progress for an active agent team"
-argument-hint: "[team-name] [--tasks] [--members] [--json]"
+argument-hint: "[--tasks] [--members] [--json]"
+last_verified: 2026-10-27
 ---
 
 # Team Status
@@ -9,10 +10,7 @@ Display the current state of an active agent team including members, tasks, and 
 
 ## Phase 1: Team Discovery
 
-1. Parse `$ARGUMENTS` for team name and flags:
-   - If team name provided, use it directly
-   - If no team name, check `~/.claude/teams/` for active teams
-   - If multiple teams exist and no name specified, list all teams and ask user to choose
+1. Parse `$ARGUMENTS` for flags. The session has one team, named after the session; find it by listing `~/.claude/teams/`. If several directories exist (other sessions), use the one whose `config.json` lists this session's teammates. No directory means no team is running; say so and stop.
    - `--tasks`: show only task details
    - `--members`: show only member details
    - `--json`: output raw JSON instead of formatted table
