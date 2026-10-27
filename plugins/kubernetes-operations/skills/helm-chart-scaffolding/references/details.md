@@ -287,8 +287,8 @@ postgresql:
 # Lint the chart
 helm lint my-app/
 
-# Dry-run installation
-helm install my-app ./my-app --dry-run --debug
+# Render offline and validate against the target Kubernetes version
+helm template my-app ./my-app | kubeconform -strict -summary -kubernetes-version 1.37.0
 
 # Template rendering
 helm template my-app ./my-app
@@ -298,7 +298,14 @@ helm template my-app ./my-app -f values-prod.yaml
 
 # Show computed values
 helm show values ./my-app
+
+# Against a real cluster: server-side dry-run (runs admission, checks the release name)
+helm install my-app ./my-app --dry-run=server
 ```
+
+`helm install --dry-run` with no value contacts the cluster on Helm 3, even as
+`--dry-run=client`; only Helm 4 runs a bare `--dry-run` offline. Use
+`helm template` when no cluster is available.
 
 **Validation script:**
 
@@ -309,11 +316,8 @@ set -e
 echo "Linting chart..."
 helm lint .
 
-echo "Testing template rendering..."
-helm template test-release . --dry-run
-
-echo "Checking for required values..."
-helm template test-release . --validate
+echo "Rendering and validating manifests offline..."
+helm template test-release . | kubeconform -strict -summary -kubernetes-version 1.37.0
 
 echo "All validations passed!"
 ```
@@ -329,7 +333,15 @@ helm package my-app/
 # Creates: my-app-1.0.0.tgz
 ```
 
-**Create chart repository:**
+**Push to an OCI registry (preferred):**
+
+```bash
+helm registry login registry.example.com
+helm push my-app-1.0.0.tgz oci://registry.example.com/charts
+helm install my-app oci://registry.example.com/charts/my-app --version 1.0.0
+```
+
+**Or create a classic HTTP chart repository:**
 
 ```bash
 # Create index

@@ -103,13 +103,17 @@ else
 fi
 echo ""
 
-# 5. Dry-run installation
-echo "5️⃣  Testing dry-run installation..."
-if helm install "$RELEASE_NAME" "$CHART_DIR" --dry-run --debug > /dev/null 2>&1; then
-    success "Dry-run installation successful"
+# 5. Schema validation (offline; `helm install --dry-run` needs a cluster on Helm 3)
+echo "5️⃣  Validating rendered manifests against Kubernetes schemas..."
+if command -v kubeconform &> /dev/null; then
+    if helm template "$RELEASE_NAME" "$CHART_DIR" | kubeconform -strict -summary -ignore-missing-schemas -kubernetes-version "${KUBERNETES_VERSION:-1.37.0}"; then
+        success "Manifests match the Kubernetes ${KUBERNETES_VERSION:-1.37.0} schemas"
+    else
+        error "Schema validation failed"
+        exit 1
+    fi
 else
-    error "Dry-run installation failed"
-    exit 1
+    warning "kubeconform not installed, skipping schema validation"
 fi
 echo ""
 

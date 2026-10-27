@@ -10,7 +10,12 @@ kind: ClusterRole
 metadata:
   name: read-only
 rules:
-  - apiGroups: ["", "apps", "batch"]
+  # List resources explicitly: "*" in the core group would include Secrets,
+  # and list/watch on Secrets returns their contents
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "services", "configmaps", "events", "persistentvolumeclaims"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps", "batch"]
     resources: ["*"]
     verbs: ["get", "list", "watch"]
 ```
@@ -24,7 +29,7 @@ metadata:
   name: namespace-admin
   namespace: production
 rules:
-  - apiGroups: ["", "apps", "batch", "extensions"]
+  - apiGroups: ["", "apps", "batch"]
     resources: ["*"]
     verbs: ["*"]
 ```
@@ -109,11 +114,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-app
+  namespace: production
 spec:
+  selector:
+    matchLabels:
+      app: my-app
   template:
+    metadata:
+      labels:
+        app: my-app
     spec:
       serviceAccountName: my-app
       automountServiceAccountToken: false # Disable if not needed
+      containers:
+        - name: app
+          image: registry.example.com/my-app:1.0.0
 ```
 
 ### Least-Privilege ServiceAccount

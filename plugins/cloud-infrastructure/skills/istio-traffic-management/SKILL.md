@@ -1,6 +1,7 @@
 ---
 name: istio-traffic-management
 description: Configure Istio traffic management including routing, load balancing, circuit breakers, and canary deployments. Use when implementing service mesh traffic policies, progressive delivery, or resilience patterns.
+last_verified: 2026-10-27
 ---
 
 # Istio Traffic Management
@@ -39,7 +40,7 @@ Client → Gateway → VirtualService → DestinationRule → Service
 ### Template 1: Basic Routing
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: reviews-route
@@ -61,7 +62,7 @@ spec:
             host: reviews
             subset: v1
 ---
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: reviews-destination
@@ -83,7 +84,7 @@ spec:
 ### Template 2: Canary Deployment
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: my-service-canary
@@ -101,7 +102,7 @@ spec:
             subset: canary
           weight: 10
 ---
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: my-service-dr
@@ -127,7 +128,7 @@ spec:
 ### Template 3: Circuit Breaker
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: circuit-breaker
@@ -153,7 +154,7 @@ spec:
 ### Template 4: Retry and Timeout
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: ratings-retry
@@ -175,7 +176,7 @@ spec:
 ### Template 5: Traffic Mirroring
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: mirror-traffic
@@ -197,7 +198,7 @@ spec:
 ### Template 6: Fault Injection
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: fault-injection
@@ -221,8 +222,13 @@ spec:
 
 ### Template 7: Ingress Gateway
 
+Istio also implements the Kubernetes Gateway API (`gateway.networking.k8s.io/v1`
+`Gateway` + `HTTPRoute`) and intends to make it the default traffic-management
+API. The Istio `Gateway` below remains supported and is what most existing
+meshes use.
+
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: Gateway
 metadata:
   name: my-gateway
@@ -240,7 +246,7 @@ spec:
       hosts:
         - "*.example.com"
 ---
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: my-vs
@@ -263,7 +269,7 @@ spec:
 ## Load Balancing Strategies
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: load-balancing
@@ -271,10 +277,10 @@ spec:
   host: my-service
   trafficPolicy:
     loadBalancer:
-      simple: ROUND_ROBIN # or LEAST_CONN, RANDOM, PASSTHROUGH
+      simple: ROUND_ROBIN # or LEAST_REQUEST, RANDOM, PASSTHROUGH
 ---
 # Consistent hashing for sticky sessions
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: sticky-sessions

@@ -1,6 +1,7 @@
 ---
 name: gitops-workflow
 description: Implement GitOps workflows with ArgoCD and Flux for automated, declarative Kubernetes deployments with continuous reconciliation. Use when implementing GitOps practices, automating Kubernetes deployments, or setting up declarative infrastructure management.
+last_verified: 2026-10-27
 ---
 
 # GitOps Workflow
@@ -31,20 +32,39 @@ Implement declarative, Git-based continuous delivery for Kubernetes using ArgoCD
 
 ### 1. Installation
 
+Pin a release (v3.5.6 at the time of writing; check
+[releases](https://github.com/argoproj/argo-cd/releases)) instead of `stable`, so
+a re-apply never upgrades by surprise. Server-side apply is required: some Argo
+CD CRDs exceed the 262 KB annotation limit of client-side `kubectl apply`.
+
 ```bash
-# Create namespace
+ARGOCD_VERSION=v3.5.6
 kubectl create namespace argocd
-
-# Install ArgoCD
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
-# Get admin password
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+kubectl apply -n argocd --server-side --force-conflicts \
+  -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/install.yaml"
 ```
+
+`--force-conflicts` takes ownership of fields set by earlier applies; it is safe
+on a fresh install and needed for upgrades.
+
+### 2. Replace the Initial Admin Password
+
+The generated password sits in plain text in `argocd-initial-admin-secret`.
+Rotate it and delete the secret before exposing the API server:
+
+```bash
+argocd admin initial-password -n argocd   # read the generated password
+argocd login <argocd-host> --username admin
+argocd account update-password
+kubectl -n argocd delete secret argocd-initial-admin-secret
+```
+
+Once SSO works, disable the local admin user by setting `admin.enabled: "false"`
+in the `argocd-cm` ConfigMap.
 
 **Reference:** See `references/argocd-setup.md` for detailed setup
 
-### 2. Repository Structure
+### 3. Repository Structure
 
 ```
 gitops-repo/
@@ -64,7 +84,7 @@ gitops-repo/
     └── projects/
 ```
 
-### 3. Create Application
+### 4. Create Application
 
 ```yaml
 # argocd/applications/my-app.yaml
@@ -90,7 +110,7 @@ spec:
       - CreateNamespace=true
 ```
 
-### 4. App of Apps Pattern
+### 5. App of Apps Pattern
 
 ```yaml
 apiVersion: argoproj.io/v1alpha1
@@ -198,7 +218,7 @@ spec:
 
 ## Progressive Delivery
 
-### Canary Deployment with ArgoCD Rollouts
+### Canary Deployment with Argo Rollouts
 
 ```yaml
 apiVersion: argoproj.io/v1alpha1
@@ -232,7 +252,7 @@ strategy:
 ### External Secrets Operator
 
 ```yaml
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: db-credentials
@@ -284,8 +304,10 @@ argocd app sync my-app --prune
 
 ```bash
 argocd app diff my-app
-argocd app sync my-app --force
+argocd app sync my-app
 ```
+
+Avoid `--force` here: it deletes and recreates resources that fail to apply.
 
 ## Related Skills
 

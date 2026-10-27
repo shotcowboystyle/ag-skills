@@ -1,6 +1,7 @@
 ---
 name: k8s-manifest-generator
 description: Create production-ready Kubernetes manifests for Deployments, Services, ConfigMaps, and Secrets following best practices and security standards. Use when generating Kubernetes YAML manifests, creating K8s resources, or implementing production-grade Kubernetes configurations.
+last_verified: 2026-10-27
 ---
 
 # Kubernetes Manifest Generator
@@ -23,9 +24,49 @@ Use this skill when you need to:
 - Implement resource limits, health checks, and security contexts
 - Design manifests for multi-environment deployments
 
-## Detailed patterns and worked examples
+## Procedure
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+1. **Gather requirements**: workload type (stateless, stateful, batch), image
+   and an immutable tag or digest, ports, config and secrets, storage, CPU and
+   memory, replica count, health endpoints, and whether it is exposed outside
+   the cluster. Ask for anything missing rather than inventing it.
+2. **Pick the workload kind**: Deployment for stateless services, StatefulSet
+   for stable identity or per-replica storage, Job or CronJob for batch.
+3. **Write the workload** from `assets/deployment-template.yaml`. Every
+   container gets resource requests (and a memory limit), readiness and
+   liveness probes, and a restricted security context: `runAsNonRoot: true`,
+   `allowPrivilegeEscalation: false`, `capabilities.drop: ["ALL"]`,
+   `seccompProfile.type: RuntimeDefault`. That is what a namespace at the
+   `restricted` Pod Security level admits.
+4. **Expose it** with a Service from `assets/service-template.yaml`: ClusterIP
+   by default, LoadBalancer only for direct external access. The Service
+   selector must match the pod template labels exactly.
+5. **Externalise configuration**: ConfigMaps from
+   `assets/configmap-template.yaml`; Secrets never committed in plain text (use
+   External Secrets, Sealed Secrets or SOPS).
+6. **Add storage** if needed: a PersistentVolumeClaim with an explicit
+   `storageClassName` and access mode.
+7. **Label consistently** with the `app.kubernetes.io/*` recommended labels
+   (`name`, `instance`, `version`, `component`, `part-of`, `managed-by`).
+8. **Validate offline** against the target Kubernetes version, then
+   server-side when a cluster is available:
+
+   ```bash
+   kubeconform -strict -summary -kubernetes-version 1.37.0 manifests/
+   kubectl apply --dry-run=server -f manifests/
+   ```
+
+   kubeconform replaces kubeval, which is unmaintained and has no schemas for
+   current Kubernetes. CRDs need extra `-schema-location` entries (see
+   `references/details.md`, step 10).
+
+## References
+
+- `references/details.md`: the full step-by-step workflow with worked examples,
+  multi-resource layout and common patterns
+- `references/deployment-spec.md`: every Deployment field worth setting
+- `references/service-spec.md`: Service types, traffic policies, headless
+  Services and external endpoints
 
 ## Best Practices Summary
 
@@ -36,7 +77,7 @@ Detailed pattern documentation lives in `references/details.md`. Read that file 
 5. **Use ConfigMaps and Secrets** - Separate config from code
 6. **Label everything** - Enables filtering and organization
 7. **Follow naming conventions** - Use standard Kubernetes labels
-8. **Validate before applying** - Use dry-run and validation tools
+8. **Validate before applying** - `kubeconform -strict`, then server-side dry-run
 9. **Version your manifests** - Keep in Git with version control
 10. **Document with annotations** - Add context for other developers
 
@@ -50,9 +91,9 @@ Detailed pattern documentation lives in `references/details.md`. Read that file 
 
 **Service not accessible:**
 
-- Verify selector matches pod labels: `kubectl get endpoints <service-name>`
+- Verify selector matches pod labels: `kubectl get endpointslices -l kubernetes.io/service-name=<service-name>` (no ready endpoints means no matching ready pods)
 - Check service type and port configuration
-- Test from within cluster: `kubectl run debug --rm -it --image=busybox -- sh`
+- Test from within cluster: `kubectl run debug --rm -it --image=busybox:1.37 -- sh`
 
 **ConfigMap/Secret not loading:**
 
