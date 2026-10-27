@@ -6,7 +6,7 @@
     "url": "https://github.com/shotcowboystyle"
   },
   "metadata": {
-    "description": "Production-ready workflow orchestration with 81 marketplace plugins, 183 local specialized agents, and 323 local skills - optimized for granular installation and minimal token usage",
+    "description": "Production-ready workflow orchestration with 81 marketplace plugins, 179 local specialized agents, and 323 local skills - optimized for granular installation and minimal token usage",
     "version": "1.0.0"
   },
   "plugins": [
@@ -728,8 +728,8 @@
     {
       "name": "seo-analysis-monitoring",
       "source": "./plugins/seo-analysis-monitoring",
-      "version": "1.2.1",
-      "description": "Content freshness analysis, cannibalization detection, and authority building for SEO",
+      "version": "2.0.0",
+      "description": "Keyword cannibalization detection across a site's pages, using Search Console exports for performance data",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -739,8 +739,8 @@
     {
       "name": "seo-content-creation",
       "source": "./plugins/seo-content-creation",
-      "version": "1.2.1",
-      "description": "SEO content writing, planning, and quality auditing with E-E-A-T optimization",
+      "version": "2.0.0",
+      "description": "Search content planning, writing and auditing built around search intent, topic coverage and sourced claims",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -750,8 +750,8 @@
     {
       "name": "seo-technical-optimization",
       "source": "./plugins/seo-technical-optimization",
-      "version": "1.2.1",
-      "description": "Technical SEO optimization including meta tags, keywords, structure, and featured snippets",
+      "version": "2.0.0",
+      "description": "Technical SEO audits (crawling, indexing, rendering, canonicals, sitemaps, structured data) and page metadata",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"

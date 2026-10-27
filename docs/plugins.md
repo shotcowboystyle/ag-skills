@@ -257,9 +257,9 @@ Next.js, React + Vite, and Node.js project setup with pnpm and TypeScript best p
 
 | Plugin                         | Description                             | Install                                      |
 | ------------------------------ | --------------------------------------- | -------------------------------------------- |
-| **seo-content-creation**       | SEO content writing and planning        | `/plugin install seo-content-creation`       |
-| **seo-technical-optimization** | Meta tags, keywords, and schema markup  | `/plugin install seo-technical-optimization` |
-| **seo-analysis-monitoring**    | Content analysis and authority building | `/plugin install seo-analysis-monitoring`    |
+| **seo-content-creation**       | Content planning, writing and audits    | `/plugin install seo-content-creation`       |
+| **seo-technical-optimization** | Technical SEO audits and page metadata  | `/plugin install seo-technical-optimization` |
+| **seo-analysis-monitoring**    | Keyword cannibalization detection       | `/plugin install seo-analysis-monitoring`    |
 | **social-publishing**          | Multi-platform social media publishing  | `/plugin install social-publishing`          |
 
 ### 💼 Business (5 plugins)

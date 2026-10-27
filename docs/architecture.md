@@ -49,7 +49,7 @@ The repository shares agents, skills, and commands across seven AI coding tools.
 
 ### Component Breakdown
 
-**183 Local Specialized Agents**
+**179 Local Specialized Agents**
 
 - Domain experts with deep knowledge
 - Organized across architecture, languages, infrastructure, quality, data/AI, documentation, business, and SEO
@@ -262,7 +262,7 @@ code-reviewer (Sonnet) validates architecture
 ### Component Coverage
 
 - **Full component coverage** - every plugin includes at least one agent, command, or skill
-- **100% component availability** - all 183 local agents accessible across plugins
+- **100% component availability** - all 179 local agents accessible across plugins
 - **Efficient distribution** - 5.9 components per plugin average
 
 ### Discoverability

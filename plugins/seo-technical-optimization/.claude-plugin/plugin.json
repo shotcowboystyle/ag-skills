@@ -1,7 +1,7 @@
 {
   "name": "seo-technical-optimization",
-  "version": "1.2.1",
-  "description": "Technical SEO optimization including meta tags, keywords, structure, and featured snippets",
+  "version": "2.0.0",
+  "description": "Technical SEO audits (crawling, indexing, rendering, canonicals, sitemaps, structured data) and page metadata",
   "author": {
     "name": "Curtis Blanton",
     "email": "curtis@shotcowboystyle.com"
