@@ -1,11 +1,12 @@
 ---
 name: nx-workspace-patterns
 description: Configure and optimize Nx monorepo workspaces. Use when setting up Nx, configuring project boundaries, optimizing build caching, or implementing affected commands.
+last_verified: 2026-10-27
 ---
 
 # Nx Workspace Patterns
 
-Production patterns for Nx monorepo management.
+Patterns for current Nx (24.x at last check).
 
 ## When to Use This Skill
 
@@ -14,7 +15,7 @@ Production patterns for Nx monorepo management.
 - Optimizing CI with affected commands
 - Implementing remote caching
 - Managing dependencies between projects
-- Migrating to Nx
+- Upgrading an older Nx workspace
 
 ## Core Concepts
 
@@ -22,22 +23,38 @@ Production patterns for Nx monorepo management.
 
 ```
 workspace/
-├── apps/              # Deployable applications
-│   ├── web/
-│   └── api/
-├── libs/              # Shared libraries
-│   ├── shared/
-│   │   ├── ui/
-│   │   └── utils/
-│   └── feature/
-│       ├── auth/
-│       └── dashboard/
-├── tools/             # Custom executors/generators
-├── nx.json            # Nx configuration
-└── workspace.json     # Project configuration
+├── apps/                  # Deployable applications
+│   ├── web/project.json
+│   └── api/project.json
+├── libs/                  # Shared libraries
+│   ├── shared/{ui,utils}/
+│   └── feature/{auth,dashboard}/
+├── tools/                 # Local generators and plugins
+├── nx.json                # Workspace-wide defaults and plugins
+├── eslint.config.mjs      # Flat config with module boundaries
+└── package.json
 ```
 
-### 2. Library Types
+Each project is configured by its own `project.json` or `package.json`.
+`workspace.json` was removed; `nx.json` no longer lists projects.
+
+### 2. What Changed From Older Nx
+
+| Old                                         | Current                                          |
+| ------------------------------------------- | ------------------------------------------------ |
+| `workspace.json`                            | Per-project `project.json` / `package.json`      |
+| `tasksRunnerOptions` / `cacheableOperations` | `"cache": true` in `targetDefaults` or targets   |
+| `nx-cloud` / custom tasks runners           | `nxCloudId`, or a self-hosted cache server       |
+| `npmScope`                                  | Package names in each `package.json`             |
+| `affected.defaultBase`                      | Top-level `defaultBase`                          |
+| `nx affected:build`                         | `nx affected -t build`                           |
+| `.eslintrc.json`                            | `eslint.config.mjs` (flat config)                |
+| Hand-written targets for every tool         | Inferred tasks from plugins in `nx.json`         |
+
+Run `nx migrate latest` then `nx migrate --run-migrations` to upgrade; the
+migrations rewrite most of these.
+
+### 3. Library Types
 
 | Type            | Purpose                          | Example             |
 | --------------- | -------------------------------- | ------------------- |
@@ -49,7 +66,8 @@ workspace/
 
 ## Templates and detailed worked examples
 
-Full template library and detailed worked examples live in `references/details.md`. Read that file when you need the concrete templates.
+`references/details.md` has `nx.json`, `project.json`, module boundary rules,
+a local generator, CI with affected commands, and remote caching.
 
 ## Best Practices
 
@@ -59,7 +77,7 @@ Full template library and detailed worked examples live in `references/details.m
 - **Enable caching early** - Significant CI savings
 - **Keep libs focused** - Single responsibility
 - **Use generators** - Ensure consistency
-- **Document boundaries** - Help new developers
+- **Let plugins infer targets** - Less config to drift
 
 ### Don'ts
 
@@ -67,3 +85,4 @@ Full template library and detailed worked examples live in `references/details.m
 - **Don't skip affected** - Test only what changed
 - **Don't ignore boundaries** - Tech debt accumulates
 - **Don't over-granularize** - Balance lib count
+- **Don't commit cache tokens** - Use CI secrets

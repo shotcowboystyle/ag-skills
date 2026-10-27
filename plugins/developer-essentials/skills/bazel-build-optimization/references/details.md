@@ -1,94 +1,92 @@
 # bazel-build-optimization — templates and worked examples
 
+Versions below are from the Bazel Central Registry on 2026-10-27. Check
+<https://registry.bazel.build> for the latest before copying.
+
 ## Templates
 
-### Template 1: WORKSPACE Configuration
+### Template 1: MODULE.bazel
 
 ```python
-# WORKSPACE.bazel
-workspace(name = "myproject")
+# MODULE.bazel
+module(name = "myproject", version = "0.0.0")
 
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+bazel_dep(name = "platforms", version = "1.1.0")
+bazel_dep(name = "bazel_skylib", version = "1.9.2")
+bazel_dep(name = "aspect_rules_js", version = "3.5.2")
+bazel_dep(name = "aspect_rules_ts", version = "3.10.1")
+bazel_dep(name = "aspect_rules_jest", version = "0.26.0")
+bazel_dep(name = "rules_nodejs", version = "6.7.7")
+bazel_dep(name = "rules_python", version = "2.4.5")
 
-# Rules for JavaScript/TypeScript
-http_archive(
-    name = "aspect_rules_js",
-    sha256 = "...",
-    strip_prefix = "rules_js-1.34.0",
-    url = "https://github.com/aspect-build/rules_js/releases/download/v1.34.0/rules_js-v1.34.0.tar.gz",
-)
+# Node.js toolchain, version taken from .nvmrc
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain(node_version_from_nvmrc = "//:.nvmrc")
 
-load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
-rules_js_dependencies()
-
-load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains")
-nodejs_register_toolchains(
-    name = "nodejs",
-    node_version = "20.9.0",
-)
-
-load("@aspect_rules_js//npm:repositories.bzl", "npm_translate_lock")
-npm_translate_lock(
+# npm packages from the pnpm lockfile
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+npm.npm_translate_lock(
     name = "npm",
     pnpm_lock = "//:pnpm-lock.yaml",
     verify_node_modules_ignored = "//:.bazelignore",
 )
+use_repo(npm, "npm")
 
-load("@npm//:repositories.bzl", "npm_repositories")
-npm_repositories()
+# TypeScript compiler, version kept in sync with package.json
+typescript = use_extension("@aspect_rules_ts//ts:extensions.bzl", "typescript")
+typescript.toolchain(version_from = "//:package.json")
+use_repo(typescript, "npm_typescript")
 
-# Rules for Python
-http_archive(
-    name = "rules_python",
-    sha256 = "...",
-    strip_prefix = "rules_python-0.27.0",
-    url = "https://github.com/bazelbuild/rules_python/releases/download/0.27.0/rules_python-0.27.0.tar.gz",
+# Python toolchain and pip packages
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(python_version = "3.12")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pip",
+    python_version = "3.12",
+    requirements_lock = "//:requirements_lock.txt",
 )
-
-load("@rules_python//python:repositories.bzl", "py_repositories")
-py_repositories()
+use_repo(pip, "pip")
 ```
 
-### Template 2: .bazelrc Configuration
+Run `bazel mod tidy` after editing to fix `use_repo` lists, and
+`bazel mod graph` to see the resolved dependency graph.
+
+### Template 2: .bazelrc
 
 ```bash
 # .bazelrc
 
-# Build settings
-build --enable_platform_specific_config
-build --incompatible_enable_cc_toolchain_resolution
-build --experimental_strict_conflict_checks
-
 # Performance
 build --jobs=auto
-build --local_cpu_resources=HOST_CPUS*.75
-build --local_ram_resources=HOST_RAM*.75
+build --local_resources=cpu=HOST_CPUS*.75
+build --local_resources=memory=HOST_RAM*.75
 
-# Caching
+# Local caches
 build --disk_cache=~/.cache/bazel-disk
 build --repository_cache=~/.cache/bazel-repo
 
-# Remote caching (optional)
+# Remote cache: everyone reads, only CI writes
 build:remote-cache --remote_cache=grpcs://cache.example.com
-build:remote-cache --remote_upload_local_results=true
-build:remote-cache --remote_timeout=3600
+build:remote-cache --remote_upload_local_results=false
+build:remote-cache --remote_timeout=60
 
-# Remote execution (optional)
+# Remote execution
+build:remote-exec --config=remote-cache
 build:remote-exec --remote_executor=grpcs://remote.example.com
 build:remote-exec --remote_instance_name=projects/myproject/instances/default
-build:remote-exec --jobs=500
+build:remote-exec --extra_execution_platforms=//platforms:remote_linux
+build:remote-exec --jobs=200
 
-# Platform configurations
-build:linux --platforms=//platforms:linux_x86_64
-build:macos --platforms=//platforms:macos_arm64
-
-# CI configuration
+# CI
 build:ci --config=remote-cache
+build:ci --remote_upload_local_results=true
 build:ci --build_metadata=ROLE=CI
-build:ci --bes_results_url=https://results.example.com/invocation/
 build:ci --bes_backend=grpcs://bes.example.com
+build:ci --bes_results_url=https://results.example.com/invocation/
 
-# Test settings
+# Tests
 test --test_output=errors
 test --test_summary=detailed
 
@@ -96,11 +94,12 @@ test --test_summary=detailed
 coverage --combined_report=lcov
 coverage --instrumentation_filter="//..."
 
-# Convenience aliases
+# Compilation modes
 build:opt --compilation_mode=opt
 build:dbg --compilation_mode=dbg
 
-# Import user settings
+# Per-user overrides (gitignored); put credentials such as
+# --remote_header=x-api-key=... here or in CI secrets, never in .bazelrc
 try-import %workspace%/user.bazelrc
 ```
 
@@ -108,21 +107,20 @@ try-import %workspace%/user.bazelrc
 
 ```python
 # libs/utils/BUILD.bazel
-load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
+load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
 load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("@aspect_rules_ts//ts:defs.bzl", "ts_project")
 load("@npm//:defs.bzl", "npm_link_all_packages")
 
 npm_link_all_packages(name = "node_modules")
 
 ts_project(
     name = "utils_ts",
-    srcs = glob(["src/**/*.ts"]),
+    srcs = glob(["src/**/*.ts"], exclude = ["src/**/*.test.ts"]),
     declaration = True,
     source_map = True,
-    tsconfig = "//:tsconfig.json",
-    deps = [
-        ":node_modules/@types/node",
-    ],
+    tsconfig = "//:tsconfig",
+    deps = [":node_modules/@types/node"],
 )
 
 js_library(
@@ -131,98 +129,89 @@ js_library(
     visibility = ["//visibility:public"],
 )
 
-# Tests
-load("@aspect_rules_jest//jest:defs.bzl", "jest_test")
-
 jest_test(
     name = "utils_test",
-    config = "//:jest.config.js",
-    data = [
-        ":utils",
-        "//:node_modules/jest",
-    ],
+    config = "//:jest_config",
+    data = [":utils"] + glob(["src/**/*.test.ts"]),
     node_modules = "//:node_modules",
 )
 ```
+
+`load()` statements must come before any other statement in a BUILD file.
+`//:tsconfig` and `//:jest_config` are targets in the root BUILD file (for
+example a `ts_config` and a `js_library` wrapping the config files).
 
 ### Template 4: Python Library BUILD
 
 ```python
 # libs/ml/BUILD.bazel
-load("@rules_python//python:defs.bzl", "py_library", "py_test", "py_binary")
 load("@pip//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
 
 py_library(
     name = "ml",
     srcs = glob(["src/**/*.py"]),
+    visibility = ["//visibility:public"],
     deps = [
+        "//libs/utils:utils_py",
         requirement("numpy"),
         requirement("pandas"),
         requirement("scikit-learn"),
-        "//libs/utils:utils_py",
     ],
-    visibility = ["//visibility:public"],
 )
 
 py_test(
     name = "ml_test",
+    size = "medium",
     srcs = glob(["tests/**/*.py"]),
     deps = [
         ":ml",
         requirement("pytest"),
     ],
-    size = "medium",
-    timeout = "moderate",
 )
 
 py_binary(
     name = "train",
     srcs = ["train.py"],
-    deps = [":ml"],
     data = ["//data:training_data"],
+    deps = [":ml"],
 )
 ```
 
-### Template 5: Custom Rule for Docker
+### Template 5: Custom Rule
+
+For container images, use `rules_oci` (`oci_image`, `oci_push`) instead of
+writing a rule. The pattern below shows the shape of a custom rule that wraps
+an in-repo tool.
 
 ```python
-# tools/bazel/rules/docker.bzl
-def _docker_image_impl(ctx):
-    dockerfile = ctx.file.dockerfile
-    base_image = ctx.attr.base_image
-    layers = ctx.files.layers
-
-    # Build the image
+# tools/bazel/rules/bundle.bzl
+def _bundle_impl(ctx):
     output = ctx.actions.declare_file(ctx.attr.name + ".tar")
 
     args = ctx.actions.args()
-    args.add("--dockerfile", dockerfile)
+    args.add("--manifest", ctx.file.manifest)
     args.add("--output", output)
-    args.add("--base", base_image)
-    args.add_all("--layer", layers)
+    args.add_all("--layer", ctx.files.layers)
 
     ctx.actions.run(
-        inputs = [dockerfile] + layers,
+        inputs = [ctx.file.manifest] + ctx.files.layers,
         outputs = [output],
         executable = ctx.executable._builder,
         arguments = [args],
-        mnemonic = "DockerBuild",
-        progress_message = "Building Docker image %s" % ctx.label,
+        mnemonic = "Bundle",
+        progress_message = "Bundling %{label}",
     )
 
     return [DefaultInfo(files = depset([output]))]
 
-docker_image = rule(
-    implementation = _docker_image_impl,
+bundle = rule(
+    implementation = _bundle_impl,
     attrs = {
-        "dockerfile": attr.label(
-            allow_single_file = [".dockerfile", "Dockerfile"],
-            mandatory = True,
-        ),
-        "base_image": attr.string(mandatory = True),
+        "manifest": attr.label(allow_single_file = [".json"], mandatory = True),
         "layers": attr.label_list(allow_files = True),
         "_builder": attr.label(
-            default = "//tools/docker:builder",
+            default = "//tools/bundle:builder",
             executable = True,
             cfg = "exec",
         ),
@@ -233,32 +222,33 @@ docker_image = rule(
 ### Template 6: Query and Dependency Analysis
 
 ```bash
-# Find all dependencies of a target
+# Dependencies of a target
 bazel query "deps(//apps/web:web)"
 
-# Find reverse dependencies (what depends on this)
+# What depends on this library
 bazel query "rdeps(//..., //libs/utils:utils)"
 
-# Find all targets in a package
-bazel query "//libs/..."
-
-# Find changed targets since commit
-bazel query "rdeps(//..., set($(git diff --name-only HEAD~1 | sed 's/.*/"&"/' | tr '\n' ' ')))"
-
-# Generate dependency graph
-bazel query "deps(//apps/web:web)" --output=graph | dot -Tpng > deps.png
-
-# Find all test targets
+# All test targets
 bazel query "kind('.*_test', //...)"
 
-# Find targets with specific tag
+# Targets with a tag
 bazel query "attr(tags, 'integration', //...)"
 
-# Compute build graph size
-bazel query "deps(//...)" --output=package | wc -l
+# Configured graph (respects select() and flags)
+bazel cquery "deps(//apps/web:web)" --output=label_kind
+
+# Dependency graph as an image
+bazel query "deps(//apps/web:web)" --output=graph | dot -Tsvg > deps.svg
+
+# Why a module is in the graph
+bazel mod explain rules_python
 ```
 
-### Template 7: Remote Execution Setup
+To find targets affected by a change in CI, use a tool built for it, such as
+`bazel-diff` or `target-determinator`, rather than mapping `git diff` output to
+labels by hand.
+
+### Template 7: Remote Execution Platforms
 
 ```python
 # platforms/BUILD.bazel
@@ -268,50 +258,41 @@ platform(
         "@platforms//os:linux",
         "@platforms//cpu:x86_64",
     ],
-    exec_properties = {
-        "container-image": "docker://gcr.io/myproject/bazel-worker:latest",
-        "OSFamily": "Linux",
-    },
 )
 
 platform(
     name = "remote_linux",
     parents = [":linux_x86_64"],
     exec_properties = {
+        # Pin the worker image by digest so remote actions are reproducible
+        "container-image": "docker://gcr.io/myproject/bazel-worker@sha256:...",
+        "OSFamily": "Linux",
         "Pool": "default",
-        "dockerNetwork": "standard",
     },
 )
-
-# toolchains/BUILD.bazel
-toolchain(
-    name = "cc_toolchain_linux",
-    exec_compatible_with = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
-    ],
-    target_compatible_with = [
-        "@platforms//os:linux",
-        "@platforms//cpu:x86_64",
-    ],
-    toolchain = "@remotejdk11_linux//:jdk",
-    toolchain_type = "@bazel_tools//tools/jdk:runtime_toolchain_type",
-)
 ```
+
+Register toolchains that match this platform from their rule modules (for
+example `rules_cc` or a hermetic toolchain module) rather than hand-writing
+`toolchain()` targets.
 
 ## Performance Optimization
 
 ```bash
-# Profile build
-bazel build //... --profile=profile.json
-bazel analyze-profile profile.json
+# Profile a build (Bazel writes a profile by default; this names it)
+bazel build //... --profile=profile.json.gz
+bazel analyze-profile profile.json.gz
+# Or open the profile in chrome://tracing or https://ui.perfetto.dev
 
-# Identify slow actions
-bazel build //... --execution_log_json_file=exec_log.json
+# Compact execution log, for comparing cache keys between two builds
+bazel build //... --execution_log_compact_file=exec_log.binpb.zst
 
-# Memory profiling
-bazel build //... --memory_profile=memory.json
+# Memory profile
+bazel build //... --memory_profile=memory.profile
 
-# Skip analysis cache
+# Lower memory use on CI by discarding incremental state
 bazel build //... --notrack_incremental_state
 ```
+
+To debug remote cache misses, record the compact execution log on two machines
+and compare them; the differing inputs or environment variables are the cause.

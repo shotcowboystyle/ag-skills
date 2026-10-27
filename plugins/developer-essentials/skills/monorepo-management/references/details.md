@@ -10,20 +10,28 @@ packages:
   - "apps/*"
   - "packages/*"
   - "tools/*"
+
+# One version per dependency, referenced as "catalog:" in package.json
+catalog:
+  react: ^19.3.0
+  typescript: ^7.0.0
+
+# pnpm settings live here (camelCase), not in .npmrc
+autoInstallPeers: true
+strictPeerDependencies: true
 ```
 
 ```json
-// .npmrc
-# Hoist shared dependencies
-shamefully-hoist=true
-
-# Strict peer dependencies
-auto-install-peers=true
-strict-peer-dependencies=true
-
-# Performance
-store-dir=~/.pnpm-store
+// packages/ui/package.json (excerpt)
+{
+  "peerDependencies": { "react": "catalog:" },
+  "devDependencies": { "typescript": "catalog:" }
+}
 ```
+
+Keep `.npmrc` for registry auth only, and keep tokens out of the repository.
+Avoid `shamefullyHoist`: it hides phantom dependencies that pnpm's strict
+`node_modules` layout exists to catch.
 
 ### Dependency Management
 
@@ -33,10 +41,10 @@ pnpm add react --filter @repo/ui
 pnpm add -D typescript --filter @repo/ui
 
 # Install workspace dependency
-pnpm add @repo/ui --filter web
+pnpm add @repo/ui@workspace:* --filter web
 
-# Install in all packages
-pnpm add -D eslint -w
+# Install at the workspace root
+pnpm add -Dw eslint
 
 # Update all dependencies
 pnpm update -r
@@ -52,7 +60,7 @@ pnpm remove react --filter @repo/ui
 pnpm --filter web dev
 pnpm --filter @repo/ui build
 
-# Run in all packages
+# Run in all packages (topological order)
 pnpm -r build
 pnpm -r test
 
@@ -61,78 +69,15 @@ pnpm -r --parallel dev
 
 # Filter by pattern
 pnpm --filter "@repo/*" build
-pnpm --filter "...web" build  # Build web and dependencies
+pnpm --filter "web..." build  # web and its dependencies
+pnpm --filter "...web" build  # web and its dependents
 ```
 
-## Nx Monorepo
+## Nx and Turborepo
 
-### Setup
-
-```bash
-# Create Nx monorepo
-npx create-nx-workspace@latest my-org
-
-# Generate applications
-nx generate @nx/react:app my-app
-nx generate @nx/next:app my-next-app
-
-# Generate libraries
-nx generate @nx/react:lib ui-components
-nx generate @nx/js:lib utils
-```
-
-### Configuration
-
-```json
-// nx.json
-{
-  "extends": "nx/presets/npm.json",
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"],
-      "cache": true
-    },
-    "test": {
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
-      "cache": true
-    },
-    "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
-      "cache": true
-    }
-  },
-  "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
-    "production": [
-      "default",
-      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-      "!{projectRoot}/tsconfig.spec.json"
-    ],
-    "sharedGlobals": []
-  }
-}
-```
-
-### Running Tasks
-
-```bash
-# Run task for specific project
-nx build my-app
-nx test ui-components
-nx lint utils
-
-# Run for affected projects
-nx affected:build
-nx affected:test --base=main
-
-# Visualize dependencies
-nx graph
-
-# Run in parallel
-nx run-many --target=build --all --parallel=3
-```
+Task configuration, caching and affected runs are covered by the
+`nx-workspace-patterns` and `turborepo-caching` skills. To add Nx to an
+existing pnpm workspace, run `npx nx@latest init`.
 
 ## Shared Configurations
 
@@ -180,42 +125,32 @@ nx run-many --target=build --all --parallel=3
 ### ESLint Configuration
 
 ```javascript
-// packages/config/eslint-preset.js
-module.exports = {
-  extends: [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "prettier",
-  ],
-  plugins: ["@typescript-eslint", "react", "react-hooks"],
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaVersion: 2022,
-    sourceType: "module",
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  settings: {
-    react: {
-      version: "detect",
-    },
-  },
-  rules: {
-    "@typescript-eslint/no-unused-vars": "error",
-    "react/react-in-jsx-scope": "off",
-  },
-};
+// packages/eslint-config/index.js
+import js from "@eslint/js";
+import { defineConfig } from "eslint/config";
+import tseslint from "typescript-eslint";
+import reactHooks from "eslint-plugin-react-hooks";
+import prettier from "eslint-config-prettier";
 
-// apps/web/.eslintrc.js
-module.exports = {
-  extends: ["@repo/config/eslint-preset"],
-  rules: {
-    // App-specific rules
+export default defineConfig([
+  js.configs.recommended,
+  tseslint.configs.recommended,
+  reactHooks.configs.flat.recommended,
+  prettier,
+]);
+
+// apps/web/eslint.config.js
+import { defineConfig } from "eslint/config";
+import base from "@repo/eslint-config";
+
+export default defineConfig([
+  base,
+  {
+    rules: {
+      // App-specific rules
+    },
   },
-};
+]);
 ```
 
 ## Code Sharing Patterns
@@ -297,50 +232,6 @@ export interface CreateUserInput {
 import type { User, CreateUserInput } from "@repo/types";
 ```
 
-## Build Optimization
-
-### Turborepo Caching
-
-```json
-// turbo.json
-{
-  "tasks": {
-    "build": {
-      // Build depends on dependencies being built first
-      "dependsOn": ["^build"],
-
-      // Cache these outputs
-      "outputs": ["dist/**", ".next/**"],
-
-      // Cache based on these inputs (default: all files)
-      "inputs": ["src/**/*.tsx", "src/**/*.ts", "package.json"]
-    },
-    "test": {
-      // Run tests in parallel, don't depend on build
-      "cache": true,
-      "outputs": ["coverage/**"]
-    }
-  }
-}
-```
-
-### Remote Caching
-
-```bash
-# Turborepo Remote Cache (Vercel)
-npx turbo login
-npx turbo link
-
-# Custom remote cache
-# turbo.json
-{
-  "remoteCache": {
-    "signature": true,
-    "enabled": true
-  }
-}
-```
-
 ## CI/CD for Monorepos
 
 ### GitHub Actions
@@ -360,46 +251,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
         with:
-          fetch-depth: 0 # For Nx affected commands
+          fetch-depth: 0 # --affected needs history back to the base branch
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
+      - uses: pnpm/action-setup@v6 # reads "packageManager" from package.json
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7
         with:
-          node-version: 18
+          node-version: 22
           cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm turbo run build
-
-      - name: Test
-        run: pnpm turbo run test
-
-      - name: Lint
-        run: pnpm turbo run lint
-
-      - name: Type check
-        run: pnpm turbo run type-check
+      - name: Build, test, lint and type-check affected packages
+        run: pnpm turbo run build test lint typecheck --affected
 ```
 
 ### Deploy Affected Only
 
-The step below uses Nx to check whether `web` changed, then runs the `deploy` script in `apps/web/package.json`. The `create-turbo` starter has neither, so add Nx (`npx nx@latest init`) and a `deploy` script for your hosting provider first.
+Give `deploy` `"cache": false` and `"dependsOn": ["build"]` in `turbo.json`,
+and a `deploy` script in each deployable app. Then `--affected` runs it only
+for apps the branch changed:
 
 ```yaml
-# Deploy only changed apps
 - name: Deploy affected apps
-  run: |
-    if pnpm nx show projects --affected --base=origin/main --head=HEAD | grep -qx "web"; then
-      echo "Deploying web app"
-      # `pnpm deploy` is a built-in command; use `run` for the package's deploy script
-      pnpm --filter web run deploy
-    fi
+  if: github.ref == 'refs/heads/main'
+  env:
+    TURBO_SCM_BASE: ${{ github.event.before }} # compare with the previous main commit
+  run: pnpm turbo run deploy --affected --filter='./apps/*'
 ```

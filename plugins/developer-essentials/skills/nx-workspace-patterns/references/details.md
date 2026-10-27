@@ -7,25 +7,26 @@
 ```json
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "myorg",
-  "affected": {
-    "defaultBase": "main"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default",
+  "defaultBase": "main",
+  "parallel": 3,
+  "plugins": [
+    {
+      "plugin": "@nx/vite/plugin",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e",
-          "build-storybook"
-        ],
-        "parallel": 3
+        "buildTargetName": "build",
+        "serveTargetName": "serve",
+        "typecheckTargetName": "typecheck"
       }
+    },
+    {
+      "plugin": "@nx/jest/plugin",
+      "options": { "targetName": "test" }
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": { "targetName": "lint" }
     }
-  },
+  ],
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
@@ -37,7 +38,7 @@
       "cache": true
     },
     "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
+      "inputs": ["default", "{workspaceRoot}/eslint.config.mjs"],
       "cache": true
     },
     "e2e": {
@@ -52,31 +53,22 @@
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/.eslintrc.json"
+      "!{projectRoot}/eslint.config.mjs"
     ],
-    "sharedGlobals": [
-      "{workspaceRoot}/babel.config.json",
-      "{workspaceRoot}/tsconfig.base.json"
-    ]
+    "sharedGlobals": ["{workspaceRoot}/tsconfig.base.json"]
   },
   "generators": {
     "@nx/react": {
-      "application": {
-        "style": "css",
-        "linter": "eslint",
-        "bundler": "webpack"
-      },
-      "library": {
-        "style": "css",
-        "linter": "eslint"
-      },
-      "component": {
-        "style": "css"
-      }
+      "library": { "style": "css", "linter": "eslint", "unitTestRunner": "jest" }
     }
   }
 }
 ```
+
+Plugins listed under `plugins` infer targets from tool config files
+(`vite.config.ts`, `jest.config.ts`, `eslint.config.mjs`), so projects don't
+need hand-written targets for them. Run `nx show project web` to see the
+targets Nx inferred.
 
 ### Template 2: Project Configuration
 
@@ -90,138 +82,79 @@
   "tags": ["type:app", "scope:web"],
   "targets": {
     "build": {
-      "executor": "@nx/webpack:webpack",
-      "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
-      "options": {
-        "compiler": "babel",
-        "outputPath": "dist/apps/web",
-        "index": "apps/web/src/index.html",
-        "main": "apps/web/src/main.tsx",
-        "tsConfig": "apps/web/tsconfig.app.json",
-        "assets": ["apps/web/src/assets"],
-        "styles": ["apps/web/src/styles.css"]
-      },
-      "configurations": {
-        "development": {
-          "extractLicenses": false,
-          "optimization": false,
-          "sourceMap": true
-        },
-        "production": {
-          "optimization": true,
-          "outputHashing": "all",
-          "sourceMap": false,
-          "extractLicenses": true
-        }
-      }
+      "outputs": ["{projectRoot}/dist"]
     },
-    "serve": {
-      "executor": "@nx/webpack:dev-server",
-      "defaultConfiguration": "development",
+    "deploy": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
       "options": {
-        "buildTarget": "web:build"
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "web:build:development"
-        },
-        "production": {
-          "buildTarget": "web:build:production"
-        }
-      }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "apps/web/jest.config.ts",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/web/**/*.{ts,tsx,js,jsx}"]
+        "command": "./scripts/deploy.sh apps/web/dist"
       }
     }
   }
 }
 ```
 
+`build`, `serve`, `test` and `lint` come from the plugins; entries here only
+override or add to them. A project can use `package.json` instead, with the
+same fields under an `"nx"` key.
+
 ### Template 3: Module Boundary Rules
 
-```json
-// .eslintrc.json
-{
-  "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nx"],
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {
-        "@nx/enforce-module-boundaries": [
-          "error",
-          {
-            "enforceBuildableLibDependency": true,
-            "allow": [],
-            "depConstraints": [
-              {
-                "sourceTag": "type:app",
-                "onlyDependOnLibsWithTags": [
-                  "type:feature",
-                  "type:ui",
-                  "type:data-access",
-                  "type:util"
-                ]
-              },
-              {
-                "sourceTag": "type:feature",
-                "onlyDependOnLibsWithTags": [
-                  "type:ui",
-                  "type:data-access",
-                  "type:util"
-                ]
-              },
-              {
-                "sourceTag": "type:ui",
-                "onlyDependOnLibsWithTags": ["type:ui", "type:util"]
-              },
-              {
-                "sourceTag": "type:data-access",
-                "onlyDependOnLibsWithTags": ["type:data-access", "type:util"]
-              },
-              {
-                "sourceTag": "type:util",
-                "onlyDependOnLibsWithTags": ["type:util"]
-              },
-              {
-                "sourceTag": "scope:web",
-                "onlyDependOnLibsWithTags": ["scope:web", "scope:shared"]
-              },
-              {
-                "sourceTag": "scope:api",
-                "onlyDependOnLibsWithTags": ["scope:api", "scope:shared"]
-              },
-              {
-                "sourceTag": "scope:shared",
-                "onlyDependOnLibsWithTags": ["scope:shared"]
-              }
-            ]
-          }
-        ]
-      }
-    }
-  ]
-}
+```javascript
+// eslint.config.mjs
+import nx from "@nx/eslint-plugin";
+
+export default [
+  ...nx.configs["flat/base"],
+  ...nx.configs["flat/typescript"],
+  ...nx.configs["flat/javascript"],
+  {
+    files: ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+    rules: {
+      "@nx/enforce-module-boundaries": [
+        "error",
+        {
+          enforceBuildableLibDependency: true,
+          allow: [],
+          depConstraints: [
+            {
+              sourceTag: "type:app",
+              onlyDependOnLibsWithTags: ["type:feature", "type:ui", "type:data-access", "type:util"],
+            },
+            {
+              sourceTag: "type:feature",
+              onlyDependOnLibsWithTags: ["type:ui", "type:data-access", "type:util"],
+            },
+            { sourceTag: "type:ui", onlyDependOnLibsWithTags: ["type:ui", "type:util"] },
+            {
+              sourceTag: "type:data-access",
+              onlyDependOnLibsWithTags: ["type:data-access", "type:util"],
+            },
+            { sourceTag: "type:util", onlyDependOnLibsWithTags: ["type:util"] },
+            { sourceTag: "scope:web", onlyDependOnLibsWithTags: ["scope:web", "scope:shared"] },
+            { sourceTag: "scope:api", onlyDependOnLibsWithTags: ["scope:api", "scope:shared"] },
+            { sourceTag: "scope:shared", onlyDependOnLibsWithTags: ["scope:shared"] },
+          ],
+        },
+      ],
+    },
+  },
+];
 ```
 
-### Template 4: Custom Generator
+### Template 4: Local Generator
+
+Scaffold the plugin and generator first:
+
+```bash
+nx add @nx/plugin
+nx g @nx/plugin:plugin tools/workspace-plugin
+nx g @nx/plugin:generator tools/workspace-plugin/src/generators/feature-lib
+```
 
 ```typescript
-// tools/generators/feature-lib/index.ts
+// tools/workspace-plugin/src/generators/feature-lib/generator.ts
 import {
   Tree,
   formatFiles,
@@ -232,54 +165,43 @@ import {
 } from "@nx/devkit";
 import { libraryGenerator } from "@nx/react";
 
-interface FeatureLibraryGeneratorSchema {
+interface FeatureLibGeneratorSchema {
   name: string;
   scope: string;
-  directory?: string;
 }
 
-export default async function featureLibraryGenerator(
+export default async function featureLibGenerator(
   tree: Tree,
-  options: FeatureLibraryGeneratorSchema,
+  options: FeatureLibGeneratorSchema,
 ) {
-  const { name, scope, directory } = options;
-  const projectDirectory = directory
-    ? `${directory}/${name}`
-    : `libs/${scope}/feature-${name}`;
+  const { name, scope } = options;
+  const projectName = `${scope}-feature-${name}`;
 
-  // Generate base library
+  // `directory` is required; `name` sets the project name as given
   await libraryGenerator(tree, {
-    name: `feature-${name}`,
-    directory: projectDirectory,
+    directory: `libs/${scope}/feature-${name}`,
+    name: projectName,
     tags: `type:feature,scope:${scope}`,
     style: "css",
-    skipTsConfig: false,
-    skipFormat: true,
-    unitTestRunner: "jest",
     linter: "eslint",
+    unitTestRunner: "jest",
+    skipFormat: true,
   });
 
-  // Add custom files
-  const projectConfig = readProjectConfiguration(
-    tree,
-    `${scope}-feature-${name}`,
-  );
-  const projectNames = names(name);
+  const project = readProjectConfiguration(tree, projectName);
 
   generateFiles(
     tree,
     joinPathFragments(__dirname, "files"),
-    projectConfig.sourceRoot,
-    {
-      ...projectNames,
-      scope,
-      tmpl: "",
-    },
+    project.sourceRoot ?? project.root,
+    { ...names(name), scope, tmpl: "" },
   );
 
   await formatFiles(tree);
 }
 ```
+
+Run it with `nx g @myorg/workspace-plugin:feature-lib auth --scope=web`.
 
 ### Template 5: CI Configuration with Affected
 
@@ -300,88 +222,84 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 22
           cache: "npm"
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
       - name: Derive SHAs for affected commands
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@v5
 
-      - name: Run affected lint
-        run: npx nx affected -t lint --parallel=3
-
-      - name: Run affected test
-        run: npx nx affected -t test --parallel=3 --configuration=ci
-
-      - name: Run affected build
-        run: npx nx affected -t build --parallel=3
-
-      - name: Run affected e2e
-        run: npx nx affected -t e2e --parallel=1
+      - run: npx nx affected -t lint test build
+      - run: npx nx affected -t e2e --parallel=1
 ```
 
-### Template 6: Remote Caching Setup
+`nx affected` runs only tasks whose inputs a change reaches. Set
+`"affected": { "legacy": true }` in `nx.json` to run every task of every
+affected project instead.
 
-```typescript
-// nx.json with Nx Cloud
-{
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "your-nx-cloud-token",
-        "parallel": 3,
-        "cacheDirectory": ".nx/cache"
-      }
-    }
-  },
-  "nxCloudAccessToken": "your-nx-cloud-token"
-}
+### Template 6: Remote Caching
 
-// Self-hosted cache with S3
+Nx Cloud:
+
+```bash
+npx nx connect   # writes "nxCloudId" to nx.json
+```
+
+```json
+// nx.json
 {
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nx-aws-cache/nx-aws-cache",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test"],
-        "awsRegion": "us-east-1",
-        "awsBucket": "my-nx-cache-bucket",
-        "awsProfile": "default"
-      }
-    }
-  }
+  "nxCloudId": "SOMEID"
 }
 ```
+
+In CI, give the job a read-write access token through `NX_CLOUD_ACCESS_TOKEN`
+and give untrusted pull requests a read-only token. Don't put tokens in
+`nx.json`.
+
+Self-hosted: custom tasks runners such as `nx-aws-cache` no longer work. Run a
+server that implements Nx's remote cache OpenAPI spec (see "Self-hosted remote
+cache" in the Nx docs) and point Nx at it:
+
+```bash
+export NX_SELF_HOSTED_REMOTE_CACHE_SERVER="https://nx-cache.internal.example.com"
+export NX_SELF_HOSTED_REMOTE_CACHE_ACCESS_TOKEN="$CACHE_TOKEN"
+npx nx affected -t build
+```
+
+Use `--skipRemoteCache` to skip the remote cache for one command.
 
 ## Common Commands
 
 ```bash
-# Generate new library
-nx g @nx/react:lib feature-auth --directory=libs/web --tags=type:feature,scope:web
+# Generate a library (the directory is the positional argument)
+nx g @nx/react:lib libs/web/feature-auth --tags=type:feature,scope:web
 
 # Run affected tests
 nx affected -t test --base=main
 
+# Run a target for many projects
+nx run-many -t build --projects=tag:scope:web
+
+# Inspect a project's resolved targets
+nx show project web
+
 # View dependency graph
 nx graph
 
-# Run specific project
+# Run a specific project and configuration
 nx build web --configuration=production
 
-# Reset cache
+# Reset cache and daemon
 nx reset
 
-# Run migrations
+# Upgrade Nx and run migrations
 nx migrate latest
 nx migrate --run-migrations
 ```
