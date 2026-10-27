@@ -31,7 +31,7 @@ For stages that have **no native equivalent** (most lip-sync APIs, Runway Gen-3,
 1. Read `SPEC.md` and each `stages/NN-*.md`.
 2. For each stage, look up the mapping. Use the local checkpoint catalogue if provided to pin specific filenames; otherwise emit `<choose checkpoint>` placeholders the user must fill.
 3. Build the workflow as **API-format** JSON (flat `{node_id: {class_type, inputs}}`). Sequential numeric IDs starting from `1`. Wire `inputs` references as `[source_id, output_index]` pairs.
-4. Set sampler params from the stage definitions (steps, cfg, sampler_name, scheduler, seed). Default seed: `-1` (random) unless the stage specifies a fixed seed.
+4. Set sampler params from the stage definitions (steps, cfg, sampler_name, scheduler, seed). API format has no "random" seed: `seed` must be an integer from 0 to 2^64−1, and `-1` fails validation. If the stage gives no seed, generate one (e.g. `python3 -c 'import secrets; print(secrets.randbelow(2**32))'`), write it into the workflow and record it in `manifest-export.md` so the run can be reproduced. Randomise-per-run is the UI's `control_after_generate` widget, which API format doesn't carry.
 5. Write outputs:
    - `pipelines/<name>/comfy/workflow-export.json` — the API-format workflow.
    - `pipelines/<name>/comfy/manifest-export.md` — checkpoints, LoRAs, custom nodes the user needs (with `ComfyUI-Manager` install names where possible).

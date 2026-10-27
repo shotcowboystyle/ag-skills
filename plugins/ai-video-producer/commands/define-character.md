@@ -10,7 +10,7 @@ Ask the user (in batches, conversationally):
 2. **Role in the video** — protagonist, narrator, background, product, etc.
 3. **Visual description** — age, build, clothing, distinguishing features, lighting style. Detailed enough to seed a text-to-image prompt.
 4. **Reference images** — paths under `assets/reference-images/` if any exist; offer to copy files in.
-5. **Voice** — gender, age, accent, tone. If a voice clone will be used, note the source audio path under `assets/voice-clones/`.
+5. **Voice** — gender, age, accent, tone. If a voice clone will be used, note the source audio path under `assets/voice-clones/` and the speaker's consent record beside it (`<name>.consent.md`; see the `voice-to-lip-sync` skill).
 6. **Per-shot variations** — outfit changes, age progression, expressions to anticipate.
 7. **A reusable seed prompt** — a paragraph that can be pasted into image/video generation to recreate the character consistently.
 
