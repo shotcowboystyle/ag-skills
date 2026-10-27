@@ -24,7 +24,7 @@
     {
       "name": "agent-orchestration",
       "source": "./plugins/agent-orchestration",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "description": "Multi-agent system optimization, agent improvement workflows, and context management",
       "author": {
         "name": "Curtis Blanton",
@@ -57,7 +57,7 @@
     {
       "name": "api-scaffolding",
       "source": "./plugins/api-scaffolding",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "REST and GraphQL API scaffolding, framework selection, backend architecture, and API generation",
       "author": {
         "name": "Curtis Blanton",
@@ -68,7 +68,7 @@
     {
       "name": "api-testing-observability",
       "source": "./plugins/api-testing-observability",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "description": "API testing automation, request mocking, OpenAPI documentation generation, observability setup, and monitoring",
       "author": {
         "name": "Curtis Blanton",
@@ -79,7 +79,7 @@
     {
       "name": "application-performance",
       "source": "./plugins/application-performance",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "description": "Application profiling, performance optimization, and observability for frontend and backend systems",
       "author": {
         "name": "Curtis Blanton",
@@ -191,7 +191,7 @@
     {
       "name": "code-documentation",
       "source": "./plugins/code-documentation",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "Documentation generation, code explanation, and technical writing with automated doc generation and tutorial creation",
       "author": {
         "name": "Curtis Blanton",
@@ -235,7 +235,7 @@
     {
       "name": "context-management",
       "source": "./plugins/context-management",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "Context persistence, restoration, and long-running conversation management",
       "author": {
         "name": "Curtis Blanton",
@@ -290,7 +290,7 @@
     {
       "name": "debugging-toolkit",
       "source": "./plugins/debugging-toolkit",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "Interactive debugging, developer experience optimization, and smart debugging workflows",
       "author": {
         "name": "Curtis Blanton",
@@ -367,7 +367,7 @@
     {
       "name": "documentation-generation",
       "source": "./plugins/documentation-generation",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "description": "OpenAPI specification generation, Mermaid diagram creation, tutorial writing, API reference documentation",
       "author": {
         "name": "Curtis Blanton",
@@ -434,7 +434,7 @@
     {
       "name": "frontend-mobile-development",
       "source": "./plugins/frontend-mobile-development",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "description": "Frontend UI development and mobile application implementation across platforms",
       "author": {
         "name": "Curtis Blanton",
@@ -445,7 +445,7 @@
     {
       "name": "frontend-mobile-security",
       "source": "./plugins/frontend-mobile-security",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "description": "XSS prevention, CSRF protection, content security policies, mobile app security, and secure storage patterns",
       "author": {
         "name": "Curtis Blanton",
@@ -467,7 +467,7 @@
     {
       "name": "game-development",
       "source": "./plugins/game-development",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "description": "Unity game development with C# scripting, Minecraft server plugin development with Bukkit/Spigot APIs",
       "author": {
         "name": "Curtis Blanton",
@@ -533,7 +533,7 @@
     {
       "name": "javascript-typescript",
       "source": "./plugins/javascript-typescript",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "description": "JavaScript and TypeScript development with ES6+, Node.js, React, and modern web frameworks",
       "author": {
         "name": "Curtis Blanton",
@@ -577,7 +577,7 @@
     {
       "name": "machine-learning-ops",
       "source": "./plugins/machine-learning-ops",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "description": "ML model training pipelines, hyperparameter tuning, model deployment automation, experiment tracking, and MLOps workflows",
       "author": {
         "name": "Curtis Blanton",
@@ -610,7 +610,7 @@
     {
       "name": "multi-platform-apps",
       "source": "./plugins/multi-platform-apps",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "description": "Cross-platform application development coordinating web, iOS, Android, and desktop implementations",
       "author": {
         "name": "Curtis Blanton",
@@ -684,7 +684,7 @@
     {
       "name": "python-development",
       "source": "./plugins/python-development",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "description": "Modern Python development with Python 3.12+, Django, FastAPI, async patterns, and production best practices",
       "author": {
         "name": "Curtis Blanton",
@@ -840,7 +840,7 @@
     {
       "name": "systems-programming",
       "source": "./plugins/systems-programming",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "description": "Systems programming with Rust, Go, C, and C++ for performance-critical and low-level development",
       "author": {
         "name": "Curtis Blanton",
@@ -862,7 +862,7 @@
     {
       "name": "team-collaboration",
       "source": "./plugins/team-collaboration",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "description": "Team workflows, issue management, standup automation, and developer experience optimization",
       "author": {
         "name": "Curtis Blanton",

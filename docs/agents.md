@@ -11,7 +11,7 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | Agent                                                                                         | Model   | Description                                                            |
 | --------------------------------------------------------------------------------------------- | ------- | ---------------------------------------------------------------------- |
 | [backend-architect](../plugins/backend-development/agents/backend-architect.md) | opus | Backend design: service boundaries, API contracts, failure handling |
-| [frontend-developer](../plugins/multi-platform-apps/agents/frontend-developer.md)             | inherit | React components, responsive layouts, client-side state management     |
+| [frontend-developer](../plugins/multi-platform-apps/agents/frontend-developer.md) | sonnet | One accessible, tested web UI change in the existing framework |
 | [graphql-architect](../plugins/backend-development/agents/graphql-architect.md) | opus | GraphQL schema design, breaking-change checks, query cost limits |
 | [architect-review](../plugins/comprehensive-review/agents/architect-review.md)                | opus    | Architectural consistency analysis and pattern validation              |
 | [cloud-architect](../plugins/cloud-infrastructure/agents/cloud-architect.md) | opus | Cloud workload design and review with cited pricing |
@@ -31,10 +31,10 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | [design-ops-ux-architect](../plugins/design-ops/agents/ux-architect.md)                  | sonnet  | Flows, screen inventory, IA from real app patterns      |
 | [ui-ux-designer](../plugins/multi-platform-apps/agents/ui-ux-designer.md)                | sonnet  | Interface design, wireframes, design systems            |
 | [ui-visual-validator](../plugins/accessibility-compliance/agents/ui-visual-validator.md) | sonnet  | Visual regression testing and UI verification           |
-| [mobile-developer](../plugins/frontend-mobile-development/agents/mobile-developer.md)    | inherit | React Native and Expo application development           |
+| [mobile-developer](../plugins/frontend-mobile-development/agents/mobile-developer.md) | sonnet | One React Native or Expo change, checked on iOS and Android |
 | [android-developer](../plugins/multi-platform-apps/agents/android-developer.md)          | inherit | Native Android development with Kotlin/Compose          |
-| [ios-developer](../plugins/multi-platform-apps/agents/ios-developer.md)                  | inherit | Native iOS development with Swift/SwiftUI               |
-| [flutter-expert](../plugins/multi-platform-apps/agents/flutter-expert.md)                | inherit | Advanced Flutter development with state management      |
+| [ios-developer](../plugins/multi-platform-apps/agents/ios-developer.md) | sonnet | Native iOS at the project deployment target and Swift version |
+| [flutter-expert](../plugins/multi-platform-apps/agents/flutter-expert.md) | sonnet | Flutter at the pubspec versions; analyze and tests run |
 
 ### Programming Languages
 
@@ -42,18 +42,18 @@ Reference for 164 local AI agents organized by category. The model column lists 
 
 | Agent                                                             | Model | Description                                                 |
 | ----------------------------------------------------------------- | ----- | ----------------------------------------------------------- |
-| [c-pro](../plugins/systems-programming/agents/c-pro.md)           | opus  | System programming with memory management and OS interfaces |
-| [cpp-pro](../plugins/systems-programming/agents/cpp-pro.md)       | opus  | Modern C++ with RAII, smart pointers, STL algorithms        |
-| [rust-pro](../plugins/systems-programming/agents/rust-pro.md)     | opus  | Memory-safe systems programming with ownership patterns     |
-| [golang-pro](../plugins/systems-programming/agents/golang-pro.md) | opus  | Concurrent programming with goroutines and channels         |
+| [c-pro](../plugins/systems-programming/agents/c-pro.md) | sonnet | C under the project `-std`; sanitizer- or Valgrind-checked |
+| [cpp-pro](../plugins/systems-programming/agents/cpp-pro.md) | sonnet | C++ under the project standard; RAII; sanitizer-checked |
+| [rust-pro](../plugins/systems-programming/agents/rust-pro.md) | sonnet | Rust at the pinned toolchain, edition and MSRV; clippy and tests run |
+| [golang-pro](../plugins/systems-programming/agents/golang-pro.md) | sonnet | Go at the `go.mod` version; vet and `test -race` run |
 
 #### Web & Application
 
 | Agent                                                                               | Model   | Description                                                                       |
 | ----------------------------------------------------------------------------------- | ------- | --------------------------------------------------------------------------------- |
-| [javascript-pro](../plugins/javascript-typescript/agents/javascript-pro.md)         | inherit | Modern JavaScript with ES6+, async patterns, Node.js                              |
-| [typescript-pro](../plugins/javascript-typescript/agents/typescript-pro.md)         | opus    | Advanced TypeScript with type systems and generics                                |
-| [python-pro](../plugins/python-development/agents/python-pro.md)                    | opus    | Python development with advanced features and optimization                        |
+| [javascript-pro](../plugins/javascript-typescript/agents/javascript-pro.md) | sonnet | One tested Node or browser JavaScript change with safe async |
+| [typescript-pro](../plugins/javascript-typescript/agents/typescript-pro.md) | sonnet | One type-checked TypeScript change, no unexplained `any` |
+| [python-pro](../plugins/python-development/agents/python-pro.md) | sonnet | One focused, typed, tested Python change with the project tooling |
 | [temporal-python-pro](../plugins/backend-development/agents/temporal-python-pro.md) | inherit | Temporal workflow orchestration with Python SDK, durable workflows, saga patterns |
 
 #### Shell Scripting
@@ -67,10 +67,10 @@ Reference for 164 local AI agents organized by category. The model column lists 
 
 | Agent                                                                              | Model   | Description                                   |
 | ---------------------------------------------------------------------------------- | ------- | --------------------------------------------- |
-| [django-pro](../plugins/api-scaffolding/agents/django-pro.md)                      | opus    | Django development with ORM and async views   |
-| [fastapi-pro](../plugins/api-scaffolding/agents/fastapi-pro.md)                    | opus    | FastAPI with async patterns and Pydantic      |
-| [unity-developer](../plugins/game-development/agents/unity-developer.md)           | opus    | Unity game development and optimization       |
-| [minecraft-bukkit-pro](../plugins/game-development/agents/minecraft-bukkit-pro.md) | opus    | Minecraft server plugin development           |
+| [django-pro](../plugins/api-scaffolding/agents/django-pro.md) | sonnet | One Django change with tests, on the project pinned versions |
+| [fastapi-pro](../plugins/api-scaffolding/agents/fastapi-pro.md) | sonnet | One FastAPI route with typed models and tests |
+| [unity-developer](../plugins/game-development/agents/unity-developer.md) | sonnet | Unity at the project editor and package versions; flags deprecated APIs |
+| [minecraft-bukkit-pro](../plugins/game-development/agents/minecraft-bukkit-pro.md) | sonnet | Bukkit/Spigot/Paper plugin feature at the plugin `api-version` |
 | [sql-pro](../plugins/database-design/agents/sql-pro.md)                            | inherit | Complex SQL queries and database optimization |
 
 ### Infrastructure & Operations
@@ -82,7 +82,7 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | [devops-troubleshooter](../plugins/incident-response/agents/devops-troubleshooter.md) | sonnet | Root-cause diagnosis from logs, metrics and recent changes |
 | [deployment-engineer](../plugins/cicd-automation/agents/deployment-engineer.md) | sonnet | CI/CD pipelines with gated production rollout and rollback |
 | [terraform-specialist](../plugins/cloud-infrastructure/agents/terraform-specialist.md) | sonnet | Terraform/OpenTofu modules checked with fmt, validate and plan |
-| [dx-optimizer](../plugins/team-collaboration/agents/dx-optimizer.md)                   | sonnet | Developer experience optimization and tooling improvements         |
+| [dx-optimizer](../plugins/team-collaboration/agents/dx-optimizer.md) | sonnet | Measured setup friction fixed with portable task runner and AGENTS.md changes |
 
 #### Database Management
 
@@ -184,10 +184,10 @@ Reference for 164 local AI agents organized by category. The model column lists 
 
 | Agent                                                                                | Model  | Description                                                           |
 | ------------------------------------------------------------------------------------ | ------ | --------------------------------------------------------------------- |
-| [docs-architect](../plugins/code-documentation/agents/docs-architect.md)             | sonnet | Comprehensive technical documentation generation                      |
-| [api-documenter](../plugins/api-testing-observability/agents/api-documenter.md)      | sonnet | OpenAPI/Swagger specifications and developer docs                     |
+| [docs-architect](../plugins/code-documentation/agents/docs-architect.md) | sonnet | Architecture docs from code, every claim traced to a file |
+| [api-documenter](../plugins/api-testing-observability/agents/api-documenter.md) | sonnet | OpenAPI 3.1 / AsyncAPI 3 spec, checked for drift against code |
 | [reference-builder](../plugins/documentation-generation/agents/reference-builder.md) | sonnet | Module, CLI and config references traced to the source               |
-| [tutorial-engineer](../plugins/code-documentation/agents/tutorial-engineer.md)       | sonnet | Step-by-step tutorials and educational content                        |
+| [tutorial-engineer](../plugins/code-documentation/agents/tutorial-engineer.md) | sonnet | Step-by-step tutorial, each step run and verified |
 | [mermaid-expert](../plugins/documentation-generation/agents/mermaid-expert.md)       | haiku  | Mermaid diagrams, render-checked with mermaid-cli                     |
 | [c4-code](../plugins/c4-architecture/agents/c4-code.md)                              | haiku  | C4 Code-level documentation with function signatures and dependencies |
 | [c4-component](../plugins/c4-architecture/agents/c4-component.md)                    | sonnet | C4 Component-level architecture synthesis and documentation           |
@@ -254,7 +254,7 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | Agent                                                                              | Model   | Description                                    |
 | ---------------------------------------------------------------------------------- | ------- | ---------------------------------------------- |
 | [payment-integration](../plugins/payment-processing/agents/payment-integration.md) | sonnet  | Payment processor integration (Stripe, PayPal) |
-| [context-manager](../plugins/agent-orchestration/agents/context-manager.md)        | inherit | Multi-agent context management                 |
+| [context-manager](../plugins/agent-orchestration/agents/context-manager.md) | sonnet | Compact, sourced context brief for a handoff; read-only |
 
 ## Model Configuration
 

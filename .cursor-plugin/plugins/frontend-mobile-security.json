@@ -1,7 +1,7 @@
 {
   "name": "frontend-mobile-security",
   "displayName": "Frontend Mobile Security",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "XSS prevention, CSRF protection, content security policies, mobile app security, and secure storage patterns",
   "author": {
     "name": "Curtis Blanton",

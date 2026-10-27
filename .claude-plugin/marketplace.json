@@ -27,7 +27,7 @@
       "name": "agent-orchestration",
       "source": "./plugins/agent-orchestration",
       "description": "Multi-agent system optimization, agent improvement workflows, and context management",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -85,7 +85,7 @@
       "name": "api-scaffolding",
       "source": "./plugins/api-scaffolding",
       "description": "REST and GraphQL API scaffolding, framework selection, backend architecture, and API generation",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -98,7 +98,7 @@
       "name": "api-testing-observability",
       "source": "./plugins/api-testing-observability",
       "description": "API testing automation, request mocking, OpenAPI documentation generation, observability setup, and monitoring",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -111,7 +111,7 @@
       "name": "application-performance",
       "source": "./plugins/application-performance",
       "description": "Application profiling, performance optimization, and observability for frontend and backend systems",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -240,7 +240,7 @@
       "name": "code-documentation",
       "source": "./plugins/code-documentation",
       "description": "Documentation generation, code explanation, and technical writing with automated doc generation and tutorial creation",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -292,7 +292,7 @@
       "name": "context-management",
       "source": "./plugins/context-management",
       "description": "Context persistence, restoration, and long-running conversation management",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -357,7 +357,7 @@
       "name": "debugging-toolkit",
       "source": "./plugins/debugging-toolkit",
       "description": "Interactive debugging, developer experience optimization, and smart debugging workflows",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -459,7 +459,7 @@
       "name": "documentation-generation",
       "source": "./plugins/documentation-generation",
       "description": "OpenAPI specification generation, Mermaid diagram creation, tutorial writing, API reference documentation",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -550,7 +550,7 @@
       "name": "frontend-mobile-development",
       "source": "./plugins/frontend-mobile-development",
       "description": "Frontend UI development and mobile application implementation across platforms",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -562,7 +562,7 @@
     {
       "name": "frontend-mobile-security",
       "description": "XSS prevention, CSRF protection, content security policies, mobile app security, and secure storage patterns",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -576,7 +576,7 @@
       "name": "game-development",
       "source": "./plugins/game-development",
       "description": "Unity game development with C# scripting, Minecraft server plugin development with Bukkit/Spigot APIs",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -712,7 +712,7 @@
       "name": "javascript-typescript",
       "source": "./plugins/javascript-typescript",
       "description": "JavaScript and TypeScript development with ES6+, Node.js, React, and modern web frameworks",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -763,7 +763,7 @@
     {
       "name": "machine-learning-ops",
       "description": "ML model training pipelines, hyperparameter tuning, model deployment automation, experiment tracking, and MLOps workflows",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -824,7 +824,7 @@
       "name": "multi-platform-apps",
       "source": "./plugins/multi-platform-apps",
       "description": "Cross-platform application development coordinating web, iOS, Android, and desktop implementations",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -923,7 +923,7 @@
       "name": "python-development",
       "source": "./plugins/python-development",
       "description": "Modern Python development with Python 3.12+, Django, FastAPI, async patterns, and production best practices",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -1135,7 +1135,7 @@
       "name": "systems-programming",
       "source": "./plugins/systems-programming",
       "description": "Systems programming with Rust, Go, C, and C++ for performance-critical and low-level development",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -1161,7 +1161,7 @@
       "name": "team-collaboration",
       "source": "./plugins/team-collaboration",
       "description": "Team workflows, issue management, standup automation, and developer experience optimization",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
