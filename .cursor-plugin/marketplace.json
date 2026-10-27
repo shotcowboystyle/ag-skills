@@ -13,7 +13,7 @@
     {
       "name": "accessibility-compliance",
       "source": "./plugins/accessibility-compliance",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "description": "WCAG accessibility auditing, compliance validation, UI testing for screen readers, keyboard navigation, and inclusive design",
       "author": {
         "name": "Curtis Blanton",
@@ -35,7 +35,7 @@
     {
       "name": "agent-teams",
       "source": "./plugins/agent-teams",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "description": "Orchestrate multi-agent teams for parallel code review, hypothesis-driven debugging, and coordinated feature development using Claude Code's Agent Teams",
       "author": {
         "name": "Curtis Blanton",
@@ -79,7 +79,7 @@
     {
       "name": "application-performance",
       "source": "./plugins/application-performance",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "description": "Application profiling, performance optimization, and observability for frontend and backend systems",
       "author": {
         "name": "Curtis Blanton",
@@ -224,7 +224,7 @@
     {
       "name": "conductor",
       "source": "./plugins/conductor",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "description": "Context-Driven Development plugin that transforms Claude Code into a project management tool with structured workflow: Context \u2192 Spec & Plan \u2192 Implement",
       "author": {
         "name": "Curtis Blanton",
@@ -323,7 +323,7 @@
     {
       "name": "design-ops",
       "source": "./plugins/design-ops",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "description": "UX/UI design ops \u2014 briefs, tokens, components, screens and pages graded against live Awwwards and Mobbin references, plus Material 3/Compose, React Native, and web component design. Absorbs the former ui-design plugin.",
       "author": {
         "name": "Curtis Blanton",
@@ -434,7 +434,7 @@
     {
       "name": "frontend-mobile-development",
       "source": "./plugins/frontend-mobile-development",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "description": "Frontend UI development and mobile application implementation across platforms",
       "author": {
         "name": "Curtis Blanton",
@@ -445,7 +445,7 @@
     {
       "name": "frontend-mobile-security",
       "source": "./plugins/frontend-mobile-security",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "description": "XSS prevention, CSRF protection, content security policies, mobile app security, and secure storage patterns",
       "author": {
         "name": "Curtis Blanton",
@@ -456,7 +456,7 @@
     {
       "name": "full-stack-orchestration",
       "source": "./plugins/full-stack-orchestration",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "description": "End-to-end feature orchestration with testing, security, performance, and deployment",
       "author": {
         "name": "Curtis Blanton",
@@ -610,7 +610,7 @@
     {
       "name": "multi-platform-apps",
       "source": "./plugins/multi-platform-apps",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "description": "Cross-platform application development coordinating web, iOS, Android, and desktop implementations",
       "author": {
         "name": "Curtis Blanton",
@@ -621,7 +621,7 @@
     {
       "name": "observability-monitoring",
       "source": "./plugins/observability-monitoring",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "description": "Metrics collection, logging infrastructure, distributed tracing, SLO implementation, and monitoring dashboards",
       "author": {
         "name": "Curtis Blanton",
@@ -656,7 +656,7 @@
     {
       "name": "performance-testing-review",
       "source": "./plugins/performance-testing-review",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "description": "Performance analysis, test coverage review, and AI-powered code quality assessment",
       "author": {
         "name": "Curtis Blanton",

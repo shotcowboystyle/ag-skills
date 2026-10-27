@@ -324,7 +324,7 @@ Check:
 ```markdown
 ## 4.1 Compatible
 
-### 4.1.1 Parsing (Level A) - Obsolete in WCAG 2.2
+### 4.1.1 Parsing - Removed in WCAG 2.2 (keep as hygiene, not a conformance failure)
 - [ ] Valid HTML (good practice)
 - [ ] No duplicate IDs
 - [ ] Complete start/end tags
@@ -470,4 +470,82 @@ class AccessibleDropdown extends HTMLElement {
     });
   }
 }
+```
+
+## WCAG 2.2 Additions
+
+### 2.4.11 Focus Not Obscured (Minimum) (AA) / 2.4.12 (Enhanced) (AAA)
+
+- [ ] Tab through every page with sticky header, cookie banner and chat widget visible
+- [ ] AA: focused element is never entirely covered; AAA: never partly covered
+
+```css
+/* Reserve room so scrolled-to focus targets clear a 4rem sticky header */
+html {
+  scroll-padding-top: 4rem;
+}
+```
+
+### 2.4.13 Focus Appearance (AAA)
+
+- [ ] Indicator area ≥ a 2 CSS px perimeter around the unfocused component
+- [ ] Focused vs unfocused pixels differ by ≥ 3:1 contrast
+
+```css
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+```
+
+### 2.5.7 Dragging Movements (AA)
+
+- [ ] Sortable lists offer move up/down buttons or a "Move to…" menu
+- [ ] Sliders accept a click on the track and arrow keys; maps have pan buttons
+
+```html
+<li>
+  Item 3
+  <button type="button" aria-label="Move Item 3 up">↑</button>
+  <button type="button" aria-label="Move Item 3 down">↓</button>
+</li>
+```
+
+### 2.5.8 Target Size (Minimum) (AA)
+
+- [ ] Pointer targets ≥ 24×24 CSS px
+- [ ] Smaller targets have enough spacing that a 24 px circle centred on each does not intersect another target or circle
+- [ ] Exceptions recorded: inline text links, equivalent control elsewhere, user-agent default, essential presentation
+
+```css
+.icon-button {
+  min-inline-size: 24px;
+  min-block-size: 24px;
+}
+```
+
+### 3.2.6 Consistent Help (A)
+
+- [ ] Contact details, help link, chat or FAQ appear in the same relative order on every page that has them
+
+### 3.3.7 Redundant Entry (A)
+
+- [ ] Multi-step flows pre-fill or offer to reuse earlier answers (e.g. "Billing same as shipping")
+- [ ] Exceptions only: re-entry essential (password confirm), security, or stale data
+
+```html
+<label><input type="checkbox" name="billing-same" checked /> Billing address same as shipping</label>
+```
+
+### 3.3.8 Accessible Authentication (Minimum) (AA) / 3.3.9 (Enhanced) (AAA)
+
+- [ ] Paste is allowed in password and one-time-code fields
+- [ ] `autocomplete` lets password managers fill credentials
+- [ ] Passkeys, magic links or OAuth offered as alternatives to memorized secrets
+- [ ] CAPTCHAs: AA allows object-recognition or the user's own content; AAA allows neither
+
+```html
+<input type="email" name="email" autocomplete="username" />
+<input type="password" name="password" autocomplete="current-password" />
+<input type="text" name="otp" inputmode="numeric" autocomplete="one-time-code" />
 ```

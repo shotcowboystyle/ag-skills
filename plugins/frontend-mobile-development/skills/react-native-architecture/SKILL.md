@@ -1,6 +1,7 @@
 ---
 name: react-native-architecture
 description: Build production React Native apps with Expo, navigation, native modules, offline sync, and cross-platform patterns. Use when developing mobile apps, implementing native integrations, or architecting React Native projects.
+last_verified: 2026-10-27
 ---
 
 # React Native Architecture
@@ -98,5 +99,5 @@ Detailed pattern documentation lives in `references/details.md`. Read that file 
 - **Don't inline styles** - Use StyleSheet.create for performance
 - **Don't fetch in render** - Use useEffect or React Query
 - **Don't ignore platform differences** - Test on both iOS and Android
-- **Don't store secrets in code** - Use environment variables
+- **Don't ship secrets in the app** - `EXPO_PUBLIC_*` vars, `app.config` `extra` and `.env` values are inlined into the JS bundle and readable by anyone who unzips the IPA/APK. Keep third-party API keys on your backend (proxy the call) and store only per-user tokens on device with `expo-secure-store` (Keychain / Android Keystore)
 - **Don't skip error boundaries** - Mobile crashes are unforgiving

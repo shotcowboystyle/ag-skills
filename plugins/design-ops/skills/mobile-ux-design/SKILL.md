@@ -148,7 +148,7 @@ Based on Steven Hoober's research on how people hold phones:
 
 ### Critical Performance Metrics
 - **LCP (Largest Contentful Paint):** < 2.5s — the primary content must load fast
-- **FID (First Input Delay):** < 100ms — the interface must respond immediately to touch
+- **INP (Interaction to Next Paint):** < 200ms — every tap must paint a visual response quickly (INP replaced FID as a Core Web Vital in March 2024)
 - **CLS (Cumulative Layout Shift):** < 0.1 — nothing should jump after rendering
 - **INP (Interaction to Next Paint):** < 200ms — every interaction must feel responsive
 

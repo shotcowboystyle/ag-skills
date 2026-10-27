@@ -41,11 +41,23 @@ export default async function ProductsPage({
 }
 
 // components/products/ProductList.tsx - Server Component
-async function getProducts(filters: ProductFilters) {
-  const res = await fetch(
-    `${process.env.API_URL}/products?${new URLSearchParams(filters)}`,
-    { next: { tags: ['products'] } }
-  )
+import { cacheLife, cacheTag } from 'next/cache'
+import { config } from '@/config'
+
+interface ProductFilters {
+  category?: string
+  sort?: 'price' | 'name' | 'date'
+  page: number
+}
+
+async function getProducts({ category, sort, page }: ProductFilters) {
+  'use cache'
+  cacheLife('minutes')
+  cacheTag('products')
+  const query = new URLSearchParams({ page: String(page) })
+  if (category) query.set('category', category)
+  if (sort) query.set('sort', sort)
+  const res = await fetch(`${config.apiUrl}/products?${query}`)
   if (!res.ok) throw new Error('Failed to fetch products')
   return res.json()
 }
@@ -110,7 +122,7 @@ export function AddToCartButton({ productId }: { productId: string }) {
 // app/actions/cart.ts
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -129,7 +141,7 @@ export async function addToCart(productId: string) {
       create: { sessionId, productId, quantity: 1 },
     });
 
-    revalidateTag("cart");
+    updateTag("cart"); // read-your-writes for this user
     return { success: true };
   } catch (error) {
     return { error: "Failed to add item to cart" };
@@ -399,30 +411,59 @@ export default async function ProductPage({ params }: Props) {
 }
 ```
 
-## Caching Strategies
+## Caching Strategies (Cache Components, Next.js 16)
 
-### Data Cache
+Enable with `cacheComponents: true` in `next.config.ts`. Nothing is cached implicitly: `fetch()` and DB calls run per request unless the enclosing function, component or file is marked `'use cache'`. This replaces the Next.js 14 model (`fetch` cached by default, `export const revalidate`, `unstable_cache`).
+
+### Marking cached data
 
 ```typescript
-// No cache (always fresh)
-fetch(url, { cache: "no-store" });
+// lib/products.ts
+import { cacheLife, cacheTag } from "next/cache";
 
-// Cache forever (static)
-fetch(url, { cache: "force-cache" });
+export async function getProduct(id: string) {
+  "use cache";
+  cacheLife("hours"); // built-ins: default, minutes, hours, days, weeks, max
+  cacheTag("products", `product-${id}`);
+  return db.product.findUnique({ where: { id } });
+}
 
-// ISR - revalidate after 60 seconds
-fetch(url, { next: { revalidate: 60 } });
+export async function getPrices() {
+  "use cache";
+  cacheLife({ stale: 60, revalidate: 300, expire: 3600 }); // seconds
+  return (await fetch("https://api.example.com/prices")).json();
+}
+```
 
-// Tag-based invalidation
-fetch(url, { next: { tags: ["products"] } });
+Arguments and closed-over values become part of the cache key, so they must be serializable. `cookies()`, `headers()` and `searchParams` cannot be read inside `'use cache'`: read them outside and pass the value in, or wrap the uncached component in `<Suspense>`.
 
-// Invalidate via Server Action
-("use server");
-import { revalidateTag, revalidatePath } from "next/cache";
+### Invalidating from a Server Action
+
+A `"use server"` directive must be the first statement of the file (or of the function body), never mid-file.
+
+```typescript
+// app/actions/products.ts
+"use server";
+
+import { revalidateTag, updateTag } from "next/cache";
 
 export async function updateProduct(id: string, data: ProductData) {
   await db.product.update({ where: { id }, data });
-  revalidateTag("products");
-  revalidatePath("/products");
+  updateTag(`product-${id}`); // expire now: this user sees the write on redirect
+}
+
+export async function importCatalog() {
+  await syncCatalogFromErp();
+  revalidateTag("products", "max"); // stale-while-revalidate for everyone else
 }
 ```
+
+| Old (Next.js 14)                        | Next.js 16                                      |
+| --------------------------------------- | ----------------------------------------------- |
+| `fetch(url)` cached by default          | Uncached; add `'use cache'` to opt in           |
+| `fetch(url, { next: { revalidate } })`  | `cacheLife({ revalidate })`                     |
+| `fetch(url, { next: { tags } })`        | `cacheTag(...)`                                 |
+| `unstable_cache(fn)`                    | `'use cache'` function                          |
+| `export const dynamic = 'force-static'` | `'use cache'` + `cacheLife('max')`              |
+| `revalidateTag(tag)`                    | `revalidateTag(tag, 'max')` or `updateTag(tag)` |
+| `experimental.ppr`                      | `cacheComponents: true`                         |

@@ -159,7 +159,7 @@ The goal is not "make it look like Linear." The goal is "understand why Linear's
 **How to apply the principle:** For any collaborative tool with versions/drafts, provide shareable preview links. Make it zero-effort to share a version for review. Embed previews in communication tools (Slack, GitHub, email).
 
 ### Signature Pattern 3: Analytics Dashboard (Minimal but Complete)
-**What they do:** Vercel's analytics shows exactly the metrics web developers care about: Core Web Vitals (LCP, FID, CLS), request count, bandwidth, error rate, and geographic distribution. No more, no less. Each metric has a time series chart, current value, and trend.
+**What they do:** Vercel's analytics shows exactly the metrics web developers care about: Core Web Vitals (LCP, INP, CLS), request count, bandwidth, error rate, and geographic distribution. No more, no less. Each metric has a time series chart, current value, and trend.
 **Why it works (psychology):** Opinionated curation. Rather than offering 50 metrics and letting users figure out which matter, Vercel curates the 6-8 metrics that define web performance. This is an editorial decision that saves users from metric overload.
 **How to apply the principle:** Curate your dashboard metrics. Show the 5-8 metrics that actually matter for your users' goals. Do not show everything — show the right things. Offer deeper analytics for users who want to explore, but default to the curated view.
 

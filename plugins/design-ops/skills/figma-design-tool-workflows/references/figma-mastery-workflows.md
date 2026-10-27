@@ -469,7 +469,7 @@ Provides realistic placeholder content — names, avatars, addresses, dates, par
 
 Comprehensive accessibility checking:
 
-- **Contrast checker**: WCAG 2.1 AA and AAA compliance for text and UI elements against their backgrounds.
+- **Contrast checker**: WCAG 2.2 AA and AAA compliance for text and UI elements against their backgrounds.
 - **Vision simulator**: Preview designs as seen by people with protanopia, deuteranopia, tritanopia, and other vision differences.
 - **Alt text annotations**: Add alt text to images for documentation purposes.
 - **Touch target checker**: Verify that interactive elements meet minimum touch target sizes (44x44pt iOS, 48x48dp Android).

@@ -34,7 +34,8 @@ Reference for 183 local AI agents organized by category. The model column lists 
 | [design-ops-ux-architect](../plugins/design-ops/agents/ux-architect.md)                  | inherit | Flows, screen inventory, IA from real app patterns      |
 | [ui-ux-designer](../plugins/multi-platform-apps/agents/ui-ux-designer.md)                | sonnet  | Interface design, wireframes, design systems            |
 | [ui-visual-validator](../plugins/accessibility-compliance/agents/ui-visual-validator.md) | sonnet  | Visual regression testing and UI verification           |
-| [mobile-developer](../plugins/multi-platform-apps/agents/mobile-developer.md)            | inherit | React Native and Flutter application development        |
+| [mobile-developer](../plugins/frontend-mobile-development/agents/mobile-developer.md)    | inherit | React Native and Expo application development           |
+| [android-developer](../plugins/multi-platform-apps/agents/android-developer.md)          | inherit | Native Android development with Kotlin/Compose          |
 | [ios-developer](../plugins/multi-platform-apps/agents/ios-developer.md)                  | inherit | Native iOS development with Swift/SwiftUI               |
 | [flutter-expert](../plugins/multi-platform-apps/agents/flutter-expert.md)                | inherit | Advanced Flutter development with state management      |
 

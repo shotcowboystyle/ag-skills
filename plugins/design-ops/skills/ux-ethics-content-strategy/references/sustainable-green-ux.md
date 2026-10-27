@@ -349,7 +349,7 @@ Use this 20-point checklist before every release.
 | 14 | No autoplay video or audio | Manual play only |
 | 15 | Poster images on all videos | All video elements |
 | 16 | Semantic HTML validated | All pages |
-| 17 | Accessibility audit passed (WCAG 2.1 AA) | All pages |
+| 17 | Accessibility audit passed (WCAG 2.2 AA) | All pages |
 | 18 | Carbon per page view measured | Under 0.5g CO2 |
 | 19 | Green hosting verified | Renewable energy host |
 | 20 | Carbon budget integrated into CI/CD pipeline | Automated checks |

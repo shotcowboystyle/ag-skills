@@ -108,7 +108,7 @@
 
 ### Compliance Target
 
-{{ACCESSIBILITY_STANDARD}} (e.g., WCAG 2.1 AA)
+{{ACCESSIBILITY_STANDARD}} (e.g., WCAG 2.2 AA)
 
 ### Core Requirements
 

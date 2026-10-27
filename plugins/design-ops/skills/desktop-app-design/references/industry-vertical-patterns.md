@@ -261,7 +261,7 @@ Implement threaded discussions with reply, quote, and @mention support. Display 
 
 ### Accessibility in Education
 
-Meet WCAG 2.1 AA as a minimum; target WCAG 2.1 AAA for publicly funded institutions. Provide captions and transcripts for all video and audio content. Offer alternative assessment formats (extended time, text-to-speech compatibility, alternative response formats). Ensure all interactive elements are fully keyboard navigable. Test with screen readers (NVDA, JAWS, VoiceOver) for every release.
+Meet WCAG 2.2 AA as a minimum (ADA Title II requires WCAG 2.1 AA for US public institutions); target WCAG 2.2 AAA for publicly funded institutions. Provide captions and transcripts for all video and audio content. Offer alternative assessment formats (extended time, text-to-speech compatibility, alternative response formats). Ensure all interactive elements are fully keyboard navigable. Test with screen readers (NVDA, JAWS, VoiceOver) for every release.
 
 ---
 

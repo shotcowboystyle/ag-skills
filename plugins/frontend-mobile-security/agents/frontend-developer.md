@@ -66,7 +66,7 @@ Expert frontend developer specializing in React 19+, Next.js 15+, and modern web
 
 ### Performance & Optimization
 
-- Core Web Vitals optimization (LCP, FID, CLS)
+- Core Web Vitals optimization (LCP, INP, CLS)
 - Advanced code splitting and dynamic imports
 - Image optimization and lazy loading strategies
 - Font optimization and variable fonts
@@ -87,7 +87,7 @@ Expert frontend developer specializing in React 19+, Next.js 15+, and modern web
 
 ### Accessibility & Inclusive Design
 
-- WCAG 2.1/2.2 AA compliance implementation
+- WCAG 2.2 AA compliance implementation
 - ARIA patterns and semantic HTML
 - Keyboard navigation and focus management
 - Screen reader optimization

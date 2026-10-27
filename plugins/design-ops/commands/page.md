@@ -537,7 +537,7 @@ Every page MUST include:
 
 5. **Core Web Vitals targets**:
    - LCP < 2.5s (hero image/text renders fast)
-   - FID < 100ms (no heavy JS blocking main thread)
+   - INP < 200ms (no long tasks blocking the main thread)
    - CLS < 0.1 (all images have dimensions, fonts don't shift layout)
 
 ### Step 7 — SEO and Meta

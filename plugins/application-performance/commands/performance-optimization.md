@@ -146,7 +146,7 @@ Task:
     ## Performance Baselines
     [Insert contents of .performance-optimization/01-profiling.md]
 
-    Measure Core Web Vitals (LCP, FID, CLS), page load times, time to interactive,
+    Measure Core Web Vitals (LCP, INP, CLS), page load times, time to interactive,
     and perceived performance. Use Real User Monitoring (RUM) data if available.
     Identify user journeys with poor performance and their business impact.
 
@@ -666,7 +666,7 @@ Performance optimization complete: $TARGET
 
 ## Success Criteria
 - Response Time: P50 < 200ms, P95 < 1s, P99 < 2s for critical endpoints
-- Core Web Vitals: LCP < 2.5s, FID < 100ms, CLS < 0.1
+- Core Web Vitals: LCP < 2.5s, INP < 200ms, CLS < 0.1
 - Throughput: Support 2x current peak load with <1% error rate
 - Database Performance: Query P95 < 100ms, no queries > 1s
 - Resource Utilization: CPU < 70%, Memory < 80% under normal load

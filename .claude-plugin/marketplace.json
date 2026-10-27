@@ -14,7 +14,7 @@
       "name": "accessibility-compliance",
       "source": "./plugins/accessibility-compliance",
       "description": "WCAG accessibility auditing, compliance validation, UI testing for screen readers, keyboard navigation, and inclusive design",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -39,7 +39,7 @@
     {
       "name": "agent-teams",
       "description": "Orchestrate multi-agent teams for parallel code review, hypothesis-driven debugging, and coordinated feature development using Claude Code's Agent Teams",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -111,7 +111,7 @@
       "name": "application-performance",
       "source": "./plugins/application-performance",
       "description": "Application profiling, performance optimization, and observability for frontend and backend systems",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -278,7 +278,7 @@
     {
       "name": "conductor",
       "description": "Context-Driven Development plugin that transforms Claude Code into a project management tool with structured workflow: Context \u2192 Spec & Plan \u2192 Implement",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -395,7 +395,7 @@
     {
       "name": "design-ops",
       "description": "UX/UI design ops \u2014 briefs, tokens, components, screens and pages graded against live Awwwards and Mobbin references, plus Material 3/Compose, React Native, and web component design. Absorbs the former ui-design plugin.",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "author": {
         "name": "Curtis Blanton",
         "email": "public@shotcowboystyle.com",
@@ -550,7 +550,7 @@
       "name": "frontend-mobile-development",
       "source": "./plugins/frontend-mobile-development",
       "description": "Frontend UI development and mobile application implementation across platforms",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -562,7 +562,7 @@
     {
       "name": "frontend-mobile-security",
       "description": "XSS prevention, CSRF protection, content security policies, mobile app security, and secure storage patterns",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -589,7 +589,7 @@
       "name": "full-stack-orchestration",
       "source": "./plugins/full-stack-orchestration",
       "description": "End-to-end feature orchestration with testing, security, performance, and deployment",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -824,7 +824,7 @@
       "name": "multi-platform-apps",
       "source": "./plugins/multi-platform-apps",
       "description": "Cross-platform application development coordinating web, iOS, Android, and desktop implementations",
-      "version": "1.3.1",
+      "version": "1.3.2",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -836,7 +836,7 @@
     {
       "name": "observability-monitoring",
       "description": "Metrics collection, logging infrastructure, distributed tracing, SLO implementation, and monitoring dashboards",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -876,7 +876,7 @@
       "name": "performance-testing-review",
       "source": "./plugins/performance-testing-review",
       "description": "Performance analysis, test coverage review, and AI-powered code quality assessment",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"

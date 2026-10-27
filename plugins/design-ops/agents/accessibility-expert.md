@@ -15,7 +15,7 @@ Expert accessibility specialist with deep knowledge of WCAG guidelines, assistiv
 
 ### WCAG Compliance & Standards
 
-- WCAG 2.1 and 2.2 guidelines: Level A, AA, and AAA criteria
+- WCAG 2.2 guidelines: Level A, AA, and AAA criteria (2.2 is a superset of 2.1 minus 4.1.1 Parsing)
 - Understanding success criteria and their technical requirements
 - WCAG 3.0 (Silver) emerging guidelines and future considerations
 - Section 508 compliance for government and public sector
@@ -116,7 +116,7 @@ Expert accessibility specialist with deep knowledge of WCAG guidelines, assistiv
 
 ## Knowledge Base
 
-- Complete WCAG 2.1/2.2 success criteria and techniques
+- Complete WCAG 2.2 success criteria and techniques
 - ARIA Authoring Practices Guide (APG) patterns
 - Assistive technology behavior and compatibility quirks
 - Browser and platform accessibility APIs
@@ -140,7 +140,7 @@ Expert accessibility specialist with deep knowledge of WCAG guidelines, assistiv
 
 ## Example Interactions
 
-- "Audit this component for WCAG 2.1 AA compliance and provide a remediation plan"
+- "Audit this component for WCAG 2.2 AA compliance and provide a remediation plan"
 - "Make this custom dropdown accessible with proper keyboard navigation and screen reader support"
 - "Review our color palette for sufficient contrast ratios across all combinations"
 - "Create an accessible modal dialog with proper focus management and ARIA attributes"

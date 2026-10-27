@@ -60,7 +60,7 @@ Perform deep, focused code review on your assigned dimension. Produce findings i
 
 ### Accessibility
 
-- WCAG 2.1 AA compliance
+- WCAG 2.2 AA compliance
 - Semantic HTML and ARIA usage
 - Keyboard navigation support
 - Screen reader compatibility
