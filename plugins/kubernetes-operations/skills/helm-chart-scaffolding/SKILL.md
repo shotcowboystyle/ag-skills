@@ -1,6 +1,7 @@
 ---
 name: helm-chart-scaffolding
 description: Design, organize, and manage Helm charts for templating and packaging Kubernetes applications with reusable configurations. Use when creating Helm charts, packaging Kubernetes applications, or implementing templated deployments.
+last_verified: 2026-10-27
 ---
 
 # Helm Chart Scaffolding
@@ -22,9 +23,42 @@ Use this skill when you need to:
 - Set up Helm chart repositories
 - Follow Helm best practices and conventions
 
-## Detailed patterns and worked examples
+## Procedure
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+1. **Scaffold**: `helm create my-app`, then delete the templates the app does
+   not need. Fill `Chart.yaml` from `assets/Chart.yaml.template` with
+   `apiVersion: v2`, a SemVer `version` (the chart) and `appVersion` (the image).
+2. **Design `values.yaml`** from `assets/values.yaml.template`: every value
+   commented, safe defaults (non-root security context, resource requests,
+   probes), and a pinned image tag. Add `values.schema.json` so bad values fail
+   at install time instead of rendering broken manifests.
+3. **Template**: put names, labels and selectors in `_helpers.tpl` and include
+   them everywhere; gate optional resources (Ingress, HPA) behind `enabled`
+   flags; quote strings and use `required` for values with no safe default.
+4. **Pin dependencies** in `Chart.yaml` with exact or tightly bounded versions,
+   then `helm dependency update` and commit `Chart.lock`.
+5. **Validate offline**, with no cluster needed:
+
+   ```bash
+   helm lint ./my-app
+   helm template my-app ./my-app | kubeconform -strict -summary -kubernetes-version 1.37.0
+   helm template my-app ./my-app -f values-prod.yaml | kubeconform -strict -summary -kubernetes-version 1.37.0
+   ```
+
+   or run `scripts/validate-chart.sh ./my-app`, which also checks structure,
+   security context, resources and probes.
+6. **Validate against a cluster** when one is available:
+   `helm install my-app ./my-app --dry-run=server`. On Helm 3, every
+   `helm install --dry-run` contacts the cluster, so use `helm template` for
+   offline checks.
+7. **Package and publish**: `helm package`, then `helm push` to an OCI registry.
+
+## References
+
+- `references/details.md`: full workflow with worked examples, multi-environment
+  values, hooks and tests, common template patterns
+- `references/chart-structure.md`: directory layout, `Chart.yaml` fields,
+  dependencies, CRDs, versioning
 
 ## Best Practices
 
@@ -57,7 +91,7 @@ helm dependency list
 **Installation failures:**
 
 ```bash
-helm install my-app ./my-app --dry-run --debug
+helm install my-app ./my-app --dry-run=server --debug
 kubectl get events --sort-by='.lastTimestamp'
 ```
 

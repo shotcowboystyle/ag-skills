@@ -2,24 +2,37 @@
 
 ## Installation Methods
 
+Pin a release tag rather than `stable`, and apply server-side: some Argo CD CRDs
+exceed the annotation size limit of client-side `kubectl apply`. Versions below
+were current on 2026-10-27; check the
+[releases](https://github.com/argoproj/argo-cd/releases) page.
+
 ### 1. Standard Installation
 
 ```bash
+ARGOCD_VERSION=v3.5.6
 kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply -n argocd --server-side --force-conflicts \
+  -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/install.yaml"
 ```
 
 ### 2. High Availability Installation
 
+Needs at least three nodes for the pod anti-affinity rules.
+
 ```bash
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/ha/install.yaml
+kubectl apply -n argocd --server-side --force-conflicts \
+  -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/ha/install.yaml"
 ```
 
 ### 3. Helm Installation
 
+The chart has its own version line; chart 10.11.6 ships Argo CD v3.5.6
+(`helm search repo argo/argo-cd --versions` lists the mapping).
+
 ```bash
 helm repo add argo https://argoproj.github.io/argo-helm
-helm install argocd argo/argo-cd -n argocd --create-namespace
+helm install argocd argo/argo-cd --version 10.11.6 -n argocd --create-namespace
 ```
 
 ## Initial Configuration
@@ -34,36 +47,73 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 argocd admin initial-password -n argocd
 ```
 
-### Configure Ingress
+### Rotate the Admin Password
+
+The initial password is stored in plain text in `argocd-initial-admin-secret`.
+Change it, then delete the secret (Argo CD only recreates it if a new admin
+password has to be generated):
+
+```bash
+argocd login localhost:8080 --username admin
+argocd account update-password
+kubectl -n argocd delete secret argocd-initial-admin-secret
+```
+
+After SSO is configured, disable the local admin user with
+`admin.enabled: "false"` in `argocd-cm`.
+
+### Expose with Gateway API
+
+ingress-nginx was retired in March 2026, so expose the API server through a
+Gateway API implementation. This example terminates TLS at an existing
+`Gateway` (`cluster-gateway` in namespace `gateway`, with an HTTPS listener named
+`https`) and runs `argocd-server` without its own TLS. Set
+`server.insecure: "true"` in the `argocd-cmd-params-cm` ConfigMap and restart
+`argocd-server`, or keep TLS to the backend with a `BackendTLSPolicy`.
 
 ```yaml
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
-  name: argocd-server-ingress
+  name: argocd-http
   namespace: argocd
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
-  ingressClassName: nginx
+  parentRefs:
+    - name: cluster-gateway
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - argocd.example.com
   rules:
-    - host: argocd.example.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-server
-                port:
-                  number: 443
-  tls:
-    - hosts:
-        - argocd.example.com
-      secretName: argocd-secret
+    - backendRefs:
+        - name: argocd-server
+          port: 80
+---
+# The argocd CLI works best over gRPC; give it its own hostname
+apiVersion: gateway.networking.k8s.io/v1
+kind: GRPCRoute
+metadata:
+  name: argocd-grpc
+  namespace: argocd
+spec:
+  parentRefs:
+    - name: cluster-gateway
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - grpc.argocd.example.com
+  rules:
+    - backendRefs:
+        - name: argocd-server
+          port: 443
 ```
+
+For the gRPC route, mark the `argocd-server` Service's `https` port as HTTP/2
+with `appProtocol: kubernetes.io/h2c` (Helm value
+`server.service.servicePortHttpsAppProtocol`).
+
+For other setups (TLS passthrough, other ingress controllers), see the Argo CD
+[ingress guide](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/).
 
 ## CLI Configuration
 
@@ -107,8 +157,9 @@ data:
         id: github
         name: GitHub
         config:
-          clientID: $GITHUB_CLIENT_ID
-          clientSecret: $GITHUB_CLIENT_SECRET
+          clientID: <github-oauth-client-id>
+          # Resolved from the dex.github.clientSecret key in the argocd-secret Secret
+          clientSecret: $dex.github.clientSecret
           orgs:
           - name: my-org
 ```

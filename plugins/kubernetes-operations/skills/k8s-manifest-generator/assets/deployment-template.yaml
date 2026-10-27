@@ -66,6 +66,9 @@ spec:
           allowPrivilegeEscalation: false
           runAsNonRoot: true
           runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL
 
       containers:
       - name: <container-name>

@@ -1,6 +1,7 @@
 ---
 name: mtls-configuration
 description: Configure mutual TLS (mTLS) for zero-trust service-to-service communication. Use when implementing zero-trust networking, certificate management, or securing internal service communication.
+last_verified: 2026-10-27
 ---
 
 # mTLS Configuration

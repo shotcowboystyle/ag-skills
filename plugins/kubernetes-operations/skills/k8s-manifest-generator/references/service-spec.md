@@ -412,7 +412,7 @@ Kubernetes uses random selection by default. For advanced load balancing:
 **Service Mesh (Istio example):**
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: my-destination-rule
@@ -447,7 +447,7 @@ spec:
 ### Istio Virtual Service
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: my-service
@@ -572,26 +572,34 @@ spec:
   type: ExternalName
   externalName: prod-db.cxyz.us-west-2.rds.amazonaws.com
 ---
-# Or with Endpoints for IP-based external service
+# Or a selector-less Service with a manual EndpointSlice for an IP-based
+# external service (the v1 Endpoints API is deprecated since Kubernetes 1.33)
 apiVersion: v1
 kind: Service
 metadata:
   name: external-api
 spec:
   ports:
-    - port: 443
+    - name: https
+      port: 443
       targetPort: 443
       protocol: TCP
 ---
-apiVersion: v1
-kind: Endpoints
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
 metadata:
-  name: external-api
-subsets:
+  name: external-api-1
+  labels:
+    kubernetes.io/service-name: external-api # links the slice to the Service
+    endpointslice.kubernetes.io/managed-by: cluster-admins # anything except the controller's own value
+addressType: IPv4
+ports:
+  - name: https # must match the Service port name
+    port: 443
+    protocol: TCP
+endpoints:
   - addresses:
-      - ip: 203.0.113.100
-    ports:
-      - port: 443
+      - "203.0.113.100"
 ```
 
 ### Pattern 5: Multi-Port Service with Metrics
@@ -700,8 +708,8 @@ spec:
 # Check service exists
 kubectl get service <service-name>
 
-# Check endpoints (should show pod IPs)
-kubectl get endpoints <service-name>
+# Check endpoint slices (should show ready pod IPs)
+kubectl get endpointslices -l kubernetes.io/service-name=<service-name>
 
 # Describe service
 kubectl describe service <service-name>
@@ -713,7 +721,7 @@ kubectl get pods -l app=<app-name>
 **Common issues:**
 
 - Selector doesn't match pod labels
-- No pods running (endpoints empty)
+- No ready pods (EndpointSlice has no ready endpoints)
 - Ports misconfigured
 - Network policy blocking traffic
 

@@ -1,192 +1,72 @@
 ---
 name: k8s-security-policies
-description: Implement Kubernetes security policies including NetworkPolicy, PodSecurityPolicy, and RBAC for production-grade security. Use when securing Kubernetes clusters, implementing network isolation, or enforcing pod security standards.
+description: Implement Kubernetes security policies with Pod Security Admission, NetworkPolicy, RBAC and pod security contexts. Use when securing Kubernetes clusters, implementing network isolation, enforcing pod security standards, or migrating off PodSecurityPolicy.
+last_verified: 2026-10-27
 ---
 
 # Kubernetes Security Policies
 
-Comprehensive guide for implementing NetworkPolicy, PodSecurityPolicy, RBAC, and Pod Security Standards in Kubernetes.
+Layered workload security with built-in Kubernetes APIs: Pod Security Admission
+(PSA) for what pods may run, NetworkPolicy for who they may talk to, RBAC for
+what identities may do, and security contexts on the pods themselves.
 
-## Purpose
+PodSecurityPolicy was removed in Kubernetes 1.25. Pod Security Admission, built
+into the API server, replaces it. Do not write PSP manifests.
 
-Implement defense-in-depth security for Kubernetes clusters using network policies, pod security standards, and RBAC.
+## Procedure
 
-## When to Use This Skill
+1. **Pick a Pod Security level per namespace.** `restricted` for application
+   namespaces, `baseline` where a workload genuinely needs more, `privileged`
+   only for system namespaces (CNI, storage, node agents).
+2. **Dry-run it before enforcing.** The server reports every existing pod that
+   would violate the level, without changing anything:
 
-- Implement network segmentation
-- Configure pod security standards
-- Set up RBAC for least-privilege access
-- Create security policies for compliance
-- Implement admission control
-- Secure multi-tenant clusters
+   ```bash
+   kubectl label --dry-run=server --overwrite ns production \
+     pod-security.kubernetes.io/enforce=restricted
+   ```
 
-## Pod Security Standards
+3. **Label the namespace** (below). Start with `warn` and `audit` if pods still
+   violate, then add `enforce`.
+4. **Fix pod specs** with a restricted security context (below) until the
+   dry-run is clean.
+5. **Default-deny traffic**, then allow DNS and each required flow
+   (`assets/network-policy-template.yaml`). Confirm the CNI enforces
+   NetworkPolicy; some do not, and then policies are silently ignored.
+6. **Give each workload its own ServiceAccount** with a namespaced Role that
+   lists only the verbs and resources it uses (`references/rbac-patterns.md`).
+7. **Verify** with `kubectl auth can-i` and a test pod (Troubleshooting).
 
-### 1. Privileged (Unrestricted)
-
-```yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: privileged-ns
-  labels:
-    pod-security.kubernetes.io/enforce: privileged
-    pod-security.kubernetes.io/audit: privileged
-    pod-security.kubernetes.io/warn: privileged
-```
-
-### 2. Baseline (Minimally restrictive)
-
-```yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: baseline-ns
-  labels:
-    pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/audit: baseline
-    pod-security.kubernetes.io/warn: baseline
-```
-
-### 3. Restricted (Most restrictive)
+## Pod Security Admission
 
 ```yaml
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: restricted-ns
+  name: production
   labels:
     pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/audit: restricted
+    # Pin the policy version so a cluster upgrade can't tighten it unannounced
+    pod-security.kubernetes.io/enforce-version: v1.37
     pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/warn-version: latest
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/audit-version: latest
 ```
 
-## Network Policies
+`warn` and `audit` at `latest` show what the next policy version will reject
+before you move `enforce-version` forward.
 
-### Default Deny All
+## Restricted Pod Security Context
 
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: default-deny-all
-  namespace: production
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
-    - Egress
-```
-
-### Allow Frontend to Backend
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-frontend-to-backend
-  namespace: production
-spec:
-  podSelector:
-    matchLabels:
-      app: backend
-  policyTypes:
-    - Ingress
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              app: frontend
-      ports:
-        - protocol: TCP
-          port: 8080
-```
-
-### Allow DNS
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-dns
-  namespace: production
-spec:
-  podSelector: {}
-  policyTypes:
-    - Egress
-  egress:
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              name: kube-system
-      ports:
-        - protocol: UDP
-          port: 53
-```
-
-**Reference:** See `assets/network-policy-template.yaml`
-
-## RBAC Configuration
-
-### Role (Namespace-scoped)
-
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: pod-reader
-  namespace: production
-rules:
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get", "watch", "list"]
-```
-
-### ClusterRole (Cluster-wide)
-
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: secret-reader
-rules:
-  - apiGroups: [""]
-    resources: ["secrets"]
-    verbs: ["get", "watch", "list"]
-```
-
-### RoleBinding
-
-```yaml
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: read-pods
-  namespace: production
-subjects:
-  - kind: User
-    name: jane
-    apiGroup: rbac.authorization.k8s.io
-  - kind: ServiceAccount
-    name: default
-    namespace: production
-roleRef:
-  kind: Role
-  name: pod-reader
-  apiGroup: rbac.authorization.k8s.io
-```
-
-**Reference:** See `references/rbac-patterns.md`
-
-## Pod Security Context
-
-### Restricted Pod
+The minimum a pod needs to pass the `restricted` level:
 
 ```yaml
 apiVersion: v1
 kind: Pod
 metadata:
   name: secure-pod
+  namespace: production
 spec:
   securityContext:
     runAsNonRoot: true
@@ -196,150 +76,121 @@ spec:
       type: RuntimeDefault
   containers:
     - name: app
-      image: myapp:1.0
+      image: registry.example.com/myapp:1.0.0
       securityContext:
         allowPrivilegeEscalation: false
-        readOnlyRootFilesystem: true
+        readOnlyRootFilesystem: true # not required by PSA, but recommended
         capabilities:
-          drop:
-            - ALL
+          drop: ["ALL"]
 ```
 
-## Policy Enforcement with OPA Gatekeeper
-
-### ConstraintTemplate
+## Network Policies
 
 ```yaml
-apiVersion: templates.gatekeeper.sh/v1
-kind: ConstraintTemplate
+# Deny all ingress and egress for every pod in the namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
 metadata:
-  name: k8srequiredlabels
-spec:
-  crd:
-    spec:
-      names:
-        kind: K8sRequiredLabels
-      validation:
-        openAPIV3Schema:
-          type: object
-          properties:
-            labels:
-              type: array
-              items:
-                type: string
-  targets:
-    - target: admission.k8s.gatekeeper.sh
-      rego: |
-        package k8srequiredlabels
-        violation[{"msg": msg, "details": {"missing_labels": missing}}] {
-          provided := {label | input.review.object.metadata.labels[label]}
-          required := {label | label := input.parameters.labels[_]}
-          missing := required - provided
-          count(missing) > 0
-          msg := sprintf("missing required labels: %v", [missing])
-        }
-```
-
-### Constraint
-
-```yaml
-apiVersion: constraints.gatekeeper.sh/v1beta1
-kind: K8sRequiredLabels
-metadata:
-  name: require-app-label
-spec:
-  match:
-    kinds:
-      - apiGroups: ["apps"]
-        kinds: ["Deployment"]
-  parameters:
-    labels: ["app", "environment"]
-```
-
-## Service Mesh Security (Istio)
-
-### PeerAuthentication (mTLS)
-
-```yaml
-apiVersion: security.istio.io/v1beta1
-kind: PeerAuthentication
-metadata:
-  name: default
+  name: default-deny-all
   namespace: production
 spec:
-  mtls:
-    mode: STRICT
-```
-
-### AuthorizationPolicy
-
-```yaml
-apiVersion: security.istio.io/v1beta1
-kind: AuthorizationPolicy
+  podSelector: {}
+  policyTypes: ["Ingress", "Egress"]
+---
+# Allow DNS to the cluster DNS pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
 metadata:
-  name: allow-frontend
+  name: allow-dns
   namespace: production
 spec:
-  selector:
-    matchLabels:
-      app: backend
-  action: ALLOW
-  rules:
-    - from:
-        - source:
-            principals: ["cluster.local/ns/production/sa/frontend"]
+  podSelector: {}
+  policyTypes: ["Egress"]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
 ```
 
-## Best Practices
+Select namespaces with the `kubernetes.io/metadata.name` label, which the API
+server sets on every namespace. A hand-added `name:` label may not exist. More
+flows (frontend to backend, ingress controller, monitoring, external HTTPS,
+database) are in `assets/network-policy-template.yaml`.
 
-1. **Implement Pod Security Standards** at namespace level
-2. **Use Network Policies** for network segmentation
-3. **Apply least-privilege RBAC** for all service accounts
-4. **Enable admission control** (OPA Gatekeeper/Kyverno)
-5. **Run containers as non-root**
-6. **Use read-only root filesystem**
-7. **Drop all capabilities** unless needed
-8. **Implement resource quotas** and limit ranges
-9. **Enable audit logging** for security events
-10. **Regular security scanning** of images
+## RBAC
 
-## Compliance Frameworks
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-app
+  namespace: production
+automountServiceAccountToken: false # opt in per pod only if it calls the API
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: my-app
+  namespace: production
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["my-app-config"]
+    verbs: ["get", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: my-app
+  namespace: production
+subjects:
+  - kind: ServiceAccount
+    name: my-app
+    namespace: production
+roleRef:
+  kind: Role
+  name: my-app
+  apiGroup: rbac.authorization.k8s.io
+```
 
-### CIS Kubernetes Benchmark
+Prefer Roles over ClusterRoles, name resources where you can, and avoid `*`.
+`list` and `watch` on Secrets expose every Secret's contents, not only names.
+More patterns: `references/rbac-patterns.md`.
 
-- Use RBAC authorization
-- Enable audit logging
-- Use Pod Security Standards
-- Configure network policies
-- Implement secrets encryption at rest
-- Enable node authentication
+## Beyond the built-ins
 
-### NIST Cybersecurity Framework
-
-- Implement defense in depth
-- Use network segmentation
-- Configure security monitoring
-- Implement access controls
-- Enable logging and monitoring
+- **Custom admission rules** (required labels, allowed registries):
+  ValidatingAdmissionPolicy (`admissionregistration.k8s.io/v1`, GA since 1.30)
+  runs CEL in the API server with no extra component. Kyverno or OPA Gatekeeper
+  add mutation, image verification and policy reports.
+- **Service mesh mTLS and L7 authorization**: see the `mtls-configuration`
+  skill in the `cloud-infrastructure` plugin.
 
 ## Troubleshooting
 
-**NetworkPolicy not working:**
-
 ```bash
-# Check if CNI supports NetworkPolicy
-kubectl get nodes -o wide
-kubectl describe networkpolicy <name>
+# Which pods in a namespace would a level reject?
+kubectl label --dry-run=server --overwrite ns <ns> pod-security.kubernetes.io/enforce=restricted
+
+# Pod rejected at admission: the event names the failing check
+kubectl get events -n <ns> --field-selector reason=FailedCreate
+
+# Effective permissions of a ServiceAccount
+kubectl auth can-i --list --as system:serviceaccount:<ns>:<sa> -n <ns>
+
+# NetworkPolicy has no effect: test from a pod the policy selects
+kubectl run nettest -n <ns> --rm -it --image=busybox:1.37 --labels app=frontend -- \
+  wget -qO- -T 3 http://backend:8080
 ```
-
-**RBAC permission denied:**
-
-```bash
-# Check effective permissions
-kubectl auth can-i list pods --as system:serviceaccount:default:my-sa
-kubectl auth can-i '*' '*' --as system:serviceaccount:default:my-sa
-```
-
 
 ## Related Skills
 

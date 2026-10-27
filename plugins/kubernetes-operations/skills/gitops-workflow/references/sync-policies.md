@@ -58,7 +58,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: my-app
+  namespace: flux-system
 spec:
+  sourceRef:
+    kind: GitRepository
+    name: my-app
+  path: ./deploy
   interval: 5m
   prune: true
   wait: true
@@ -74,7 +79,11 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: my-app
+  namespace: flux-system
 spec:
+  url: https://github.com/org/my-app
+  ref:
+    branch: main
   interval: 1m
   timeout: 60s
 ```

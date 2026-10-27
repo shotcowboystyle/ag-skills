@@ -1,6 +1,7 @@
 ---
 name: linkerd-patterns
 description: Implement Linkerd service mesh patterns for lightweight, security-focused service mesh deployments. Use when setting up Linkerd, configuring traffic policies, or implementing zero-trust networking with minimal overhead.
+last_verified: 2026-10-27
 ---
 
 # Linkerd Patterns
@@ -11,9 +12,8 @@ Production patterns for Linkerd service mesh - the lightweight, security-first s
 
 - Setting up a lightweight service mesh
 - Implementing automatic mTLS
-- Configuring traffic splits for canary deployments
-- Setting up service profiles for per-route metrics
-- Implementing retries and timeouts
+- Configuring weighted traffic splits for canary deployments
+- Per-route routing, retries and timeouts with Gateway API routes
 - Multi-cluster service mesh
 
 ## Core Concepts
@@ -22,10 +22,10 @@ Production patterns for Linkerd service mesh - the lightweight, security-first s
 
 ```
 ┌─────────────────────────────────────────────┐
-│                Control Plane                 │
-│  ┌─────────┐ ┌──────────┐ ┌──────────────┐ │
-│  │ destiny │ │ identity │ │ proxy-inject │ │
-│  └─────────┘ └──────────┘ └──────────────┘ │
+│                Control Plane                │
+│ ┌───────────┐ ┌──────────┐ ┌────────────┐   │
+│ │destination│ │ identity │ │proxy-inject│   │
+│ └───────────┘ └──────────┘ └────────────┘   │
 └─────────────────────────────────────────────┘
                       │
 ┌─────────────────────────────────────────────┐
@@ -42,24 +42,39 @@ Production patterns for Linkerd service mesh - the lightweight, security-first s
 
 ### 2. Key Resources
 
-| Resource                | Purpose                              |
-| ----------------------- | ------------------------------------ |
-| **ServiceProfile**      | Per-route metrics, retries, timeouts |
-| **TrafficSplit**        | Canary deployments, A/B testing      |
-| **Server**              | Define server-side policies          |
-| **ServerAuthorization** | Access control policies              |
+| Resource                                     | Purpose                                                 |
+| -------------------------------------------- | ------------------------------------------------------- |
+| **HTTPRoute / GRPCRoute** (Gateway API)      | Routing, weighted splits, retries and timeouts per route |
+| **Server**                                   | Names a port on a set of pods for policy                |
+| **AuthorizationPolicy**                      | Allows traffic to a Server, route or namespace          |
+| **MeshTLSAuthentication / NetworkAuthentication** | Who the policy allows: mesh identities or CIDRs     |
+
+Linkerd's routing and policy features use the Kubernetes Gateway API types. SMI
+`TrafficSplit` (the SMI project is archived) and the `linkerd-smi` extension are
+not used for new setups. ServiceProfiles still work, but new features land on
+HTTPRoute/GRPCRoute, and a ServiceProfile on a Service overrides any route-level
+retry and timeout annotations.
 
 ## Templates
 
 ### Template 1: Mesh Installation
 
-Use a CLI version compatible with the target cluster. The example uses Homebrew;
-for other systems, follow the [official installation guide](https://linkerd.io/docs/getting-started/).
+The Linkerd project publishes open-source *edge* releases (`edge-YY.M.N`);
+versioned stable releases come from vendors. Use a CLI version that matches the
+control plane. The example uses Homebrew; for other systems, follow the
+[official installation guide](https://linkerd.io/2-edge/getting-started/).
 
 ```bash
 # Install the CLI with Homebrew
 brew install linkerd
 linkerd version
+
+# Linkerd needs the Gateway API CRDs. Check whether they are already installed
+# (prints the bundle version) and that it is in Linkerd's compatibility table
+kubectl get crds/httproutes.gateway.networking.k8s.io \
+  -o "jsonpath={.metadata.annotations.gateway\.networking\.k8s\.io/bundle-version}"
+# If not found, install a compatible version (1.5.1 at the time of writing)
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
 
 # Validate cluster
 linkerd check --pre
@@ -93,169 +108,89 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-app
-  annotations:
-    linkerd.io/inject: enabled
 spec:
+  selector:
+    matchLabels:
+      app: my-app
   template:
     metadata:
+      labels:
+        app: my-app
       annotations:
-        linkerd.io/inject: enabled
+        linkerd.io/inject: enabled # on the pod template, not the Deployment
+    spec:
+      containers:
+        - name: app
+          image: registry.example.com/my-app:1.0.0
 ```
 
-### Template 3: Service Profile with Retries
+### Template 3: Retries and Timeouts on a Route
+
+Retries are opt-in and only safe for idempotent requests, so put them on a
+route that matches only those requests.
 
 ```yaml
-apiVersion: linkerd.io/v1alpha2
-kind: ServiceProfile
-metadata:
-  name: my-service.my-namespace.svc.cluster.local
-  namespace: my-namespace
-spec:
-  routes:
-    - name: GET /api/users
-      condition:
-        method: GET
-        pathRegex: /api/users
-      responseClasses:
-        - condition:
-            status:
-              min: 500
-              max: 599
-          isFailure: true
-      isRetryable: true
-    - name: POST /api/users
-      condition:
-        method: POST
-        pathRegex: /api/users
-      # POST not retryable by default
-      isRetryable: false
-    - name: GET /api/users/{id}
-      condition:
-        method: GET
-        pathRegex: /api/users/[^/]+
-      timeout: 5s
-      isRetryable: true
-  retryBudget:
-    retryRatio: 0.2
-    minRetriesPerSecond: 10
-    ttl: 10s
-```
-
-### Template 4: Traffic Split (Canary)
-
-```yaml
-apiVersion: split.smi-spec.io/v1alpha1
-kind: TrafficSplit
-metadata:
-  name: my-service-canary
-  namespace: my-namespace
-spec:
-  service: my-service
-  backends:
-    - service: my-service-stable
-      weight: 900m # 90%
-    - service: my-service-canary
-      weight: 100m # 10%
-```
-
-### Template 5: Server Authorization Policy
-
-```yaml
-# Define the server
-apiVersion: policy.linkerd.io/v1beta1
-kind: Server
-metadata:
-  name: my-service-http
-  namespace: my-namespace
-spec:
-  podSelector:
-    matchLabels:
-      app: my-service
-  port: http
-  proxyProtocol: HTTP/1
----
-# Allow traffic from specific clients
-apiVersion: policy.linkerd.io/v1beta1
-kind: ServerAuthorization
-metadata:
-  name: allow-frontend
-  namespace: my-namespace
-spec:
-  server:
-    name: my-service-http
-  client:
-    meshTLS:
-      serviceAccounts:
-        - name: frontend
-          namespace: my-namespace
----
-# Allow unauthenticated traffic (e.g., from ingress)
-apiVersion: policy.linkerd.io/v1beta1
-kind: ServerAuthorization
-metadata:
-  name: allow-ingress
-  namespace: my-namespace
-spec:
-  server:
-    name: my-service-http
-  client:
-    unauthenticated: true
-    networks:
-      - cidr: 10.0.0.0/8
-```
-
-### Template 6: HTTPRoute for Advanced Routing
-
-```yaml
-apiVersion: policy.linkerd.io/v1beta2
+apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: my-route
+  name: users-get
+  namespace: my-namespace
+  annotations:
+    retry.linkerd.io/http: 5xx
+    retry.linkerd.io/limit: "2"
+    retry.linkerd.io/timeout: 300ms # per-attempt timeout
+    timeout.linkerd.io/request: 5s # whole request, including retries
+spec:
+  parentRefs:
+    - name: my-service
+      kind: Service
+      group: ""
+      port: 8080
+  rules:
+    - matches:
+        - method: GET
+          path:
+            type: PathPrefix
+            value: /api/users
+      backendRefs:
+        - name: my-service
+          port: 8080
+```
+
+The same annotations on the Service apply to every route of that Service.
+
+### Template 4: Weighted Traffic Split (Canary)
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: my-service-canary
   namespace: my-namespace
 spec:
   parentRefs:
     - name: my-service
       kind: Service
-      group: core
+      group: ""
       port: 8080
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /api/v2
-        - headers:
-            - name: x-api-version
-              value: v2
-      backendRefs:
-        - name: my-service-v2
+    - backendRefs:
+        - name: my-service-stable
           port: 8080
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /api
-      backendRefs:
-        - name: my-service-v1
+          weight: 90
+        - name: my-service-canary
           port: 8080
+          weight: 10
 ```
 
-### Template 7: Multi-cluster Setup
+Shift the weights step by step, or let Flagger or Argo Rollouts (Gateway API
+plugin) drive them.
 
-```bash
-# On each cluster, install with cluster credentials
-linkerd multicluster install | kubectl apply -f -
+### More templates
 
-# Link clusters
-linkerd multicluster link --cluster-name west \
-  --api-server-address https://west.example.com:6443 \
-  | kubectl apply -f -
-
-# Export a service to other clusters
-kubectl label svc/my-service mirror.linkerd.io/exported=true
-
-# Verify cross-cluster connectivity
-linkerd multicluster check
-linkerd multicluster gateways
-```
+`references/details.md` covers header- and path-based routing with HTTPRoute,
+authorization policy (Server, AuthorizationPolicy, MeshTLSAuthentication,
+NetworkAuthentication) and multi-cluster linking with `link-gen`.
 
 ## Monitoring Commands
 
@@ -263,7 +198,7 @@ linkerd multicluster gateways
 # Live traffic view
 linkerd viz top deploy/my-app
 
-# Per-route metrics
+# Per-route metrics (HTTPRoute/GRPCRoute or ServiceProfile routes)
 linkerd viz routes deploy/my-app
 
 # Check proxy status
@@ -297,13 +232,13 @@ linkerd viz tap deploy/my-app --to deploy/my-backend
 ### Do's
 
 - **Enable mTLS everywhere** - It's automatic with Linkerd
-- **Use ServiceProfiles** - Get per-route metrics and retries
-- **Set retry budgets** - Prevent retry storms
+- **Use HTTPRoute/GRPCRoute** - Per-route routing, retries and timeouts
+- **Limit retries** - Retry idempotent routes only, with `retry.linkerd.io/limit`
 - **Monitor golden metrics** - Success rate, latency, throughput
 
 ### Don'ts
 
 - **Don't skip check** - Always run `linkerd check` after changes
 - **Don't over-configure** - Linkerd defaults are sensible
-- **Don't ignore ServiceProfiles** - They unlock advanced features
+- **Don't mix ServiceProfiles and route annotations** - A ServiceProfile overrides route-level retries and timeouts
 - **Don't forget timeouts** - Set appropriate values per route

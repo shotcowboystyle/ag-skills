@@ -53,7 +53,7 @@ spec:
         - name: <container-name>
           image: <image>:<tag>
           ports:
-            - containerPort: <port>
+            - containerPort: 8080 # your app's port
               name: http
           resources:
             requests:
@@ -381,14 +381,18 @@ overlays/
 **Validation steps:**
 
 ```bash
-# Dry-run validation
-kubectl apply -f manifest.yaml --dry-run=client
+# Offline schema validation against the target Kubernetes version
+# (kubeval is unmaintained and has no schemas for current releases)
+kubeconform -strict -summary -kubernetes-version 1.37.0 manifest.yaml
 
-# Server-side validation
+# CRDs need their schemas too, for example from the community CRD catalog
+kubeconform -strict -summary -kubernetes-version 1.37.0 \
+  -schema-location default \
+  -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+  manifest.yaml
+
+# Server-side validation (needs a cluster; runs admission, including Pod Security)
 kubectl apply -f manifest.yaml --dry-run=server
-
-# Validate with kubeval
-kubeval manifest.yaml
 
 # Validate with kube-score
 kube-score score manifest.yaml
@@ -399,7 +403,7 @@ kube-linter lint manifest.yaml
 
 **Testing checklist:**
 
-- [ ] Manifest passes dry-run validation
+- [ ] Manifest passes `kubeconform -strict` (and server-side dry-run when a cluster is available)
 - [ ] All required fields are present
 - [ ] Resource limits are reasonable
 - [ ] Health checks are configured

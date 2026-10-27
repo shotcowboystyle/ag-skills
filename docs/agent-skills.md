@@ -28,7 +28,7 @@ Skills provide domain guidance that coding agents can load when relevant. Each s
 | **k8s-manifest-generator** | Create production-ready Kubernetes manifests for Deployments, Services, ConfigMaps, and Secrets following best practices |
 | **helm-chart-scaffolding** | Design, organize, and manage Helm charts for templating and packaging Kubernetes applications                            |
 | **gitops-workflow**        | Implement GitOps workflows with ArgoCD and Flux for automated, declarative deployments                                   |
-| **k8s-security-policies**  | Implement Kubernetes security policies including NetworkPolicy, PodSecurityPolicy, and RBAC                              |
+| **k8s-security-policies**  | Implement Kubernetes security policies with Pod Security Admission, NetworkPolicy, and RBAC                              |
 
 ### LLM Application Development (8 skills)
 

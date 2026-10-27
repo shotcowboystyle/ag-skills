@@ -6,7 +6,7 @@
 
 ```yaml
 # Enable strict mTLS mesh-wide
-apiVersion: security.istio.io/v1beta1
+apiVersion: security.istio.io/v1
 kind: PeerAuthentication
 metadata:
   name: default
@@ -16,7 +16,7 @@ spec:
     mode: STRICT
 ---
 # Namespace-level override (permissive for migration)
-apiVersion: security.istio.io/v1beta1
+apiVersion: security.istio.io/v1
 kind: PeerAuthentication
 metadata:
   name: default
@@ -26,7 +26,7 @@ spec:
     mode: PERMISSIVE
 ---
 # Workload-specific policy
-apiVersion: security.istio.io/v1beta1
+apiVersion: security.istio.io/v1
 kind: PeerAuthentication
 metadata:
   name: payment-service
@@ -47,7 +47,7 @@ spec:
 ### Template 2: Istio Destination Rule for mTLS
 
 ```yaml
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: default
@@ -59,7 +59,7 @@ spec:
       mode: ISTIO_MUTUAL
 ---
 # TLS to external service
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: external-api
@@ -71,7 +71,7 @@ spec:
       caCertificates: /etc/certs/external-ca.pem
 ---
 # Mutual TLS to external service
-apiVersion: networking.istio.io/v1beta1
+apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
   name: partner-api
@@ -216,7 +216,7 @@ spec:
 # linkerd viz edges deployment -n my-namespace
 
 # For external services without mTLS
-apiVersion: policy.linkerd.io/v1beta1
+apiVersion: policy.linkerd.io/v1beta3
 kind: Server
 metadata:
   name: external-api
