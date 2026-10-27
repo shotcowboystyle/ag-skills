@@ -77,7 +77,7 @@ Produces investor-ready business case document.
 
 ### Agent Usage
 
-The startup-analyst agent triggers automatically for business-related questions:
+Invoke the startup-analyst agent for one business analysis at a time:
 
 ```
 "Help me analyze the competitive landscape for my fintech startup"

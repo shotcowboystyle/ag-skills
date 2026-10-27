@@ -35,7 +35,7 @@
     {
       "name": "agent-teams",
       "source": "./plugins/agent-teams",
-      "version": "1.0.4",
+      "version": "1.1.0",
       "description": "Orchestrate multi-agent teams for parallel code review, hypothesis-driven debugging, and coordinated feature development using Claude Code's Agent Teams",
       "author": {
         "name": "Curtis Blanton",
@@ -103,7 +103,7 @@
     {
       "name": "backend-api-security",
       "source": "./plugins/backend-api-security",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "API security hardening, authentication implementation, authorization patterns, rate limiting, and input validation",
       "author": {
         "name": "Curtis Blanton",
@@ -114,7 +114,7 @@
     {
       "name": "backend-development",
       "source": "./plugins/backend-development",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "description": "Backend API design, GraphQL architecture, workflow orchestration with Temporal, and test-driven backend development",
       "author": {
         "name": "Curtis Blanton",
@@ -147,7 +147,7 @@
     {
       "name": "business-analytics",
       "source": "./plugins/business-analytics",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "description": "Business metrics analysis, KPI tracking, financial reporting, and data-driven decision making",
       "author": {
         "name": "Curtis Blanton",
@@ -180,7 +180,7 @@
     {
       "name": "cloud-infrastructure",
       "source": "./plugins/cloud-infrastructure",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "description": "Cloud architecture design for AWS/Azure/GCP/OCI, Kubernetes cluster configuration, Terraform infrastructure-as-code, hybrid cloud networking, and multi-cloud cost optimization",
       "author": {
         "name": "Curtis Blanton",
@@ -213,7 +213,7 @@
     {
       "name": "comprehensive-review",
       "source": "./plugins/comprehensive-review",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "description": "Multi-perspective code analysis covering architecture, security, and best practices",
       "author": {
         "name": "Curtis Blanton",
@@ -268,7 +268,7 @@
     {
       "name": "database-design",
       "source": "./plugins/database-design",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "Database architecture, schema design, and SQL optimization for production systems",
       "author": {
         "name": "Curtis Blanton",
@@ -279,7 +279,7 @@
     {
       "name": "database-migrations",
       "source": "./plugins/database-migrations",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "Database migration automation, observability, and cross-database migration strategies",
       "author": {
         "name": "Curtis Blanton",
@@ -334,7 +334,7 @@
     {
       "name": "developer-essentials",
       "source": "./plugins/developer-essentials",
-      "version": "1.0.5",
+      "version": "1.1.0",
       "description": "Essential developer skills including Git workflows, SQL optimization, error handling, code review, E2E testing, authentication, debugging, and monorepo management",
       "author": {
         "name": "Curtis Blanton",
@@ -445,7 +445,7 @@
     {
       "name": "frontend-mobile-security",
       "source": "./plugins/frontend-mobile-security",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "XSS prevention, CSRF protection, content security policies, mobile app security, and secure storage patterns",
       "author": {
         "name": "Curtis Blanton",
@@ -489,7 +489,7 @@
     {
       "name": "hr-legal-compliance",
       "source": "./plugins/hr-legal-compliance",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "description": "HR policy documentation, legal compliance templates (GDPR/SOC2/HIPAA), employment contracts, and regulatory documentation",
       "author": {
         "name": "Curtis Blanton",
@@ -577,7 +577,7 @@
     {
       "name": "machine-learning-ops",
       "source": "./plugins/machine-learning-ops",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "description": "ML model training pipelines, hyperparameter tuning, model deployment automation, experiment tracking, and MLOps workflows",
       "author": {
         "name": "Curtis Blanton",
@@ -610,7 +610,7 @@
     {
       "name": "multi-platform-apps",
       "source": "./plugins/multi-platform-apps",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "description": "Cross-platform application development coordinating web, iOS, Android, and desktop implementations",
       "author": {
         "name": "Curtis Blanton",
@@ -667,7 +667,7 @@
     {
       "name": "plugin-eval",
       "source": "./plugins/plugin-eval",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "description": "Static lint for Claude Code plugins and skills, with experimental LLM scoring for skills"
     },
     {
@@ -717,7 +717,7 @@
     {
       "name": "security-scanning",
       "source": "./plugins/security-scanning",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "description": "SAST analysis, dependency vulnerability scanning, OWASP Top 10 compliance, container security scanning, and automated security hardening",
       "author": {
         "name": "Curtis Blanton",
@@ -805,7 +805,7 @@
     {
       "name": "social-publishing",
       "source": "./plugins/social-publishing",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Schedule and publish social media posts across 13 platforms (X, LinkedIn Profile + Page, Instagram Business + Standalone, Facebook Pages, TikTok, Discord, Telegram, YouTube, Reddit, WordPress, Pinterest) via SocialClaw \u2014 one workspace API key covers everything",
       "author": {
         "name": "ndesv21",
@@ -817,7 +817,7 @@
     {
       "name": "startup-business-analyst",
       "source": "./plugins/startup-business-analyst",
-      "version": "1.0.6",
+      "version": "1.1.0",
       "description": "Comprehensive startup business analysis with market sizing (TAM/SAM/SOM), financial modeling, team planning, and strategic research",
       "author": {
         "name": "Curtis Blanton",

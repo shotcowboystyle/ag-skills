@@ -1,7 +1,7 @@
 {
   "name": "cloud-infrastructure",
   "displayName": "Cloud Infrastructure",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Cloud architecture design for AWS/Azure/GCP/OCI, Kubernetes cluster configuration, Terraform infrastructure-as-code, hybrid cloud networking, and multi-cloud cost optimization",
   "author": {
     "name": "Curtis Blanton",

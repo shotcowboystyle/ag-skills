@@ -1,6 +1,6 @@
 {
   "name": "backend-development",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Backend API design, GraphQL architecture, workflow orchestration with Temporal, and test-driven backend development",
   "author": {
     "name": "Curtis Blanton",

@@ -1,6 +1,6 @@
 {
   "name": "developer-essentials",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Essential developer skills including Git workflows, SQL optimization, error handling, code review, E2E testing, authentication, debugging, and monorepo management",
   "skills": "./skills/",
   "author": {

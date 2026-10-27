@@ -1,7 +1,7 @@
 {
   "name": "multi-platform-apps",
   "displayName": "Multi Platform Apps",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Cross-platform application development coordinating web, iOS, Android, and desktop implementations",
   "author": {
     "name": "Curtis Blanton",
