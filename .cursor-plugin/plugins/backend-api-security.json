@@ -1,7 +1,7 @@
 {
   "name": "backend-api-security",
   "displayName": "Backend Api Security",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "API security hardening, authentication implementation, authorization patterns, rate limiting, and input validation",
   "author": {
     "name": "Curtis Blanton",

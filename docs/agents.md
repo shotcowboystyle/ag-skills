@@ -17,8 +17,8 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | [cloud-architect](../plugins/cloud-infrastructure/agents/cloud-architect.md) | opus | Cloud workload design and review with cited pricing |
 | [hybrid-cloud-architect](../plugins/cloud-infrastructure/agents/hybrid-cloud-architect.md) | opus | On-premises and multi-cloud connectivity, placement, failover |
 | [kubernetes-architect](../plugins/kubernetes-operations/agents/kubernetes-architect.md) | opus | Kubernetes platform layout, tenancy, security, GitOps delivery |
-| [service-mesh-expert](../plugins/cloud-infrastructure/agents/service-mesh-expert.md)          | opus    | Istio/Linkerd service mesh architecture, mTLS, and traffic management  |
-| [event-sourcing-architect](../plugins/backend-development/agents/event-sourcing-architect.md) | inherit | Event sourcing, CQRS patterns, event stores, and saga orchestration    |
+| [service-mesh-expert](../plugins/cloud-infrastructure/agents/service-mesh-expert.md)          | sonnet  | Istio/Linkerd service mesh architecture, mTLS, and traffic management  |
+| [event-sourcing-architect](../plugins/backend-development/agents/event-sourcing-architect.md) | opus    | Event sourcing, CQRS patterns, event stores, and saga orchestration    |
 | [monorepo-architect](../plugins/developer-essentials/agents/monorepo-architect.md)            | opus    | Monorepo tooling with Nx, Turborepo, Bazel, and workspace optimization |
 
 #### UI/UX & Mobile
@@ -54,7 +54,7 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | [javascript-pro](../plugins/javascript-typescript/agents/javascript-pro.md) | sonnet | One tested Node or browser JavaScript change with safe async |
 | [typescript-pro](../plugins/javascript-typescript/agents/typescript-pro.md) | sonnet | One type-checked TypeScript change, no unexplained `any` |
 | [python-pro](../plugins/python-development/agents/python-pro.md) | sonnet | One focused, typed, tested Python change with the project tooling |
-| [temporal-python-pro](../plugins/backend-development/agents/temporal-python-pro.md) | inherit | Temporal workflow orchestration with Python SDK, durable workflows, saga patterns |
+| [temporal-python-pro](../plugins/backend-development/agents/temporal-python-pro.md) | sonnet  | Temporal workflow orchestration with Python SDK, durable workflows, saga patterns |
 
 #### Shell Scripting
 
@@ -71,7 +71,7 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | [fastapi-pro](../plugins/api-scaffolding/agents/fastapi-pro.md) | sonnet | One FastAPI route with typed models and tests |
 | [unity-developer](../plugins/game-development/agents/unity-developer.md) | sonnet | Unity at the project editor and package versions; flags deprecated APIs |
 | [minecraft-bukkit-pro](../plugins/game-development/agents/minecraft-bukkit-pro.md) | sonnet | Bukkit/Spigot/Paper plugin feature at the plugin `api-version` |
-| [sql-pro](../plugins/database-design/agents/sql-pro.md)                            | inherit | Complex SQL queries and database optimization |
+| [sql-pro](../plugins/database-design/agents/sql-pro.md)                            | sonnet  | Complex SQL queries and database optimization |
 
 ### Infrastructure & Operations
 
@@ -151,7 +151,7 @@ Reference for 164 local AI agents organized by category. The model column lists 
 
 | Agent                                                                      | Model   | Description                                             |
 | -------------------------------------------------------------------------- | ------- | ------------------------------------------------------- |
-| [data-scientist](../plugins/machine-learning-ops/agents/data-scientist.md) | inherit | Data analysis, SQL queries, BigQuery operations         |
+| [data-scientist](../plugins/machine-learning-ops/agents/data-scientist.md) | sonnet  | Data analysis, SQL queries, BigQuery operations         |
 | [data-engineer](../plugins/data-engineering/agents/data-engineer.md)       | sonnet  | One batch or streaming pipeline, built and tested via the data-engineering skills |
 
 #### Machine Learning & AI
@@ -159,8 +159,8 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | Agent                                                                                                    | Model   | Description                                                           |
 | -------------------------------------------------------------------------------------------------------- | ------- | --------------------------------------------------------------------- |
 | [ai-engineer](../plugins/llm-application-dev/agents/ai-engineer.md)                                      | sonnet  | Architecture decision for one LLM feature (call, chain, RAG, agent)   |
-| [ml-engineer](../plugins/machine-learning-ops/agents/ml-engineer.md)                                     | inherit | ML pipelines, model serving, feature engineering                      |
-| [mlops-engineer](../plugins/machine-learning-ops/agents/mlops-engineer.md)                               | inherit | ML infrastructure, experiment tracking, model registries              |
+| [ml-engineer](../plugins/machine-learning-ops/agents/ml-engineer.md)                                     | sonnet  | ML pipelines, model serving, feature engineering                      |
+| [mlops-engineer](../plugins/machine-learning-ops/agents/mlops-engineer.md)                               | sonnet  | ML infrastructure, experiment tracking, model registries              |
 | [prompt-engineer](../plugins/llm-application-dev/agents/prompt-engineer.md)                              | sonnet  | Write or revise one production prompt, with test cases                |
 | [vector-database-engineer](../plugins/llm-application-dev/agents/vector-database-engineer.md)            | sonnet  | Vector search setup recommendation for a corpus and query workload    |
 | [llm-finetuning-architect](../plugins/llm-finetuning/agents/llm-finetuning-architect.md)                 | opus    | Fine-tuning strategy, method/model selection, eval-gate ownership     |
@@ -201,13 +201,13 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | Agent                                                                            | Model   | Description                                                              |
 | -------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------ |
 | [business-analyst](../plugins/business-analytics/agents/business-analyst.md)     | sonnet  | Metrics analysis, reporting, KPI tracking                                |
-| [startup-analyst](../plugins/startup-business-analyst/agents/startup-analyst.md) | inherit | Market sizing, financial modeling, and competitive analysis for startups |
+| [startup-analyst](../plugins/startup-business-analyst/agents/startup-analyst.md) | sonnet  | Market sizing, financial modeling, and competitive analysis for startups |
 
 #### Marketing & Sales
 
 | Agent                                                                                             | Model | Description                                           |
 | ------------------------------------------------------------------------------------------------- | ----- | ----------------------------------------------------- |
-| [social-publishing-publisher](../plugins/social-publishing/agents/social-publishing-publisher.md) | haiku | Multi-platform social media publishing via SocialClaw |
+| [social-publishing-publisher](../plugins/social-publishing/agents/social-publishing-publisher.md) | sonnet| Multi-platform social media publishing via SocialClaw |
 
 #### Support & Legal
 
@@ -231,10 +231,10 @@ Reference for 164 local AI agents organized by category. The model column lists 
 
 | Agent                                                                                   | Model   | Description                                                                                  |
 | --------------------------------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------- |
-| [team-lead](../plugins/agent-teams/agents/team-lead.md)                                 | fable   | Decomposes work into parallel tasks with file ownership and synthesizes results              |
-| [team-implementer](../plugins/agent-teams/agents/team-implementer.md)                   | opus    | Parallel feature builder within strict file ownership boundaries                             |
+| [team-lead](../plugins/agent-teams/agents/team-lead.md)                                 | sonnet  | Decomposes work into parallel tasks with file ownership and synthesizes results              |
+| [team-implementer](../plugins/agent-teams/agents/team-implementer.md)                   | sonnet  | Parallel feature builder within strict file ownership boundaries                             |
 | [team-reviewer](../plugins/agent-teams/agents/team-reviewer.md)                         | opus    | Reviews one assigned dimension (security, performance, architecture, testing, accessibility) |
-| [team-debugger](../plugins/agent-teams/agents/team-debugger.md)                         | opus    | Confirms or falsifies one debugging hypothesis with file:line evidence                       |
+| [team-debugger](../plugins/agent-teams/agents/team-debugger.md)                         | sonnet  | Confirms or falsifies one debugging hypothesis with file:line evidence                       |
 | [ship-mate-orchestrate](../plugins/ship-mate/agents/orchestrate.md)                               | sonnet  | Turns a story file into an unambiguous spec through clarifying questions                     |
 | [ship-mate-architect](../plugins/ship-mate/agents/architect.md)                                   | inherit | Produces a numbered implementation plan and pauses for approval                              |
 | [ship-mate-implement](../plugins/ship-mate/agents/implement.md)                                   | sonnet  | Implements the architect plan step by step with tests                                        |
@@ -246,7 +246,7 @@ Reference for 164 local AI agents organized by category. The model column lists 
 | [code-review-preshipment](../plugins/operating-kit/agents/code-review-preshipment.md)   | sonnet  | Pre-ship review of all changes since the last deploy                                         |
 | [deploy-with-verification](../plugins/operating-kit/agents/deploy-with-verification.md) | sonnet  | Tests, builds, deploys, and verifies the live revision                                       |
 | [prod-logs-health-check](../plugins/operating-kit/agents/prod-logs-health-check.md)     | haiku   | Scans recent production logs for errors and anomalies                                        |
-| [eval-orchestrator](../plugins/plugin-eval/agents/eval-orchestrator.md)                 | opus    | Orchestrates plugin quality evaluation and certification                                     |
+| [eval-orchestrator](../plugins/plugin-eval/agents/eval-orchestrator.md)                 | sonnet  | Orchestrates plugin quality evaluation and certification                                     |
 | [eval-judge](../plugins/plugin-eval/agents/eval-judge.md)                               | sonnet  | LLM judge that scores skills with anchored rubrics                                           |
 
 ### Specialized Domains
