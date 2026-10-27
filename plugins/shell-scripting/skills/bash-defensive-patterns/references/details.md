@@ -27,8 +27,8 @@ Implement proper cleanup on script exit or error.
 set -Eeuo pipefail
 
 trap 'echo "Error on line $LINENO"' ERR
-TMPDIR=$(mktemp -d)
-trap 'echo "Cleaning up..."; rm -rf "$TMPDIR"' EXIT
+tmpdir=$(mktemp -d)
+trap 'echo "Cleaning up..."; rm -rf "$tmpdir"' EXIT
 
 # Script code here
 ```
@@ -101,7 +101,7 @@ SCRIPT_NAME="$(basename -- "${BASH_SOURCE[0]}")"
 echo "Script location: $SCRIPT_DIR/$SCRIPT_NAME"
 ```
 
-### Pattern 2: Comprehensive Function Templat
+### Pattern 2: Comprehensive Function Template
 
 ```bash
 #!/bin/bash
@@ -148,17 +148,17 @@ process_files() {
 set -Eeuo pipefail
 
 # Create temporary directory
-TMPDIR=$(mktemp -d) || { echo "ERROR: Failed to create temp directory" >&2; exit 1; }
-trap 'rm -rf -- "$TMPDIR"' EXIT
+tmpdir=$(mktemp -d) || { echo "ERROR: Failed to create temp directory" >&2; exit 1; }
+trap 'rm -rf -- "$tmpdir"' EXIT
 
 # Create temporary files in directory
-TMPFILE1="$TMPDIR/temp1.txt"
-TMPFILE2="$TMPDIR/temp2.txt"
+TMPFILE1="$tmpdir/temp1.txt"
+TMPFILE2="$tmpdir/temp2.txt"
 
 # Use temporary files
 touch "$TMPFILE1" "$TMPFILE2"
 
-echo "Temp files created in: $TMPDIR"
+echo "Temp files created in: $tmpdir"
 ```
 
 ### Pattern 4: Robust Argument Parsing
@@ -199,11 +199,11 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         -o|--output)
-            OUTPUT_FILE="$2"
+            OUTPUT_FILE="${2:?--output needs a value}"
             shift 2
             ;;
         -j|--jobs)
-            THREADS="$2"
+            THREADS="${2:?--jobs needs a value}"
             shift 2
             ;;
         -h|--help)

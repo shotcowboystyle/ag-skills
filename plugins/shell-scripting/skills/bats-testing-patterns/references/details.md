@@ -1,91 +1,6 @@
 # bats-testing-patterns — detailed patterns and worked examples
 
-## Bats Fundamentals
-
-### What is Bats?
-
-Bats (Bash Automated Testing System) is a TAP (Test Anything Protocol) compliant testing framework for shell scripts that provides:
-
-- Simple, natural test syntax
-- TAP output format compatible with CI systems
-- Fixtures and setup/teardown support
-- Assertion helpers
-- Parallel test execution
-
-### Installation
-
-```bash
-# macOS with Homebrew
-brew install bats-core
-
-# Ubuntu/Debian
-git clone https://github.com/bats-core/bats-core.git
-cd bats-core
-./install.sh /usr/local
-
-# From npm (Node.js)
-npm install --global bats
-
-# Verify installation
-bats --version
-```
-
-### File Structure
-
-```
-project/
-├── bin/
-│   ├── script.sh
-│   └── helper.sh
-├── tests/
-│   ├── test_script.bats
-│   ├── test_helper.sh
-│   ├── fixtures/
-│   │   ├── input.txt
-│   │   └── expected_output.txt
-│   └── helpers/
-│       └── mocks.bash
-└── README.md
-```
-
-## Basic Test Structure
-
-### Simple Test File
-
-```bash
-#!/usr/bin/env bats
-
-# Load test helper if present
-load test_helper
-
-# Setup runs before each test
-setup() {
-    export TMPDIR=$(mktemp -d)
-}
-
-# Teardown runs after each test
-teardown() {
-    rm -rf "$TMPDIR"
-}
-
-# Test: simple assertion
-@test "Function returns 0 on success" {
-    run my_function "input"
-    [ "$status" -eq 0 ]
-}
-
-# Test: output verification
-@test "Function outputs correct result" {
-    run my_function "test"
-    [ "$output" = "expected output" ]
-}
-
-# Test: error handling
-@test "Function returns 1 on missing argument" {
-    run my_function
-    [ "$status" -eq 1 ]
-}
-```
+Basics (install, layout, `run`, temp dirs, skips) are in `SKILL.md`.
 
 ## Assertion Patterns
 
@@ -157,30 +72,31 @@ line3" ]
 #!/usr/bin/env bats
 
 @test "File is created" {
-    [ ! -f "$TMPDIR/output.txt" ]
-    my_function > "$TMPDIR/output.txt"
-    [ -f "$TMPDIR/output.txt" ]
+    [ ! -f "$BATS_TEST_TMPDIR/output.txt" ]
+    my_function > "$BATS_TEST_TMPDIR/output.txt"
+    [ -f "$BATS_TEST_TMPDIR/output.txt" ]
 }
 
 @test "File contents match expected" {
-    my_function > "$TMPDIR/output.txt"
-    [ "$(cat "$TMPDIR/output.txt")" = "expected content" ]
+    my_function > "$BATS_TEST_TMPDIR/output.txt"
+    [ "$(cat "$BATS_TEST_TMPDIR/output.txt")" = "expected content" ]
 }
 
 @test "File is readable" {
-    touch "$TMPDIR/test.txt"
-    [ -r "$TMPDIR/test.txt" ]
+    touch "$BATS_TEST_TMPDIR/test.txt"
+    [ -r "$BATS_TEST_TMPDIR/test.txt" ]
 }
 
 @test "File has correct permissions" {
-    touch "$TMPDIR/test.txt"
-    chmod 644 "$TMPDIR/test.txt"
-    [ "$(stat -f %OLp "$TMPDIR/test.txt")" = "644" ]
+    touch "$BATS_TEST_TMPDIR/test.txt"
+    chmod 644 "$BATS_TEST_TMPDIR/test.txt"
+    # stat -f is BSD/macOS; GNU stat uses -c '%a'
+    [ "$(stat -f %OLp "$BATS_TEST_TMPDIR/test.txt" 2>/dev/null || stat -c %a "$BATS_TEST_TMPDIR/test.txt")" = "644" ]
 }
 
 @test "File size is correct" {
-    echo -n "12345" > "$TMPDIR/test.txt"
-    [ "$(wc -c < "$TMPDIR/test.txt")" -eq 5 ]
+    printf '12345' > "$BATS_TEST_TMPDIR/test.txt"
+    [ "$(wc -c < "$BATS_TEST_TMPDIR/test.txt")" -eq 5 ]
 }
 ```
 
@@ -192,22 +108,18 @@ line3" ]
 #!/usr/bin/env bats
 
 setup() {
-    # Create test directory
-    TEST_DIR=$(mktemp -d)
-    export TEST_DIR
-
     # Source script under test
     source "${BATS_TEST_DIRNAME}/../bin/script.sh"
 }
 
 teardown() {
-    # Clean up temporary directory
-    rm -rf "$TEST_DIR"
+    # Runs even when the test fails: stop anything the test started
+    if [[ -n ${SERVER_PID:-} ]]; then kill "$SERVER_PID" 2>/dev/null || true; fi
 }
 
-@test "Test using TEST_DIR" {
-    touch "$TEST_DIR/file.txt"
-    [ -f "$TEST_DIR/file.txt" ]
+@test "Test using the per-test temp dir" {
+    touch "$BATS_TEST_TMPDIR/file.txt"
+    [ -f "$BATS_TEST_TMPDIR/file.txt" ]
 }
 ```
 
@@ -217,22 +129,18 @@ teardown() {
 #!/usr/bin/env bats
 
 setup() {
-    # Create directory structure
-    mkdir -p "$TMPDIR/data/input"
-    mkdir -p "$TMPDIR/data/output"
+    # Create directory structure in the per-test temp dir (bats removes it)
+    mkdir -p "$BATS_TEST_TMPDIR/data/input"
+    mkdir -p "$BATS_TEST_TMPDIR/data/output"
 
     # Create test fixtures
-    echo "line1" > "$TMPDIR/data/input/file1.txt"
-    echo "line2" > "$TMPDIR/data/input/file2.txt"
+    echo "line1" > "$BATS_TEST_TMPDIR/data/input/file1.txt"
+    echo "line2" > "$BATS_TEST_TMPDIR/data/input/file2.txt"
 
     # Initialize environment
-    export DATA_DIR="$TMPDIR/data"
+    export DATA_DIR="$BATS_TEST_TMPDIR/data"
     export INPUT_DIR="$DATA_DIR/input"
     export OUTPUT_DIR="$DATA_DIR/output"
-}
-
-teardown() {
-    rm -rf "$TMPDIR/data"
 }
 
 @test "Processes input files" {
@@ -252,13 +160,10 @@ load test_helper
 
 # setup_file runs once before all tests
 setup_file() {
-    export SHARED_RESOURCE=$(mktemp -d)
+    # $BATS_FILE_TMPDIR is shared by every test in this file; export to reach tests
+    export SHARED_RESOURCE="$BATS_FILE_TMPDIR/shared"
+    mkdir -p "$SHARED_RESOURCE"
     echo "Expensive setup" > "$SHARED_RESOURCE/data.txt"
-}
-
-# teardown_file runs once after all tests
-teardown_file() {
-    rm -rf "$SHARED_RESOURCE"
 }
 
 @test "First test uses shared resource" {
@@ -297,7 +202,7 @@ my_external_tool() {
 
 setup() {
     # Create stub directory
-    STUBS_DIR="$TMPDIR/stubs"
+    STUBS_DIR="$BATS_TEST_TMPDIR/stubs"
     mkdir -p "$STUBS_DIR"
 
     # Add to PATH
@@ -355,12 +260,7 @@ EOF
 
 setup() {
     FIXTURES_DIR="${BATS_TEST_DIRNAME}/fixtures"
-    WORK_DIR=$(mktemp -d)
-    export WORK_DIR
-}
-
-teardown() {
-    rm -rf "$WORK_DIR"
+    WORK_DIR="$BATS_TEST_TMPDIR"
 }
 
 @test "Process fixture file" {
@@ -384,19 +284,121 @@ generate_fixture() {
     local lines="$1"
     local file="$2"
 
-    for i in $(seq 1 "$lines"); do
-        echo "Line $i content" >> "$file"
-    done
+    local i
+    for (( i = 1; i <= lines; i++ )); do
+        printf 'Line %d content\n' "$i"
+    done > "$file"
 }
 
 @test "Handle large input file" {
-    generate_fixture 1000 "$TMPDIR/large.txt"
-    run my_function "$TMPDIR/large.txt"
+    generate_fixture 1000 "$BATS_TEST_TMPDIR/large.txt"
+    run my_function "$BATS_TEST_TMPDIR/large.txt"
     [ "$status" -eq 0 ]
-    [ "$(wc -l < "$TMPDIR/large.txt")" -eq 1000 ]
+    [ "$(wc -l < "$BATS_TEST_TMPDIR/large.txt")" -eq 1000 ]
 }
 ```
 
-## Advanced Patterns
 
-#
+## Testing Error Conditions
+
+```bash
+#!/usr/bin/env bats
+
+bats_require_minimum_version 1.5.0
+
+setup() {
+    load 'test_helper/bats-support/load'
+    load 'test_helper/bats-assert/load'
+}
+
+@test "fails with a missing file" {
+    run my_function "/nonexistent/file.txt"
+    assert_failure
+    assert_output --partial "not found"
+}
+
+@test "fails with empty input" {
+    run ! my_function ""
+}
+
+@test "fails when the file is unreadable" {
+    # root reads files regardless of mode bits
+    [ "$(id -u)" -ne 0 ] || skip "running as root"
+    touch "$BATS_TEST_TMPDIR/locked.txt"
+    chmod 000 "$BATS_TEST_TMPDIR/locked.txt"
+    run my_function "$BATS_TEST_TMPDIR/locked.txt"
+    assert_failure
+}
+
+@test "prints usage for an unknown option" {
+    run -2 my_function --invalid-option
+    assert_output --partial "Usage:"
+}
+```
+
+No cleanup is needed: bats deletes `$BATS_TEST_TMPDIR` after each test.
+
+## Testing Under Several Shells
+
+```bash
+#!/usr/bin/env bats
+
+SCRIPT="${BATS_TEST_DIRNAME}/../bin/script.sh"
+
+@test "runs under bash" {
+    run bash "$SCRIPT" arg1
+    [ "$status" -eq 0 ]
+}
+
+@test "runs under dash" {
+    command -v dash >/dev/null || skip "dash not installed"
+    run dash "$SCRIPT" arg1
+    [ "$status" -eq 0 ]
+}
+
+@test "runs under busybox sh" {
+    command -v busybox >/dev/null || skip "busybox not installed"
+    run busybox sh "$SCRIPT" arg1
+    [ "$status" -eq 0 ]
+}
+```
+
+Bats itself always runs in Bash; these tests run the script under test in another shell.
+
+## CI
+
+### GitHub Actions
+
+```yaml
+name: Tests
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
+      - name: Run Bats
+        run: test/bats/bin/bats --formatter tap -r test/
+```
+
+With bats vendored as submodules (see `SKILL.md`), nothing else needs installing.
+
+### Makefile
+
+```makefile
+BATS := test/bats/bin/bats
+
+.PHONY: test test-tap
+test:
+	$(BATS) -r test/
+
+test-tap:
+	$(BATS) --formatter tap -r test/
+```

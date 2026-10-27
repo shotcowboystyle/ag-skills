@@ -1,229 +1,156 @@
 ---
 name: bats-testing-patterns
-description: Master Bash Automated Testing System (Bats) for comprehensive shell script testing. Use when writing tests for shell scripts, CI/CD pipelines, or requiring test-driven development of shell utilities.
+description: Test shell scripts with bats-core - installation, file layout, run/status/output, bats-assert helpers, per-test temp directories, skips, setup_file and CI. Use when writing or fixing tests for a Bash or sh script, adding shell tests to CI, or doing test-first development of a shell utility.
+last_verified: 2026-10-27
 ---
 
 # Bats Testing Patterns
 
-Comprehensive guidance for writing comprehensive unit tests for shell scripts using Bats (Bash Automated Testing System), including test patterns, fixtures, and best practices for production-grade shell testing.
+[bats-core](https://github.com/bats-core/bats-core) runs `@test` blocks written in Bash and
+reports results in TAP. Each test runs in its own subshell; a test fails when any command in
+it fails.
 
 ## When to Use This Skill
 
-- Writing unit tests for shell scripts
-- Implementing test-driven development (TDD) for scripts
-- Setting up automated testing in CI/CD pipelines
-- Testing edge cases and error conditions
-- Validating behavior across different shell environments
-- Building maintainable test suites for scripts
-- Creating fixtures for complex test scenarios
-- Testing multiple shell dialects (bash, sh, dash)
+- Writing tests for a shell script or function library
+- Adding shell tests to CI
+- Reproducing a shell bug with a failing test before fixing it
 
-## Detailed patterns and worked examples
+## Install
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
-
-## Testing Error Conditions
+Vendor bats and its helper libraries as git submodules, so every machine and CI runner uses
+the same versions:
 
 ```bash
-#!/usr/bin/env bats
-
-@test "Function fails with missing file" {
-    run my_function "/nonexistent/file.txt"
-    [ "$status" -ne 0 ]
-    [[ "$output" == *"not found"* ]]
-}
-
-@test "Function fails with invalid input" {
-    run my_function ""
-    [ "$status" -ne 0 ]
-}
-
-@test "Function fails with permission denied" {
-    touch "$TMPDIR/readonly.txt"
-    chmod 000 "$TMPDIR/readonly.txt"
-    run my_function "$TMPDIR/readonly.txt"
-    [ "$status" -ne 0 ]
-    chmod 644 "$TMPDIR/readonly.txt"  # Cleanup
-}
-
-@test "Function provides helpful error message" {
-    run my_function --invalid-option
-    [ "$status" -ne 0 ]
-    [[ "$output" == *"Usage:"* ]]
-}
+git submodule add https://github.com/bats-core/bats-core.git test/bats
+git submodule add https://github.com/bats-core/bats-support.git test/test_helper/bats-support
+git submodule add https://github.com/bats-core/bats-assert.git test/test_helper/bats-assert
 ```
 
-### Testing with Dependencies
+Or install system-wide: `brew install bats-core` or `npm install -g bats`. Either way, the
+helper libraries are separate.
 
-```bash
-#!/usr/bin/env bats
+## Layout
 
-setup() {
-    # Check for required tools
-    if ! command -v jq &>/dev/null; then
-        skip "jq is not installed"
-    fi
-
-    export SCRIPT="${BATS_TEST_DIRNAME}/../bin/script.sh"
-}
-
-@test "JSON parsing works" {
-    skip_if ! command -v jq &>/dev/null
-    run my_json_parser '{"key": "value"}'
-    [ "$status" -eq 0 ]
-}
+```
+project/
+├── src/
+│   └── greet.sh
+└── test/
+    ├── bats/                     # submodule
+    ├── test_helper/
+    │   ├── bats-support/         # submodule
+    │   ├── bats-assert/          # submodule
+    │   └── common-setup.bash
+    └── greet.bats
 ```
 
-### Testing Shell Compatibility
+## A Complete Test File
 
-```bash
-#!/usr/bin/env bats
-
-@test "Script works in bash" {
-    bash "${BATS_TEST_DIRNAME}/../bin/script.sh" arg1
-}
-
-@test "Script works in sh (POSIX)" {
-    sh "${BATS_TEST_DIRNAME}/../bin/script.sh" arg1
-}
-
-@test "Script works in dash" {
-    if command -v dash &>/dev/null; then
-        dash "${BATS_TEST_DIRNAME}/../bin/script.sh" arg1
-    else
-        skip "dash not installed"
-    fi
-}
-```
-
-### Parallel Execution
-
-```bash
-#!/usr/bin/env bats
-
-@test "Multiple independent operations" {
-    run bash -c 'for i in {1..10}; do
-        my_operation "$i" &
-    done
-    wait'
-    [ "$status" -eq 0 ]
-}
-
-@test "Concurrent file operations" {
-    for i in {1..5}; do
-        my_function "$TMPDIR/file$i" &
-    done
-    wait
-    [ -f "$TMPDIR/file1" ]
-    [ -f "$TMPDIR/file5" ]
-}
-```
-
-## Test Helper Pattern
-
-### test_helper.sh
+`src/greet.sh` under test:
 
 ```bash
 #!/usr/bin/env bash
-
-# Source script under test
-export SCRIPT_DIR="${BATS_TEST_DIRNAME%/*}/bin"
-
-# Common test utilities
-assert_file_exists() {
-    if [ ! -f "$1" ]; then
-        echo "Expected file to exist: $1"
-        return 1
-    fi
+greet() {
+  [[ $# -eq 1 && -n $1 ]] || { printf 'usage: greet NAME\n' >&2; return 2; }
+  printf 'Hello, %s!\n' "$1"
 }
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then greet "$@"; fi
+```
 
-assert_file_equals() {
-    local file="$1"
-    local expected="$2"
+The last line runs `greet` only when the file is executed, not when a test sources it.
+Make it executable (`chmod +x src/greet.sh`) for the "works as an executable" test.
 
-    if [ ! -f "$file" ]; then
-        echo "File does not exist: $file"
-        return 1
-    fi
+`test/test_helper/common-setup.bash`:
 
-    local actual=$(cat "$file")
-    if [ "$actual" != "$expected" ]; then
-        echo "File contents do not match"
-        echo "Expected: $expected"
-        echo "Actual: $actual"
-        return 1
-    fi
-}
-
-# Create temporary test directory
-setup_test_dir() {
-    export TEST_DIR=$(mktemp -d)
-}
-
-cleanup_test_dir() {
-    rm -rf "$TEST_DIR"
+```bash
+_common_setup() {
+  load 'test_helper/bats-support/load'
+  load 'test_helper/bats-assert/load'
+  PROJECT_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
+  PATH="$PROJECT_ROOT/src:$PATH"
 }
 ```
 
-## Integration with CI/CD
+`test/greet.bats`:
 
-### GitHub Actions Workflow
+```bash
+#!/usr/bin/env bats
 
-```yaml
-name: Tests
+bats_require_minimum_version 1.5.0
 
-on: [push, pull_request]
+setup() {
+  load 'test_helper/common-setup'
+  _common_setup
+  source "$PROJECT_ROOT/src/greet.sh"
+}
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
+@test "greets by name" {
+  run greet "Ada"
+  assert_success
+  assert_output "Hello, Ada!"
+}
 
-    steps:
-      - uses: actions/checkout@v3
+@test "rejects a missing name with exit code 2" {
+  run -2 --separate-stderr greet
+  assert_output ""
+  [[ $stderr == *"usage: greet NAME"* ]]
+}
 
-      - name: Install Bats
-        run: |
-          npm install --global bats
+@test "works as an executable" {
+  run greet.sh "Grace"
+  assert_success
+  assert_line --index 0 "Hello, Grace!"
+}
 
-      - name: Run Tests
-        run: |
-          bats tests/*.bats
+@test "writes a file in the per-test temp dir" {
+  greet "Linus" >"$BATS_TEST_TMPDIR/out.txt"
+  run cat "$BATS_TEST_TMPDIR/out.txt"
+  assert_output --partial "Linus"
+}
 
-      - name: Run Tests with Tap Reporter
-        run: |
-          bats tests/*.bats --tap | tee test_output.tap
+@test "formats JSON when jq is installed" {
+  command -v jq >/dev/null || skip "jq not installed"
+  run jq -n --arg n "$(greet Ada)" '$n'
+  assert_success
+}
 ```
 
-### Makefile Integration
+Run it with `test/bats/bin/bats test/` (or `bats test/` with a system install).
 
-```makefile
-.PHONY: test test-verbose test-tap
+## Core Rules
 
-test:
-	bats tests/*.bats
+- **`run` captures, it never fails the test.** After `run cmd`, check `$status`, `$output`
+  and `${lines[@]}` yourself, or with `assert_success`, `assert_failure`, `assert_output`,
+  `assert_line` and `refute_output` from bats-assert.
+- **`run -N cmd`** asserts the exit code is `N`; `run ! cmd` asserts it is non-zero. Both
+  need `bats_require_minimum_version 1.5.0` at the top of the file.
+- **`--separate-stderr`** puts stderr in `$stderr` instead of mixing it into `$output`.
+- **Commands outside `run`** fail the test on a non-zero exit, so plain `[ … ]` and `[[ … ]]`
+  lines are assertions. On Bash older than 4.1 a failing `[[ … ]]` or `(( … ))` in the
+  middle of a test does not fail it; use `[ … ]` or the `assert_*` helpers when that matters.
+- **Temp files go in `$BATS_TEST_TMPDIR`**, a fresh directory per test that bats deletes
+  afterwards. `$BATS_FILE_TMPDIR` is shared by the tests in one file. Do not reassign
+  `TMPDIR`: the code under test and `mktemp` read it.
+- **Skip with `skip "reason"`**, inside a test or `setup`. Bats has no conditional-skip helper; write the
+  condition yourself: `command -v jq >/dev/null || skip "jq not installed"`.
+- **`setup`/`teardown` run around every test; `setup_file`/`teardown_file` once per file.**
+  Variables from `setup_file` reach tests only if exported.
+- **Pipes need a wrapper**: `run bash -c "producer | consumer"`, or `run` a function that
+  contains the pipe. `run producer | consumer` pipes `run`'s own (empty) output.
 
-test-verbose:
-	bats tests/*.bats --verbose
+## Running
 
-test-tap:
-	bats tests/*.bats --tap
-
-test-parallel:
-	bats tests/*.bats --parallel 4
-
-coverage: test
-	# Optional: Generate coverage reports
+```bash
+bats test/                         # every .bats file in the directory
+bats -r test/                      # recurse into subdirectories
+bats --filter 'rejects' test/      # tests whose name matches a regex
+bats --formatter tap test/         # TAP for CI tools
+bats --jobs 4 test/                # parallel; needs GNU parallel installed
+bats --print-output-on-failure test/
 ```
 
-## Best Practices
+## More Patterns
 
-1. **Test one thing per test** - Single responsibility principle
-2. **Use descriptive test names** - Clearly states what is being tested
-3. **Clean up after tests** - Always remove temporary files in teardown
-4. **Test both success and failure paths** - Don't just test happy path
-5. **Mock external dependencies** - Isolate unit under test
-6. **Use fixtures for complex data** - Makes tests more readable
-7. **Run tests in CI/CD** - Catch regressions early
-8. **Test across shell dialects** - Ensure portability
-9. **Keep tests fast** - Run in parallel when possible
-10. **Document complex test setup** - Explain unusual patterns
+`references/details.md` covers output and file assertions, fixtures, command stubs on
+`PATH`, testing error paths and multiple shells, and CI workflows.
