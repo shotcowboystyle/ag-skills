@@ -159,7 +159,7 @@ One word. Zero config. Complete visual identity.
 
 ## Tips for Best Results
 
-1. **Start with `/style`**. Takes 2 minutes, makes everything 10x better.
+1. **Start with `/style`**. Takes 2 minutes and gives every later command a clear direction.
 2. **Run `/fix` on any AI-generated code**. It's the fastest path to production quality.
 3. **Use `/grade` before every PR**. If it scores below 70, run `/fix`.
 4. **The more context you give, the better the output**. Paste screenshots, code, URLs, Figma exports.

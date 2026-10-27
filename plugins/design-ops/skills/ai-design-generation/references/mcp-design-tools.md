@@ -1,265 +1,47 @@
-# MCP Design Tools — Complete Catalog
+# MCP Design Tools — Catalog
 
-This reference covers every MCP server relevant to AI-powered design generation. For each tool: capabilities, configuration, tool names, parameters, pricing, strengths, limitations, and best use cases.
+This reference lists the MCP servers that are useful for AI-powered design generation: who
+publishes each one, how to connect it, and what it is good for. Tool names change between
+server versions, so list the connected server's tools at runtime before calling one. Never
+call a tool name from memory.
+
+Checked against each publisher's docs in October 2026. Re-check the linked docs before
+relying on an endpoint or package name.
 
 ---
 
-## 1. Stitch MCP (Google)
+## 1. Stitch (Google)
 
-### Purpose
+Generates UI screens and multi-screen flows from text or an image, and exports HTML/CSS or
+Figma. Google documents an MCP route at <https://stitch.withgoogle.com/docs/mcp/setup>; the
+remote endpoint authenticates with Google credentials, which not every MCP client supports.
+There is no official npm package. If the client can't authenticate, use Stitch in the
+browser and paste the exported HTML/CSS back in.
 
-Generate complete UI screens, multi-page sites, and design systems from text descriptions. Stitch understands design context (colors, typography, layout patterns) and produces HTML/CSS output that can be previewed, iterated, and converted to production code.
+**Best for:** fast first drafts of whole screens and wireframes.
+**Limits:** output needs a token pass before it matches a design system.
 
-### MCP Configuration
+## 2. fal (fal.ai)
 
-```json
-{
-  "mcpServers": {
-    "stitch": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/stitch-mcp"]
-    }
-  }
-}
+One server in front of fal's model catalogue: FLUX, Imagen, Recraft, Veo and others.
+Official remote server, OAuth sign-in (docs: <https://fal.ai/docs/documentation/setting-up/mcp>):
+
+```bash
+claude mcp add --transport http --scope user fal https://mcp.fal.ai/mcp-relay
 ```
 
-### Available Tools
+Its tools cover model discovery (`search_models`, `get_model_schema`, `get_pricing`,
+`recommend_model`), execution (`run_model`, `submit_job`, `check_job`, `get_job_result`,
+`cancel_job`) and `upload_file`. Read `get_model_schema` before `run_model`, since every
+model takes different inputs.
 
-#### `extract_design_context`
+**Best for:** hero images, product shots, vector icons (Recraft models), short video.
+**Limits:** per-generation cost; check `get_pricing` before batch runs.
 
-Analyzes an existing design (URL, screenshot, or description) to extract design context including colors, typography, layout patterns, component styles, and spacing systems.
+## 3. Replicate
 
-**Parameters:**
-
-- `source` (string, required): URL, file path, or detailed text description of existing design
-- `extract_colors` (boolean, default true): Extract color palette
-- `extract_typography` (boolean, default true): Extract font families, sizes, weights
-- `extract_layout` (boolean, default true): Extract grid, spacing, layout patterns
-- `extract_components` (boolean, default true): Extract component patterns
-
-**Returns:** A design context object that can be passed to `generate_screen_from_text` for style-consistent generation.
-
-**When to use:** Before generating screens for an existing product, or when the user wants to match a reference design's style.
-
-#### `generate_screen_from_text`
-
-Generates a complete screen from a text description, optionally using design context for style consistency.
-
-**Parameters:**
-
-- `description` (string, required): Detailed description of the screen to generate
-- `design_context` (object, optional): Context extracted from `extract_design_context`
-- `platform` (string, optional): "web", "ios", "android" — defaults to "web"
-- `theme` (string, optional): "light", "dark", "auto" — defaults to "light"
-- `viewport` (object, optional): Width and height for the generated screen
-- `responsive` (boolean, optional): Generate responsive variants
-
-**Returns:** HTML/CSS output with preview URL, plus metadata about the generated design decisions.
-
-**When to use:** Primary screen generation tool. Use for any single-screen generation task.
-
-#### `build_site`
-
-Generates a multi-page site from a description, maintaining design consistency across all pages.
-
-**Parameters:**
-
-- `description` (string, required): Overall site description
-- `pages` (array, required): List of page descriptions with names and content requirements
-- `design_context` (object, optional): Context for style consistency
-- `navigation` (string, optional): Navigation structure description
-- `theme` (string, optional): "light", "dark", "auto"
-
-**Returns:** Multi-page HTML/CSS output with navigation, consistent styling, and preview URLs for each page.
-
-**When to use:** When generating landing pages, marketing sites, or multi-screen app prototypes.
-
-### Strengths
-
-- Full screen generation from text — not just images but interactive HTML/CSS
-- Design context awareness — can match existing styles
-- Multi-page consistency — maintains design coherence across pages
-- Layout intelligence — understands grid systems, responsive patterns
-- Real content handling — works with actual content, not just placeholders
-- Rapid iteration — can regenerate quickly with adjusted descriptions
-
-### Limitations
-
-- Output is HTML/CSS, not native code (SwiftUI, Jetpack Compose)
-- Limited fine-grained style control compared to manual CSS
-- Cannot generate complex interactive components (modals, drag-and-drop, charts with live data)
-- May not perfectly match very specific brand guidelines without strong design context
-- No SVG/vector output for icons or illustrations
-
-### Best Use Cases
-
-- Rapid prototyping of screen concepts
-- Landing page generation
-- Multi-screen app wireframes and mockups
-- Design exploration (generate 3 variants, pick best)
-- Converting verbal design ideas into visual screens
-
-### Pricing
-
-API-based, per generation. Check current rates at the Stitch documentation.
-
----
-
-## 2. Fal.ai MCP
-
-### Purpose
-
-Access 600+ image and video generation models through a single MCP server. This is the most versatile generation MCP — it provides access to models from Google (Imagen 4, Veo 3.1), Black Forest Labs (FLUX), Stability AI (Stable Diffusion), Recraft (V3 vector), and hundreds more.
-
-### MCP Configuration
-
-```json
-{
-  "mcpServers": {
-    "fal-ai": {
-      "command": "npx",
-      "args": ["-y", "@fal-ai/mcp"],
-      "env": {
-        "FAL_KEY": "your-fal-api-key"
-      }
-    }
-  }
-}
-```
-
-### Available Tools
-
-#### `generate_image`
-
-Generates an image using a specified model.
-
-**Parameters:**
-
-- `model` (string, required): Model identifier (e.g., "fal-ai/flux-pro/v1.1", "fal-ai/imagen4", "fal-ai/recraft-v3")
-- `prompt` (string, required): Text description of the image to generate
-- `negative_prompt` (string, optional): What to exclude from the image
-- `image_size` (string, optional): Output dimensions ("landscape_16_9", "square", "portrait_4_3", etc.)
-- `num_images` (integer, optional): Number of images to generate (1-4)
-- `seed` (integer, optional): Reproducibility seed
-- `guidance_scale` (float, optional): How closely to follow the prompt (higher = more literal)
-- `style` (string, optional): Model-specific style parameter
-
-**Returns:** Image URL(s), generation metadata, seed used.
-
-#### `list_models`
-
-Lists available models with filtering.
-
-**Parameters:**
-
-- `category` (string, optional): "image", "video", "audio", "text-to-image", "image-to-image"
-- `search` (string, optional): Search term to filter models
-
-**Returns:** List of available models with descriptions and capabilities.
-
-#### `get_model_info`
-
-Gets detailed information about a specific model.
-
-**Parameters:**
-
-- `model` (string, required): Model identifier
-
-**Returns:** Model capabilities, supported parameters, pricing, example outputs.
-
-### Key Models for Design Generation
-
-#### FLUX Pro 1.1 (`fal-ai/flux-pro/v1.1`)
-
-- **Type:** Text-to-image
-- **Strength:** Best general-purpose image generation. Photorealistic output with excellent prompt following.
-- **Best for:** Hero images, product photography, lifestyle imagery, UI screenshots
-- **Resolution:** Up to 2048x2048
-- **Speed:** ~5-10 seconds per image
-- **Design use:** Generate high-quality hero images, background imagery, product shots
-
-#### FLUX Dev (`fal-ai/flux/dev`)
-
-- **Type:** Text-to-image
-- **Strength:** Open-source variant of FLUX. Good quality, faster and cheaper than Pro.
-- **Best for:** Quick iterations, concept exploration, bulk generation
-- **Resolution:** Up to 1024x1024
-- **Speed:** ~3-5 seconds per image
-- **Design use:** Rapid exploration of visual concepts before committing to Pro quality
-
-#### Imagen 4 (`fal-ai/imagen4`)
-
-- **Type:** Text-to-image (Google)
-- **Strength:** Highest-quality photorealistic images. Excellent text rendering within images. Best at understanding complex spatial relationships.
-- **Best for:** Product photographs, images with text overlays, realistic scenes, marketing assets
-- **Resolution:** Up to 2048x2048
-- **Speed:** ~8-15 seconds per image
-- **Design use:** Product shots for e-commerce, hero images with text, realistic lifestyle photography
-
-#### Recraft V3 (`fal-ai/recraft-v3`)
-
-- **Type:** Text-to-image with SVG output
-- **Strength:** The ONLY model that generates true SVG/vector output. Critical for icons, logos, and scalable graphics.
-- **Best for:** Icons, logos, vector illustrations, brand marks, UI icons
-- **Output formats:** SVG (vector), PNG
-- **Speed:** ~5-8 seconds per image
-- **Design use:** Icon sets, logo concepts, vector illustrations, any asset that must scale without quality loss
-- **Critical note:** This is the only path to AI-generated vector assets. All other models output raster images only.
-
-#### Veo 3.1 (`fal-ai/veo-3.1`)
-
-- **Type:** Text-to-video (Google)
-- **Strength:** Video generation from text descriptions. Up to 8 seconds of video.
-- **Best for:** Product demo concepts, motion design references, hero video backgrounds, onboarding animation concepts
-- **Resolution:** Up to 1080p
-- **Duration:** Up to 8 seconds
-- **Speed:** ~30-60 seconds per video
-- **Design use:** Motion concept exploration, product demo storyboards, background video for hero sections
-
-#### Stable Diffusion 3.5 (`fal-ai/stable-diffusion-v35`)
-
-- **Type:** Text-to-image
-- **Strength:** Open-source, fine-tunable, large community and ecosystem
-- **Best for:** Fine-tuned use cases, specialized styles, community models
-- **Design use:** When you need a fine-tuned model for a specific visual style
-
-### Strengths
-
-- Massive model variety — 600+ models through one MCP server
-- Competitive pricing — often cheaper than direct API access
-- Fast inference — optimized infrastructure
-- Single API key — access everything with one FAL_KEY
-- Model comparison — easy to try different models for same prompt
-
-### Limitations
-
-- Requires FAL_KEY (API key with billing)
-- Image output only (except Veo for video) — no HTML/CSS like Stitch
-- Model availability can change
-- Some models have queue times during peak usage
-- Vector output only through Recraft V3
-
-### Best Use Cases
-
-- Any image generation task — route to the best model for the specific need
-- Icon generation (via Recraft V3)
-- Hero image and photography generation
-- Video concept generation (via Veo 3.1)
-- Model comparison and A/B testing
-
-### Pricing
-
-Per-model pricing. Generally $0.01-0.10 per image, $0.10-0.50 per video. Check fal.ai/pricing for current rates.
-
----
-
-## 3. Replicate MCP
-
-### Purpose
-
-Run open-source AI models with support for custom fine-tuned models. Replicate hosts thousands of community models and allows users to deploy their own fine-tuned versions.
-
-### MCP Configuration
+Runs public and custom fine-tuned models. Official server (npm `replicate-mcp`, from
+Replicate), keyed by `REPLICATE_API_TOKEN`:
 
 ```json
 {
@@ -267,246 +49,58 @@ Run open-source AI models with support for custom fine-tuned models. Replicate h
     "replicate": {
       "command": "npx",
       "args": ["-y", "replicate-mcp"],
-      "env": {
-        "REPLICATE_API_TOKEN": "your-replicate-token"
-      }
+      "env": { "REPLICATE_API_TOKEN": "<token>" }
     }
   }
 }
 ```
 
-### Available Tools
+**Best for:** custom fine-tuned styles, utility models (background removal, upscaling).
 
-#### `run_model`
+## 4. Recraft
 
-Runs a model on Replicate.
-
-**Parameters:**
-
-- `model` (string, required): Model identifier (owner/name:version)
-- `input` (object, required): Model-specific input parameters
-
-#### `list_models`
-
-Lists and searches available models.
-
-#### `get_model`
-
-Gets details about a specific model.
-
-### Key Models for Design
-
-- FLUX variants (schnell, dev, pro)
-- Stable Diffusion XL and variants
-- Custom fine-tuned models (brand-specific, style-specific)
-- Image upscaling models (Real-ESRGAN)
-- Background removal models (RemBG)
-- Style transfer models
-
-### Strengths
-
-- Custom fine-tuned model support — train on your brand's visual style
-- Large community model ecosystem
-- Pay-per-use pricing (no idle costs)
-- Model versioning and reproducibility
-- Image utility models (upscale, remove background, style transfer)
-
-### Limitations
-
-- Cold start times for less popular models
-- Quality varies widely across community models
-- More complex model selection (thousands of options)
-- No vector/SVG output
-
-### Best Use Cases
-
-- Running custom fine-tuned models trained on brand assets
-- Image utility operations (upscale, background removal, style transfer)
-- Accessing specialized community models
-- Reproducible generation with pinned model versions
-
-### Pricing
-
-Per-second GPU billing. Typical image generation: $0.01-0.05. Check replicate.com/pricing.
-
----
-
-## 4. OpenAI GPT-Image / DALL-E MCP
-
-### Purpose
-
-Access OpenAI's image generation models (GPT-Image-1, DALL-E 3) through MCP. Known for strong prompt comprehension, good text rendering in images, and consistent artistic style.
-
-### MCP Configuration
+Raster and vector (SVG) generation, background removal, vectorizing. Official server from
+Recraft (npm `@recraft-ai/mcp-recraft-server`), keyed by `RECRAFT_API_KEY`:
 
 ```json
 {
   "mcpServers": {
-    "openai-images": {
+    "recraft": {
       "command": "npx",
-      "args": ["-y", "openai-images-mcp"],
-      "env": {
-        "OPENAI_API_KEY": "your-openai-key"
-      }
+      "args": ["-y", "@recraft-ai/mcp-recraft-server"],
+      "env": { "RECRAFT_API_KEY": "<key>" }
     }
   }
 }
 ```
 
-### Available Tools
+**Best for:** icon sets and illustrations that must ship as SVG.
 
-#### `generate_image`
+## 5. OpenAI image models (no official MCP)
 
-Generates an image using GPT-Image-1 or DALL-E 3.
+OpenAI doesn't publish an image-generation MCP server. Call the Images API directly
+(`gpt-image-1`), or hand the user the prompt. Strong at following prompts, rendering text
+and editing an existing image.
 
-**Parameters:**
+## 6. Figma (official)
 
-- `prompt` (string, required): Description of the image to generate
-- `model` (string, optional): "gpt-image-1" or "dall-e-3" — defaults to latest
-- `size` (string, optional): "1024x1024", "1024x1792", "1792x1024"
-- `quality` (string, optional): "standard", "hd"
-- `style` (string, optional): "natural", "vivid"
-- `n` (integer, optional): Number of images (1-4 for DALL-E 3)
+Figma runs two servers (docs: <https://developers.figma.com/docs/figma-mcp-server/>):
 
-#### `edit_image`
-
-Edits an existing image based on a text description (inpainting/outpainting).
-
-**Parameters:**
-
-- `image` (string, required): URL or base64 of the image to edit
-- `prompt` (string, required): Description of the edit to make
-- `mask` (string, optional): Mask indicating areas to edit
-
-### Strengths
-
-- Excellent prompt comprehension — understands complex, nuanced descriptions
-- Strong text rendering in images — better than most models at including readable text
-- Consistent artistic quality across generations
-- Image editing (inpainting) capability — modify specific regions of existing images
-- Reliable and well-documented API
-
-### Limitations
-
-- Fewer model options than Fal.ai (only GPT-Image-1 and DALL-E 3)
-- No vector/SVG output
-- No video generation
-- Higher pricing than some alternatives
-- Content policy restrictions can block some design-related prompts
-
-### Best Use Cases
-
-- Illustrations for UI (empty states, onboarding, feature highlights)
-- Concept art and mood board imagery
-- Images that need readable text embedded
-- Lifestyle photography with specific compositions
-- Image editing and modification (change background, modify elements)
-
-### Pricing
-
-DALL-E 3: $0.040-0.080 per image depending on size and quality. GPT-Image-1: check current OpenAI pricing.
-
----
-
-## 5. Figma MCP (Official)
-
-### Purpose
-
-Read and write Figma design files programmatically. This MCP connects to Figma's official API, enabling design extraction, component analysis, and design-to-code workflows.
-
-### MCP Configuration
-
-```json
-{
-  "mcpServers": {
-    "figma": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/figma-mcp"],
-      "env": {
-        "FIGMA_ACCESS_TOKEN": "your-figma-token"
-      }
-    }
-  }
-}
+```bash
+claude mcp add --transport http figma https://mcp.figma.com/mcp              # remote, OAuth
+claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp      # desktop app, Dev Mode
 ```
 
-### Available Tools
+Core read tools on both: `get_design_context`, `get_variable_defs`, `get_metadata`,
+`get_screenshot`, `get_code_connect_map`, `search_design_system`. The remote server also
+writes to files (for example `use_figma`, `generate_figma_design`, `upload_assets`). It
+exposes the `create_design_system_rules` prompt.
 
-#### `get_file`
+**Best for:** pulling real specs, variables and screenshots out of a Figma file before
+building; pushing a built page back into Figma for review.
 
-Retrieves a complete Figma file with all pages, frames, and components.
-
-**Parameters:**
-
-- `file_key` (string, required): Figma file key (from URL)
-- `depth` (integer, optional): How deep to traverse the node tree
-
-#### `get_file_nodes`
-
-Retrieves specific nodes from a Figma file.
-
-**Parameters:**
-
-- `file_key` (string, required): Figma file key
-- `ids` (array, required): Node IDs to retrieve
-
-#### `get_images`
-
-Exports images from Figma nodes.
-
-**Parameters:**
-
-- `file_key` (string, required): Figma file key
-- `ids` (array, required): Node IDs to export as images
-- `format` (string, optional): "png", "jpg", "svg", "pdf"
-- `scale` (number, optional): Export scale (1x, 2x, 3x)
-
-#### `post_comment`
-
-Posts a comment on a Figma file.
-
-**Parameters:**
-
-- `file_key` (string, required): Figma file key
-- `message` (string, required): Comment text
-- `client_meta` (object, optional): Position coordinates for the comment
-
-#### `get_file_styles`
-
-Retrieves all styles (colors, text, effects) defined in a Figma file.
-
-#### `get_file_components`
-
-Retrieves all components and component sets defined in a Figma file.
-
-### Strengths
-
-- Direct access to design files — read actual design specifications
-- Component extraction — understand design system components
-- Style extraction — pull colors, typography, effects from Figma
-- Image export — export any layer as PNG, JPG, SVG, or PDF
-- Design-to-code bridge — extract specs needed for implementation
-- Comment integration — annotate designs programmatically
-
-### Limitations
-
-- Read-heavy — writing back to Figma is limited compared to reading
-- Requires Figma access token with appropriate permissions
-- Large files can be slow to retrieve (use node-specific endpoints)
-- Cannot create new files — only read and annotate existing ones
-- Does not generate designs — it reads existing ones
-
-### Best Use Cases
-
-- Extracting design specifications for code implementation
-- Analyzing existing design systems (components, styles, tokens)
-- Exporting assets from Figma for use in projects
-- Design audit — programmatically check design file quality
-- Creating design context (from Figma) for use with Stitch generation
-
-### Pricing
-
-Figma API is free with a Figma account. Rate limits apply (check Figma API docs).
+Community servers such as Framelink (`figma-developer-mcp`) read files through the REST API
+with a personal access token. They work, but they aren't Figma's.
 
 ---
 
@@ -517,21 +111,21 @@ Use this matrix to route generation tasks to the best available MCP tool.
 | Task                      | Best Tool                       | Fallback                 | Notes                                            |
 | ------------------------- | ------------------------------- | ------------------------ | ------------------------------------------------ |
 | Full UI screen from text  | Stitch                          | FLUX Pro (as screenshot) | Stitch outputs HTML/CSS; FLUX outputs image only |
-| Multi-page site           | Stitch (build_site)             | Manual                   | Only Stitch handles multi-page consistency       |
-| App icon (SVG)            | Recraft V3 (via Fal.ai)         | Manual SVG               | Recraft is the ONLY vector-capable model         |
-| Icon set (batch SVG)      | Recraft V3 (via Fal.ai)         | Manual SVG               | Generate with consistent style prompt            |
-| UI illustrations          | GPT-Image (OpenAI)              | FLUX Pro (Fal.ai)        | OpenAI better for stylized illustration          |
-| Product photographs       | Imagen 4 (via Fal.ai)           | FLUX Pro (Fal.ai)        | Imagen 4 is highest photorealism                 |
+| Multi-page site           | Stitch                          | Manual                   | Keeps one style across screens                   |
+| App icon (SVG)            | Recraft (own MCP or via fal)    | Manual SVG               | Native SVG output                                |
+| Icon set (batch SVG)      | Recraft (own MCP or via fal)    | Manual SVG               | Generate with consistent style prompt            |
+| UI illustrations          | FLUX Pro (fal)                  | OpenAI Images API        | No OpenAI MCP; call the API or hand off a prompt |
+| Product photographs       | Imagen 4 (via Fal.ai)           | FLUX Pro (Fal.ai)        | Strong photorealism                              |
 | Hero images               | FLUX Pro (via Fal.ai)           | Imagen 4 (Fal.ai)        | FLUX Pro best general-purpose                    |
-| Images with text          | Imagen 4 or GPT-Image           | —                        | Both handle text well                            |
-| Video/motion concepts     | Veo 3.1 (via Fal.ai)            | —                        | Only video-capable tool                          |
+| Images with text          | Imagen (fal) or OpenAI Images   | —                        | Both handle text well                            |
+| Video/motion concepts     | Veo (via fal)                   | Kie.ai (`/scroll`)       | Short clips for motion concepts                  |
 | Design system extraction  | Figma MCP                       | Manual                   | Reads Figma files directly                       |
-| Design context extraction | Stitch (extract_design_context) | Figma MCP                | Stitch analyzes any design                       |
+| Design context extraction | Figma (`get_design_context`)    | Stitch                   | Figma reads real specs; Stitch infers from image |
 | Wireframes                | Stitch                          | Manual                   | Fast low-fidelity generation                     |
 | Background removal        | Replicate (RemBG)               | Manual                   | Utility model on Replicate                       |
 | Image upscaling           | Replicate (Real-ESRGAN)         | —                        | Utility model on Replicate                       |
 | Custom fine-tuned style   | Replicate                       | Fal.ai                   | Replicate supports custom models                 |
-| Image editing/inpainting  | GPT-Image (edit_image)          | —                        | Only tool with edit capability                   |
+| Image editing/inpainting  | OpenAI Images API (edit)        | fal (inpainting models)  | Masked edits of an existing image                |
 
 ## MCP Detection Protocol
 
@@ -560,8 +154,8 @@ If no generation MCP servers are available, Design Ops should:
 Always tell the user:
 
 - Which MCP tool was selected and why
-- What model is being used (for Fal.ai)
-- What the generation will cost (approximate)
+- What model is being used (for fal)
+- What the generation will cost (from the server's pricing tool, or say it is unknown)
 - What the expected output quality is
 - How to iterate if the result is not satisfactory
 
@@ -572,21 +166,21 @@ When multiple MCP servers are available, coordinate them for richer output:
 ### Screen + Assets Pipeline
 
 1. Use Stitch to generate the screen layout
-2. Use Recraft V3 (Fal.ai) to generate icons referenced in the screen
-3. Use FLUX Pro or Imagen 4 (Fal.ai) to generate hero images
+2. Use Recraft to generate icons referenced in the screen
+3. Use FLUX Pro or Imagen (fal) to generate hero images
 4. Use Figma MCP to export existing brand assets if available
 
 ### Design Extraction + Generation Pipeline
 
-1. Use Figma MCP to extract design context from existing Figma files
-2. Convert Figma styles into a design context object
-3. Pass that context to Stitch for style-consistent screen generation
+1. Use Figma `get_design_context` and `get_variable_defs` on the existing file
+2. Turn the variables into a token summary
+3. Paste that summary into the Stitch prompt for style-consistent generation
 4. Score the generated screen against the Figma original
 
 ### Iterative Refinement Pipeline
 
 1. Generate v1 with any tool
-2. Score against the 10-dimension visual framework
+2. Score against `visual-design-mastery/references/visual-scoring-framework.md`
 3. Identify weakest dimensions
 4. Adjust prompt to target weak dimensions
 5. Regenerate v2

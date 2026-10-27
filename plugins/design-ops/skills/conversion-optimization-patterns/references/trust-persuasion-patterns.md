@@ -2,7 +2,7 @@
 
 ## Why Trust Is the Prerequisite for Conversion
 
-No one converts on a product they do not trust. Trust is not a feature or a nice-to-have — it is the prerequisite condition that must be met before any conversion optimization can take effect. A user with high motivation, clear ability, and a visible trigger will still not click "Buy Now" if they suspect the product is a scam, their data will be misused, or the company will not deliver on its promises.
+No one converts on a product they do not trust. Trust is not a feature or a nice-to-have — it is the prerequisite condition that must be met before any conversion optimization can take effect. A user with high motivation, clear ability, and a visible prompt will still not click "Buy Now" if they suspect the product is a scam, their data will be misused, or the company will not deliver on its promises.
 
 The Stanford Web Credibility Research Project (Fogg et al., 2001-2003) conducted the largest study of online credibility, surveying over 4,500 people about what makes websites credible. The finding: **visual design quality is the #1 factor in initial credibility assessment**, outranking content quality, company reputation, and even trust seals. Users make credibility judgments within 50 milliseconds of seeing a page — before reading a single word.
 

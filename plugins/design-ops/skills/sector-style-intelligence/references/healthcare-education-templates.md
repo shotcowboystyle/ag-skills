@@ -30,7 +30,7 @@ Healthcare interfaces must prioritize:
 - Print/export watermarked with user identity and timestamp
 
 ### Accessibility Requirements (Critical)
-- Minimum 4.5:1 contrast ratio for all text (7:1 preferred)
+- Minimum 4.5:1 contrast ratio for all text (7:1 preferred, WCAG AAA)
 - All images have meaningful alt text
 - All form inputs have visible labels (not just placeholders)
 - Focus indicators visible on all interactive elements
@@ -69,7 +69,7 @@ Healthcare interfaces must prioritize:
 Background:             #FFFFFF
 Card background:        #FFFFFF border: 1px solid #E2E8F0
 Sidebar bg:             #F8FAFC
-Primary accent:         #0369A1 (accessible blue, 7:1 on white)
+Primary accent:         #0369A1 (accessible blue, 5.9:1 on white, AA)
 Primary hover:          #075985
 Success:                #15803D (accessible green)
 Warning:                #B45309 (accessible amber)

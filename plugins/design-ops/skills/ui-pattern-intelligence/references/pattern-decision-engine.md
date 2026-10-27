@@ -850,7 +850,7 @@ Start here when designing for when things go wrong or nothing is there yet.
 
 **Full page (initial page load, navigation):**
 → **Skeleton Screen** (shapes matching the real content layout)
-- Rationale: Skeleton screens reduce perceived wait time by 30%. They set spatial expectations so the brain starts processing the layout before data arrives.
+- Rationale: Skeleton screens reduce perceived wait time. They set spatial expectations so the brain starts processing the layout before data arrives.
 - Benchmark: Facebook, LinkedIn, Stripe Dashboard.
 
 **Single component (a chart loading, a table refreshing):**

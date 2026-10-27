@@ -566,7 +566,7 @@ Conversion-optimized hero with an inline form for immediate sign-up or demo requ
 ```tsx
 export function SaaSSignUpHero({ title, subtitle }: { title: string; subtitle: string }) {
   return (
-    <section className="bg-gradient-to-br from-blue-50 to-indigo-50">
+    <section className="bg-gradient-to-br from-muted to-background">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-20 lg:pb-28">
         <div className="lg:grid lg:grid-cols-2 lg:gap-x-16 items-center">
           <div>

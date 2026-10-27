@@ -26,7 +26,7 @@ In light mode, elevation is communicated through shadows (darker = lower). In da
 
 ### Problem 5: Contrast Polarity Is Not Symmetric
 
-APCA research shows that light text on dark backgrounds requires approximately 15-20% more contrast to achieve the same readability as dark text on light backgrounds. A dark mode palette that simply flips lightness values will feel less readable.
+APCA models text polarity separately: light text on dark backgrounds does not read the same as dark text on light at the same WCAG 2 ratio, so check dark-mode pairs on their own. A dark mode palette that simply flips lightness values will feel less readable.
 
 ---
 

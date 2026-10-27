@@ -40,7 +40,7 @@ Thumb reach from bottom-right (right-handed):
 4. **No hover states**: Every hover interaction must have a tap equivalent
 5. **System gestures are sacred**: Never override swipe-back (iOS) or system-back (Android)
 6. **Provide visual feedback within 100ms** of touch to confirm the tap registered
-7. **Limit navigation depth to 2-3 levels** — every level deeper increases drop-off by 10-20%
+7. **Limit navigation depth to 2-3 levels** — every level deeper increases drop-off
 
 ### iOS vs. Android Navigation Philosophy
 

@@ -175,7 +175,7 @@ For components that exist across platforms, ensure consistent behavior:
 
 | Aspect          | Web (React)          | iOS (SwiftUI)            | Android (Compose)         |
 | --------------- | -------------------- | ------------------------ | ------------------------- |
-| Min tap target  | 44px (WCAG)          | 44pt (HIG)               | 48dp (M3)                 |
+| Min tap target  | 24px (WCAG 2.5.8 AA)  | 44pt (HIG)               | 48dp (M3)                 |
 | Focus indicator | ring-2 ring-offset-2 | System default           | Ripple                    |
 | Loading         | Spinner component    | ProgressView             | CircularProgressIndicator |
 | Haptic          | N/A                  | UIImpactFeedback         | HapticFeedbackConstants   |
@@ -668,7 +668,7 @@ interface TabsProps {
 **Variants**: simple, striped, hoverable, bordered, condensed
 **Features**: Sortable columns, resizable columns, row selection (checkbox), pagination, sticky header, horizontal scroll on mobile
 **Keyboard**: Arrow keys for cell navigation (if interactive), Tab between interactive elements within rows
-**ARIA**: `role="grid"` for interactive tables, `aria-sort` on sortable column headers, `aria-selected` on selected rows, `aria-rowcount`/`aria-colcount` for virtual tables
+**ARIA**: native `<table>` by default; `role="grid"` only for interactive tables with arrow-key cell navigation; `aria-sort` on sortable column headers, `aria-selected` on selected rows, `aria-rowcount`/`aria-colcount` for virtual tables
 
 ```typescript
 interface Column<T> {
@@ -840,7 +840,7 @@ When building components, draw implementation patterns from:
 - `performance-states-patterns` — Loading, error, empty, skeleton states
 - `sector-style-intelligence` — Sector-specific conventions, trust signals, density norms
 - `nng-ux-heuristics` — Heuristic grounding of component decisions
-- `ui-pattern-intelligence` — 200+ UI patterns, anti-pattern encyclopedia
+- `ui-pattern-intelligence` — 190+ UI patterns, anti-pattern encyclopedia
 - `platform-visual-standards` — iOS 26 Liquid Glass, M3 Expressive, modern CSS
 - `design-token-presets` — Ready-to-deploy token systems by industry
 - `form-design-encyclopedia` — Form patterns, input types, validation strategies

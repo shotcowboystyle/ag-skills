@@ -66,36 +66,25 @@ Import designs from Figma via MCP, audit them with Design Ops' design intelligen
 
 ### Prerequisites
 
-Requires one of the following MCP servers configured:
+Requires one of these:
 
-- `figma-mcp` — Official Figma MCP server
-- `figma-developer` — Community Figma Developer MCP
-- Direct Figma API access via personal access token
+- Figma's official MCP server, remote (`https://mcp.figma.com/mcp`) or desktop (`http://127.0.0.1:3845/mcp`)
+- Framelink (`figma-developer-mcp`), a community server that reads the REST API with a personal access token
 
 If no Figma MCP is configured, instruct the user:
 
 ```
-To connect Figma, add to your coding tool's MCP config (shown in `.mcp.json` form):
-
-{
-  "mcpServers": {
-    "figma": {
-      "command": "npx",
-      "args": ["-y", "figma-developer-mcp"],
-      "env": {
-        "FIGMA_PERSONAL_ACCESS_TOKEN": "your-token-here"
-      }
-    }
-  }
-}
+claude mcp add --transport http figma https://mcp.figma.com/mcp
 ```
+
+Other tools take the same URL in their MCP config (`.mcp.json`, `~/.codex/config.toml`, `opencode.json`). Setup details: `figma-design-tool-workflows/references/figma-mcp-ai-flywheel.md`.
 
 ### Import Protocol
 
 **Step 1: Extract from Figma**
 
 - Accept a Figma file URL, frame URL, or node ID
-- Use the MCP server to fetch:
+- Use the MCP server (`get_metadata`, then `get_design_context`, `get_variable_defs` and `get_screenshot` on the target node) to fetch:
   - Component tree structure
   - Colors (fill, stroke, effects)
   - Typography (font family, size, weight, line height, letter spacing)
@@ -122,7 +111,7 @@ Before generating code, run a silent design quality check:
 - Typography: Is there a consistent type scale or random sizes?
 - Spacing: Does it follow a grid or use arbitrary values?
 - Consistency: Are similar components styled consistently?
-- Accessibility: Are interactive elements properly sized (44px+ tap targets)?
+- Accessibility: Are interactive elements properly sized (24×24 CSS px minimum per WCAG 2.2 SC 2.5.8; 44pt iOS / 48dp Android)?
 - Output any issues found as warnings before generating code
 
 **Step 4: Generate Production Code**
@@ -199,9 +188,9 @@ Before generating anything, collect:
 | **Stitch MCP**          | Full screen generation from text | Complete UI screens, multi-screen flows                        |
 | **Fal.ai — FLUX Pro**   | High-quality image generation    | Stylized mockups, hero images, illustrations                   |
 | **Fal.ai — Imagen 4**   | Photorealistic image generation  | Product photos, lifestyle shots, realistic scenes              |
-| **Fal.ai — Recraft V3** | Vector SVG generation            | Icons, logos, vector illustrations (ONLY vector-capable model) |
+| **Fal.ai — Recraft V3** | Vector SVG generation            | Icons, logos, vector illustrations (native SVG output)        |
 | **Fal.ai — Veo 3.1**    | Video generation (up to 8s)      | Motion assets, UI animations, product videos                   |
-| **OpenAI GPT-Image**    | Image with embedded text         | Illustrations with labels, diagrams, text-in-image             |
+| **OpenAI Images API**   | Image with embedded text (no MCP; direct API) | Illustrations with labels, diagrams, text-in-image             |
 | **Figma MCP**           | Design file read/write           | Component creation, design system integration                  |
 
 If **NO MCP available**: Output a detailed specification + optimized prompt that the user can use manually with their tool of choice. The prompt is the product.
@@ -426,7 +415,7 @@ Not all AI models are equal. Route each asset to the optimal model:
 | Asset Type                 | Best Model                | Why                                                     | Fallback                                   |
 | -------------------------- | ------------------------- | ------------------------------------------------------- | ------------------------------------------ |
 | **Full UI screen**         | Stitch MCP                | Purpose-built for UI generation, understands components | FLUX Pro (image-based mockup)              |
-| **UI icon set (vector)**   | Recraft V3 via Fal.ai     | Only model that outputs true SVG vectors                | GPT-Image (raster, then trace to SVG)      |
+| **UI icon set (vector)**   | Recraft V3 via Fal.ai     | Native SVG output                                       | GPT-Image (raster, then trace to SVG)      |
 | **Logo concept (vector)**  | Recraft V3 via Fal.ai     | Vector output, clean shapes                             | FLUX Pro (raster concept, refine manually) |
 | **Flat illustration**      | FLUX Pro via Fal.ai       | Strong style adherence, clean output                    | GPT-Image (good with text-in-image)        |
 | **Isometric illustration** | FLUX Pro via Fal.ai       | Best isometric rendering quality                        | Imagen 4 (more photorealistic but capable) |
@@ -435,7 +424,7 @@ Not all AI models are equal. Route each asset to the optimal model:
 | **Lifestyle photo**        | Imagen 4 via Fal.ai       | Natural lighting and composition                        | FLUX Pro                                   |
 | **Hero image (stylized)**  | FLUX Pro via Fal.ai       | Best artistic/stylized quality                          | Imagen 4 (more photorealistic)             |
 | **Background pattern**     | FLUX Pro via Fal.ai       | Good at seamless patterns                               | Recraft V3 (for vector patterns)           |
-| **UI video/animation**     | Veo 3.1 via Fal.ai        | Only video generation model                             | Screen record + edit manually              |
+| **UI video/animation**     | Veo 3.1 via Fal.ai        | Short clips from text or a still                        | Screen record + edit manually              |
 | **Product video**          | Veo 3.1 via Fal.ai        | Smooth camera movement, product focus                   | Manual video production                    |
 | **Diagram with text**      | GPT-Image                 | Best text rendering in images                           | Manual creation (Figma/design tool)        |
 | **App Store screenshots**  | Stitch MCP + post-process | Full screen generation + frame                          | FLUX Pro (mockup image)                    |
@@ -461,7 +450,7 @@ Route generation to the best available tool:
 
 1. Build specification from Step 1
 2. Construct prompt from Step 2
-3. Call Stitch MCP `generate_screen_from_text` with full prompt
+3. Generate the screen in Stitch (its MCP tool, or the web app) with the full prompt
 4. If Stitch unavailable, call Fal.ai FLUX Pro with the prompt adapted for image generation
 5. Request 2-3 variations if the tool supports it
 6. Log the exact prompt for iteration
@@ -495,22 +484,14 @@ For each generation attempt, log:
 
 #### Screen Quality Score (10 Dimensions)
 
-For generated screens, score across 10 visual dimensions:
+Score generated screens on the 10 dimensions in `visual-design-mastery/references/visual-scoring-framework.md` (the one Design Ops rubric) and report DQS = weighted overall × 10. Then check these generation-specific points pass/fail. They are not extra dimensions:
 
-| Dimension             | Weight | What to Check                                                                    |
-| --------------------- | ------ | -------------------------------------------------------------------------------- |
-| Layout and Hierarchy  | 15%    | Visual hierarchy follows F/Z-pattern, clear H1-H4 levels, content grouping       |
-| Typography            | 12%    | Type scale is consistent, contrast between heading/body, readable at target size |
-| Color and Contrast    | 12%    | Token adherence, WCAG contrast ratios (4.5:1 text, 3:1 UI), harmony              |
-| Spacing and Alignment | 10%    | Grid-aligned, consistent spacing rhythm, breathing room                          |
-| Platform Fidelity     | 10%    | Matches iOS HIG / Material 3 / Web conventions accurately                        |
-| Pattern Correctness   | 10%    | Uses correct patterns for the screen type (nav, data display, input)             |
-| Content Quality       | 10%    | Realistic content, appropriate length, no placeholder text                       |
-| State Completeness    | 8%     | Requested states are present and well-handled                                    |
-| Sector Fit            | 8%     | Matches industry visual expectations and norms                                   |
-| Accessibility         | 5%     | Visible contrast, appropriately sized targets, text legibility                   |
-
-Score each dimension 1-10 with specific justification. Compute weighted overall score.
+- Platform fidelity: matches iOS HIG / Material 3 / web conventions
+- Pattern correctness: right patterns for the screen type (nav, data display, input)
+- Content: realistic, right length, no placeholder text
+- States: every requested state is present
+- Sector fit: matches the sector's visual norms
+- Accessibility: 4.5:1 text and 3:1 UI contrast, targets at least 24×24 CSS px
 
 #### Asset Quality Checklist
 
@@ -871,10 +852,10 @@ When generating designs and assets, draw intelligence from:
 - `ai-design-generation` skill — MCP tool configuration, prompt engineering, generation pipelines, quality control, asset generation strategies
 - `visual-design-mastery` skill — visual quality standards for scoring, designer DNA for style reference, canonical design rules
 - `platform-visual-standards` skill — platform-specific generation constraints (iOS 26 Liquid Glass, Material 3 Expressive, modern CSS)
-- `ui-pattern-intelligence` skill — pattern requirements for each screen type (200+ patterns)
+- `ui-pattern-intelligence` skill — pattern requirements for each screen type (190+ patterns)
 - `sector-style-intelligence` skill — sector visual norms and expectations (20+ industries)
 - `screen-flow-patterns` skill — screen type specifications and flow context
-- `layout-block-intelligence` skill — 500+ layout section/block patterns for screen composition
+- `layout-block-intelligence` skill — ~300 layout section/block patterns for screen composition
 - `page-composition-engine` skill — full-page composition recipes for screen generation
 - `component-patterns-code` skill — component mapping for production conversion
 - `performance-states-patterns` skill — state coverage requirements (loading, error, empty, skeleton)

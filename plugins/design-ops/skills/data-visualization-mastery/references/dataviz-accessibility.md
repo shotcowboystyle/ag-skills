@@ -235,9 +235,9 @@ For complex charts (Sankey, treemap, network), provide:
 
 ## 4. Colorblind-Safe Palettes
 
-### 4.1 Palette 1: Tableau 10 (Categorical, 8 colors)
+### 4.1 Counter-example: Tableau 10 (Categorical, 8 colors)
 
-Tested against protanopia, deuteranopia, and tritanopia. Most widely validated categorical palette.
+Tableau 10 is Tableau's default palette and is **not** colorblind-safe: it was not designed for color vision deficiency, so test it before relying on hue alone. Tableau ships a separate "Color Blind" palette; otherwise prefer Okabe-Ito (4.5) or Viridis (4.6).
 
 ```
 #4e79a7  Blue (Steel)

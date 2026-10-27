@@ -190,7 +190,7 @@ Luke Wroblewski's definitive study on inline validation (2009) tested three vali
 
 **Error message position:** Below the field is the strongest convention and most accessible pattern. Errors above the field or in tooltips can be missed by screen readers and violate user expectations.
 
-**Success indicators:** Green checkmarks after validated fields provide positive reinforcement and reduce anxiety about whether input was accepted. Research shows that inline success indicators reduce form completion time by 10-15% because users do not second-guess their input.
+**Success indicators:** Green checkmarks after validated fields provide positive reinforcement and reduce anxiety about whether input was accepted. Inline success indicators reduce form completion time because users do not second-guess their input.
 
 ## Password Requirements UX
 
@@ -205,7 +205,7 @@ Password creation is one of the highest-friction form fields. Users must simulta
 
 ### Evidence-Based Password UX
 
-**Show requirements upfront:** Display all password requirements before the user starts typing, not after they fail. A checklist format that updates in real-time as the user types reduces error rates by 30-40%.
+**Show requirements upfront:** Display all password requirements before the user starts typing, not after they fail. A checklist format that updates in real-time as the user types reduces errors.
 
 **Real-time requirement checklist:**
 ```
@@ -217,7 +217,7 @@ Password must contain:
 ```
 Each requirement checks off as the user meets it. This transforms a frustrating guessing game into a satisfying progress experience.
 
-**Show/hide password toggle:** A toggle that reveals the password in the field eliminates the need for a confirm-password field and reduces password entry errors by 50%+ (NIST recommendation, 2017). The eye icon is the standard affordance.
+**Show/hide password toggle:** A toggle that reveals the password in the field eliminates the need for a confirm-password field and reduces password entry errors (NIST SP 800-63B recommends offering a show-password option). The eye icon is the standard affordance.
 
 **Eliminate confirm password:** With a show/hide toggle, the confirm password field is redundant. Removing it reduces form fields by one and eliminates the "passwords don't match" error (one of the most frustrating form errors). Research from Baymard Institute supports this recommendation.
 
@@ -295,9 +295,9 @@ Modern browsers can autofill name, email, address, phone, and payment informatio
 
 Google Places API, Mapbox, and similar services provide type-ahead address completion. Implementing address autocomplete:
 - Reduces address form fields from 5-6 (street, city, state, ZIP, country) to 1 (search field)
-- Reduces address entry time by 60-80%
-- Reduces address errors by 70-90%
-- Increases form completion by 10-15%
+- Reduces address entry time
+- Reduces address errors
+- Can increase form completion (needs measurement)
 
 **Implementation best practices:**
 - Use a single address search field that expands to editable individual fields after selection

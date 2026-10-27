@@ -59,22 +59,11 @@ This is the receipts command. It does not just fix — it proves the fix. Every 
 
 ### Step 1 — Analyze Current State (Before)
 
-Run the `/roast` scoring dimensions against the input **silently** — do not output this step. Capture all scores internally for the comparison table.
+Score the input against the 10 dimensions in `visual-design-mastery/references/visual-scoring-framework.md` **silently** — do not output this step. Capture all scores internally for the comparison table.
 
 **Score each of the 10 dimensions (1-10):**
 
-| #   | Dimension     | Evaluation Focus                                             |
-| --- | ------------- | ------------------------------------------------------------ |
-| 1   | Clarity       | Can users understand what to do without instruction?         |
-| 2   | Hierarchy     | Is information prioritized visually and structurally?        |
-| 3   | Consistency   | Does it follow established patterns and conventions?         |
-| 4   | Spacing       | Is whitespace used purposefully? Breathing room appropriate? |
-| 5   | Color         | Is the palette harmonious, semantic, and accessible?         |
-| 6   | Typography    | Is the type system clear, readable, and hierarchical?        |
-| 7   | Interaction   | Do interactive elements provide clear feedback?              |
-| 8   | Accessibility | Does it work for users of all abilities?                     |
-| 9   | Innovation    | Does it solve problems in novel, valuable ways?              |
-| 10  | Polish        | Is the craft quality and attention to detail high?           |
+Use the framework's dimensions, weights and descriptors. Don't substitute another list.
 
 **Run AI Slop Detection silently:**
 
@@ -134,19 +123,19 @@ Present the 10-dimension before/after table:
 
 | Dimension | Before | After | Change |
 |-----------|--------|-------|--------|
-| Clarity | X/10 | X/10 | +X |
-| Hierarchy | X/10 | X/10 | +X |
-| Consistency | X/10 | X/10 | +X |
-| Spacing | X/10 | X/10 | +X |
-| Color | X/10 | X/10 | +X |
 | Typography | X/10 | X/10 | +X |
-| Interaction | X/10 | X/10 | +X |
-| Accessibility | X/10 | X/10 | +X |
-| Innovation | X/10 | X/10 | +X |
+| Color | X/10 | X/10 | +X |
+| Spacing | X/10 | X/10 | +X |
+| Composition | X/10 | X/10 | +X |
+| Imagery | X/10 | X/10 | +X |
+| Iconography | X/10 | X/10 | +X |
+| Motion | X/10 | X/10 | +X |
 | Polish | X/10 | X/10 | +X |
-| **Total** | **X/100** | **X/100** | **+X** |
+| Coherence | X/10 | X/10 | +X |
+| Craft | X/10 | X/10 | +X |
+| **DQS** | **X/100** | **X/100** | **+X** |
 
-**Grade: [Before Letter] -> [After Letter]**
+**Grade: [Before Letter] -> [After Letter]** (the `/roast` Step 3 letter scale, applied to DQS)
 ```
 
 **3.2 — AI Slop Scorecard**
@@ -478,19 +467,17 @@ The output MUST NOT include:
 ## Scoring Calibration
 
 **Before scores (typical AI-generated UI):**
-- Most AI slop scores 30-50/100 total (D to C- range)
-- Accessibility is usually the lowest (1-3/10) — AI consistently misses ARIA and semantic HTML
-- Color scores 3-5/10 — functional but generic, often with the purple gradient
-- Interaction scores 2-4/10 — AI rarely generates hover/focus/active states
-- Innovation scores 4-6/10 — AI uses known patterns competently but without distinction
+- Expect the framework's Amateur tier (DQS roughly 40-55)
+- Color is often generic, with the purple gradient default
+- Polish suffers from missing hover/focus/active states
+- Iconography and Imagery are often mixed sets and stock filler
 
 **After scores (post-transformation):**
-- A well-executed fix typically reaches 65-80/100 (C+ to B range)
-- Accessibility should jump to 7-8/10 after semantic HTML and ARIA fixes
-- Color should reach 7-9/10 after semantic tokens and contrast fixes
-- Interaction should reach 7-8/10 after state coverage
-- Innovation rarely changes — fixing slop does not add novelty, it adds quality
+- A well-executed fix usually lands in Competent or low Professional (DQS roughly 55-75)
+- Craft and Motion rarely jump — fixing slop adds quality, not distinction
 - Do NOT score 9-10 on any dimension unless the transformation truly achieves exceptional quality
+
+These ranges are calibration guidance for the scorer, not measured statistics.
 
 **Score honestly. The credibility of the comparison depends on accurate before AND after scoring.**
 

@@ -740,7 +740,7 @@ For simpler pages (< 8 blocks), attempt all passes in a single response:
 
 When building pages, draw patterns and best practices from:
 
-- `layout-block-intelligence` — 500+ block patterns (hero, features, pricing, CTA, testimonials)
+- `layout-block-intelligence` — ~300 block patterns (hero, features, pricing, CTA, testimonials)
 - `page-composition-engine` — 100+ page recipes with block stacking order and visual rhythm
 - `conversion-optimization-patterns` — CRO: CTA psychology, pricing pages, form conversion, trust signals
 - `micro-copy-intelligence` — Microcopy templates for buttons, headings, CTAs, empty states

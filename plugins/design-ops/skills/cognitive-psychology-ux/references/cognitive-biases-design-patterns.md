@@ -36,7 +36,7 @@ Decision biases distort how users evaluate options, weigh trade-offs, and commit
 
 **Definition**: Users tend to accept pre-selected options, whether or not those options serve their interests. Defaults are among the most powerful choice-architecture tools described in Thaler & Sunstein's *Nudge*.
 
-**UX Implication**: Whatever is pre-checked, pre-filled, or pre-selected will be chosen by the majority. Studies show that organ donation rates swing from ~15% to ~85% based solely on whether the form defaults to opt-in or opt-out.
+**UX Implication**: Whatever is pre-checked, pre-filled, or pre-selected will be chosen by the majority. Organ donation consent rates differ sharply between countries whose forms default to opt-in and those that default to opt-out (Johnson & Goldstein, 2003).
 
 **Ethical Application**: Set defaults that align with the user's best interest and the most common use case. Pre-select privacy-protective settings. Default to the most secure password options. Pre-fill forms with sensible values that reduce cognitive load.
 

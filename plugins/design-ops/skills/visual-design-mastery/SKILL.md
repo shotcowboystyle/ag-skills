@@ -1,6 +1,6 @@
 ---
 name: visual-design-mastery
-description: "Designer-grade visual judgement: 36+ designer pattern libraries, 70 canonical rules from 23 books, Awwwards-calibrated 10-dimension scoring, color science (OKLCH, HCT), and composition (Swiss grid, golden ratio, visual weight). Use when scoring visual quality or when work looks cheap but you cannot say why."
+description: "Designer-grade visual judgement: 36 designer pattern libraries, 70 canonical rules, Awwwards-calibrated 10-dimension scoring, color science (OKLCH, HCT), and composition (Swiss grid, golden ratio, visual weight). Use when scoring visual quality or when work looks cheap but you cannot say why."
 allowed-tools: Read, Grep, Glob
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: Read, Grep, Glob
 
 ## Why Visual Design Mastery Matters
 
-The gap between a vibe-coded app and a professionally designed product is visual design mastery. Not subjective taste — learnable, systematic craft. Every world-class designer applies a finite set of principles consistently: typographic hierarchy, color harmony, spatial rhythm, compositional balance, and material craft. This skill codifies those principles from 36+ designers and 23 canonical books into teachable, measurable intelligence.
+The gap between a vibe-coded app and a professionally designed product is visual design mastery. Not subjective taste — learnable, systematic craft. Every world-class designer applies a finite set of principles consistently: typographic hierarchy, color harmony, spatial rhythm, compositional balance, and material craft. This skill codifies those principles from 36 designers and the canonical design literature into teachable, measurable intelligence.
 
 Visual design is the first language your product speaks. Before a user reads a single word, they have already judged your product's credibility, quality, and trustworthiness based on visual signals alone. Research from the Stanford Web Credibility Project shows 75% of users judge a company's credibility based on visual design. You have 50 milliseconds to make that impression.
 
@@ -33,7 +33,7 @@ The best visual design is invisible. Users should never think about the interfac
 
 ---
 
-## II. 36+ Designer Pattern Libraries
+## II. 36 Designer Pattern Libraries
 
 Each entry captures the designer's **style DNA**: their signature visual patterns, philosophy, and techniques you can learn from and reference.
 
@@ -299,7 +299,7 @@ Each entry captures the designer's **style DNA**: their signature visual pattern
 
 **Rule 42: Surface Elevation Through Color** — In flat design, elevation is communicated through subtle background color shifts rather than drop shadows. Each layer slightly lighter (light mode) or lighter (dark mode) than the one below. Source: Material Design.
 
-**Rule 43: Gradient Restraint** — Gradients work best between analogous hues (blue to purple, orange to pink). Avoid gradients between complementary colors (green to red = mud). Subtle gradients (5-15% shift) are safer than dramatic ones. Source: Color theory.
+**Rule 43: Gradient Restraint** — Gradients work best between analogous hues (blue to teal, orange to pink). Avoid gradients between complementary colors (green to red = mud). Subtle gradients (5-15% shift) are safer than dramatic ones. Source: Color theory.
 
 **Rule 44: Temperature for Mood** — Warm colors (reds, oranges, yellows) create energy and urgency. Cool colors (blues, greens, purples) create calm and trust. Most SaaS products default to cool palettes for trust. Source: Color psychology.
 
@@ -317,7 +317,7 @@ Each entry captures the designer's **style DNA**: their signature visual pattern
 
 **Rule 50: Progressive Disclosure in Layout** — Do not show everything at once. Layer information: summary visible, details on demand. This applies to visual density too — not every element needs equal visual weight on first view. Source: Norman, Design of Everyday Things.
 
-**Rule 51: Negative Space as Design Element** — Negative space (whitespace) is not wasted space. It directs attention, creates grouping, and communicates premium quality. Apple uses 2-3x more whitespace than competitors. Source: Swiss design tradition.
+**Rule 51: Negative Space as Design Element** — Negative space (whitespace) is not wasted space. It directs attention, creates grouping, and communicates premium quality. Apple uses noticeably more whitespace than competitors. Source: Swiss design tradition.
 
 **Rule 52: Card-Based Composition** — Cards create natural content grouping, consistent scanning patterns, and responsive reflow. Card designs work across all viewports. Use consistent card anatomy: media, header, body, actions. Source: Material Design.
 
@@ -361,119 +361,13 @@ Each entry captures the designer's **style DNA**: their signature visual pattern
 
 ---
 
-## IV. 10-Dimension Awwwards-Calibrated Visual Scoring System
+## IV. Visual Scoring
 
-Rate any interface on 10 dimensions, each scored 1-10. The weighted total produces a comparable quality score.
-
-### Dimension 1: Layout and Grid (Weight: 12%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | No discernible grid. Random element placement. Inconsistent margins. |
-| 3-4 | Basic layout structure but frequent alignment violations. Gutters inconsistent. |
-| 5-6 | Functional grid system. Most elements align. Minor spacing inconsistencies. |
-| 7-8 | Strong grid with intentional hierarchy. Consistent gutters and margins. Responsive reflow works. |
-| 9-10 | Masterful grid with purposeful breaks. Swiss-level precision. Every element placed with intention. Responsive behavior is seamless. |
-
-### Dimension 2: Typography (Weight: 14%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | System defaults. No type hierarchy. Single size for everything. |
-| 3-4 | Basic hierarchy (headings vs. body) but poor sizing ratios, inconsistent weights, bad line-height. |
-| 5-6 | Solid type scale. Good hierarchy. Readable measure. Minor issues with pairing or spacing. |
-| 7-8 | Professional typography. Clear hierarchy, excellent pairing, proper optical sizing, fluid scaling. |
-| 9-10 | Typography as design language. Type conveys personality. Perfect micro-typography (kerning, tracking, leading). Variable font mastery. |
-
-### Dimension 3: Color (Weight: 12%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | Random colors. No palette discipline. Clashing hues. Poor contrast. |
-| 3-4 | Basic palette but over-saturated, too many colors, or poor harmony. |
-| 5-6 | Functional palette. 60-30-10 generally followed. Adequate contrast. |
-| 7-8 | Sophisticated palette. Intentional harmony. Excellent dark mode. Semantic color usage. |
-| 9-10 | Color as storytelling. Dynamic palettes. Perfect oklch harmony. Color creates mood and guides attention flawlessly. |
-
-### Dimension 4: Spacing and Rhythm (Weight: 10%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | No spacing system. Arbitrary gaps. Cramped or wastefully sparse. |
-| 3-4 | Some consistency but frequent violations. No baseline rhythm. |
-| 5-6 | 8px grid mostly followed. Reasonable density. Minor rhythm breaks. |
-| 7-8 | Consistent spacing scale. Clear density mode. Vertical rhythm maintained. |
-| 9-10 | Mathematical spacing perfection. Breathing room creates clarity. Density feels intentional at every viewport. |
-
-### Dimension 5: Visual Hierarchy (Weight: 12%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | Everything competes for attention. No focal point. Information soup. |
-| 3-4 | Basic hierarchy but secondary elements still compete with primary. Too many bold elements. |
-| 5-6 | Clear primary/secondary distinction. Main CTA identifiable. Some tertiary noise. |
-| 7-8 | Strong 3-level hierarchy. Eye flows naturally. Progressive disclosure used well. |
-| 9-10 | Effortless scanning. The eye goes exactly where intended. Hierarchy feels invisible — it just works. |
-
-### Dimension 6: Consistency (Weight: 10%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | Every screen looks different. No shared patterns. Random styling. |
-| 3-4 | Some patterns reused but frequent inconsistencies in spacing, color, or component style. |
-| 5-6 | Design system evident. Most components consistent. Minor drift between screens. |
-| 7-8 | Tight consistency. All components from same system. Color, spacing, type unified. |
-| 9-10 | Pixel-perfect consistency across every screen, state, and viewport. A design system brought to life flawlessly. |
-
-### Dimension 7: Craft and Polish (Weight: 10%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | Obvious defects. Misaligned elements. Missing states. Broken responsive. |
-| 3-4 | Functional but rough. Hover states missing. Transitions janky. Details neglected. |
-| 5-6 | Competent execution. Basic states covered. Some attention to detail. |
-| 7-8 | Polished execution. All states designed. Smooth transitions. Thoughtful empty/error states. |
-| 9-10 | Obsessive craft. Micro-interactions delight. Loading states are beautiful. Every edge case designed. The kind of polish that makes designers zoom in to study. |
-
-### Dimension 8: Innovation and Creativity (Weight: 8%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | Generic template. No distinctive visual identity. Could be any product. |
-| 3-4 | Some personality but relies heavily on common patterns without interpretation. |
-| 5-6 | Recognizable visual identity. Some creative choices that differentiate. |
-| 7-8 | Distinctive design language. Creative solutions to common problems. Memorable visual moments. |
-| 9-10 | Industry-defining visual innovation. Sets new standards. Other products will reference this as inspiration. |
-
-### Dimension 9: Accessibility (Weight: 6%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | Fails basic contrast. No focus indicators. Color-only information coding. |
-| 3-4 | Meets some contrast requirements. Focus visible but unstyled. Some alt text. |
-| 5-6 | WCAG AA compliant. Focus indicators present. Color not sole information carrier. |
-| 7-8 | WCAG AA fully compliant. Custom focus styles. Reduced motion support. Screen reader tested. |
-| 9-10 | WCAG AAA where possible. APCA-compliant contrast. Inclusive design embedded in visual language. Accessibility enhances rather than constrains the design. |
-
-### Dimension 10: Overall Delight (Weight: 6%)
-
-| Score | Description |
-|-------|-------------|
-| 1-2 | Unpleasant to use. Visual design actively harms the experience. |
-| 3-4 | Neutral. Not offensive but not enjoyable. Forgettable. |
-| 5-6 | Pleasant. Some moments of satisfaction. Generally positive impression. |
-| 7-8 | Genuinely enjoyable. Users notice and comment on the design quality. Screenshots shared. |
-| 9-10 | Extraordinary. The design itself becomes a reason to use the product. Emotional response. Users become advocates. |
-
-### Scoring Formula
-
-```
-Total = (Layout x 0.12) + (Typography x 0.14) + (Color x 0.12) + (Spacing x 0.10)
-      + (Hierarchy x 0.12) + (Consistency x 0.10) + (Craft x 0.10)
-      + (Innovation x 0.08) + (Accessibility x 0.06) + (Delight x 0.06)
-```
-
-**Benchmarks**: 3.0 = vibe-coded default, 5.0 = competent developer, 6.5 = junior designer, 7.5 = senior designer, 8.5 = Awwwards honorable mention, 9.0+ = Awwwards Site of the Day.
+Design Ops has one scoring rubric: `references/visual-scoring-framework.md`. It defines 10
+dimensions (Typography, Color, Spacing, Composition, Imagery, Iconography, Motion, Polish,
+Coherence, Craft), their weights, per-score descriptors and the weighted formula. `/grade`
+and the critic agent both use it, and DQS is its weighted total × 10. Don't score against
+any other dimension list.
 
 ---
 
@@ -635,7 +529,7 @@ Mathematical precision does not always equal visual precision. Common optical co
 
 | File | Contents | Use When |
 |------|----------|----------|
-| `references/designer-pattern-library.md` | 36+ world-class designers organized by era and style. Each: signature visual patterns, design philosophy, teachable techniques across 8 categories. | Matching a visual direction to designer archetypes. Explaining WHY a design choice works by citing the designer who pioneered it. |
+| `references/designer-pattern-library.md` | World-class designers organized by era and style. Each: signature visual patterns, design philosophy, teachable techniques across 8 categories. | Matching a visual direction to designer archetypes. Explaining WHY a design choice works by citing the designer who pioneered it. |
 | `references/canonical-design-rules.md` | 70 rules extracted from 23 canonical design books: Grid Systems, Thinking with Type, Interaction of Color, Refactoring UI, Laws of UX, and 18 more. | Grounding visual design recommendations in published authority. |
 | `references/visual-scoring-framework.md` | 10-dimension visual quality scoring system calibrated to Awwwards, Red Dot, and iF Design Award standards. | Scoring any UI's visual quality. Benchmarking against award-winning products. |
 | `references/color-mastery.md` | Deep color science for UI: oklch(), HCT, Dynamic Color, APCA contrast, P3 gamut, dark mode mapping, semantic color systems, harmony algorithms. | Generating color palettes, auditing color, building dark mode, creating brand color systems. |
@@ -651,7 +545,7 @@ Mathematical precision does not always equal visual precision. Common optical co
 - **`cognitive-psychology-ux`** — Why visual design choices work, grounded in perception science.
 - **`interaction-motion-design`** — Motion as a visual design element.
 - **`accessibility-inclusive-design`** — Ensuring visual excellence does not compromise accessibility.
-- **`color-palette-library`** — 500+ curated palettes. This skill provides the theory; that skill provides ready-made palettes.
+- **`color-palette-library`** — 180+ curated palettes. This skill provides the theory; that skill provides ready-made palettes.
 - **`typography-pairing-recipes`** — 100+ font pairings. This skill provides the pairing principles; that skill provides tested combinations.
 - **`shadow-elevation-density`** — Shadow and elevation systems that implement the depth principles described here.
 - **`platform-visual-standards`** — Platform-specific visual rules (iOS Liquid Glass, M3 Expressive) that apply on top of these universal principles.

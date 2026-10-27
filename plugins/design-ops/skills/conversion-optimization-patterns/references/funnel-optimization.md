@@ -76,7 +76,7 @@ Industry benchmarks from Unbounce's analysis of 64,000+ landing pages (2024):
 | Travel | 2.1% | 3.7% | 6.4% |
 | B2B Services | 2.7% | 4.8% | 8.5% |
 
-These benchmarks vary dramatically by traffic source. Paid traffic from high-intent keywords converts 2-4x higher than social media traffic. Organic search traffic falls between the two.
+These benchmarks vary dramatically by traffic source. Paid traffic from high-intent keywords usually converts higher than social media traffic. Organic search traffic falls between the two.
 
 ### Landing Page Optimization Hierarchy
 
@@ -158,8 +158,8 @@ What steps must the user take between creating an account and reaching the aha m
 
 **Step 3: Measure drop-off at each step**
 Where are users abandoning the activation path? Common bottlenecks:
-- Email verification (30-50% of users never verify — consider delayed verification)
-- Long onboarding (each additional onboarding screen loses 10-20% of users)
+- Email verification (many users never verify — consider delayed verification)
+- Long onboarding (each additional onboarding screen loses users)
 - Integration setup (technical complexity creates friction)
 - Empty state (the product looks dead before the user adds data)
 
@@ -257,7 +257,7 @@ Show all costs (shipping, tax, fees) as early as possible — ideally on the pro
 26% of users abandon because they are required to create an account. Guest checkout eliminates this friction entirely. Offer account creation after purchase completion ("Save your details for faster checkout next time?"). This leverages post-purchase commitment: users who have already bought are more willing to create an account.
 
 **3. Reduce checkout steps**
-The optimal checkout is 1-2 pages. Each additional page loses 5-10% of users. The minimum viable checkout:
+The optimal checkout is 1-2 pages. Each additional page loses users. The minimum viable checkout:
 - Page 1: Shipping address + delivery options
 - Page 2: Payment + order review + confirmation
 Or, increasingly:

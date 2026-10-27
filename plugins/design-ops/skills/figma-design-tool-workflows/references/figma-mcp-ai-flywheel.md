@@ -52,71 +52,52 @@ The Figma MCP server connects Claude to the Figma REST API and translates Figma'
 
 ### Configuration in Claude Code
 
-To configure the Figma MCP server for use with Claude Code, add it to your project's `.mcp.json` or your user-level MCP configuration:
+Figma runs two official servers (docs: <https://developers.figma.com/docs/figma-mcp-server/>).
+The remote one is the default; the desktop one runs inside the Figma desktop app.
 
-```json
-{
-  "mcpServers": {
-    "figma": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/figma-mcp-server"],
-      "env": {
-        "FIGMA_ACCESS_TOKEN": "figd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      }
-    }
-  }
-}
+```bash
+# Remote server, OAuth sign-in on first use
+claude mcp add --transport http figma https://mcp.figma.com/mcp
+
+# Desktop server: open a Design file, switch to Dev Mode, enable the MCP server, then
+claude mcp add --transport http figma-desktop http://127.0.0.1:3845/mcp
 ```
 
-Alternatively, if using the community Figma MCP server or a self-hosted variant:
+Other harnesses take the same URL in their MCP config (`.mcp.json`, `~/.codex/config.toml`,
+`opencode.json`).
 
-```json
-{
-  "mcpServers": {
-    "figma": {
-      "command": "npx",
-      "args": ["-y", "figma-mcp-server", "--file-key", "YOUR_FILE_KEY"],
-      "env": {
-        "FIGMA_PERSONAL_ACCESS_TOKEN": "figd_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-      }
-    }
-  }
-}
-```
+Community servers such as Framelink (`figma-developer-mcp`) call the REST API with a
+personal access token. They work, but they are not Figma's and expose different tools.
 
 ### Authentication
 
-The Figma MCP server authenticates via a **Figma Personal Access Token (PAT)**. To generate one:
-
-1. Open Figma and navigate to Account Settings.
-2. Scroll to "Personal access tokens."
-3. Create a new token with a descriptive name (e.g., "Claude MCP Integration").
-4. Copy the token immediately -- it will not be shown again.
-5. Store the token securely. Never commit it to version control. Use environment variables or a secrets manager.
-
-Token scopes required: `file:read` at minimum. For write operations (if supported by the MCP server variant), `file:write` is also needed.
+The remote server signs in with OAuth; the desktop server uses the signed-in desktop app.
+Neither needs a token in the config. Only the community REST servers take a personal
+access token. Keep it in an environment variable, never in the repository.
 
 ### Available Tools and Resources
 
-Typical tools exposed by the Figma MCP server include:
+Core read tools (both servers). List the connected server's tools before calling one,
+since Figma adds tools between releases:
 
 | Tool Name | Description |
 |-----------|-------------|
-| `get_file` | Retrieve the full document tree for a Figma file |
-| `get_file_nodes` | Retrieve specific nodes by their IDs |
-| `get_file_styles` | List all published styles in a file |
-| `get_file_components` | List all components and component sets |
-| `get_file_variables` | Retrieve variable collections and their values |
-| `get_node_image` | Export a specific node as an image (PNG, SVG, PDF) |
-| `get_comments` | Retrieve comments on a file |
-| `search_nodes` | Search for nodes by name or type |
+| `get_design_context` | Design context and reference code for a layer or selection |
+| `get_variable_defs` | Variables and styles used in a selection |
+| `get_metadata` | Lightweight XML outline of a selection (ids, names, sizes) |
+| `get_screenshot` | Screenshot of a selection |
+| `get_code_connect_map` | Code Connect mappings for selected instances |
+| `search_design_system` | Search libraries for components, variables and styles |
+
+The remote server also writes (`use_figma`, `generate_figma_design`, `upload_assets` and
+others) and exposes the `create_design_system_rules` prompt.
 
 ### Rate Limits and Caching Strategies
 
-The Figma REST API enforces rate limits (typically 30 requests per minute for reads). The MCP server should implement:
+Figma rate-limits MCP and REST calls by plan and seat; check the current limits in Figma's docs. Plan for them:
 
 - **Response caching**: Cache file structure responses for 5-15 minutes. Figma files change infrequently during active generation sessions.
-- **Node-level fetching**: Use `get_file_nodes` with specific node IDs rather than fetching the entire file tree repeatedly.
+- **Node-level fetching**: Call `get_metadata` first, then `get_design_context` on specific nodes rather than on a whole page.
 - **Pagination awareness**: Large files may require paginated responses; the MCP server should handle this transparently.
 - **Exponential backoff**: On 429 (rate limit) responses, back off with increasing delays.
 - **Selective depth**: Request only the depth of the node tree needed. A component's immediate children are usually sufficient; deep recursive fetches waste quota.
@@ -197,11 +178,11 @@ All color, spacing, typography, and radius values are bound to Figma Variables r
 To extract this card's properties programmatically, Claude would invoke the MCP server:
 
 ```
-Tool: get_file_nodes
-Input: { "file_key": "abc123XYZ", "node_ids": ["42:1337"] }
+Tool: get_design_context
+Input: { "nodeId": "42:1337" }   # or select the Card in Figma and omit nodeId
 ```
 
-The response returns a JSON structure representing the Card node and all its children, including layout properties, style references, variable bindings, and text content. Claude parses this to understand:
+The response describes the Card node and all its children, including layout properties, style references, variable bindings, and text content. Claude parses this to understand:
 
 - The component hierarchy and slot structure.
 - Which design tokens are in use (via variable bindings).
@@ -640,7 +621,7 @@ Generated code must pass through automated quality gates before merging. These g
 - **Percy** (by BrowserStack): Similar screenshot comparison with cross-browser testing. Useful when generated components must render identically across Chrome, Firefox, Safari, and Edge.
 - **BackstopJS**: Open-source alternative for teams that need self-hosted visual regression. Configurable viewport sizes and selectors.
 
-For the flywheel, the baseline is a rendered screenshot from Figma (exported via the MCP server's `get_node_image` tool). The generated component is rendered in Storybook and compared against this baseline. Acceptable threshold: less than 0.1% pixel difference for static components, less than 1% for components with font rendering variations.
+For the flywheel, the baseline is a rendered screenshot from Figma (captured with the MCP server's `get_screenshot` tool). The generated component is rendered in Storybook and compared against this baseline. Acceptable threshold: less than 0.1% pixel difference for static components, less than 1% for components with font rendering variations.
 
 ### Accessibility Automated Checks
 

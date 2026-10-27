@@ -1,4 +1,4 @@
-# Industry Palette Catalog — 100+ Production-Ready Palettes
+# Industry Palette Catalog — 100 Production-Ready Palettes
 
 100+ curated color palettes organized by industry sector. Each palette includes 5-8 color swatches with oklch + hex values, APCA contrast scores for key text combinations, suggested semantic mapping, and mood/personality description.
 

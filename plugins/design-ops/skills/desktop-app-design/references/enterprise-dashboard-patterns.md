@@ -82,7 +82,7 @@ Approximately 8% of males and 0.5% of females have some form of color vision def
 
 - **IBM Design colorblind palette:** Ultramarine (blue), Cyan, Teal, Magenta, Red-Orange, Gold, Gray.
 - **Wong palette (Bang Wong, Nature Methods, 2011):** Black #000000, Orange #E69F00, Sky Blue #56B4E9, Bluish Green #009E73, Yellow #F0E442, Blue #0072B2, Vermillion #D55E00, Reddish Purple #CC79A7.
-- **Tableau colorblind palette:** a 10-color set designed for perceptual distinction under all CVD types.
+- **Tableau "Color Blind" palette:** a separate 10-color set designed for red-green color vision deficiency (not the default Tableau 10, which is not colorblind-safe).
 
 **Sequential palettes.** For heatmaps and choropleth maps, use single-hue progressions (light blue to dark blue) or perceptually uniform multi-hue scales (Viridis, Cividis, Inferno from matplotlib). Avoid rainbow scales -- they create false perceptual boundaries and fail under CVD.
 

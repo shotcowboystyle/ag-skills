@@ -232,7 +232,7 @@ Visual elements that direct attention toward CTAs measurably increase click-thro
 
 **Eye gaze:** Images of people looking toward the CTA increase fixation on the CTA by 30-40% (eye-tracking research by James Breeze, 2009). An image of a person looking directly at the camera draws attention to the face; an image of a person looking toward the CTA draws attention to the CTA.
 
-**Arrows and pointers:** Explicit directional arrows increase CTA attention by 15-25% in eye-tracking studies. However, they can feel heavy-handed on polished interfaces. Use them on landing pages and sales pages; avoid them in product UI.
+**Arrows and pointers:** Explicit directional arrows increase CTA attention. However, they can feel heavy-handed on polished interfaces. Use them on landing pages and sales pages; avoid them in product UI.
 
 **Whitespace as a directional cue:** Asymmetric whitespace creates visual flow. More whitespace on the side you want users to "arrive from" and less on the CTA side creates a natural reading path that terminates at the action.
 
@@ -254,19 +254,19 @@ Ghost buttons (outlined, transparent buttons) are one of the most common CTA mis
 - For tertiary actions that should be available but not prominent
 - In navigation or toolbars where solid buttons would be visually heavy
 
-**The data:** A/B tests consistently show that replacing a ghost primary CTA with a solid-fill CTA increases click-through by 20-50%. The effect is largest on mobile and on pages with complex backgrounds.
+**The data:** A/B tests consistently show that replacing a ghost primary CTA with a solid-fill CTA increases click-through. The effect is largest on mobile and on pages with complex backgrounds.
 
 ## Sticky CTA Bars: Detailed Patterns
 
 ### When Sticky CTAs Increase Conversion
 
-1. **E-commerce product pages on mobile:** A sticky "Add to Cart" bar at the bottom of the screen maintains purchase intent as users scroll through product details, reviews, and related items. Average lift: 8-15%.
+1. **E-commerce product pages on mobile:** A sticky "Add to Cart" bar at the bottom of the screen maintains purchase intent as users scroll through product details, reviews, and related items.
 
-2. **Long-form sales pages:** A sticky CTA that appears after the user scrolls past the first in-page CTA ensures the action is always accessible during the persuasion sequence. Average lift: 5-12%.
+2. **Long-form sales pages:** A sticky CTA that appears after the user scrolls past the first in-page CTA ensures the action is always accessible during the persuasion sequence.
 
-3. **Pricing page comparisons:** A sticky bar showing the selected plan and a "Continue" button prevents users from losing context while comparing features. Average lift: 10-18%.
+3. **Pricing page comparisons:** A sticky bar showing the selected plan and a "Continue" button prevents users from losing context while comparing features.
 
-4. **Free trial banners for logged-in free users:** A persistent but dismissible banner reminding free users of premium benefits. Average lift: 3-8% for trial starts.
+4. **Free trial banners for logged-in free users:** A persistent but dismissible banner reminding free users of premium benefits.
 
 ### When Sticky CTAs Annoy Users
 

@@ -1,6 +1,6 @@
 # Empty State Copy Templates
 
-> 150+ production-ready empty state copy templates organized by type and component. Every template includes headline, body text, CTA, illustration suggestion, and tone variants.
+> 120+ production-ready empty state copy templates organized by type and component. Every template includes headline, body text, CTA, illustration suggestion, and tone variants.
 
 ## Empty State Anatomy
 

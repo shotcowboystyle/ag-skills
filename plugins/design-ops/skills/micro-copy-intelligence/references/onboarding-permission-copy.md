@@ -1,6 +1,6 @@
 # Onboarding and Permission Copy Templates
 
-> 150+ production-ready onboarding and permission copy templates. Every template includes headline, body text, primary CTA, secondary CTA, and visual suggestion.
+> 140+ production-ready onboarding and permission copy templates. Every template includes headline, body text, primary CTA, secondary CTA, and visual suggestion.
 
 ## Onboarding Copy Anatomy
 

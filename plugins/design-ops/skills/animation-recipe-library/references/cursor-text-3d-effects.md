@@ -563,7 +563,7 @@ export function Typewriter({
 
 export function GradientText({
   text,
-  gradient = "from-blue-500 via-purple-500 to-pink-500",
+  gradient = "from-primary via-primary/70 to-primary",
   animate = true,
   className = "",
 }: {
@@ -599,7 +599,7 @@ export function GradientText({
 ```tsx
 <GradientText
   text="Hello"
-  gradient="from-blue-400 via-purple-400 to-pink-400 dark:from-blue-300 dark:via-purple-300 dark:to-pink-300"
+  gradient="from-primary via-primary/70 to-primary"
 />
 ```
 
@@ -1266,7 +1266,7 @@ export function ThreeScene({ className = "" }: { className?: string }) {
   if (prefersReduced) {
     return (
       <div className={`bg-gray-100 dark:bg-gray-900 rounded-2xl flex items-center justify-center ${className}`}>
-        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
+        <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-primary/60" />
       </div>
     );
   }

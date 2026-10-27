@@ -197,7 +197,7 @@ Every text-background combination must meet APCA minimums:
 For data visualization, you need colors that remain distinguishable to users with color vision deficiency. The following palettes use BOTH hue AND lightness differentiation to ensure distinguishability.
 
 ### Categorical Palette 1: Universal 8-Color (Best Overall)
-Tested against deuteranopia, protanopia, tritanopia, and achromatopsia.
+Not verified with a CVD simulator. Run it through one (for example Coblis or the Chrome DevTools vision-deficiency emulation) before relying on it.
 
 ```css
 --cat-1: oklch(45% 0.18 255);  /* Deep Blue    — #2563EB */
@@ -210,7 +210,7 @@ Tested against deuteranopia, protanopia, tritanopia, and achromatopsia.
 --cat-8: oklch(80% 0.14 95);   /* Gold         — #EAB308 */
 ```
 
-**Why it works:** Each color differs from all others by at least 25% in oklch lightness OR by at least 90 degrees in hue. Even in full achromatopsia (grayscale vision), the lightness spread (42%-80%) makes most categories distinguishable.
+**Design intent:** spread the colors across both hue and lightness (42%-80%) so that most pairs still differ in grayscale. Several pairs sit close in lightness (for example blue/red/green), so pair color with labels or shapes.
 
 ### Categorical Palette 2: Red-Green Safe (Deuteranopia/Protanopia Optimized)
 Avoids the red-green confusion axis entirely.

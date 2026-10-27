@@ -619,7 +619,7 @@ When generating layouts, draw knowledge from:
 
 - `responsive-block-patterns` skill — cross-breakpoint transformation catalog, container queries, fluid scaling
 - `page-composition-engine` skill — full-page composition recipes with block stacking order
-- `layout-block-intelligence` skill — 500+ layout section/block patterns
+- `layout-block-intelligence` skill — ~300 layout section/block patterns
 - `screen-flow-patterns` skill — screen type catalog with canonical layouts
 - `visual-design-mastery` skill — composition rules, grid systems, rule of thirds
 - `platform-visual-standards` skill — platform-specific layout conventions

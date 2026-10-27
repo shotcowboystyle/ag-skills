@@ -1,10 +1,10 @@
 ---
 name: design-token-presets
-description: 20+ ready-to-deploy token systems by industry vertical, each in W3C DTCG JSON, CSS custom properties, and Tailwind v4 @theme, with Style Dictionary config and Figma Variables mapping. Use when you want a vetted starting token set. For architecting your own, use design-systems-architecture.
+description: 15 ready-to-deploy token systems by industry vertical, each in W3C DTCG JSON, CSS custom properties, and Tailwind v4 @theme, with Style Dictionary config and Figma Variables mapping. Use when you want a vetted starting token set. For architecting your own, use design-systems-architecture.
 allowed-tools: Read, Grep, Glob
 ---
 
-# Design Token Presets — 20+ Ready-to-Deploy Token Systems
+# Design Token Presets — 15 Ready-to-Deploy Token Systems
 
 ## Philosophy
 
@@ -185,6 +185,6 @@ Detailed presets are available in the `references/` directory:
 
 - **design-systems-architecture** — Token architecture deep-dive
 - **sector-style-intelligence** — Industry visual direction
-- **color-palette-library** — 500+ color palettes
+- **color-palette-library** — 180+ color palettes
 - **ui-visual-design-system** — Typography and spacing theory
 - **visual-design-mastery** — Complete visual scoring

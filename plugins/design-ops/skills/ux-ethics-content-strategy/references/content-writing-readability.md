@@ -403,7 +403,7 @@ Make required legal text understandable without eliminating legal accuracy.
 
 ## AI Content Design
 
-The rise of LLM-powered content tools is fundamentally changing the content designer's role. Industry data indicates 82% of content designers use LLMs daily for drafting, editing, and ideation. Design content workflows that leverage AI effectively while maintaining quality, brand consistency, and human judgment.
+The rise of LLM-powered content tools is fundamentally changing the content designer's role. Many content designers now use LLMs for drafting, editing, and ideation. Design content workflows that leverage AI effectively while maintaining quality, brand consistency, and human judgment.
 
 ### AI Content Quality Evaluation Framework
 

@@ -44,7 +44,7 @@ Dark patterns are deceptive interface designs that manipulate users into actions
 
 **Ethical alternative.** Match cancellation effort to signup effort. If signup takes one click, cancellation must take no more than two. Provide self-service cancellation in the same location where subscription management lives. Offer a single optional retention screen with a genuine discount, then process the cancellation immediately upon confirmation. Send a confirmation email with a resubscribe link.
 
-**Legal implications.** The FTC's "click-to-cancel" rule (finalized 2023) requires that cancellation be as easy as signup. GDPR's right to withdraw consent (Article 7(3)) mandates that withdrawal be as easy as giving consent. The EU Digital Services Act reinforces these requirements. California's Automatic Renewal Law requires a cost-effective mechanism for cancellation.
+**Legal implications.** The FTC's "click-to-cancel" amendments to the Negative Option Rule (finalized October 2024) were vacated by the 8th Circuit in July 2025, so they are not in force; ROSCA and the FTC Act still apply to deceptive cancellation flows. GDPR's right to withdraw consent (Article 7(3)) mandates that withdrawal be as easy as giving consent. The EU Digital Services Act reinforces these requirements. California's Automatic Renewal Law requires a cost-effective mechanism for cancellation.
 
 ---
 
@@ -86,7 +86,7 @@ Dark patterns are deceptive interface designs that manipulate users into actions
 
 **Ethical alternative.** Display the all-in price from the first listing. If itemized fees are necessary for transparency, show them in the product listing alongside the total. Present a price breakdown early in the flow — not at the final step. Use a persistent order summary visible throughout the checkout process.
 
-**Legal implications.** The FTC's enforcement against drip pricing is increasing, with proposed rules to require all-in pricing. The EU Consumer Rights Directive requires that the total price inclusive of all charges be disclosed before the consumer places an order. CCPA and state consumer protection laws address deceptive pricing.
+**Legal implications.** The FTC's fees rule (finalized December 2024) requires all-in pricing for live-event tickets and short-term lodging; other drip pricing is still actionable under Section 5. The EU Consumer Rights Directive requires that the total price inclusive of all charges be disclosed before the consumer places an order. CCPA and state consumer protection laws address deceptive pricing.
 
 ---
 
@@ -212,7 +212,7 @@ Dark patterns are deceptive interface designs that manipulate users into actions
 
 **Ethical alternative.** Display only verified reviews from confirmed purchasers. Label reviews by verification status. Do not suppress negative reviews or manipulate sort order to bury them. Show the full rating distribution, not just the average. Report user counts and metrics honestly, using verifiable methodology.
 
-**Legal implications.** The FTC's updated Endorsement Guides (2023) explicitly address fake reviews. The FTC has proposed rules banning fake reviews and testimonials with penalties up to $50,000 per violation. The EU Digital Services Act requires platforms to ensure the integrity of reviews. Amazon and other platforms have filed lawsuits against fake review brokers.
+**Legal implications.** The FTC's updated Endorsement Guides (2023) explicitly address fake reviews. The FTC's Consumer Reviews and Testimonials rule (finalized August 2024) bans fake reviews and testimonials and allows civil penalties per violation. The EU Digital Services Act requires platforms to ensure the integrity of reviews. Amazon and other platforms have filed lawsuits against fake review brokers.
 
 ---
 
@@ -226,7 +226,7 @@ Dark patterns are deceptive interface designs that manipulate users into actions
 
 **Ethical alternative.** Place cancellation, deletion, and unsubscribe actions in predictable, accessible locations. Use standard visual weight for these controls — they do not need to be prominent, but they must not be hidden. Process account actions within the timeframe the user expects: immediate for digital services, within a stated short window for complex accounts. Provide data export in standard, usable formats.
 
-**Legal implications.** GDPR's right to erasure (Article 17) and right to data portability (Article 20) require accessible mechanisms. The FTC's click-to-cancel rule directly addresses obstruction in cancellation flows. CAN-SPAM requires functional unsubscribe mechanisms that process within 10 business days.
+**Legal implications.** GDPR's right to erasure (Article 17) and right to data portability (Article 20) require accessible mechanisms. ROSCA requires a simple mechanism to stop recurring charges (the FTC's separate click-to-cancel rule was vacated in July 2025). CAN-SPAM requires functional unsubscribe mechanisms that process within 10 business days.
 
 ---
 
@@ -399,9 +399,9 @@ The EU AI Act (effective August 2025) introduces AI-specific provisions relevant
 The US Federal Trade Commission has intensified dark pattern enforcement:
 
 - Multiple enforcement actions against subscription services with difficult cancellation (Roach Motel pattern).
-- The "click-to-cancel" rule (finalized 2023) requires cancellation to be as easy as signup.
+- The "click-to-cancel" rule (finalized October 2024) was vacated by the 8th Circuit in July 2025. ROSCA and state auto-renewal laws (such as California's) still govern cancellation.
 - Increased scrutiny of children's privacy dark patterns under COPPA.
-- Proposed rules for fake reviews with penalties up to $50,000 per violation.
+- A final rule banning fake reviews and testimonials (announced August 2024), enforceable with civil penalties per violation.
 - Enforcement actions against drip pricing and hidden fees, particularly in ticket sales and hospitality.
 
 ### Compliance Design Checklists
@@ -422,7 +422,7 @@ The US Federal Trade Commission has intensified dark pattern enforcement:
 - Implement human oversight mechanisms for high-risk AI decisions.
 
 **For FTC Compliance:**
-- Implement click-to-cancel for all subscription services.
+- Provide a simple way to stop recurring charges (ROSCA) and follow state auto-renewal laws such as California's. The federal click-to-cancel rule was vacated in July 2025, so do not cite it as the requirement.
 - Display all-in pricing from the first listing.
 - Eliminate pre-checked consent boxes.
 - Provide functional, prominent unsubscribe mechanisms.

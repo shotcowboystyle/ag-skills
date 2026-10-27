@@ -775,7 +775,7 @@ Every form must meet WCAG 2.2 AA. These are non-negotiable:
 
 **Touch targets**:
 
-- All interactive elements: minimum 44x44px touch target (WCAG 2.2 Target Size)
+- All interactive elements: minimum 44x44px touch target (WCAG 2.2 requires 24x24px at AA via 2.5.8; 44x44px is 2.5.5, AAA)
 - Checkboxes and radio buttons: at least 24x24px visual, 44x44px hit area
 - Spacing between touch targets: at least 8px gap
 

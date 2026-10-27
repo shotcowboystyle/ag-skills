@@ -1277,6 +1277,6 @@ struct AvatarGroupView: View {
 | Animation | Respect `prefers-reduced-motion` | AAA (2.3.3) |
 | Custom player | Keyboard-accessible controls | A (2.1.1) |
 | Carousel | Pause, stop, hide mechanism | A (2.2.2) |
-| Media controls | Minimum 44x44px touch target | AA (2.5.8) |
+| Media controls | Minimum 24x24px target (44x44px for AAA 2.5.5) | AA (2.5.8) |
 | Color-only info | Not conveyed by color alone | A (1.4.1) |
 | Focus | Visible focus indicator on controls | AA (2.4.7) |

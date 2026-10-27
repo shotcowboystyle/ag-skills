@@ -225,7 +225,7 @@ Copy the block above. Paste it into ANY Design Ops command:
 /component notification-card
 [paste constraint stack]
 
-Every command becomes 10x more precise when it knows your
+Every command becomes more precise when it knows your
 problem, persona, success criteria, and anti-goals.
 
 Pro tip: Save the Constraint Stack as a comment at the top
