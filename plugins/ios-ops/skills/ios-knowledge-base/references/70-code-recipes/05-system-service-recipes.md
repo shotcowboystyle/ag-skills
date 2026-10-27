@@ -1,6 +1,6 @@
 # System-Service Code Recipes
 
-These are compile-oriented route sketches for the T017 system-service cards. They show the seam between app-owned state and an Apple system service; they are not claimed to compile in this documentation-only workspace. Before copying a sketch, check the selected SDK’s current signature, add the required target/capability/entitlement configuration, and compile the smallest slice.
+These are compile-oriented route sketches for the system-service route cards. They show the seam between app-owned state and an Apple system service; they are not claimed to compile in this documentation-only workspace. Before copying a sketch, check the selected SDK’s current signature, add the required target/capability/entitlement configuration, and compile the smallest slice.
 
 ## 1. Family Controls authorization gate
 

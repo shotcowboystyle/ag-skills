@@ -1,7 +1,8 @@
 ---
 name: ios-project-target-architect
 description: Architect or audit an Apple-platform project before implementation by choosing the correct Xcode targets, Swift modules and packages, extensions, schemes, configurations, capabilities, privacy resources, test plans, and evidence gates for a feature. Use when an iOS/iPadOS/watchOS/macOS/visionOS/CarPlay/App Clip/widget/Live Activity/companion feature needs a target-aware build route or when project structure and proof are unclear.
-allowed-tools: Read, Grep, Glob
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash
+last_verified: 2026-08-19
 ---
 
 # iOS Project, Target, and Module Architect

@@ -17,7 +17,7 @@ import { dirname } from "node:path";
 const BASE = "https://www.awwwards.com";
 // Identify honestly. Awwwards serves the same HTML to this UA, and the listing and
 // /sites/ detail paths are allowed by its robots.txt.
-const UA = "design-ops-plugin (+https://github.com/shotcowboystyle/design-ops-plugin)";
+const UA = "ag-skills-design-ops (+https://github.com/shotcowboystyle/ag-skills)";
 const SHORTCUTS = {
   sotd: "/websites/sites_of_the_day/",
   sotm: "/websites/sites_of_the_month/",

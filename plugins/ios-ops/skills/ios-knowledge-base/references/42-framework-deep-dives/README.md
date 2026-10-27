@@ -4,7 +4,7 @@ These pages extend the route catalog into hardware-facing and high-sensitivity A
 
 `user outcome -> device capability -> framework boundary -> permission/entitlement -> state model -> proof`
 
-The same principle applies across this tranche: a health sample is not a diagnosis, a camera frame is not confirmed content, a keychain item is not a server session, and an AR session is not a simulator feature. Keep those boundaries visible in the app architecture and in the user-facing copy.
+The same principle applies across these deep dives: a health sample is not a diagnosis, a camera frame is not confirmed content, a keychain item is not a server session, and an AR session is not a simulator feature. Keep those boundaries visible in the app architecture and in the user-facing copy.
 
 ## Deep dives
 

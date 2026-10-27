@@ -471,7 +471,7 @@ writing it.
 
 ## 12. Integrate with a document scene
 
-For a T166 DocumentGroup editor, keep the layers explicit:
+For a DocumentGroup editor, keep the layers explicit:
 
 ~~~text
 DocumentGroup configuration
@@ -546,7 +546,7 @@ A text-editor claim needs more than a screenshot:
 | Markdown import | Parser fixture tests for valid, partial, invalid, links, and custom attributes |
 | AI proposal | Availability fixture, source-revision/stale test, review/commit test |
 | Liquid Glass editor shell | Light/dark/accessibility-size/reduced-effects visual and task run |
-| Document integration | T166 file/revision/autosave/conflict proof, not a text-only preview |
+| Document integration | DocumentGroup file/revision/autosave/conflict proof, not a text-only preview |
 | Release readiness | Archive/process/entitlement/physical/TestFlight evidence recorded separately |
 
 ## Common failures

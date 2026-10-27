@@ -1,6 +1,6 @@
 # SwiftUI Foundation Models advanced provider and multimodal route review
 
-This page extends the production lifecycle in the [Foundation Models production-route review](111-swiftui-foundation-models-production-route-review.md). T191 focused on one on-device session, context budgeting, guided output, tools, cancellation, evaluation, and release proof. This route covers the next boundary: one session API can sit over different model providers, dynamic profiles can change the model and tool set as app state changes, and a prompt can contain image attachments.
+This page extends the production lifecycle in the [Foundation Models production-route review](111-swiftui-foundation-models-production-route-review.md). That review focused on one on-device session, context budgeting, guided output, tools, cancellation, evaluation, and release proof. This route covers the next boundary: one session API can sit over different model providers, dynamic profiles can change the model and tool set as app state changes, and a prompt can contain image attachments.
 
 The advanced route is not “add an agent.” It is a controlled choice among:
 
@@ -33,7 +33,7 @@ Model provider and capability are selected by app policy. Dynamic instructions d
 
 ### SystemLanguageModel
 
-The system model is the default on-device Apple Foundation Model. It is the starting point for an intelligence feature because it keeps the work offline when available and uses the system’s Apple Intelligence eligibility and model-readiness checks. T191 covers the request lifecycle and availability states in detail.
+The system model is the default on-device Apple Foundation Model. It is the starting point for an intelligence feature because it keeps the work offline when available and uses the system’s Apple Intelligence eligibility and model-readiness checks. The production-route review covers the request lifecycle and availability states in detail.
 
 Treat these as distinct:
 

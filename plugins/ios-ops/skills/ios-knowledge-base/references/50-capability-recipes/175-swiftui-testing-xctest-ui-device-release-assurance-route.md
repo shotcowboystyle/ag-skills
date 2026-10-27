@@ -190,22 +190,6 @@ The release gate should inspect the archive and run the exact uploaded build:
 TestFlight is a distribution/evidence layer. It does not promise approval or
 prove every hardware, region, account, system, or production condition.
 
-## Agentic skill-bundle output
-
-The route should produce portable artifacts for the future open-source bundle:
-
-- `claim-map.md`: each product claim and required evidence level;
-- `fixture-matrix.md`: stable states, IDs, inputs, and reset policy;
-- `test-plan-map.md`: targets, plans, tags, configurations, and exclusions;
-- `ai-evaluation-record.md`: dataset, schema/profile, criteria, scores, review;
-- `device-run.md`: named device/system settings and actual observations;
-- `release-audit.md`: archive, signing, entitlements, TestFlight, and gaps.
-
-An LLM can use these artifacts to route work to architect, native designer,
-implementer, test engineer, AI evaluator, device verifier, release auditor, and
-source maintainer. The bundle should refuse to collapse these artifacts into a
-single “passed” claim.
-
 ## Stop conditions
 
 Stop and correct the route when:

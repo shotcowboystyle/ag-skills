@@ -1,4 +1,4 @@
-[Part of the shotcowboystyle marketplace](https://github.com/shotcowboystyle/ai-plugins)
+[Part of the shotcowboystyle marketplace](../../README.md)
 
 ## Meta Wearables Ops Plugin
 
@@ -6,7 +6,7 @@
 
 Meta smart-glasses engineering — Wearables Device Access SDK integration on iOS and Android, camera, display, sensors, transport reliability, on-device compliance, and device-backed release proof.
 
-Pairs with [`ios-ops`](https://github.com/shotcowboystyle/ios-ops-plugin), which owns general Apple-platform work.
+Pairs with [`ios-ops`](../ios-ops/README.md), which owns general Apple-platform work.
 Each works on its own.
 
 ## Installation

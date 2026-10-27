@@ -1,6 +1,6 @@
 # Apple-Native Design Deep Dives
 
-This tranche turns the SwiftUI and Liquid Glass foundations into repeatable visual design decisions. The target is not a pixel copy of Apple’s apps; it is the kind of native, coherent, adaptive polish that feels at home on Apple platforms while remaining an original product.
+These pages turn the SwiftUI and Liquid Glass foundations into repeatable visual design decisions. The target is not a pixel copy of Apple’s apps; it is the kind of native, coherent, adaptive polish that feels at home on Apple platforms while remaining an original product.
 
 ## Design loop
 

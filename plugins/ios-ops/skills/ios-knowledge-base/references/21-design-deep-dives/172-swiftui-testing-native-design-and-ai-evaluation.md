@@ -170,22 +170,6 @@ choice “Apple-approved” because the screen resembles an Apple surface. The
 system owns its system surfaces; app design should use native controls and
 materials within the app’s own responsibility.
 
-## Role handoff for the open-source skill bundle
-
-The design skill should emit a small contract that the testing and audit skills
-can consume:
-
-- screen/state names and fixture IDs;
-- semantic labels, identifiers, roles, values, hints, and focus destinations;
-- Liquid Glass groups, motion purpose, and reduced-effects fallbacks;
-- supported text sizes, locales, input modes, and system settings;
-- user-approved source revision and generated-proposal fields;
-- primary/recovery actions and their side-effect boundaries;
-- evidence levels required for design sign-off.
-
-This turns design guidance into an executable handoff for an LLM-led team while
-preserving uncertainty and avoiding a claim of automatic Apple approval.
-
 ## Sources
 
 - [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
