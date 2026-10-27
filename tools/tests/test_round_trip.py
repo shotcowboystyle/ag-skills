@@ -25,32 +25,37 @@ if str(_REPO_ROOT) not in sys.path:
 
 from tools.adapters.base import (  # noqa: E402
     WORKTREE,
+    PluginSource,
     list_plugins,
     load_plugin,
     parse_frontmatter,
 )
 
 
-def _plugins(harness: str) -> list[str]:
+def _sources(harness: str) -> list[PluginSource]:
     """Local plugins the generator emits for `harness` (plugin.json `harnesses` allows it)."""
     return [
-        name
+        plugin
         for name in list_plugins()
         if (plugin := load_plugin(name)) and plugin.runs_on(harness)
     ]
 
 
+def _plugins(harness: str) -> list[str]:
+    return [plugin.name for plugin in _sources(harness)]
+
+
 def _source_agent_count(harness: str) -> int:
     """Count agents across the local plugins emitted for `harness`."""
-    return sum(len(load_plugin(name).agents) for name in _plugins(harness))
+    return sum(len(plugin.agents) for plugin in _sources(harness))
 
 
 def _source_skill_count(harness: str) -> int:
-    return sum(len(load_plugin(name).skills) for name in _plugins(harness))
+    return sum(len(plugin.skills) for plugin in _sources(harness))
 
 
 def _source_command_count(harness: str) -> int:
-    return sum(len(load_plugin(name).commands) for name in _plugins(harness))
+    return sum(len(plugin.commands) for plugin in _sources(harness))
 
 
 # ── Per-harness output checks ────────────────────────────────────────────────
@@ -430,9 +435,7 @@ class TestNativeInstallManifests:
         assert marketplace.is_file(), ".agents/plugins/marketplace.json missing"
         data = json.loads(marketplace.read_text())
         names = {p["name"] for p in data["plugins"]}
-        eligible = {
-            name for name in _plugins("codex") if load_plugin(name).skills
-        }
+        eligible = {plugin.name for plugin in _sources("codex") if plugin.skills}
         assert names == eligible, (
             f"Codex marketplace mismatch: missing={eligible - names}, extra={names - eligible}"
         )
