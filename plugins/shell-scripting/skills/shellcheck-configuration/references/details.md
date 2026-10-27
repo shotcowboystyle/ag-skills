@@ -1,421 +1,185 @@
 # shellcheck-configuration — detailed patterns and worked examples
 
-## ShellCheck Fundamentals
-
-### What is ShellCheck?
-
-ShellCheck is a static analysis tool that analyzes shell scripts and detects problematic patterns. It supports:
-
-- Bash, sh, dash, ksh, and other POSIX shells
-- Over 100 different warnings and errors
-- Configuration for target shell and flags
-- Integration with editors and CI/CD systems
-
-### Installation
+## Installation
 
 ```bash
-# macOS with Homebrew
-brew install shellcheck
+brew install shellcheck            # macOS
+sudo apt-get install -y shellcheck # Debian/Ubuntu
+sudo dnf install ShellCheck        # Fedora
+pipx install shellcheck-py         # any platform with Python; bundles the binary
 
-# Ubuntu/Debian
-apt-get install shellcheck
-
-# From source
-git clone https://github.com/koalaman/shellcheck.git
-cd shellcheck
-make build
-make install
-
-# Verify installation
 shellcheck --version
 ```
 
-## Configuration Files
+Distribution packages can lag several releases behind. Newer checks need a newer binary;
+the release binaries on GitHub are static and run anywhere.
 
-### .shellcheckrc (Project Level)
+## How Codes Are Numbered
 
-Create `.shellcheckrc` in your project root:
+- **SC1xxx**: parser errors and syntax problems (unbalanced quotes, unrecognized shebang,
+  sourced file not found).
+- **SC2xxx**: the main body of checks: quoting, exit-status handling, likely bugs.
+- **SC3xxx**: features undefined in the shell named by the shebang or `shell=`, mostly
+  Bash or ksh syntax in a POSIX `sh` script.
 
-```
-# Specify target shell
-shell=bash
+Codes within each range are not grouped by topic. Look each one up on
+`https://www.shellcheck.net/wiki/SCxxxx`.
 
-# Enable optional checks
-enable=avoid-nullary-conditions
-enable=require-variable-braces
+## Configuration Examples
 
-# Disable specific warnings
-disable=SC1091
-disable=SC2086
-```
+### Strict profile for new code
 
-### Environment Variables
-
-```bash
-# Set default shell target
-export SHELLCHECK_SHELL=bash
-
-# Enable strict mode
-export SHELLCHECK_STRICT=true
-
-# Specify configuration file location
-export SHELLCHECK_CONFIG=~/.shellcheckrc
-```
-
-## Common ShellCheck Error Codes
-
-### SC1000-1099: Parser Errors
-
-```bash
-# SC1004: Backslash continuation not followed by newline
-echo hello\
-world  # Error - needs line continuation
-
-# SC1008: Invalid data for operator `=='
-if [[ $var =  "value" ]]; then  # Space before ==
-    true
-fi
-```
-
-### SC2000-2099: Shell Issues
-
-```bash
-# SC2009: Consider using pgrep or pidof instead of grep|grep
-ps aux | grep -v grep | grep myprocess  # Use pgrep instead
-
-# SC2012: Use `ls` only for viewing. Use `find` for reliable output
-for file in $(ls -la)  # Better: use find or globbing
-
-# SC2015: Avoid using && and || instead of if-then-else
-[[ -f "$file" ]] && echo "found" || echo "not found"  # Less clear
-
-# SC2016: Expressions don't expand in single quotes
-echo '$VAR'  # Literal $VAR, not variable expansion
-
-# SC2026: This word is non-standard. Set POSIXLY_CORRECT
-# when using with scripts for other shells
-```
-
-### SC2100-2199: Quoting Issues
-
-```bash
-# SC2086: Double quote to prevent globbing and word splitting
-for i in $list; do  # Should be: for i in $list or for i in "$list"
-    echo "$i"
-done
-
-# SC2115: Literal tilde in path not expanded. Use $HOME instead
-~/.bashrc  # In strings, use "$HOME/.bashrc"
-
-# SC2181: Check exit code directly with `if`, not indirectly in a list
-some_command
-if [ $? -eq 0 ]; then  # Better: if some_command; then
-
-# SC2206: Quote to prevent word splitting or set IFS
-array=( $items )  # Should use: array=( $items )
-```
-
-### SC3000-3999: POSIX Compliance Issues
-
-```bash
-# SC3010: In POSIX sh, use 'case' instead of 'cond && foo'
-[[ $var == "value" ]] && do_something  # Not POSIX
-
-# SC3043: In POSIX sh, use 'local' is undefined
-function my_func() {
-    local var=value  # Not POSIX in some shells
-}
-```
-
-## Practical Configuration Examples
-
-### Minimal Configuration (Strict POSIX)
-
-```bash
-#!/bin/bash
-# Configure for maximum portability
-
-shellcheck \
-  --shell=sh \
-  --external-sources \
-  --check-sourced \
-  script.sh
-```
-
-### Development Configuration (Bash with Relaxed Rules)
-
-```bash
-#!/bin/bash
-# Configure for Bash development
-
-shellcheck \
-  --shell=bash \
-  --exclude=SC1091,SC2119 \
-  --enable=all \
-  script.sh
-```
-
-### CI/CD Integration Configuration
-
-```bash
-#!/bin/bash
-set -Eeuo pipefail
-
-# Analyze all shell scripts and fail on issues
-find . -type f -name "*.sh" | while read -r script; do
-    echo "Checking: $script"
-    shellcheck \
-        --shell=bash \
-        --format=gcc \
-        --exclude=SC1091 \
-        "$script" || exit 1
-done
-```
-
-### .shellcheckrc for Project
-
-```
-# Shell dialect to analyze against
-shell=bash
-
-# Enable optional checks
-enable=avoid-nullary-conditions,require-variable-braces,check-unassigned-uppercase
-
-# Disable specific warnings
-# SC1091: Not following sourced files (many false positives)
-disable=SC1091
-
-# SC2119: Use function_name instead of function_name -- (arguments)
-disable=SC2119
-
-# External files to source for context
+```ini
+# .shellcheckrc
+enable=all
 external-sources=true
+source-path=SCRIPTDIR
+
+# require-variable-braces: ${var} everywhere is noise for this codebase.
+disable=SC2250
+```
+
+Check which optional checks exist in your installed version with `shellcheck --list-optional`.
+
+### One-off runs without a config file
+
+```bash
+# POSIX target, follow sources
+shellcheck --shell=sh --external-sources script.sh
+
+# Bash, every optional check, two codes excluded
+shellcheck --shell=bash --enable=all --exclude=SC1091,SC2250 script.sh
+
+# Ignore any .shellcheckrc
+shellcheck --norc script.sh
+```
+
+### Environment variable
+
+`SHELLCHECK_OPTS` is the only environment variable ShellCheck reads for options. Its value
+is prepended to the command-line flags:
+
+```bash
+export SHELLCHECK_OPTS='--severity=warning --external-sources'
 ```
 
 ## Integration Patterns
 
-### Pre-commit Hook Configuration
+### Git pre-commit hook without the pre-commit framework
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 # .git/hooks/pre-commit
+set -euo pipefail
 
-#!/bin/bash
-set -e
-
-# Find all shell scripts changed in this commit
-git diff --cached --name-only | grep '\.sh$' | while read -r script; do
-    echo "Linting: $script"
-
-    if ! shellcheck "$script"; then
-        echo "ShellCheck failed on $script"
-        exit 1
-    fi
-done
+mapfile -d '' files < <(git diff --cached --name-only -z --diff-filter=ACMR -- '*.sh')
+(( ${#files[@]} == 0 )) && exit 0
+shellcheck -x -- "${files[@]}"
 ```
 
-### GitHub Actions Workflow
+### GitHub Actions workflow
 
 ```yaml
 name: ShellCheck
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   shellcheck:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v5
       - name: Run ShellCheck
-        run: |
-          sudo apt-get install shellcheck
-          find . -type f -name "*.sh" -exec shellcheck {} \;
+        run: git ls-files -z '*.sh' | xargs -0 --no-run-if-empty shellcheck -x
 ```
 
-### GitLab CI Pipeline
+### GitLab CI
 
 ```yaml
 shellcheck:
   stage: lint
-  image: koalaman/shellcheck-alpine
+  image: koalaman/shellcheck-alpine:stable
   script:
-    - find . -type f -name "*.sh" -exec shellcheck {} \;
-  allow_failure: false
+    - find . -type f -name '*.sh' -exec shellcheck -x {} +
 ```
 
-## Handling ShellCheck Violations
+`-exec … {} +` passes many files to one ShellCheck run and returns its exit status.
+`-exec … {} \;` does not: `find` exits 0 even when every file fails.
 
-### Suppressing Specific Warnings
+## Handling Violations
+
+### Suppressing with a reason
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
+# A directive right after the shebang applies to the whole file.
+# shellcheck disable=SC2154 # set by the CI environment
 
-# Disable warning for entire line
-# shellcheck disable=SC2086
-for file in $(ls -la); do
-    echo "$file"
-done
+# A directive on its own line applies to the next command only.
+# shellcheck disable=SC2086 # $FLAGS is a deliberately split list of options
+gcc $FLAGS -o app main.c
 
-# Disable for entire script
-# shellcheck disable=SC1091,SC2119
-
-# Disable multiple warnings (format varies)
-command_that_fails() {
-    # shellcheck disable=SC2015
-    [ -f "$1" ] && echo "found" || echo "not found"
-}
-
-# Disable specific check for source directive
-# shellcheck source=./helper.sh
-source helper.sh
+# Tell ShellCheck where a dynamically built path points.
+# shellcheck source=lib/common.sh
+. "$LIB_DIR/common.sh"
 ```
 
-### Common Violations and Fixes
+Prefer fixing over suppressing. Suppress when the code is right and ShellCheck cannot know
+it, and say why in the same comment.
 
-#### SC2086: Double quote to prevent word splitting
-
-```bash
-# Problem
-for i in $list; do done
-
-# Solution
-for i in $list; do done  # If $list is already quoted, or
-for i in "${list[@]}"; do done  # If list is an array
-```
-
-#### SC2181: Check exit code directly
+### Common fixes
 
 ```bash
-# Problem
+# SC2086 / SC2046: quote expansions
+cp $src $dest          # bad
+cp -- "$src" "$dest"   # good
+
+# SC2206: split a string into an array on purpose
+arr=( $line )                    # bad: also globs
+read -ra arr <<<"$line"          # good
+
+# SC2155: keep the exit status
+local out=$(build)               # bad: failure of build is ignored
+local out; out=$(build)          # good
+
+# SC2181: test the command, not $?
 some_command
-if [ $? -eq 0 ]; then
-    echo "success"
-fi
+if [ $? -eq 0 ]; then echo ok; fi   # bad
+if some_command; then echo ok; fi   # good
 
-# Solution
-if some_command; then
-    echo "success"
-fi
+# SC2015: A && B || C is not if/else; C runs when B fails
+[ -f "$f" ] && process "$f" || echo "missing"           # bad
+if [ -f "$f" ]; then process "$f"; else echo "missing"; fi  # good
+
+# SC2009: use pgrep
+ps aux | grep -v grep | grep myprocess   # bad
+pgrep -f myprocess                       # good
 ```
 
-#### SC2015: Use if-then instead of && ||
+## Checking Many Files
 
 ```bash
-# Problem
-[ -f "$file" ] && echo "exists" || echo "not found"
+# One process per batch of files; non-zero if any file has findings
+git ls-files -z '*.sh' | xargs -0 shellcheck -x
 
-# Solution - clearer intent
-if [ -f "$file" ]; then
-    echo "exists"
-else
-    echo "not found"
-fi
+# Parallel: four ShellCheck processes
+git ls-files -z '*.sh' | xargs -0 -P 4 -n 20 shellcheck -x
 ```
 
-#### SC2016: Expressions don't expand in single quotes
-
-```bash
-# Problem
-echo 'Variable value: $VAR'
-
-# Solution
-echo "Variable value: $VAR"
-```
-
-#### SC2009: Use pgrep instead of grep
-
-```bash
-# Problem
-ps aux | grep -v grep | grep myprocess
-
-# Solution
-pgrep -f myprocess
-```
-
-## Performance Optimization
-
-### Checking Multiple Files
-
-```bash
-#!/bin/bash
-
-# Sequential checking
-for script in *.sh; do
-    shellcheck "$script"
-done
-
-# Parallel checking (faster)
-find . -name "*.sh" -print0 | \
-    xargs -0 -P 4 -n 1 shellcheck
-```
-
-### Caching Results
-
-```bash
-#!/bin/bash
-
-CACHE_DIR=".shellcheck_cache"
-mkdir -p "$CACHE_DIR"
-
-check_script() {
-    local script="$1"
-    local hash
-    local cache_file
-
-    hash=$(sha256sum "$script" | cut -d' ' -f1)
-    cache_file="$CACHE_DIR/$hash"
-
-    if [[ ! -f "$cache_file" ]]; then
-        if shellcheck "$script" > "$cache_file" 2>&1; then
-            touch "$cache_file.ok"
-        else
-            return 1
-        fi
-    fi
-
-    [[ -f "$cache_file.ok" ]]
-}
-
-find . -name "*.sh" | while read -r script; do
-    check_script "$script" || exit 1
-done
-```
+Whether parallel runs are faster for a given repository needs measurement.
 
 ## Output Formats
 
-### Default Format
-
 ```bash
-shellcheck script.sh
-
-# Output:
-# script.sh:1:3: warning: foo is referenced but not assigned. [SC2154]
+shellcheck script.sh                  # tty: annotated source, the default
+shellcheck -f gcc script.sh           # script.sh:3:6: warning: ... [SC2154]
+shellcheck -f checkstyle script.sh    # XML for Jenkins and similar
+shellcheck -f json1 script.sh         # {"comments": [{"file", "line", "column", "level", "code", "message", "fix"}]}
+shellcheck -f diff script.sh          # unified diff of automatic fixes
+shellcheck -f quiet script.sh         # no output; exit status only
 ```
 
-### GCC Format (for CI/CD)
-
-```bash
-shellcheck --format=gcc script.sh
-
-# Output:
-# script.sh:1:3: warning: foo is referenced but not assigned.
-```
-
-### JSON Format (for parsing)
-
-```bash
-shellcheck --format=json script.sh
-
-# Output:
-# [{"file": "script.sh", "line": 1, "column": 3, "level": "warning", "code": 2154, "message": "..."}]
-```
-
-### Quiet Format
-
-```bash
-shellcheck --format=quiet script.sh
-
-# Returns non-zero if issues found, no output otherwise
-```
+Prefer `json1` over the older `json` format; `json1` wraps the list in a `comments` object.
