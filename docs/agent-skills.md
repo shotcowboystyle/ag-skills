@@ -208,9 +208,9 @@ Skills provide domain guidance that coding agents can load when relevant. Each s
 
 | Skill                           | Description                                                                 |
 | ------------------------------- | --------------------------------------------------------------------------- |
-| **spark-optimization**          | Optimize Apache Spark jobs with partitioning, caching, and broadcast joins  |
-| **dbt-transformation-patterns** | Build dbt models with incremental strategies and testing                    |
-| **airflow-dag-patterns**        | Design Airflow DAGs with proper dependencies and error handling             |
+| **spark-optimization**          | Diagnose slow or failing Spark jobs from the UI and plan: skew, joins, spills, file layout |
+| **dbt-transformation-patterns** | dbt models, tests and incremental strategies in dbt 1.10+ / v2 YAML          |
+| **airflow-dag-patterns**        | Airflow 3 DAGs with `airflow.sdk`, timetables, assets and DAG tests          |
 | **data-quality-frameworks**     | Implement data quality checks with Great Expectations and custom validators |
 
 ### Documentation Generation (3 skills)

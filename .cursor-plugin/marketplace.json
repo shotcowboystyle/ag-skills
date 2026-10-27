@@ -246,7 +246,7 @@
     {
       "name": "data-engineering",
       "source": "./plugins/data-engineering",
-      "version": "1.3.2",
+      "version": "1.3.3",
       "description": "ETL pipeline construction, data warehouse design, batch processing workflows, and data-driven feature development",
       "author": {
         "name": "Curtis Blanton",

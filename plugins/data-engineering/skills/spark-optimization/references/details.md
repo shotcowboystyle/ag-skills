@@ -1,321 +1,198 @@
-# spark-optimization — detailed patterns and worked examples
+# spark-optimization: detailed patterns
 
-## Patterns
+Examples use PySpark 4.2 and only set configuration that differs from the defaults.
 
-### Pattern 1: Optimal Partitioning
+## Reading the plan
 
 ```python
-# Calculate optimal partition count
-def calculate_partitions(data_size_gb: float, partition_size_mb: int = 128) -> int:
-    """
-    Optimal partition size: 128MB - 256MB
-    Too few: Under-utilization, memory pressure
-    Too many: Task scheduling overhead
-    """
-    return max(int(data_size_gb * 1024 / partition_size_mb), 1)
-
-# Repartition for even distribution
-df_repartitioned = df.repartition(200, "partition_key")
-
-# Coalesce to reduce partitions (no shuffle)
-df_coalesced = df.coalesce(100)
-
-# Partition pruning with predicate pushdown
-df = (spark.read.parquet("s3://bucket/data/")
-    .filter(F.col("date") == "2024-01-01"))  # Spark pushes this down
-
-# Write with partitioning for future queries
-(df.write
-    .partitionBy("year", "month", "day")
-    .mode("overwrite")
-    .parquet("s3://bucket/partitioned_output/"))
+df.explain(mode="formatted")   # physical plan with numbered operators and their details
+df.explain(mode="cost")        # adds the optimizer's size and row estimates where available
 ```
 
-### Pattern 2: Join Optimization
+What to look for:
+
+- `Exchange hashpartitioning(...)`: a shuffle. Each one is a stage boundary. Count them; two
+  shuffles on the same key often mean a missing `repartition` reuse or an extra `groupBy`.
+- `AdaptiveSparkPlan isFinalPlan=false`: AQE will re-plan at run time. The final plan, with the
+  real join type and partition counts, is in the SQL tab of the Spark UI after the run.
+- `PartitionFilters: [...]` on the scan: partition pruning worked. An empty list with a filter
+  on the partition column means the filter wraps the column in a function or a cast.
+- `PushedFilters: [...]`: filters the file reader applies (Parquet row-group skipping).
+
+In the Spark UI, open the slowest stage and compare the median and max of task duration and
+shuffle read size. A max several times the median is skew. Non-zero "Spill (Disk)" means the
+partition did not fit in execution memory.
+
+## Skew
+
+AQE splits a skewed partition of a sort-merge join when it is more than
+`skewedPartitionFactor` (5) times the median and over `skewedPartitionThresholdInBytes`
+(256 MB). Lower those two settings if the UI still shows one long task:
 
 ```python
+spark.conf.set("spark.sql.adaptive.skewJoin.skewedPartitionFactor", "3")
+spark.conf.set("spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes", "128MB")
+```
+
+AQE does not split skew in an aggregation. When one key holds most rows of a `groupBy`, or the
+join is not a sort-merge join, salt the key:
+
+```python
+# jobs/salted_join.py
+from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-from pyspark.sql.types import *
 
-# 1. Broadcast Join - Small table joins
-# Best when: One side < 10MB (configurable)
-small_df = spark.read.parquet("s3://bucket/small_table/")  # < 10MB
-large_df = spark.read.parquet("s3://bucket/large_table/")  # TBs
+spark = SparkSession.builder.appName("salted-join").getOrCreate()
+SALTS = 16
 
-# Explicit broadcast hint
-result = large_df.join(
-    F.broadcast(small_df),
-    on="key",
-    how="left"
+events = spark.range(2_000_000).select(
+    F.when(F.col("id") % 10 < 8, F.lit(0)).otherwise(F.col("id") % 1000).alias("customer_id"),
+    F.col("id").alias("event_id"),
+)
+customers = spark.range(1000).select(F.col("id").alias("customer_id"), F.lit("x").alias("plan"))
+
+salted_events = events.withColumn("salt", (F.rand(seed=7) * SALTS).cast("int"))
+salted_customers = customers.crossJoin(spark.range(SALTS).withColumnRenamed("id", "salt"))
+
+joined = salted_events.join(salted_customers, ["customer_id", "salt"]).drop("salt")
+print(joined.count())  # same row count as the unsalted join
+```
+
+The small side grows by a factor of `SALTS`, so salt only the keys that are skewed when that
+side is large: split the hot keys out, salt them, and union the result with a plain join of the
+rest.
+
+## Joins
+
+| Physical join | When Spark picks it | Notes |
+| --- | --- | --- |
+| `BroadcastHashJoin` | one side is under `autoBroadcastJoinThreshold` (10 MB) by estimate, or AQE sees it is small at run time | no shuffle of the large side; the small side must fit in driver and executor memory |
+| `SortMergeJoin` | default for two large sides | shuffles and sorts both sides |
+| `ShuffledHashJoin` | with the `SHUFFLE_HASH` hint, or when AQE converts a sort-merge join after you set `spark.sql.adaptive.maxShuffledHashJoinLocalMapThreshold` (0, off, by default) | skips the sort; the build side of each partition must fit in memory |
+
+Force a strategy with a hint when the estimate is wrong:
+
+```python
+large.join(small.hint("broadcast"), "key")
+large.join(other.hint("shuffle_hash"), "key")
+```
+
+```sql
+SELECT /*+ BROADCAST(c) */ * FROM orders o JOIN customers c ON o.customer_id = c.customer_id
+```
+
+Bucketed Hive tables avoid the shuffle when both sides use the same bucket column and count.
+For Iceberg and other DataSource V2 tables, storage-partitioned join does the same from the
+table's partitioning (`spark.sql.sources.v2.bucketing.enabled`, on by default).
+
+## Partitions and files
+
+- AQE starts from `spark.sql.shuffle.partitions` and coalesces toward
+  `spark.sql.adaptive.advisoryPartitionSizeInBytes` (64 MB). For very large shuffles, raise
+  `spark.sql.shuffle.partitions` so that AQE has room to coalesce, rather than lowering it.
+- `coalesce(n)` merges partitions without a shuffle but also lowers the parallelism of the work
+  before it. Use `repartition(n)` when the upstream work needs its parallelism.
+- Partition tables on disk by a low-cardinality column that queries filter on, usually a date.
+  Partitioning by a high-cardinality column produces many small files.
+- Write fewer, larger files: `df.repartition("dt").write.partitionBy("dt")` gives one file per
+  date, and `spark.sql.files.maxRecordsPerFile` caps the size.
+
+```python
+# jobs/write_partitioned.py
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
+
+spark = SparkSession.builder.appName("write-partitioned").getOrCreate()
+
+events = spark.range(100_000).select(
+    F.col("id").alias("event_id"),
+    F.date_add(F.lit("2026-01-01"), (F.col("id") % 7).cast("int")).alias("dt"),
 )
 
-# 2. Sort-Merge Join - Default for large tables
-# Requires shuffle, but handles any size
-result = large_df1.join(large_df2, on="key", how="inner")
+out = "/tmp/spark-optimization/events"
+events.repartition("dt").write.mode("overwrite").partitionBy("dt").parquet(out)
 
-# 3. Bucket Join - Pre-sorted, no shuffle at join time
-# Write bucketed tables
-(df.write
-    .bucketBy(200, "customer_id")
-    .sortBy("customer_id")
-    .mode("overwrite")
-    .saveAsTable("bucketed_orders"))
-
-# Join bucketed tables (no shuffle!)
-orders = spark.table("bucketed_orders")
-customers = spark.table("bucketed_customers")  # Same bucket count
-result = orders.join(customers, on="customer_id")
-
-# 4. Skew Join Handling
-# Enable AQE skew join optimization
-spark.conf.set("spark.sql.adaptive.skewJoin.enabled", "true")
-spark.conf.set("spark.sql.adaptive.skewJoin.skewedPartitionFactor", "5")
-spark.conf.set("spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes", "256MB")
-
-# Manual salting for severe skew
-def salt_join(df_skewed, df_other, key_col, num_salts=10):
-    """Add salt to distribute skewed keys"""
-    # Add salt to skewed side
-    df_salted = df_skewed.withColumn(
-        "salt",
-        (F.rand() * num_salts).cast("int")
-    ).withColumn(
-        "salted_key",
-        F.concat(F.col(key_col), F.lit("_"), F.col("salt"))
-    )
-
-    # Explode other side with all salts
-    df_exploded = df_other.crossJoin(
-        spark.range(num_salts).withColumnRenamed("id", "salt")
-    ).withColumn(
-        "salted_key",
-        F.concat(F.col(key_col), F.lit("_"), F.col("salt"))
-    )
-
-    # Join on salted key
-    return df_salted.join(df_exploded, on="salted_key", how="inner")
+day = spark.read.parquet(out).filter(F.col("dt") == "2026-01-03")
+day.explain(mode="formatted")  # the scan lists PartitionFilters on dt
+print(day.count())
 ```
 
-### Pattern 3: Caching and Persistence
+## Caching
+
+Cache a DataFrame only when more than one action reads it and recomputing it is expensive.
+`cache()` uses `MEMORY_AND_DISK_DESER` for DataFrames. The cache is filled by the first action,
+so do not add a `count()` just to fill it.
 
 ```python
-from pyspark import StorageLevel
-
-# Cache when reusing DataFrame multiple times
-df = spark.read.parquet("s3://bucket/data/")
-df_filtered = df.filter(F.col("status") == "active")
-
-# Cache in memory (MEMORY_AND_DISK is default)
-df_filtered.cache()
-
-# Or with specific storage level
-df_filtered.persist(StorageLevel.MEMORY_AND_DISK_SER)
-
-# Force materialization
-df_filtered.count()
-
-# Use in multiple actions
-agg1 = df_filtered.groupBy("category").count()
-agg2 = df_filtered.groupBy("region").sum("amount")
-
-# Unpersist when done
-df_filtered.unpersist()
-
-# Storage levels explained:
-# MEMORY_ONLY - Fast, but may not fit
-# MEMORY_AND_DISK - Spills to disk if needed (recommended)
-# MEMORY_ONLY_SER - Serialized, less memory, more CPU
-# DISK_ONLY - When memory is tight
-# OFF_HEAP - Tungsten off-heap memory
-
-# Checkpoint for complex lineage
-spark.sparkContext.setCheckpointDir("s3://bucket/checkpoints/")
-df_complex = (df
-    .join(other_df, "key")
-    .groupBy("category")
-    .agg(F.sum("amount")))
-df_complex.checkpoint()  # Breaks lineage, materializes
+active = df.filter(F.col("status") == "active").cache()
+by_region = active.groupBy("region").count().collect()
+by_plan = active.groupBy("plan").count().collect()
+active.unpersist()
 ```
 
-### Pattern 4: Memory Tuning
+`checkpoint()` and `localCheckpoint()` return a new DataFrame with the lineage cut. Use the
+returned value: `df = df.checkpoint()`. Use them for iterative jobs whose plan grows every loop.
+
+## Memory
+
+- `spark.executor.memory` is the JVM heap. Of it, 300 MB is reserved and
+  `spark.memory.fraction` (0.6) of the rest is shared by execution and storage.
+- `spark.executor.memoryOverhead` (default 10% of executor memory, at least 384 MB) covers
+  off-heap use: Python workers, Arrow buffers and native libraries. Raise it when YARN or
+  Kubernetes kills executors for exceeding the container limit while the heap looks fine.
+- Spill with long GC means partitions are too large for the memory per core. Either lower the
+  partition size or give each core more memory (fewer cores per executor).
+- Five or fewer cores per executor is a common starting point on YARN and Kubernetes. Measure
+  before and after any change.
+
+## Python UDFs
+
+Built-in functions run in the JVM and are optimized by Catalyst. A Python `@udf` sends every row
+to a Python worker. When no built-in function fits, use an Arrow-based `@pandas_udf`, which
+moves data in batches:
 
 ```python
-# Executor memory configuration
-# spark-submit --executor-memory 8g --executor-cores 4
+# jobs/pandas_udf.py
+import pandas as pd
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
 
-# Memory breakdown (8GB executor):
-# - spark.memory.fraction = 0.6 (60% = 4.8GB for execution + storage)
-#   - spark.memory.storageFraction = 0.5 (50% of 4.8GB = 2.4GB for cache)
-#   - Remaining 2.4GB for execution (shuffles, joins, sorts)
-# - 40% = 3.2GB for user data structures and internal metadata
+spark = SparkSession.builder.appName("pandas-udf").getOrCreate()
 
-spark = (SparkSession.builder
-    .config("spark.executor.memory", "8g")
-    .config("spark.executor.memoryOverhead", "2g")  # For non-JVM memory
-    .config("spark.memory.fraction", "0.6")
-    .config("spark.memory.storageFraction", "0.5")
-    .config("spark.sql.shuffle.partitions", "200")
-    # For memory-intensive operations
-    .config("spark.sql.autoBroadcastJoinThreshold", "50MB")
-    # Prevent OOM on large shuffles
-    .config("spark.sql.files.maxPartitionBytes", "128MB")
-    .getOrCreate())
 
-# Monitor memory usage
-def print_memory_usage(spark):
-    """Print current memory usage"""
-    sc = spark.sparkContext
-    for executor in sc._jsc.sc().getExecutorMemoryStatus().keySet().toArray():
-        mem_status = sc._jsc.sc().getExecutorMemoryStatus().get(executor)
-        total = mem_status._1() / (1024**3)
-        free = mem_status._2() / (1024**3)
-        print(f"{executor}: {total:.2f}GB total, {free:.2f}GB free")
+@F.pandas_udf("double")
+def with_tax(amount: pd.Series) -> pd.Series:
+    return amount * 1.2
+
+
+df = spark.range(10).select(F.col("id").cast("double").alias("amount"))
+df.select(with_tax("amount").alias("gross")).show()
 ```
 
-### Pattern 5: Shuffle Optimization
+Spark 4 also supports Arrow-optimized regular UDFs (`@udf(useArrow=True)`) and Python data
+source and UDTF APIs.
 
-```python
-# Reduce shuffle data size
-spark.conf.set("spark.sql.shuffle.partitions", "auto")  # With AQE
-spark.conf.set("spark.shuffle.compress", "true")
-spark.conf.set("spark.shuffle.spill.compress", "true")
+## Table maintenance
 
-# Pre-aggregate before shuffle
-df_optimized = (df
-    # Local aggregation first (combiner)
-    .groupBy("key", "partition_col")
-    .agg(F.sum("value").alias("partial_sum"))
-    # Then global aggregation
-    .groupBy("key")
-    .agg(F.sum("partial_sum").alias("total")))
+Small files and stale layout slow every read of a table. Run compaction on a schedule:
 
-# Avoid shuffle with map-side operations
-# BAD: Shuffle for each distinct
-distinct_count = df.select("category").distinct().count()
+- Delta Lake: `OPTIMIZE <table>`; `OPTIMIZE <table> ZORDER BY (col)` for older tables, or
+  liquid clustering (`CLUSTER BY`) for new ones; `VACUUM` to delete unreferenced files after the
+  retention period.
+- Iceberg: the `rewrite_data_files` and `expire_snapshots` procedures
+  (`CALL catalog.system.rewrite_data_files('db.table')`).
 
-# GOOD: Approximate distinct (no shuffle)
-approx_count = df.select(F.approx_count_distinct("category")).collect()[0][0]
+Check the Delta or Iceberg version in use before copying table properties; option names differ
+between open-source releases and Databricks.
 
-# Use coalesce instead of repartition when reducing partitions
-df_reduced = df.coalesce(10)  # No shuffle
+## Settings worth changing
 
-# Optimize shuffle with compression
-spark.conf.set("spark.io.compression.codec", "lz4")  # Fast compression
-```
+Only set a value when a measurement shows the default is wrong for this job:
 
-### Pattern 6: Data Format Optimization
-
-```python
-# Parquet optimizations
-(df.write
-    .option("compression", "snappy")  # Fast compression
-    .option("parquet.block.size", 128 * 1024 * 1024)  # 128MB row groups
-    .parquet("s3://bucket/output/"))
-
-# Column pruning - only read needed columns
-df = (spark.read.parquet("s3://bucket/data/")
-    .select("id", "amount", "date"))  # Spark only reads these columns
-
-# Predicate pushdown - filter at storage level
-df = (spark.read.parquet("s3://bucket/partitioned/year=2024/")
-    .filter(F.col("status") == "active"))  # Pushed to Parquet reader
-
-# Delta Lake optimizations
-(df.write
-    .format("delta")
-    .option("optimizeWrite", "true")  # Bin-packing
-    .option("autoCompact", "true")  # Compact small files
-    .mode("overwrite")
-    .save("s3://bucket/delta_table/"))
-
-# Z-ordering for multi-dimensional queries
-spark.sql("""
-    OPTIMIZE delta.`s3://bucket/delta_table/`
-    ZORDER BY (customer_id, date)
-""")
-```
-
-### Pattern 7: Monitoring and Debugging
-
-```python
-# Enable detailed metrics
-spark.conf.set("spark.sql.codegen.wholeStage", "true")
-spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
-
-# Explain query plan
-df.explain(mode="extended")
-# Modes: simple, extended, codegen, cost, formatted
-
-# Get physical plan statistics
-df.explain(mode="cost")
-
-# Monitor task metrics
-def analyze_stage_metrics(spark):
-    """Analyze recent stage metrics"""
-    status_tracker = spark.sparkContext.statusTracker()
-
-    for stage_id in status_tracker.getActiveStageIds():
-        stage_info = status_tracker.getStageInfo(stage_id)
-        print(f"Stage {stage_id}:")
-        print(f"  Tasks: {stage_info.numTasks}")
-        print(f"  Completed: {stage_info.numCompletedTasks}")
-        print(f"  Failed: {stage_info.numFailedTasks}")
-
-# Identify data skew
-def check_partition_skew(df):
-    """Check for partition skew"""
-    partition_counts = (df
-        .withColumn("partition_id", F.spark_partition_id())
-        .groupBy("partition_id")
-        .count()
-        .orderBy(F.desc("count")))
-
-    partition_counts.show(20)
-
-    stats = partition_counts.select(
-        F.min("count").alias("min"),
-        F.max("count").alias("max"),
-        F.avg("count").alias("avg"),
-        F.stddev("count").alias("stddev")
-    ).collect()[0]
-
-    skew_ratio = stats["max"] / stats["avg"]
-    print(f"Skew ratio: {skew_ratio:.2f}x (>2x indicates skew)")
-```
-
-## Configuration Cheat Sheet
-
-```python
-# Production configuration template
-spark_configs = {
-    # Adaptive Query Execution (AQE)
-    "spark.sql.adaptive.enabled": "true",
-    "spark.sql.adaptive.coalescePartitions.enabled": "true",
-    "spark.sql.adaptive.skewJoin.enabled": "true",
-
-    # Memory
-    "spark.executor.memory": "8g",
-    "spark.executor.memoryOverhead": "2g",
-    "spark.memory.fraction": "0.6",
-    "spark.memory.storageFraction": "0.5",
-
-    # Parallelism
-    "spark.sql.shuffle.partitions": "200",
-    "spark.default.parallelism": "200",
-
-    # Serialization
-    "spark.serializer": "org.apache.spark.serializer.KryoSerializer",
-    "spark.sql.execution.arrow.pyspark.enabled": "true",
-
-    # Compression
-    "spark.io.compression.codec": "lz4",
-    "spark.shuffle.compress": "true",
-
-    # Broadcast
-    "spark.sql.autoBroadcastJoinThreshold": "50MB",
-
-    # File handling
-    "spark.sql.files.maxPartitionBytes": "128MB",
-    "spark.sql.files.openCostInBytes": "4MB",
-}
-```
+| Setting | Default | Change when |
+| --- | --- | --- |
+| `spark.sql.autoBroadcastJoinThreshold` | 10 MB | a dimension table just over 10 MB is joined often and fits in memory |
+| `spark.sql.shuffle.partitions` | 200 | shuffles are hundreds of GB; raise so AQE can coalesce |
+| `spark.sql.adaptive.advisoryPartitionSizeInBytes` | 64 MB | tasks spill (lower) or there are many tiny tasks (raise) |
+| `spark.sql.files.maxPartitionBytes` | 128 MB | the scan stage spills or has too few tasks |
+| `spark.executor.memoryOverhead` | 10%, min 384 MB | containers are killed for exceeding memory with PySpark or Arrow |

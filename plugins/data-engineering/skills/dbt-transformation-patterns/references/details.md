@@ -1,129 +1,85 @@
-# dbt-transformation-patterns — detailed patterns and worked examples
+# dbt-transformation-patterns: detailed patterns
 
-## Patterns
+The files below form one small project: Stripe customers and payments, staged, joined and
+published as `dim_customers` and an incremental `fct_payments`. The YAML uses the dbt 1.10+
+forms, which parse without deprecation warnings on dbt Core 1.12 and are what dbt v2 requires.
 
-### Pattern 1: Source Definitions
+## Sources and freshness
 
 ```yaml
 # models/staging/stripe/_stripe__sources.yml
-version: 2
-
 sources:
   - name: stripe
-    description: Raw Stripe data loaded via Fivetran
-    database: raw
+    description: Raw Stripe data loaded by Fivetran.
     schema: stripe
-    loader: fivetran
-    loaded_at_field: _fivetran_synced
-    freshness:
-      warn_after: { count: 12, period: hour }
-      error_after: { count: 24, period: hour }
+    config:
+      loaded_at_field: _loaded_at
+      freshness:
+        warn_after: { count: 12, period: hour }
+        error_after: { count: 24, period: hour }
     tables:
       - name: customers
-        description: Stripe customer records
         columns:
           - name: id
-            description: Primary key
-            tests:
-              - unique
-              - not_null
-          - name: email
-            description: Customer email
-          - name: created
-            description: Account creation timestamp
-
+            data_tests: [unique, not_null]
       - name: payments
-        description: Stripe payment transactions
         columns:
           - name: id
-            tests:
-              - unique
-              - not_null
-          - name: customer_id
-            tests:
-              - not_null
-              - relationships:
-                  to: source('stripe', 'customers')
-                  field: id
+            data_tests: [unique, not_null]
 ```
 
-### Pattern 2: Staging Models
+`dbt source freshness` compares `max(_loaded_at)` with the current time and fails past
+`error_after`. Run it before `dbt build` in the scheduled job.
+
+## Staging
+
+Rename to the project's conventions, cast types and convert units. Nothing else. The payments
+staging model is in the SKILL.md quick start.
 
 ```sql
 -- models/staging/stripe/stg_stripe__customers.sql
 with source as (
     select * from {{ source('stripe', 'customers') }}
-),
-
-renamed as (
-    select
-        -- ids
-        id as customer_id,
-
-        -- strings
-        lower(email) as email,
-        name as customer_name,
-
-        -- timestamps
-        created as created_at,
-
-        -- metadata
-        _fivetran_synced as _loaded_at
-
-    from source
 )
 
-select * from renamed
+select
+    id as customer_id,
+    lower(email) as email,
+    name as customer_name,
+    cast(created as timestamp) as created_at,
+    _loaded_at
+from source
 ```
 
-```sql
--- models/staging/stripe/stg_stripe__payments.sql
-{{
-    config(
-        materialized='incremental',
-        unique_key='payment_id',
-        on_schema_change='append_new_columns'
-    )
-}}
-
-with source as (
-    select * from {{ source('stripe', 'payments') }}
-
-    {% if is_incremental() %}
-    where _fivetran_synced > (select max(_loaded_at) from {{ this }})
-    {% endif %}
-),
-
-renamed as (
-    select
-        -- ids
-        id as payment_id,
-        customer_id,
-        invoice_id,
-
-        -- amounts (convert cents to dollars)
-        amount / 100.0 as amount,
-        amount_refunded / 100.0 as amount_refunded,
-
-        -- status
-        status as payment_status,
-
-        -- timestamps
-        created as created_at,
-
-        -- metadata
-        _fivetran_synced as _loaded_at
-
-    from source
-)
-
-select * from renamed
+```yaml
+# models/staging/stripe/_stripe__models.yml
+models:
+  - name: stg_stripe__customers
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+  - name: stg_stripe__payments
+    columns:
+      - name: payment_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_stripe__customers')
+                field: customer_id
+      - name: payment_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["succeeded", "failed", "refunded"]
 ```
 
-### Pattern 3: Intermediate Models
+## Intermediate
 
 ```sql
--- models/intermediate/finance/int_payments_pivoted_to_customer.sql
+-- models/intermediate/int_customer_payments.sql
 with payments as (
     select * from {{ ref('stg_stripe__payments') }}
 ),
@@ -132,14 +88,12 @@ customers as (
     select * from {{ ref('stg_stripe__customers') }}
 ),
 
-payment_summary as (
+per_customer as (
     select
         customer_id,
-        count(*) as total_payments,
-        count(case when payment_status = 'succeeded' then 1 end) as successful_payments,
-        sum(case when payment_status = 'succeeded' then amount else 0 end) as total_amount_paid,
-        min(created_at) as first_payment_at,
-        max(created_at) as last_payment_at
+        count(*) as payment_count,
+        sum(case when payment_status = 'succeeded' then amount else 0 end) as lifetime_value,
+        min(created_at) as first_payment_at
     from payments
     group by customer_id
 )
@@ -147,301 +101,199 @@ payment_summary as (
 select
     customers.customer_id,
     customers.email,
-    customers.created_at as customer_created_at,
-    coalesce(payment_summary.total_payments, 0) as total_payments,
-    coalesce(payment_summary.successful_payments, 0) as successful_payments,
-    coalesce(payment_summary.total_amount_paid, 0) as lifetime_value,
-    payment_summary.first_payment_at,
-    payment_summary.last_payment_at
-
+    customers.created_at,
+    coalesce(per_customer.payment_count, 0) as payment_count,
+    coalesce(per_customer.lifetime_value, 0) as lifetime_value,
+    per_customer.first_payment_at
 from customers
-left join payment_summary using (customer_id)
+left join per_customer on customers.customer_id = per_customer.customer_id
 ```
 
-### Pattern 4: Mart Models (Dimensions and Facts)
+## Marts
 
 ```sql
--- models/marts/core/dim_customers.sql
-{{
-    config(
-        materialized='table',
-        unique_key='customer_id'
-    )
-}}
-
-with customers as (
-    select * from {{ ref('int_payments_pivoted_to_customer') }}
-),
-
-orders as (
-    select * from {{ ref('stg_shopify__orders') }}
-),
-
-order_summary as (
-    select
-        customer_id,
-        count(*) as total_orders,
-        sum(total_price) as total_order_value,
-        min(created_at) as first_order_at,
-        max(created_at) as last_order_at
-    from orders
-    group by customer_id
-),
-
-final as (
-    select
-        -- surrogate key
-        {{ dbt_utils.generate_surrogate_key(['customers.customer_id']) }} as customer_key,
-
-        -- natural key
-        customers.customer_id,
-
-        -- attributes
-        customers.email,
-        customers.customer_created_at,
-
-        -- payment metrics
-        customers.total_payments,
-        customers.successful_payments,
-        customers.lifetime_value,
-        customers.first_payment_at,
-        customers.last_payment_at,
-
-        -- order metrics
-        coalesce(order_summary.total_orders, 0) as total_orders,
-        coalesce(order_summary.total_order_value, 0) as total_order_value,
-        order_summary.first_order_at,
-        order_summary.last_order_at,
-
-        -- calculated fields
-        case
-            when customers.lifetime_value >= 1000 then 'high'
-            when customers.lifetime_value >= 100 then 'medium'
-            else 'low'
-        end as customer_tier,
-
-        -- timestamps
-        current_timestamp as _loaded_at
-
-    from customers
-    left join order_summary using (customer_id)
-)
-
-select * from final
+-- models/marts/dim_customers.sql
+select
+    customer_id,
+    email,
+    created_at,
+    payment_count,
+    lifetime_value,
+    first_payment_at,
+    case
+        when lifetime_value >= 1000 then 'high'
+        when lifetime_value >= 100 then 'medium'
+        else 'low'
+    end as customer_tier
+from {{ ref('int_customer_payments') }}
 ```
 
+An incremental fact reprocesses the last three days on every run so that late-arriving and
+updated rows are merged instead of skipped. `dbt.dateadd` compiles to each warehouse's own
+syntax.
+
 ```sql
--- models/marts/core/fct_orders.sql
+-- models/marts/fct_payments.sql
 {{
     config(
         materialized='incremental',
-        unique_key='order_id',
-        incremental_strategy='merge'
-    )
-}}
-
-with orders as (
-    select * from {{ ref('stg_shopify__orders') }}
-
-    {% if is_incremental() %}
-    where updated_at > (select max(updated_at) from {{ this }})
-    {% endif %}
-),
-
-customers as (
-    select * from {{ ref('dim_customers') }}
-),
-
-final as (
-    select
-        -- keys
-        orders.order_id,
-        customers.customer_key,
-        orders.customer_id,
-
-        -- dimensions
-        orders.order_status,
-        orders.fulfillment_status,
-        orders.payment_status,
-
-        -- measures
-        orders.subtotal,
-        orders.tax,
-        orders.shipping,
-        orders.total_price,
-        orders.total_discount,
-        orders.item_count,
-
-        -- timestamps
-        orders.created_at,
-        orders.updated_at,
-        orders.fulfilled_at,
-
-        -- metadata
-        current_timestamp as _loaded_at
-
-    from orders
-    left join customers on orders.customer_id = customers.customer_id
-)
-
-select * from final
-```
-
-### Pattern 5: Testing and Documentation
-
-```yaml
-# models/marts/core/_core__models.yml
-version: 2
-
-models:
-  - name: dim_customers
-    description: Customer dimension with payment and order metrics
-    columns:
-      - name: customer_key
-        description: Surrogate key for the customer dimension
-        tests:
-          - unique
-          - not_null
-
-      - name: customer_id
-        description: Natural key from source system
-        tests:
-          - unique
-          - not_null
-
-      - name: email
-        description: Customer email address
-        tests:
-          - not_null
-
-      - name: customer_tier
-        description: Customer value tier based on lifetime value
-        tests:
-          - accepted_values:
-              values: ["high", "medium", "low"]
-
-      - name: lifetime_value
-        description: Total amount paid by customer
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: ">= 0"
-
-  - name: fct_orders
-    description: Order fact table with all order transactions
-    tests:
-      - dbt_utils.recency:
-          datepart: day
-          field: created_at
-          interval: 1
-    columns:
-      - name: order_id
-        tests:
-          - unique
-          - not_null
-      - name: customer_key
-        tests:
-          - not_null
-          - relationships:
-              to: ref('dim_customers')
-              field: customer_key
-```
-
-### Pattern 6: Macros and DRY Code
-
-```sql
--- macros/cents_to_dollars.sql
-{% macro cents_to_dollars(column_name, precision=2) %}
-    round({{ column_name }} / 100.0, {{ precision }})
-{% endmacro %}
-
--- macros/generate_schema_name.sql
-{% macro generate_schema_name(custom_schema_name, node) %}
-    {%- set default_schema = target.schema -%}
-    {%- if custom_schema_name is none -%}
-        {{ default_schema }}
-    {%- else -%}
-        {{ default_schema }}_{{ custom_schema_name }}
-    {%- endif -%}
-{% endmacro %}
-
--- macros/limit_data_in_dev.sql
-{% macro limit_data_in_dev(column_name, days=3) %}
-    {% if target.name == 'dev' %}
-        where {{ column_name }} >= dateadd(day, -{{ days }}, current_date)
-    {% endif %}
-{% endmacro %}
-
--- Usage in model
-select * from {{ ref('stg_orders') }}
-{{ limit_data_in_dev('created_at') }}
-```
-
-### Pattern 7: Incremental Strategies
-
-```sql
--- Delete+Insert (default for most warehouses)
-{{
-    config(
-        materialized='incremental',
-        unique_key='id',
-        incremental_strategy='delete+insert'
-    )
-}}
-
--- Merge (best for late-arriving data)
-{{
-    config(
-        materialized='incremental',
-        unique_key='id',
-        incremental_strategy='merge',
-        merge_update_columns=['status', 'amount', 'updated_at']
-    )
-}}
-
--- Insert Overwrite (partition-based)
-{{
-    config(
-        materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        partition_by={
-            "field": "created_date",
-            "data_type": "date",
-            "granularity": "day"
-        }
+        unique_key='payment_id',
+        incremental_strategy='delete+insert',
+        on_schema_change='append_new_columns'
     )
 }}
 
 select
-    *,
-    date(created_at) as created_date
-from {{ ref('stg_events') }}
+    payment_id,
+    customer_id,
+    amount,
+    payment_status,
+    created_at,
+    _loaded_at
+from {{ ref('stg_stripe__payments') }}
 
 {% if is_incremental() %}
-where created_date >= dateadd(day, -3, current_date)
+where _loaded_at >= (
+    select {{ dbt.dateadd('day', -3, 'max(_loaded_at)') }} from {{ this }}
+)
 {% endif %}
 ```
 
-## dbt Commands
+```yaml
+# models/marts/_marts__models.yml
+models:
+  - name: dim_customers
+    description: One row per Stripe customer.
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+      - name: customer_tier
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["high", "medium", "low"]
+      - name: lifetime_value
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 0"
+
+  - name: fct_payments
+    description: One row per payment attempt.
+    columns:
+      - name: payment_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+              config:
+                severity: warn
+
+unit_tests:
+  - name: dim_customers_assigns_tiers
+    model: dim_customers
+    given:
+      - input: ref('int_customer_payments')
+        rows:
+          - { customer_id: 1, lifetime_value: 1500 }
+          - { customer_id: 2, lifetime_value: 100 }
+          - { customer_id: 3, lifetime_value: 99.99 }
+    expect:
+      rows:
+        - { customer_id: 1, customer_tier: high }
+        - { customer_id: 2, customer_tier: medium }
+        - { customer_id: 3, customer_tier: low }
+```
+
+`dbt_utils` comes from `packages.yml`; run `dbt deps` after adding it:
+
+```yaml
+# packages.yml
+packages:
+  - package: dbt-labs/dbt_utils
+    version: [">=1.3.0", "<2.0.0"]
+```
+
+Unit tests run before the model is built in `dbt build`, using only the rows you give. List only
+the columns the logic reads; the rest are null.
+
+## Incremental strategies
+
+| Strategy | What it does | Use when |
+| --- | --- | --- |
+| `append` | inserts new rows | rows never change and duplicates can't arrive |
+| `merge` | updates matching `unique_key` rows, inserts the rest | rows are updated after they land |
+| `delete+insert` | deletes matching keys, then inserts | the adapter has no `merge`, or merge is slow on large batches |
+| `insert_overwrite` | replaces whole partitions | BigQuery or Spark tables partitioned by date |
+| `microbatch` | runs one query per time batch on `event_time` | large event tables; dbt 1.9+ |
+
+Support and defaults vary by adapter, so set the strategy in the config. Check the adapter's
+documentation page before using `merge_update_columns`, `incremental_predicates` or
+`insert_overwrite`.
+
+Microbatch splits the work into batches by an `event_time` column and can rerun one batch
+(`dbt run --event-time-start ... --event-time-end ...`). Set `event_time` on the upstream model
+too, so dbt filters it to the batch:
+
+```sql
+-- models/marts/fct_payment_events.sql
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='microbatch',
+        event_time='created_at',
+        batch_size='day',
+        begin='2026-01-01',
+        lookback=3
+    )
+}}
+
+select payment_id, customer_id, amount, payment_status, created_at
+from {{ ref('stg_stripe__payments') }}
+```
+
+```yaml
+# in models/staging/stripe/_stripe__models.yml
+  - name: stg_stripe__payments
+    config:
+      event_time: created_at
+```
+
+## Macros
+
+```sql
+-- macros/cents_to_dollars.sql
+{% macro cents_to_dollars(column_name, scale=2) %}
+    cast({{ column_name }} as numeric(18, {{ scale }})) / 100
+{% endmacro %}
+```
+
+```sql
+-- macros/limit_in_dev.sql
+{% macro limit_in_dev(column_name, days=3) %}
+    {% if target.name == 'dev' %}
+        where {{ column_name }} >= {{ dbt.dateadd('day', -days, dbt.current_timestamp()) }}
+    {% endif %}
+{% endmacro %}
+```
+
+A `generate_schema_name` override controls which schema each model lands in. dbt's default
+already prefixes a custom schema with the target schema (`<target>_<custom>`); override it only
+when production should use the bare custom name.
+
+## Commands
 
 ```bash
-# Development
-dbt run                          # Run all models
-dbt run --select staging         # Run staging models only
-dbt run --select +fct_orders     # Run fct_orders and its upstream
-dbt run --select fct_orders+     # Run fct_orders and its downstream
-dbt run --full-refresh           # Rebuild incremental models
-
-# Testing
-dbt test                         # Run all tests
-dbt test --select stg_stripe     # Test specific models
-dbt build                        # Run + test in DAG order
-
-# Documentation
-dbt docs generate                # Generate docs
-dbt docs serve                   # Serve docs locally
-
-# Debugging
-dbt compile                      # Compile SQL without running
-dbt debug                        # Test connection
-dbt ls --select tag:critical     # List models by tag
+dbt deps                                   # install packages
+dbt parse                                  # parse and print deprecations
+dbt source freshness                       # check source freshness
+dbt build --select stg_stripe__payments+   # build and test a model and everything downstream
+dbt build --select state:modified+ --defer --state prod-artifacts/   # CI: only changed models
+dbt build --select fct_payments --full-refresh   # rebuild an incremental model from scratch
+dbt test --select test_type:unit           # unit tests only
+dbt ls --select tag:daily                  # list matching nodes
+dbt docs generate
 ```

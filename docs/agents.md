@@ -155,7 +155,7 @@ Reference for 179 local AI agents organized by category. The model column lists 
 | Agent                                                                      | Model   | Description                                             |
 | -------------------------------------------------------------------------- | ------- | ------------------------------------------------------- |
 | [data-scientist](../plugins/machine-learning-ops/agents/data-scientist.md) | inherit | Data analysis, SQL queries, BigQuery operations         |
-| [data-engineer](../plugins/data-engineering/agents/data-engineer.md)       | opus    | ETL pipelines, data warehouses, streaming architectures |
+| [data-engineer](../plugins/data-engineering/agents/data-engineer.md)       | sonnet  | One batch or streaming pipeline, built and tested via the data-engineering skills |
 
 #### Machine Learning & AI
 

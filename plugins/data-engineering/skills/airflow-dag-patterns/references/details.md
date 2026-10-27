@@ -1,409 +1,344 @@
-# airflow-dag-patterns — detailed patterns and worked examples
+# airflow-dag-patterns: detailed patterns
 
-## Patterns
+All examples target Airflow 3.3 and import DAG-authoring names from `airflow.sdk`. Operators and
+sensors that used to ship in core (`PythonOperator`, `BashOperator`, `EmptyOperator`,
+`ExternalTaskSensor`, `FileSensor`) live in `apache-airflow-providers-standard`.
 
-### Pattern 1: TaskFlow API (Airflow 2.0+)
+## Asset scheduling between DAGs
+
+A task that lists an asset in `outlets` marks it updated when it succeeds. A DAG scheduled on
+that asset runs after the update. This replaces an `ExternalTaskSensor` that polls another DAG.
 
 ```python
-# dags/taskflow_example.py
-from datetime import datetime
-from airflow.decorators import dag, task
-from airflow.models import Variable
+# dags/orders_assets.py
+import pendulum
+from airflow.sdk import Asset, dag, task
 
-@dag(
-    dag_id='taskflow_etl',
-    schedule='@daily',
-    start_date=datetime(2024, 1, 1),
-    catchup=False,
-    tags=['etl', 'taskflow'],
-)
-def taskflow_etl():
-    """ETL pipeline using TaskFlow API"""
+raw_orders = Asset("s3://lake/raw/orders/")
+clean_orders = Asset("s3://lake/clean/orders/")
 
-    @task()
-    def extract(source: str) -> dict:
-        """Extract data from source"""
-        import pandas as pd
 
-        df = pd.read_csv(f's3://bucket/{source}/{{ ds }}.csv')
-        return {'data': df.to_dict(), 'rows': len(df)}
+@dag(schedule="@hourly", start_date=pendulum.datetime(2026, 1, 1, tz="UTC"), catchup=False)
+def land_orders():
+    @task(outlets=[raw_orders])
+    def land() -> None:
+        print("landed new files")
 
-    @task()
-    def transform(extracted: dict) -> dict:
-        """Transform extracted data"""
-        import pandas as pd
+    land()
 
-        df = pd.DataFrame(extracted['data'])
-        df['processed_at'] = datetime.now()
-        df = df.dropna()
-        return {'data': df.to_dict(), 'rows': len(df)}
 
-    @task()
-    def load(transformed: dict, target: str):
-        """Load data to target"""
-        import pandas as pd
+@dag(schedule=[raw_orders], start_date=pendulum.datetime(2026, 1, 1, tz="UTC"), catchup=False)
+def clean_orders_dag():
+    @task(outlets=[clean_orders])
+    def clean() -> None:
+        print("rewrote clean partition")
 
-        df = pd.DataFrame(transformed['data'])
-        df.to_parquet(f's3://bucket/{target}/{{ ds }}.parquet')
-        return transformed['rows']
+    clean()
 
-    @task()
-    def notify(rows_loaded: int):
-        """Send notification"""
-        print(f'Loaded {rows_loaded} rows')
 
-    # Define dependencies with XCom passing
-    extracted = extract(source='raw_data')
-    transformed = transform(extracted)
-    loaded = load(transformed, target='processed_data')
-    notify(loaded)
-
-# Instantiate the DAG
-taskflow_etl()
+land_orders()
+clean_orders_dag()
 ```
 
-### Pattern 2: Dynamic DAG Generation
+`schedule=[a, b]` waits for both assets. Use `a | b` to run on either, or
+`AssetOrTimeSchedule(timetable=..., assets=...)` to run on a clock and on updates.
+
+## Dynamic task mapping
+
+Create one task instance per input at run time with `.expand()`. Constant arguments go in
+`.partial()`. Cap concurrency with `max_active_tis_per_dag` when the target can't take the load.
 
 ```python
-# dags/dynamic_dag_factory.py
-from datetime import datetime, timedelta
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.models import Variable
-import json
+# dags/per_table_export.py
+import pendulum
+from airflow.sdk import dag, task
 
-# Configuration for multiple similar pipelines
-PIPELINE_CONFIGS = [
-    {'name': 'customers', 'schedule': '@daily', 'source': 's3://raw/customers'},
-    {'name': 'orders', 'schedule': '@hourly', 'source': 's3://raw/orders'},
-    {'name': 'products', 'schedule': '@weekly', 'source': 's3://raw/products'},
-]
 
-def create_dag(config: dict) -> DAG:
-    """Factory function to create DAGs from config"""
+@dag(schedule=None, start_date=pendulum.datetime(2026, 1, 1, tz="UTC"), catchup=False)
+def per_table_export():
+    @task
+    def list_tables() -> list[str]:
+        return ["customers", "orders", "payments"]
 
-    dag_id = f"etl_{config['name']}"
+    @task(max_active_tis_per_dag=2)
+    def export(table: str, bucket: str) -> int:
+        print(f"exporting {table} to {bucket}")
+        return 0
 
-    default_args = {
-        'owner': 'data-team',
-        'retries': 3,
-        'retry_delay': timedelta(minutes=5),
-    }
+    @task
+    def summarize(row_counts: list[int]) -> None:
+        print(f"exported {len(row_counts)} tables")
 
-    dag = DAG(
-        dag_id=dag_id,
-        default_args=default_args,
-        schedule=config['schedule'],
-        start_date=datetime(2024, 1, 1),
-        catchup=False,
-        tags=['etl', 'dynamic', config['name']],
-    )
+    counts = export.partial(bucket="s3://exports").expand(table=list_tables())
+    summarize(counts)
 
-    with dag:
-        def extract_fn(source, **context):
-            print(f"Extracting from {source} for {context['ds']}")
 
-        def transform_fn(**context):
-            print(f"Transforming data for {context['ds']}")
-
-        def load_fn(table_name, **context):
-            print(f"Loading to {table_name} for {context['ds']}")
-
-        extract = PythonOperator(
-            task_id='extract',
-            python_callable=extract_fn,
-            op_kwargs={'source': config['source']},
-        )
-
-        transform = PythonOperator(
-            task_id='transform',
-            python_callable=transform_fn,
-        )
-
-        load = PythonOperator(
-            task_id='load',
-            python_callable=load_fn,
-            op_kwargs={'table_name': config['name']},
-        )
-
-        extract >> transform >> load
-
-    return dag
-
-# Generate DAGs
-for config in PIPELINE_CONFIGS:
-    globals()[f"dag_{config['name']}"] = create_dag(config)
+per_table_export()
 ```
 
-### Pattern 3: Branching and Conditional Logic
+## Branching
+
+`@task.branch` returns the `task_id` (or list of IDs) to run. The other branches are skipped,
+so a join task after them needs a trigger rule that tolerates skips.
 
 ```python
-# dags/branching_example.py
-from airflow.decorators import dag, task
-from airflow.operators.python import BranchPythonOperator
-from airflow.operators.empty import EmptyOperator
-from airflow.utils.trigger_rule import TriggerRule
+# dags/quality_branch.py
+import pendulum
+from airflow.providers.standard.operators.empty import EmptyOperator
+from airflow.sdk import dag, task
 
-@dag(
-    dag_id='branching_pipeline',
-    schedule='@daily',
-    start_date=datetime(2024, 1, 1),
-    catchup=False,
-)
-def branching_pipeline():
 
-    @task()
-    def check_data_quality() -> dict:
-        """Check data quality and return metrics"""
-        quality_score = 0.95  # Simulated
-        return {'score': quality_score, 'rows': 10000}
+@dag(schedule=None, start_date=pendulum.datetime(2026, 1, 1, tz="UTC"), catchup=False)
+def quality_branch():
+    @task
+    def score() -> float:
+        return 0.95
 
-    def choose_branch(**context) -> str:
-        """Determine which branch to execute"""
-        ti = context['ti']
-        metrics = ti.xcom_pull(task_ids='check_data_quality')
+    @task.branch
+    def route(quality: float) -> str:
+        return "publish" if quality >= 0.9 else "quarantine"
 
-        if metrics['score'] >= 0.9:
-            return 'high_quality_path'
-        elif metrics['score'] >= 0.7:
-            return 'medium_quality_path'
-        else:
-            return 'low_quality_path'
+    publish = EmptyOperator(task_id="publish")
+    quarantine = EmptyOperator(task_id="quarantine")
+    done = EmptyOperator(task_id="done", trigger_rule="none_failed_min_one_success")
 
-    quality_check = check_data_quality()
+    route(score()) >> [publish, quarantine] >> done
 
-    branch = BranchPythonOperator(
-        task_id='branch',
-        python_callable=choose_branch,
-    )
 
-    high_quality = EmptyOperator(task_id='high_quality_path')
-    medium_quality = EmptyOperator(task_id='medium_quality_path')
-    low_quality = EmptyOperator(task_id='low_quality_path')
-
-    # Join point - runs after any branch completes
-    join = EmptyOperator(
-        task_id='join',
-        trigger_rule=TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS,
-    )
-
-    quality_check >> branch >> [high_quality, medium_quality, low_quality] >> join
-
-branching_pipeline()
+quality_branch()
 ```
 
-### Pattern 4: Sensors and External Dependencies
+## Sensors
+
+Prefer a deferrable sensor: it hands the wait to the triggerer and frees the worker slot. Every
+sensor needs a `timeout`, or it waits for 7 days.
 
 ```python
-# dags/sensor_patterns.py
-from datetime import datetime, timedelta
-from airflow import DAG
-from airflow.sensors.filesystem import FileSensor
+# Needs apache-airflow-providers-amazon.
 from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
-from airflow.sensors.external_task import ExternalTaskSensor
-from airflow.operators.python import PythonOperator
 
-with DAG(
-    dag_id='sensor_example',
-    schedule='@daily',
-    start_date=datetime(2024, 1, 1),
-    catchup=False,
-) as dag:
-
-    # Wait for file on S3
-    wait_for_file = S3KeySensor(
-        task_id='wait_for_s3_file',
-        bucket_name='data-lake',
-        bucket_key='raw/{{ ds }}/data.parquet',
-        aws_conn_id='aws_default',
-        timeout=60 * 60 * 2,  # 2 hours
-        poke_interval=60 * 5,  # Check every 5 minutes
-        mode='reschedule',  # Free up worker slot while waiting
-    )
-
-    # Wait for another DAG to complete
-    wait_for_upstream = ExternalTaskSensor(
-        task_id='wait_for_upstream_dag',
-        external_dag_id='upstream_etl',
-        external_task_id='final_task',
-        execution_date_fn=lambda dt: dt,  # Same execution date
-        timeout=60 * 60 * 3,
-        mode='reschedule',
-    )
-
-    # Custom sensor using @task.sensor decorator
-    @task.sensor(poke_interval=60, timeout=3600, mode='reschedule')
-    def wait_for_api() -> PokeReturnValue:
-        """Custom sensor for API availability"""
-        import requests
-
-        response = requests.get('https://api.example.com/health')
-        is_done = response.status_code == 200
-
-        return PokeReturnValue(is_done=is_done, xcom_value=response.json())
-
-    api_ready = wait_for_api()
-
-    def process_data(**context):
-        api_result = context['ti'].xcom_pull(task_ids='wait_for_api')
-        print(f"API returned: {api_result}")
-
-    process = PythonOperator(
-        task_id='process',
-        python_callable=process_data,
-    )
-
-    [wait_for_file, wait_for_upstream, api_ready] >> process
+wait_for_file = S3KeySensor(
+    task_id="wait_for_file",
+    bucket_name="lake",
+    bucket_key="raw/orders/dt={{ data_interval_start | ds }}/_SUCCESS",
+    deferrable=True,
+    timeout=2 * 60 * 60,
+)
 ```
 
-### Pattern 5: Error Handling and Alerts
+For a condition no provider covers, write a `@task.sensor`. It pokes until `is_done` is true and
+pushes `xcom_value` downstream. `mode="reschedule"` releases the worker slot between pokes.
 
 ```python
-# dags/error_handling.py
-from datetime import datetime, timedelta
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.utils.trigger_rule import TriggerRule
-from airflow.models import Variable
+# dags/wait_for_export.py
+import pendulum
+from airflow.sdk import PokeReturnValue, dag, task
 
-def task_failure_callback(context):
-    """Callback on task failure"""
-    task_instance = context['task_instance']
-    exception = context.get('exception')
 
-    # Send to Slack/PagerDuty/etc
-    message = f"""
-    Task Failed!
-    DAG: {task_instance.dag_id}
-    Task: {task_instance.task_id}
-    Execution Date: {context['ds']}
-    Error: {exception}
-    Log URL: {task_instance.log_url}
-    """
-    # send_slack_alert(message)
-    print(message)
+@dag(schedule=None, start_date=pendulum.datetime(2026, 1, 1, tz="UTC"), catchup=False)
+def wait_for_export():
+    @task.sensor(poke_interval=60, timeout=60 * 60, mode="reschedule")
+    def export_ready() -> PokeReturnValue:
+        status = {"state": "done", "path": "s3://exports/latest/"}  # replace with an API call
+        return PokeReturnValue(is_done=status["state"] == "done", xcom_value=status["path"])
 
-def dag_failure_callback(context):
-    """Callback on DAG failure"""
-    # Aggregate failures, send summary
-    pass
+    @task
+    def load(path: str) -> None:
+        print(f"loading {path}")
 
-with DAG(
-    dag_id='error_handling_example',
-    schedule='@daily',
-    start_date=datetime(2024, 1, 1),
-    catchup=False,
-    on_failure_callback=dag_failure_callback,
-    default_args={
-        'on_failure_callback': task_failure_callback,
-        'retries': 3,
-        'retry_delay': timedelta(minutes=5),
-    },
-) as dag:
+    load(export_ready())
 
-    def might_fail(**context):
-        import random
-        if random.random() < 0.3:
-            raise ValueError("Random failure!")
-        return "Success"
 
-    risky_task = PythonOperator(
-        task_id='risky_task',
-        python_callable=might_fail,
-    )
-
-    def cleanup(**context):
-        """Cleanup runs regardless of upstream failures"""
-        print("Cleaning up...")
-
-    cleanup_task = PythonOperator(
-        task_id='cleanup',
-        python_callable=cleanup,
-        trigger_rule=TriggerRule.ALL_DONE,  # Run even if upstream fails
-    )
-
-    def notify_success(**context):
-        """Only runs if all upstream succeeded"""
-        print("All tasks succeeded!")
-
-    success_notification = PythonOperator(
-        task_id='notify_success',
-        python_callable=notify_success,
-        trigger_rule=TriggerRule.ALL_SUCCESS,
-    )
-
-    risky_task >> [cleanup_task, success_notification]
+wait_for_export()
 ```
 
-### Pattern 6: Testing DAGs
+## Failure callbacks and cleanup
+
+A DAG-level `on_failure_callback` fires once per failed run. Put a task-level callback in
+`default_args` when you need an alert per task. Provider notifiers (for example
+`SlackNotifier` in `apache-airflow-providers-slack`) can be passed directly as the callback.
+A task with `trigger_rule="all_done"` runs whether its upstream tasks failed or succeeded.
+
+```python
+# dags/with_alerts.py
+from datetime import timedelta
+
+import pendulum
+from airflow.sdk import dag, task
+
+
+def alert(context) -> None:
+    ti = context["ti"]
+    print(f"{ti.dag_id}.{ti.task_id} failed for run {context['run_id']}: {context.get('exception')}")
+
+
+@dag(
+    schedule=None,
+    start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
+    catchup=False,
+    on_failure_callback=alert,
+    default_args={"retries": 2, "retry_delay": timedelta(minutes=1)},
+)
+def with_alerts():
+    @task
+    def load() -> None:
+        print("loading")
+
+    @task(trigger_rule="all_done")
+    def drop_staging_table() -> None:
+        print("dropping staging table")
+
+    load() >> drop_staging_table()
+
+
+with_alerts()
+```
+
+SLAs were removed in Airflow 3. Use Deadline Alerts (3.1 and later) to alert when a run takes
+longer than expected.
+
+## Classic operators
+
+Use an operator when a provider already wraps the work (SQL, Kubernetes, cloud services). Mix
+them with TaskFlow tasks freely; a TaskFlow call returns an object you can chain with `>>`.
+
+```python
+# dags/classic_operators.py
+import pendulum
+from airflow.providers.standard.operators.bash import BashOperator
+from airflow.providers.standard.operators.python import PythonOperator
+from airflow.sdk import DAG
+
+
+def count_rows(table: str) -> int:
+    print(f"counting {table}")
+    return 0
+
+
+with DAG(
+    dag_id="classic_operators",
+    schedule=None,
+    start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
+    catchup=False,
+):
+    dbt_build = BashOperator(
+        task_id="dbt_build",
+        bash_command="echo dbt build --select tag:daily --vars '{day: {{ ds }}}'",
+    )
+    count = PythonOperator(
+        task_id="count",
+        python_callable=count_rows,
+        op_kwargs={"table": "analytics.orders"},
+    )
+    dbt_build >> count
+```
+
+For a dbt project with many models, the `astronomer-cosmos` package renders each model as its
+own task with retries and lineage, instead of one `dbt build` call.
+
+## Generating DAGs from config
+
+Build one DAG per entry with a factory function. The DAG processor finds any `DAG` object at
+module level, so calling the decorated function is enough.
+
+```python
+# dags/dag_factory.py
+import pendulum
+from airflow.sdk import dag, task
+
+SOURCES = {"customers": "@daily", "orders": "@hourly"}
+
+
+def build(name: str, schedule: str):
+    @dag(
+        dag_id=f"ingest_{name}",
+        schedule=schedule,
+        start_date=pendulum.datetime(2026, 1, 1, tz="UTC"),
+        catchup=False,
+        tags=["ingest"],
+    )
+    def ingest():
+        @task
+        def copy() -> None:
+            print(f"copying {name}")
+
+        copy()
+
+    return ingest()
+
+
+for name, schedule in SOURCES.items():
+    build(name, schedule)
+```
+
+Keep the config in the repository. Reading it from a database or API at parse time slows every
+parse and can break all DAGs when the source is down.
+
+## Testing
 
 ```python
 # tests/test_dags.py
+from pathlib import Path
+
 import pytest
-from datetime import datetime
-from airflow.models import DagBag
+from airflow.dag_processing.dagbag import DagBag
 
-@pytest.fixture
-def dagbag():
-    return DagBag(dag_folder='dags/', include_examples=False)
+DAGS = Path(__file__).parent.parent / "dags"
 
-def test_dag_loaded(dagbag):
-    """Test that all DAGs load without errors"""
-    assert len(dagbag.import_errors) == 0, f"DAG import errors: {dagbag.import_errors}"
 
-def test_dag_structure(dagbag):
-    """Test specific DAG structure"""
-    dag = dagbag.get_dag('example_etl')
+@pytest.fixture(scope="session")
+def dagbag() -> DagBag:
+    return DagBag(dag_folder=DAGS)
 
-    assert dag is not None
-    assert len(dag.tasks) == 3
-    assert dag.schedule_interval == '0 6 * * *'
 
-def test_task_dependencies(dagbag):
-    """Test task dependencies are correct"""
-    dag = dagbag.get_dag('example_etl')
+def test_no_import_errors(dagbag: DagBag) -> None:
+    assert dagbag.import_errors == {}
 
-    extract_task = dag.get_task('extract')
-    assert 'start' in [t.task_id for t in extract_task.upstream_list]
-    assert 'end' in [t.task_id for t in extract_task.downstream_list]
 
-def test_dag_integrity(dagbag):
-    """Test DAG has no cycles and is valid"""
+def test_no_dag_backfills_by_accident(dagbag: DagBag) -> None:
     for dag_id, dag in dagbag.dags.items():
-        assert dag.test_cycle() is None, f"Cycle detected in {dag_id}"
+        assert not dag.catchup, dag_id
 
-# Test individual task logic
-def test_extract_function():
-    """Unit test for extract function"""
-    from dags.example_dag import extract_data
 
-    result = extract_data(ds='2024-01-01')
-    assert 'records' in result
-    assert isinstance(result['records'], int)
+def test_orders_daily_shape(dagbag: DagBag) -> None:
+    dag = dagbag.dags["orders_daily"]
+    assert [t.task_id for t in dag.get_task("extract").downstream_list] == ["transform"]
 ```
 
-## Project Structure
+Test task logic as plain functions: keep it in a module and call it from the test without Airflow.
+For one full run against a local metadata database:
+
+```bash
+export AIRFLOW_HOME="$PWD/.airflow"
+airflow db migrate
+airflow dags test orders_daily 2026-01-02
+```
+
+`dag.test()` does the same from Python and is easy to run under a debugger:
+
+```python
+if __name__ == "__main__":
+    orders_daily().test()
+```
+
+## Project layout
 
 ```
 airflow/
 ├── dags/
-│   ├── __init__.py
-│   ├── common/
-│   │   ├── __init__.py
-│   │   ├── operators.py    # Custom operators
-│   │   ├── sensors.py      # Custom sensors
-│   │   └── callbacks.py    # Alert callbacks
-│   ├── etl/
-│   │   ├── customers.py
-│   │   └── orders.py
-│   └── ml/
-│       └── training.py
-├── plugins/
-│   └── custom_plugin.py
+│   ├── orders_daily.py
+│   └── orders_assets.py
+├── include/            # task logic imported by DAGs; unit-tested without Airflow
+│   └── orders.py
+├── plugins/            # custom operators, hooks, notifiers
 ├── tests/
-│   ├── __init__.py
-│   ├── test_dags.py
-│   └── test_operators.py
-├── docker-compose.yml
-└── requirements.txt
+│   └── test_dags.py
+└── requirements.txt    # pin apache-airflow and providers to the same constraints file
+```
+
+Install Airflow with the constraints file for your Airflow and Python versions:
+
+```bash
+pip install "apache-airflow==3.3.2" \
+  --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-3.3.2/constraints-3.12.txt"
 ```
