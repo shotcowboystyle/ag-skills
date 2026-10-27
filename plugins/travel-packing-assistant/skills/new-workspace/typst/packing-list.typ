@@ -14,22 +14,11 @@
 // COMPILE
 // -----------------------------------------------------------------------------
 // Typst refuses to compile a source file outside `--root`, so the root must
-// contain BOTH this template and the trip workspace. Two forms work; both were
-// verified with Typst 0.14.2.
+// contain BOTH this template and the trip workspace. Copy the templates
+// into the workspace and root the compile there. Never use `--root /`: it
+// lets a template read any file the user can.
 //
-// (a) Templates left in the plugin, root at the filesystem root. Data paths are
-//     plain absolute paths — the form to use from a skill:
-//
-//       typst compile --root / \
-//         --input itinerary=/abs/trip/itinerary.yaml \
-//         --input plan=/abs/trip/plan.yaml \
-//         --input bags=/abs/trip/bags.yaml \
-//         --input inventory=/abs/trip/inventory.yaml \
-//         /abs/plugin/typst/packing-list.typ \
-//         /abs/trip/output/packing-list.pdf
-//
-// (b) Templates copied into the workspace (`cp -r <plugin>/typst <trip>/.typst`),
-//     root at the workspace:
+// With the templates in `<trip>/.typst/`, data paths are relative to the workspace:
 //
 //       cd /abs/trip
 //       typst compile --root . \

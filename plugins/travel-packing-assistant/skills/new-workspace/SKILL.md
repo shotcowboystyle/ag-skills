@@ -1,6 +1,6 @@
 ---
 name: new-workspace
-description: Provision a new trip packing workspace on disk. Use when the user is starting to plan the packing for a specific itinerary — a named route, a set of flights, a trip with a departure date. Scaffolds the workspace files (itinerary.yaml, bags.yaml, inventory.yaml, AGENTS.md), personalises them from the user's global memory, and by default creates a private GitHub repo.
+description: Provision a new trip packing workspace on disk. Use when the user is starting to plan the packing for a specific itinerary — a named route, a set of flights, a trip with a departure date. Scaffolds the workspace files (itinerary.yaml, bags.yaml, inventory.yaml, AGENTS.md), personalises them from the user's global memory, and initialises a local git repo. Creates a private GitHub repo only with `--github`, after confirming.
 disable-model-invocation: true
 allowed-tools: Bash(mkdir *), Bash(cp *), Bash(ls *), Bash(git init *), Bash(git add *), Bash(git commit *), Bash(git push *), Bash(gh repo create *), Bash(gh auth status), Read, Write, Edit
 ---
@@ -20,15 +20,19 @@ trips loses the ability to say what a bag weighed leaving home.
 
 - **First positional**: trip name, kebab-case, used as the directory and repo name. Prefer
   a route-and-date form: `bos-ath-tlv-0826`, `tlv-lhr-nov26`. Required.
-- **Second positional** (optional): target parent path. Defaults to the topic group under `~/repos/github/` that most specifically fits the subject — see `~/repos/github/README.md` for the group list. (`~/repos/github/my-repos/` is no longer the default; it holds only blog repos now.)
-- **`--local-only`**: skip GitHub entirely.
-- **`--public`**: create the GitHub repo public. Default is **private** — a packing workspace
-  names the dates a home is empty and lists what is worth stealing from it.
+- **Second positional** (optional): target parent path. Defaults to the current working
+  directory. If the user's global context file names a trips folder, offer it, but do not
+  use it without a yes.
+- **`--github`**: also create a private GitHub repo and push to it, after confirming. Off by
+  default. A packing workspace names the dates a home is empty and lists what is worth
+  stealing from it, so it stays on this machine unless the user asks otherwise.
+- **`--public`**: with `--github`, make the repo public. Warn that this publishes the
+  travel dates, and confirm separately.
 
 ```
 /travel-packing-assistant:new-trip bos-ath-tlv-0826
-/travel-packing-assistant:new-trip tlv-lhr-nov26 ~/repos/github/personal-admin
-/travel-packing-assistant:new-trip quick-hop --local-only
+/travel-packing-assistant:new-trip tlv-lhr-nov26 ~/trips
+/travel-packing-assistant:new-trip quick-hop --github
 ```
 
 ## Procedure
@@ -71,14 +75,20 @@ the full segment list first.
 
 ### 6. Git
 
-Unless `--local-only`:
+Always commit locally:
 
 ```bash
 git init && git add -A && git commit -m "Initialise trip packing workspace: <trip-name>"
+```
+
+Only with `--github`: check `gh auth status`, then show the repo name and visibility and confirm
+with the user before creating it. Pushing sends the trip dates to GitHub.
+
+```bash
 gh repo create <trip-name> --private --source=. --push
 ```
 
-Check `gh auth status` first; if it fails, commit locally, tell the user the repo was not
+If `gh auth status` fails or the user says no, keep the local commit, say no remote was
 created, and carry on. A missing remote is not a reason to leave the workspace unbuilt.
 
 ### 7. Hand off

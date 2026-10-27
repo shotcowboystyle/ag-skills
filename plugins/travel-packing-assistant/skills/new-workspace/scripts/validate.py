@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["pyyaml>=6", "jsonschema>=4.18"]
+# ///
 """Validate a trip workspace against the JSON Schemas in schema/ and cross-check references.
 
 Schema validation alone catches typos inside one file. Most real breakage in a trip
@@ -7,7 +11,7 @@ a segment that was cancelled. Those checks live here, each with a stable `code` 
 plugin's agents can react to a specific failure rather than parsing prose.
 
 Run:
-    python scripts/validate.py [WORKSPACE_DIR] [--json]
+    uv run scripts/validate.py [WORKSPACE_DIR] [--json]
 
 WORKSPACE_DIR defaults to the current directory. Exit 0 when there are no errors
 (warnings alone still exit 0), 1 when there are errors, 2 when a dependency is missing.
@@ -26,7 +30,7 @@ try:
     import yaml
     from jsonschema import Draft202012Validator
 except ImportError:  # pragma: no cover - environment guard
-    print("Missing dependencies. Install them with: uv pip install pyyaml jsonschema")
+    print("Missing dependencies. Run this script with `uv run`, which installs them from the header.")
     sys.exit(2)
 
 # schema/ sits next to scripts/ in the plugin, not in the workspace being validated.

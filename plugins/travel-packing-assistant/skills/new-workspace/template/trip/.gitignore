@@ -4,3 +4,7 @@ __pycache__/
 # Rendered documents are regenerable from the YAML — keep the inputs, not the outputs.
 # Delete these two lines if you'd rather archive the PDF that actually went to the airport.
 output/*.pdf
+
+# Typst templates, copied from the plugin on every render. Delete this line to commit them
+# with the trip so it renders without the plugin installed.
+.typst/

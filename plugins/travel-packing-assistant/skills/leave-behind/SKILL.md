@@ -1,7 +1,7 @@
 ---
 name: leave-behind
 description: Produce a ranked emergency leave-behind list — what to abandon, in what order, to get under the allowance, ranked by cost per kilogram saved and by whether the item can be re-bought at the destination. Use when the user is overweight and willing to leave things, asks what to drop, or wants a contingency list for the check-in desk. Writes leave-behind.md.
-allowed-tools: Read, Write, Edit, Bash(python3 *), Grep, Glob
+allowed-tools: Read, Write, Edit, Bash(uv run *), Grep, Glob
 ---
 
 # Leave Behind
@@ -31,7 +31,7 @@ Which is why `replaceable_at_destination` in the inventory earns its place. A 90
 shampoo replaceable for $4 ranks far above a 200 g charger that costs $60 and a trip to a shop
 in a city the traveller does not know — even though the charger is lighter.
 
-`scripts/pack_solver.py --overflow` computes this ranking and writes it to `plan.yaml` under
+`$TPA/scripts/pack_solver.py --overflow` (`$TPA` is the `new-workspace` skill directory) computes this ranking and writes it to `plan.yaml` under
 `overflow_ranking`. Read it rather than re-deriving it by eye.
 
 ## Categories that reliably top the list

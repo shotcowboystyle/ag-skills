@@ -1,7 +1,7 @@
 ---
 name: pack-plan
 description: Solve the allocation of items to bags and packing cubes against the binding baggage limits, then turn the solution into instructions a person can follow while packing. Use when the user asks how to pack, how to distribute weight between bags, whether everything will fit, or how to get under the limit. Runs scripts/pack_solver.py and writes plan.yaml.
-allowed-tools: Read, Write, Edit, Bash(python3 *), Bash(ls *), Grep, Glob
+allowed-tools: Read, Write, Edit, Bash(uv run *), Bash(ls *), Grep, Glob
 ---
 
 # Pack Plan
@@ -31,7 +31,7 @@ final.
 ## Running the solver
 
 ```bash
-python3 $TPA/scripts/pack_solver.py . --json
+uv run $TPA/scripts/pack_solver.py . --json
 ```
 
 Options worth knowing:

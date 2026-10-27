@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://shotcowboystyle.github.io/travel-packing-assistant/schema/allowances.schema.json",
   "title": "allowances.yaml",
-  "description": "Researched baggage policy per segment, plus the computed binding limits. See docs/data-model.md.",
+  "description": "Researched baggage policy per segment, plus the computed binding limits. See references/data-model.md.",
   "type": "object",
   "additionalProperties": false,
   "required": ["verified_on", "segments"],

@@ -62,7 +62,7 @@ carrier's. Recording only one of them makes the research unreproducible.
 
 **Why tickets are separate from segments:** whether two flights are on one ticket
 decides whether bags are through-checked and which carrier's allowance governs the
-whole journey. See `docs/design-notes.md`.
+whole journey. See [`design-notes.md`](design-notes.md).
 
 ---
 

@@ -59,7 +59,7 @@ Both render from the workspace YAML directly, so no number is transcribed by han
 [Typst](https://typst.app), and as Markdown for publishing to a static site. Both media apply
 the same measured-beats-projected rule, so a bag cannot read `OVER` in one and `TIGHT` in the
 other. They can be saved locally, emailed, pushed to cloud storage, or committed into a site
-repo — see [`docs/delivery.md`](skills/new-workspace/references/delivery.md).
+repo — see [`references/delivery.md`](skills/new-workspace/references/delivery.md).
 
 ## How it is organised
 
@@ -90,10 +90,12 @@ every tool that installs the skill gets them.
 | **Scripts** | `scripts/pack_solver.py` (allocation), `reconcile.py` (scale vs inventory), `validate.py` (schema + cross-file checks), `render_markdown.py` (documents as Markdown) |
 | **Templates** | `typst/counter-card.typ`, `typst/packing-list.typ` |
 | **Reference** | [`data/carriage-rules.md`](skills/new-workspace/data/carriage-rules.md), [`data/typical-weights.md`](skills/new-workspace/data/typical-weights.md), [`data/packing-categories.md`](skills/new-workspace/data/packing-categories.md) |
-| **Docs** | [`docs/data-model.md`](skills/new-workspace/references/data-model.md), [`docs/design-notes.md`](skills/new-workspace/references/design-notes.md), [`docs/delivery.md`](skills/new-workspace/references/delivery.md) |
+| **Docs** | [`references/data-model.md`](skills/new-workspace/references/data-model.md), [`references/design-notes.md`](skills/new-workspace/references/design-notes.md), [`references/delivery.md`](skills/new-workspace/references/delivery.md) |
 
 The scripts have no solver dependency and run standalone against a workspace directory; they
-need `PyYAML` and `jsonschema` only.
+need `PyYAML` and `jsonschema` only. Each script declares them in a PEP 723 header, so
+`uv run <script>` installs them; no separate install step. The skills need
+[uv](https://docs.astral.sh/uv/) on `PATH`, and the PDFs need [Typst](https://typst.app).
 
 ## Installation
 
@@ -115,7 +117,7 @@ table would go stale silently and then be worse than nothing, because it would l
 source. No booking: it prices the options and makes a recommendation; buying the bag is yours.
 
 Reasoning for these and the other design decisions is in
-[`docs/design-notes.md`](skills/new-workspace/references/design-notes.md).
+[`references/design-notes.md`](skills/new-workspace/references/design-notes.md).
 
 ## Caution
 

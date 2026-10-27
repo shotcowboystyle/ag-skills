@@ -1,11 +1,15 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["pyyaml>=6"]
+# ///
 """Allocate inventory items to bags under the binding baggage allowance, and write plan.yaml.
 
 Reads itinerary.yaml, allowances.yaml, bags.yaml and inventory.yaml from a trip workspace
 and writes plan.yaml into the same directory.
 
 Run:
-    python scripts/pack_solver.py [WORKSPACE_DIR] [--objective max-min-headroom|consolidate]
+    uv run scripts/pack_solver.py [WORKSPACE_DIR] [--objective max-min-headroom|consolidate]
                                   [--overflow] [--dry-run] [--json]
 
 The solver is deterministic by construction: every iteration order is a sorted list and
@@ -32,7 +36,7 @@ from typing import Any, Iterator
 try:
     import yaml
 except ImportError:  # pragma: no cover - environment guard
-    print("Missing dependencies. Install them with: uv pip install pyyaml jsonschema")
+    print("Missing dependencies. Run this script with `uv run`, which installs them from the header.")
     sys.exit(2)
 
 SOLVER_VERSION = "1.0.0"
@@ -726,7 +730,7 @@ def build_plan(
         plan["errors"] = errors
 
     # Search statistics stay out of the plan file: they are not part of the contract in
-    # docs/data-model.md and would churn the diff.
+    # references/data-model.md and would churn the diff.
     del evaluations
     return plan, errors
 

@@ -31,8 +31,8 @@ Install the plugin, then:
 /travel-packing-assistant:leave-behind    ranked drop list
 ```
 
-Without the plugin, the scripts still run standalone against this directory — see the plugin's
-`scripts/`.
+Without the plugin, the scripts still run standalone against this directory with
+`uv run <plugin>/skills/new-workspace/scripts/<script>.py .`.
 
 ## A caution about the allowance figures
 

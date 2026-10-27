@@ -1,7 +1,7 @@
 ---
 name: weigh-bags
 description: Record scale readings for each bag — empty (tare), outbound, current, final — and reconcile them against the itemised inventory to find unaccounted weight. Use when the user gives a bag weight, says how heavy something is, weighs their luggage, or asks how close to the limit they are. Appends to bags.yaml and runs scripts/reconcile.py.
-allowed-tools: Read, Write, Edit, Bash(python3 *), Bash(ls *), Grep
+allowed-tools: Read, Write, Edit, Bash(uv run *), Bash(ls *), Grep
 ---
 
 # Weigh Bags
@@ -45,7 +45,7 @@ caught by.
 After recording, run:
 
 ```bash
-python3 $TPA/scripts/reconcile.py . --json
+uv run $TPA/scripts/reconcile.py . --json
 ```
 
 It computes, per bag, `gross − tare − cube tare − itemised contents = unaccounted`, and

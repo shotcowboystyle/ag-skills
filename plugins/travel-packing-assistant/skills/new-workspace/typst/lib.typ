@@ -127,7 +127,7 @@
 // The figure a check-in scale will actually agree with. `plan.yaml` reports a
 // projection from the itemised inventory; where a real scale reading exists and is
 // heavier, that reading wins, because the difference is mass the inventory never
-// captured. See docs/design-notes.md, "Measured weight beats itemised weight".
+// captured. See references/design-notes.md, "Measured weight beats itemised weight".
 #let governing-kg(projected, measured) = {
   if measured == none { projected }
   else if projected == none { measured }

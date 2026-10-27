@@ -1,5 +1,5 @@
 # Flights for this trip. Filled in by /travel-packing-assistant:itinerary.
-# Schema: <plugin>/schema/itinerary.schema.json — see <plugin>/docs/data-model.md
+# Schema: $TPA/schema/itinerary.schema.json — see $TPA/references/data-model.md
 
 trip:
   id: "{{TRIP_NAME}}"     # quoted: an unquoted {{...}} is a YAML flow mapping, not a string

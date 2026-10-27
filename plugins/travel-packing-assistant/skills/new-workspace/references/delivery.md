@@ -47,11 +47,12 @@ specific provider. Two things matter:
 **Say what is being sent, and to whom, before sending it.** Mail leaves the machine and cannot
 be recalled.
 
-**Attach by URL, not by base64, above about 100 KB.** A packing-list PDF is frequently a few
-hundred kilobytes; base64ing it into tool-call arguments works but burns a large amount of
-context to do it. The route that works: presign a PUT to a transient object store, upload the
-file with `curl -T`, presign a GET, pass that URL as the attachment, delete the staged object
-afterwards.
+**Attach inline by default.** Base64ing a PDF of a few hundred kilobytes into tool-call
+arguments costs context, but it keeps the document out of third-party storage. A link is
+allowed only through a store the user configured as `email.stage` (a private bucket they own,
+with `expires_minutes`, 60 at most). Ask before each staged send, presign a GET with that
+expiry, and delete the staged object once the mail is sent. Never fall back to a public bucket
+or a link-sharing service: anyone holding the link can read when the home will be empty.
 
 ## Drive
 
