@@ -1,6 +1,7 @@
 ---
 name: wcag-audit-patterns
 description: Conduct WCAG 2.2 accessibility audits with automated testing, manual verification, and remediation guidance. Use when auditing websites for accessibility, fixing WCAG violations, or implementing accessible design patterns.
+last_verified: 2026-10-27
 ---
 
 # WCAG Audit Patterns
@@ -56,6 +57,25 @@ Moderate:
 ├── Missing landmarks
 └── Improper heading hierarchy
 ```
+
+### 4. What WCAG 2.2 Changed
+
+WCAG 2.2 (W3C Recommendation, October 2023) adds nine success criteria and removes 4.1.1 Parsing. Audit every one explicitly; automated tools catch little of this list.
+
+| SC     | Name                                 | Level | Audit check                                                                        |
+| ------ | ------------------------------------ | ----- | ---------------------------------------------------------------------------------- |
+| 2.4.11 | Focus Not Obscured (Minimum)         | AA    | Focused element never fully hidden by sticky headers, banners or chat widgets      |
+| 2.4.12 | Focus Not Obscured (Enhanced)        | AAA   | No part of the focused element is hidden                                           |
+| 2.4.13 | Focus Appearance                     | AAA   | Focus indicator ≥ 2 CSS px perimeter area with 3:1 change in contrast              |
+| 2.5.7  | Dragging Movements                   | AA    | Every drag (sliders, reorder, maps) has a single-pointer alternative               |
+| 2.5.8  | Target Size (Minimum)                | AA    | Pointer targets ≥ 24×24 CSS px, or spaced so a 24 px circle doesn't overlap        |
+| 3.2.6  | Consistent Help                      | A     | Help/contact mechanisms appear in the same relative order across pages             |
+| 3.3.7  | Redundant Entry                      | A     | Data already entered in the same process is auto-filled or selectable              |
+| 3.3.8  | Accessible Authentication (Minimum)  | AA    | No cognitive test to log in unless paste, password managers or an alternative work |
+| 3.3.9  | Accessible Authentication (Enhanced) | AAA   | As 3.3.8, with no object- or personal-content-recognition exception                |
+| 4.1.1  | Parsing                              | —     | Removed; duplicate IDs only fail when they break 1.3.1 or 4.1.2                    |
+
+Worked checks and code for each are in `references/details.md` under "WCAG 2.2 Additions".
 
 ## Detailed patterns and worked examples
 

@@ -235,7 +235,7 @@ Skills provide domain guidance that coding agents can load when relevant. Each s
 | Skill                         | Description                                                         |
 | ----------------------------- | ------------------------------------------------------------------- |
 | **design-system-patterns**    | Build scalable design systems with tokens, components, and theming  |
-| **accessibility-compliance**  | Implement WCAG 2.1/2.2 compliance with proper ARIA and keyboard nav |
+| **accessibility-compliance**  | Implement WCAG 2.2 compliance with proper ARIA and keyboard nav |
 | **responsive-design**         | Create fluid layouts with CSS Grid, Flexbox, and container queries  |
 | **mobile-ios-design**         | Design iOS apps following Human Interface Guidelines                |
 | **mobile-android-design**     | Design Android apps following Material Design 3 guidelines          |

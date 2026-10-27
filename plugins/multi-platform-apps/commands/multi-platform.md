@@ -245,7 +245,7 @@ Task:
     - Tailwind CSS with design system tokens
     - Progressive Web App capabilities
     - SSR/SSG optimization where appropriate
-    - Web vitals optimization (LCP < 2.5s, FID < 100ms)
+    - Web vitals optimization (LCP < 2.5s, INP < 200ms, CLS < 0.1)
 
     Write all code files. Report what files were created/modified.
 ```
@@ -287,7 +287,7 @@ Save output to `.multi-platform/04b-ios.md`.
 
 ```
 Task:
-  subagent_type: "multi-platform-apps-mobile-developer"
+  subagent_type: "android-developer"
   description: "Implement Android version of $FEATURE"
   prompt: |
     Implement Android version of feature: $FEATURE.

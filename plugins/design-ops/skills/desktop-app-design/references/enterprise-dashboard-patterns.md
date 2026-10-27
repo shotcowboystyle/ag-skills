@@ -90,7 +90,7 @@ Approximately 8% of males and 0.5% of females have some form of color vision def
 
 **Redundant encoding.** Never rely on color alone to convey meaning. Combine color with shape (triangle for up, circle for down), pattern (hatching, dotting), position (separate lanes), or text labels. This principle applies to status indicators, chart series, and traffic-light encodings.
 
-**Contrast requirements.** Ensure chart foreground elements meet WCAG 2.1 non-text contrast ratio of 3:1 against adjacent colors. Data series within charts must be distinguishable from each other and from the background. Test using simulation tools: Sim Daltonism (macOS), Color Oracle (cross-platform), or Chrome DevTools rendering emulation.
+**Contrast requirements.** Ensure chart foreground elements meet the WCAG 2.2 non-text contrast ratio (SC 1.4.11) of 3:1 against adjacent colors. Data series within charts must be distinguishable from each other and from the background. Test using simulation tools: Sim Daltonism (macOS), Color Oracle (cross-platform), or Chrome DevTools rendering emulation.
 
 ---
 

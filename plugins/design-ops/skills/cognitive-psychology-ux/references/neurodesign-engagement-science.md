@@ -393,7 +393,7 @@ Research demonstrates measurable cognitive and physiological differences between
 
 ### Evidence-Based Color Guidelines for UI
 
-1. **Ensure sufficient contrast** (WCAG 2.1 AA minimum: 4.5:1 for normal text, 3:1 for large text). This is both an accessibility requirement and a readability fundamental.
+1. **Ensure sufficient contrast** (WCAG 2.2 AA minimum: 4.5:1 for normal text, 3:1 for large text). This is both an accessibility requirement and a readability fundamental.
 2. **Use 60-30-10 allocation** as a starting heuristic: 60% dominant/background color, 30% secondary color, 10% accent color.
 3. **Pair color with secondary signifiers** (icons, text labels, position) so that color-blind users (8% of males, 0.5% of females) are never excluded.
 4. **Test in context:** A color that tests well in isolation may fail in the actual interface. Always evaluate color within the full visual context.

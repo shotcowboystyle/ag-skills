@@ -1,6 +1,7 @@
 ---
 name: react-state-management
 description: Master modern React state management with Redux Toolkit, Zustand, Jotai, and React Query. Use when setting up global state, managing server state, or choosing between state management solutions.
+last_verified: 2026-10-27
 ---
 
 # React State Management
@@ -20,13 +21,13 @@ Comprehensive guide to modern React state management patterns, from local compon
 
 ### 1. State Categories
 
-| Type             | Description                  | Solutions                     |
-| ---------------- | ---------------------------- | ----------------------------- |
-| **Local State**  | Component-specific, UI state | useState, useReducer          |
-| **Global State** | Shared across components     | Redux Toolkit, Zustand, Jotai |
-| **Server State** | Remote data, caching         | React Query, SWR, RTK Query   |
-| **URL State**    | Route parameters, search     | React Router, nuqs            |
-| **Form State**   | Input values, validation     | React Hook Form, Formik       |
+| Type             | Description                  | Solutions                      |
+| ---------------- | ---------------------------- | ------------------------------ |
+| **Local State**  | Component-specific, UI state | useState, useReducer           |
+| **Global State** | Shared across components     | Redux Toolkit, Zustand, Jotai  |
+| **Server State** | Remote data, caching         | React Query, SWR, RTK Query    |
+| **URL State**    | Route parameters, search     | React Router, nuqs             |
+| **Form State**   | Input values, validation     | React Hook Form, TanStack Form |
 
 ### 2. Selection Criteria
 
@@ -45,6 +46,7 @@ Atomic/granular updates → Jotai
 // store/useStore.ts
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
+import { useShallow } from 'zustand/react/shallow'
 
 interface AppState {
   user: User | null
@@ -69,9 +71,12 @@ export const useStore = create<AppState>()(
   )
 )
 
-// Usage in component
+// Usage in component: select only what you render. Calling useStore() with
+// no selector subscribes to the whole store and re-renders on every change.
 function Header() {
-  const { user, theme, toggleTheme } = useStore()
+  const { user, theme, toggleTheme } = useStore(
+    useShallow((s) => ({ user: s.user, theme: s.theme, toggleTheme: s.toggleTheme }))
+  )
   return (
     <header className={theme}>
       {user?.name}

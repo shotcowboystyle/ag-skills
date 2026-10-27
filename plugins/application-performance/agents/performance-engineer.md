@@ -50,7 +50,7 @@ Expert performance engineer with comprehensive knowledge of modern observability
 
 ### Frontend Performance Optimization
 
-- **Core Web Vitals**: LCP, FID, CLS optimization, Web Performance API
+- **Core Web Vitals**: LCP, INP, CLS optimization, Web Performance API
 - **Resource optimization**: Image optimization, lazy loading, critical resource prioritization
 - **JavaScript optimization**: Bundle splitting, tree shaking, code splitting, lazy loading
 - **CSS optimization**: Critical CSS, CSS optimization, render-blocking resource elimination

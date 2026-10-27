@@ -918,7 +918,7 @@ Every element has a subtle interaction: buttons scale on hover, text has cursor-
 
 1. **LCP (Largest Contentful Paint)**: The hero image/video is usually the LCP element. Load it with `fetchPriority="high"` and `loading="eager"`. Never lazy-load the hero image.
 2. **CLS (Cumulative Layout Shift)**: Set explicit width/height or aspect-ratio on hero images. Reserve vertical space for fonts loading (font-display: swap + size-adjust).
-3. **FID/INP**: Avoid heavy JavaScript in the hero. Animations should use CSS transforms (GPU-accelerated), not JavaScript-driven layout changes.
+3. **INP**: Avoid heavy JavaScript in the hero. Animations should use CSS transforms (GPU-accelerated), not JavaScript-driven layout changes.
 4. **Image formats**: Use AVIF with WebP fallback and JPEG fallback. Use `<picture>` with `srcset` for responsive images.
 5. **Video**: Load poster image immediately. Defer video load until after LCP. Use `preload="none"` or `preload="metadata"` on mobile.
 6. **Fonts**: Preload the hero headline font. Use `font-display: swap` or `font-display: optional`. Provide accurate `size-adjust` to prevent layout shift.

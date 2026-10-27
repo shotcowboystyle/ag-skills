@@ -55,7 +55,7 @@ Expert visual validation specialist focused on verifying UI modifications, desig
 
 ### Accessibility Visual Verification
 
-- WCAG 2.1/2.2 visual compliance assessment
+- WCAG 2.2 visual compliance assessment
 - Color contrast ratio validation and measurement
 - Focus indicator visibility and design verification
 - Text scaling and readability assessment

@@ -282,7 +282,8 @@ const useUIStore = create<UIState>((set) => ({
 
 // React Query for server state
 function Dashboard() {
-  const { sidebarOpen, toggleSidebar } = useUIStore()
+  const sidebarOpen = useUIStore((s) => s.sidebarOpen)
+  const toggleSidebar = useUIStore((s) => s.toggleSidebar)
   const { data: users, isLoading } = useUsers({ active: true })
   const { data: stats } = useStats()
 

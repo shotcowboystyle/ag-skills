@@ -824,7 +824,7 @@ Validate tokens before transformation to catch errors early:
 - **Reference validation:** Ensure all alias references resolve to existing tokens. Detect circular references.
 - **Naming convention enforcement:** Lint token names against the project's chosen convention (CTI, kebab-case, no uppercase).
 - **Value validation:** Check that color values produce valid CSS, that dimension values include units, and that numeric values fall within expected ranges.
-- **Contrast checking:** Validate that semantic color pairings (text on surface, interactive on surface) meet WCAG 2.1 AA contrast requirements.
+- **Contrast checking:** Validate that semantic color pairings (text on surface, interactive on surface) meet WCAG 2.2 AA contrast requirements.
 
 ```javascript
 // scripts/validate-tokens.js

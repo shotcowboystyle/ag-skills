@@ -1,6 +1,7 @@
 ---
 name: screen-reader-testing
 description: Test web applications with screen readers including VoiceOver, NVDA, and JAWS. Use when validating screen reader compatibility, debugging accessibility issues, or ensuring assistive technology support.
+last_verified: 2026-10-27
 ---
 
 # Screen Reader Testing
@@ -62,61 +63,36 @@ Before testing with JAWS or TalkBack, read [platform setup and commands](referen
 
 ### 1. Modal Dialog
 
+Prefer native `<dialog>` opened with `showModal()`: the browser makes the rest of the page inert, traps focus, closes on Escape, and exposes `role="dialog"` with `aria-modal` semantics.
+
 ```html
-<!-- Accessible modal structure -->
-<div
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="dialog-title"
-  aria-describedby="dialog-desc"
->
-  <h2 id="dialog-title">Confirm Delete</h2>
+<dialog id="confirm-delete" aria-labelledby="dialog-title" aria-describedby="dialog-desc">
+  <h2 id="dialog-title" tabindex="-1">Confirm Delete</h2>
   <p id="dialog-desc">This action cannot be undone.</p>
-  <button>Cancel</button>
-  <button>Delete</button>
-</div>
+  <button type="button" data-close>Cancel</button>
+  <button type="button">Delete</button>
+</dialog>
 ```
 
 ```javascript
-// Focus management
-function openModal(modal) {
-  // Store last focused element
+// Focus management: the heading needs tabindex="-1" to receive programmatic focus
+const dialog = document.getElementById("confirm-delete");
+let lastFocus = null;
+
+function openDialog() {
   lastFocus = document.activeElement;
-
-  // Move focus to modal
-  modal.querySelector("h2").focus();
-
-  // Trap focus
-  modal.addEventListener("keydown", trapFocus);
+  dialog.showModal(); // inert background + focus containment + Escape to close
+  dialog.querySelector("#dialog-title").focus();
 }
 
-function closeModal(modal) {
-  // Return focus
-  lastFocus.focus();
-}
+dialog.addEventListener("close", () => {
+  lastFocus?.focus(); // fires for Escape and dialog.close() alike
+});
 
-function trapFocus(e) {
-  if (e.key === "Tab") {
-    const focusable = modal.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) {
-      last.focus();
-      e.preventDefault();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      first.focus();
-      e.preventDefault();
-    }
-  }
-
-  if (e.key === "Escape") {
-    closeModal(modal);
-  }
-}
+dialog.querySelector("[data-close]").addEventListener("click", () => dialog.close());
 ```
+
+Test: on open, the screen reader announces the dialog name, role and description; Tab never reaches page content behind it; on close, focus lands back on the trigger.
 
 ### 2. Live Regions
 
@@ -205,24 +181,36 @@ tablist.addEventListener("keydown", (e) => {
 
 ## Debugging Tips
 
+Read the browser's computed accessible name and role rather than re-deriving them: the Accessibility pane in Chrome/Edge/Firefox DevTools shows the computed name, role, states and the source of each. In tests, assert on the accessibility tree:
+
 ```javascript
-// Log what screen reader sees
-function logAccessibleName(element) {
-  const computed = window.getComputedStyle(element);
-  console.log({
-    role: element.getAttribute("role") || element.tagName,
-    name:
-      element.getAttribute("aria-label") ||
-      element.getAttribute("aria-labelledby") ||
-      element.textContent,
-    state: {
-      expanded: element.getAttribute("aria-expanded"),
-      selected: element.getAttribute("aria-selected"),
-      checked: element.getAttribute("aria-checked"),
-      disabled: element.disabled,
-    },
-    visible: computed.display !== "none" && computed.visibility !== "hidden",
-  });
+// Playwright: query by role + accessible name, and snapshot the tree
+await expect(page.getByRole("button", { name: "Delete" })).toBeVisible();
+await expect(page.getByRole("dialog")).toMatchAriaSnapshot(`
+  - dialog "Confirm Delete":
+    - heading "Confirm Delete" [level=2]
+    - button "Cancel"
+    - button "Delete"
+`);
+```
+
+For a quick DevTools-console check, resolve `aria-labelledby` IDs to their text (it holds ID references, not the name). This approximates only the first steps of the [accessible name algorithm](https://www.w3.org/TR/accname-1.2/), so trust the Accessibility pane when they disagree:
+
+```javascript
+function approxAccessibleName(el) {
+  const ids = el.getAttribute("aria-labelledby");
+  if (ids) {
+    return ids
+      .split(/\s+/)
+      .map((id) => document.getElementById(id)?.textContent.trim() ?? "")
+      .join(" ");
+  }
+  return (
+    el.getAttribute("aria-label") ||
+    (el.labels?.length ? [...el.labels].map((l) => l.textContent.trim()).join(" ") : "") ||
+    el.getAttribute("alt") ||
+    el.textContent.trim()
+  );
 }
 ```
 
