@@ -47,12 +47,13 @@ SE = sqrt(b + c − (b − c)² / n) / n
 
 ## Catastrophic Forgetting
 
-Unmanaged LoRA fine-tuning loses real general capability, and stage 2 is what catches it:
+Unmanaged LoRA fine-tuning can lose real general capability, and stage 2 is what catches it.
+How much a given run loses depends on the model, data and schedule: it needs measurement
+against your own goldens, not a borrowed figure.
 
-- **~43% knowledge loss unmanaged** — no replay, no regularization.
-- **~10% with basic management** — some replay or a conservative LR.
-- **~3% with replay + EWC** — the disciplined case.
-- **10–30% general-data replay mix is the standard mitigation** — blend general-domain data into training rather than target-task data alone.
+- **Loss shrinks with management** — replay, a conservative LR, or regularization such as EWC
+  each reduce it; measure each change with the stage 2 gate.
+- **A 10–30% general-data replay mix is a common starting point** — blend general-domain data into training rather than target-task data alone.
 
 If a checkpoint hits the >5pt hard fail in stage 2, work this escalation ladder in order — the one canonical order this skill and `references/gate-templates.md` both point to:
 

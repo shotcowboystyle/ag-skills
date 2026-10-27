@@ -82,12 +82,18 @@ the wrong place relative to each example.
 
 ## Packing
 
-**Without packing, 40–70% of compute is spent on
-padding** — variable-length examples batched at a
-fixed sequence length waste the gap between each
-example's length and the batch's max. Packing
-concatenates multiple examples into one sequence
-up to the max length, cutting most of that waste.
+**Without packing, compute goes to padding** —
+variable-length examples batched at a fixed
+sequence length waste the gap between each
+example's length and the batch's max. How much
+needs measurement: compare the sum of example
+token counts with `batches × max_length` on your
+data. Packing concatenates multiple examples into
+one sequence up to the max length, cutting most of
+that waste. Padding-free (position-id) packing
+keeps examples from attending to each other
+without a block-diagonal mask; prefer it where the
+trainer supports it.
 
 - **Packing changes batch semantics.** A packed
   sequence can contain several original examples, so
@@ -135,13 +141,14 @@ up to the max length, cutting most of that waste.
   generates several candidates per prompt and keeps
   only the ones a filter passes. Both beat naive
   single-shot generation.
-- **Targeted, student-aware generation beats static
-  generation by 1.3–2x sample efficiency** — aiming
-  at the student's actual failure modes hits a
-  quality bar with fewer filtered examples.
-- **Typical accept rates after filtering run
-  10–30%.** Plan volume accordingly — a 10,000-row
-  target at 15% accept needs ~65,000+ raw generations.
+- **Targeted, student-aware generation usually
+  beats static generation** — aiming at the
+  student's actual failure modes hits a quality bar
+  with fewer filtered examples. The gain needs
+  measurement on your task.
+- **Measure the accept rate on a pilot batch** and
+  plan volume from it: raw generations needed ≈
+  target rows ÷ accept rate.
 - Generation-method ranking, filter funnel, replay-
   mix construction, and distillation pattern:
   `references/synthetic-data.md`.

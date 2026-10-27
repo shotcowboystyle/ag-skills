@@ -1,7 +1,7 @@
 {
   "name": "matter-ops",
   "displayName": "Matter Ops",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Legal and OSINT matter workspaces \u2014 analyse documents, track sources and entities, build timelines, redact for disclosure, and render typeset briefs from workspace material.",
   "author": {
     "name": "Curtis Blanton",

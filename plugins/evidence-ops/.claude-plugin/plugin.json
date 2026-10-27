@@ -1,6 +1,6 @@
 {
   "name": "evidence-ops",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Chain-of-custody evidence handling \u2014 hash, timestamp, inspect metadata, append to an immutable custody register, package as BagIt, verify, and sync to WORM or S3 Object Lock storage.",
   "author": {
     "name": "Curtis Blanton",
