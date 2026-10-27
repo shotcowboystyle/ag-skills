@@ -43,7 +43,7 @@ ots upgrade evidence_manifest.sha256.ots
 ```
 
 ### Verifying a timestamp
-To prove the file existed at the time of the block, verify the upgraded `.ots` file against the original evidence file. This verifies the complete Merkle path down to the block header.
+To prove the file existed at the time of the block, verify the upgraded `.ots` file against the original evidence file. This verifies the complete Merkle path down to the block header. Verification needs a local Bitcoin Core node (a pruned node is enough) reachable over RPC; without one the client cannot check the Bitcoin attestation. `ots info` inspects a proof without a node.
 
 ```bash
 # Verify the timestamp against the file

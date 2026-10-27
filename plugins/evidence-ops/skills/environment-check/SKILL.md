@@ -1,7 +1,7 @@
 ---
 name: environment-check
 description: Use when the user wants to know which evidence-handling tools are present on this host before running a pipeline — probes hashing, metadata, timestamping, packaging, and storage CLIs and reports what is missing with an install hint for each. Triggers - "check evidence tools", "what forensics tools are installed", "why did hashing fail".
-allowed-tools: Bash(command *), Bash(sw_vers *), Bash(uname *), Read
+allowed-tools: Bash(command *), Bash(export PATH=*), Bash(test *), Bash(sw_vers *), Bash(uname *), Read
 ---
 
 # Environment Check
@@ -58,7 +58,10 @@ test -x "$PLUGIN_DATA_DIR/venv/bin/python" && echo "venv present" || echo "venv 
 ```
 
 Python-based tools are looked for inside that virtual environment first and on `PATH`
-second. Report which location satisfied each.
+second. Probe `ots`, `bagit.py` and `mat2` with `command -v` in a command that starts
+with the line from
+[tool resolution](../evidence-install-deps/references/tool-resolution.md), and report
+which location satisfied each.
 
 ### 4. Report
 

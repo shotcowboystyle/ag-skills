@@ -1,7 +1,7 @@
 ---
 name: hash-evidence
 description: Use when a file or directory needs cryptographic hashes — computes SHA-256 by default and optionally BLAKE3, emitting a checkable manifest for directories. Triggers - "hash this file", "sha256 a folder", "make a checksum manifest".
-allowed-tools: Bash(shasum *), Bash(sha256sum *), Bash(b3sum *), Bash(command *), Bash(find *), Bash(wc *), Bash(du *), Read, Write
+allowed-tools: Bash(shasum *), Bash(sha256sum *), Bash(b3sum *), Bash(command *), Bash(find *), Bash(sort *), Bash(xargs *), Bash(cd *), Bash(mktemp *), Bash(test *), Bash(wc *), Bash(du *), Read, Write
 ---
 
 # Hash Evidence
@@ -51,15 +51,26 @@ Report the digest in full. Never abbreviate a hash that is the point of the oper
 
 ### 3. Hash a directory
 
+Refuse to overwrite: if `$MANIFEST` already exists, stop and pick a new name. Then take
+the file list once, from inside the target, before any manifest is written:
+
 ```bash
-find "$TARGET" -type f -print0 | sort -z | xargs -0 shasum -a 256 > "$MANIFEST"
+test -e "$MANIFEST" && echo "manifest already exists"
+LIST=$(mktemp)
+(cd "$TARGET" && find . -type f -print0 | sort -z) > "$LIST"
+(cd "$TARGET" && xargs -0 shasum -a 256 < "$LIST") > "$MANIFEST"
 ```
+
+Hashing from inside the target writes entries as `./sub/file`, relative to the hashed
+directory. Because the list is taken before `$MANIFEST` exists, a manifest written into
+the tree it describes never lists itself.
 
 `sort -z` matters: without it the manifest order depends on filesystem traversal and
 two runs over identical content produce different files. Sorted output diffs cleanly.
 
-For BLAKE3, repeat with `b3sum` and write a sibling `.blake3` manifest. Do not
-interleave algorithms in one file — checkers expect one algorithm per manifest.
+For BLAKE3, run `b3sum` over the same `$LIST` and write a sibling `.blake3` manifest, so
+neither manifest lists the other. Do not interleave algorithms in one file — checkers
+expect one algorithm per manifest.
 
 ### 4. Record scale
 
@@ -72,7 +83,8 @@ Warn before starting if the tree is large enough that hashing will take minutes.
 
 ### 5. Report
 
-State the digest or the manifest path, the entry count, and the total size. If any file
+State the digest or the manifest path, the directory that was hashed (checks run from
+there), the entry count, and the total size. If any file
 could not be read, name it — a manifest with silent gaps is worse than no manifest.
 
 ## Output

@@ -47,6 +47,11 @@ Directory roles:
 - `chain-of-custody/` — timestamp proofs, signatures, and transfer records.
 - `logs/` — one log per operation, named `<operation>-<timestamp>.md`.
 
+The directory holding `evidence/` is the store root. Every path in the register is
+relative to it. The record format is the
+[register schema](../evidence-reference-lookup/references/custody/register-schema.md);
+the register starts empty and gains one line per record.
+
 ### 3. Record the policy
 
 Write `evidence/POLICY.md` stating the facts later operations depend on, so they need

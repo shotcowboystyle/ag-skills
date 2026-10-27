@@ -37,8 +37,9 @@ degrades in a defined way:
 | `rclone`, `aws` | local only, no offsite replication |
 | `b3sum`, `mat2` | optional, no effect on the core pipeline |
 
-Run evidence-install-deps only for what was accepted. Stop at the first refusal and continue with
-the remaining stages.
+Run evidence-install-deps only for what was accepted. A declined install does not end
+onboarding: record what was declined and which stages it blocks, then continue with the
+next stage.
 
 ### 3. Configure a destination
 

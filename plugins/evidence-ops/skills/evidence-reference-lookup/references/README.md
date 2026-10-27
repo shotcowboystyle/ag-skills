@@ -22,6 +22,7 @@ The documentation within this corpus is built upon several foundational principl
 
 ### Custody
 * [Chain of Custody Principles](custody/chain-of-custody-principles.md) - Core concepts for maintaining evidential integrity from acquisition, through analysis, to disposition.
+* [Register Schema](custody/register-schema.md) - The record format of the append-only custody register: fields, id scheme, and the store root every path is relative to.
 * [Legal Considerations](custody/legal-considerations.md) - General overview of legal concepts related to digital evidence, noting that jurisdiction dictates admissibility specifics.
 
 ### Hashing

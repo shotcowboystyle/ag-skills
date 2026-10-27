@@ -1,7 +1,7 @@
 ---
 name: bag-evidence
 description: Use when a set of items must be handed over or archived as one unit — packages a directory as a BagIt bag with per-file checksums and a manifest that any receiving party can validate without this plugin. Triggers - "bag this evidence", "package for handover", "make a BagIt archive".
-allowed-tools: Bash(bagit.py *), Bash(python3 *), Bash(command *), Bash(mkdir *), Bash(cp *), Bash(du *), Bash(find *), Read, Write
+allowed-tools: Bash(bagit.py *), Bash(export PATH=*), Bash(python3 *), Bash(command *), Bash(mkdir *), Bash(cp *), Bash(du *), Bash(find *), Read, Write
 ---
 
 # Bag Evidence
@@ -40,6 +40,10 @@ restructure the evidence tree, so always work on a copy.
 
 ### 3. Create the bag
 
+`bagit.py` lives in the plugin virtual environment. Start each command that calls it
+with the line from
+[tool resolution](../evidence-install-deps/references/tool-resolution.md).
+
 ```bash
 bagit.py --sha256 --contact-name "$HANDLER" "$BAG_DIR"
 ```
@@ -64,7 +68,9 @@ described as valid.
 ### 5. Record it
 
 Note the bag path, its file count, and its total size in the operation log, and add a
-line to the custody record describing the handover unit rather than its members.
+`handover` record to the register describing the bag rather than its members, as the
+[register schema](../evidence-reference-lookup/references/custody/register-schema.md)
+defines it.
 
 ## Output
 
