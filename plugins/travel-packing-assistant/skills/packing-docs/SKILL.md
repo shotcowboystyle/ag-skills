@@ -1,7 +1,7 @@
 ---
 name: packing-docs
 description: Render the trip's packing documents — a one-page airport counter card of the binding allowances and bag weights, and a full per-bag packing list with tick boxes — as PDF via Typst and as Markdown, then deliver them by email, to cloud storage, into a static-site repo, or to disk. Use when the user asks for a packing list, a PDF, something to print, a page on their site, or to have the plan sent to them.
-allowed-tools: Read, Write, Edit, Bash(typst *), Bash(python3 *), Bash(mkdir *), Bash(ls *), Bash(cp *), Bash(curl *), Bash(git status *), Bash(git add *), Bash(git commit *), Bash(git push *), Glob
+allowed-tools: Read, Write, Edit, Bash(typst *), Bash(uv run *), Bash(mkdir *), Bash(ls *), Bash(cp *), Bash(curl *), Bash(git status *), Bash(git add *), Bash(git commit *), Bash(git push *), Glob
 ---
 
 # Packing Documents
@@ -29,31 +29,22 @@ Transcription is where totals go wrong, and these totals are read at a check-in 
 ### PDF, with Typst
 
 **Typst refuses to compile a source file that sits outside `--root`**, and a symlink does not
-get around it. So the root has to contain both the template and the workspace, which means
-`--root /` and absolute paths. This is the form to use — the obvious `--root .` from inside the
-workspace fails, because the template lives in the plugin:
+get around it. Never widen the root to `/` or `$HOME` to reach the plugin: that lets a template
+read any file the user can. Copy the templates into the workspace instead, refreshing them on
+every render so a plugin update reaches them, and root the compile at the workspace:
 
 ```bash
-mkdir -p "$TRIP/output"
+mkdir -p "$TRIP/output" "$TRIP/.typst"
+cp "$TPA"/typst/*.typ "$TRIP/.typst/"
 
-typst compile --root / \
-  --input itinerary="$TRIP/itinerary.yaml" \
-  --input allowances="$TRIP/allowances.yaml" \
-  --input plan="$TRIP/plan.yaml" \
-  "$TPA/typst/counter-card.typ" "$TRIP/output/counter-card.pdf"
-
-typst compile --root / \
-  --input itinerary="$TRIP/itinerary.yaml" \
-  --input plan="$TRIP/plan.yaml" \
-  --input bags="$TRIP/bags.yaml" \
-  --input inventory="$TRIP/inventory.yaml" \
-  "$TPA/typst/packing-list.typ" "$TRIP/output/packing-list.pdf"
+typst compile --root "$TRIP" "$TRIP/.typst/counter-card.typ" "$TRIP/output/counter-card.pdf"
+typst compile --root "$TRIP" "$TRIP/.typst/packing-list.typ" "$TRIP/output/packing-list.pdf"
 ```
 
-To make a workspace renderable without the plugin installed, copy the templates in once
-(`cp -r $TPA/typst "$TRIP/.typst"`) and then `--root .` works from inside the
-workspace with `.typst/counter-card.typ`. Offer this when a trip repo is being handed to
-someone else.
+The templates read `itinerary.yaml`, `allowances.yaml`, `plan.yaml`, `bags.yaml` and
+`inventory.yaml` from the root by default, so no `--input` flags are needed. The workspace
+`.gitignore` ignores `.typst/`. To hand a trip repo to someone without the plugin, remove that
+line so the templates are committed with it.
 
 If `typst` is not installed, say so and give the install line for the user's platform rather
 than silently producing only Markdown — the plain-text form is a fine substitute, but only if
@@ -62,7 +53,7 @@ they know that is what they got.
 ### Markdown
 
 ```bash
-python3 "$TPA/scripts/render_markdown.py" "$TRIP" --doc both --out-dir "$TRIP/output"
+uv run "$TPA/scripts/render_markdown.py" "$TRIP" --doc both --out-dir "$TRIP/output"
 ```
 
 `--doc counter-card | packing-list | both`, `--out FILE` for a single document, `--now ISO8601`
@@ -70,7 +61,7 @@ to pin the timestamp. `--frontmatter key=value` (repeatable) emits a YAML frontm
 which is what a static site needs:
 
 ```bash
-python3 "$TPA/scripts/render_markdown.py" "$TRIP" --doc counter-card \
+uv run "$TPA/scripts/render_markdown.py" "$TRIP" --doc counter-card \
   --frontmatter 'layout=../../layouts/Wiki.astro' --title 'Counter card — BOS → TLV'
 ```
 
@@ -99,10 +90,12 @@ default: local                 # local | email | drive | repo
 email:
   to: you@example.com
   from: null                   # required by some providers
+  stage: null                  # optional, for large PDFs: a private bucket you own, e.g.
+                               #   { bucket: s3://example-private/tmp, expires_minutes: 15 }
 drive:
   folder: "Travel/Packing"
 repo:
-  path: ~/repos/example/site   # an existing git working copy
+  path: ~/path/to/site         # an existing git working copy
   docs_dir: src/pages/wiki
   assets_dir: public/travel    # null to skip the PDFs
   format: markdown+pdf
@@ -121,11 +114,16 @@ That file lives outside the plugin and outside the workspace deliberately: it su
 paths.
 
 **Email** — send to the configured address with both PDFs attached. Sending mail leaves this
-machine, so say what is being sent and to whom before sending it. With the Gmail/Workspace MCP,
-attachments above roughly 100 KB should go by URL rather than inline base64: presign a PUT to a
-transient object store, upload the file, presign a GET, pass that URL as the attachment, and
-delete the staged object afterwards. Base64ing a PDF into tool arguments works for small files
-and wastes a great deal of context on larger ones.
+machine and cannot be recalled, so show the recipient, the subject and the attached files, and
+ask before sending. Attach inline (base64) by default. It costs context on a large PDF but
+keeps the document out of third-party storage.
+
+A link instead of an attachment needs a store the user configured as `email.stage` in
+`delivery.yaml`. Never pick one, and never use a public bucket or a link-sharing service. These
+documents state when a home will be empty, and anyone holding the link can read them until it
+expires. With `email.stage` set, ask before each staged send, then upload, presign a GET that
+expires within `expires_minutes` (60 at most), send the link, and delete the staged object
+once the mail is sent. If `email.stage` is not set, attach inline or save locally.
 
 **Drive / cloud storage** — upload to the configured folder. Never write to the root of a
 drive; if the configured folder does not exist, ask rather than picking one.

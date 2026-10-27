@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["pyyaml>=6"]
+# ///
 """Reconcile scale readings against the itemised inventory, bag by bag.
 
 The normal state of a real trip is a bag that has been weighed but only half itemised.
@@ -8,7 +12,7 @@ the evidence points at a miscalibrated scale rather than missing items, the `bia
 to enter by hand in bags.yaml.
 
 Run:
-    python scripts/reconcile.py [WORKSPACE_DIR] [--phase empty|outbound|current|final] [--json]
+    uv run scripts/reconcile.py [WORKSPACE_DIR] [--phase empty|outbound|current|final] [--json]
 
 Exit 0 whatever it finds; exit 1 only when a required file is missing or malformed,
 2 if a dependency is missing.
@@ -26,7 +30,7 @@ from typing import Any
 try:
     import yaml
 except ImportError:  # pragma: no cover - environment guard
-    print("Missing dependencies. Install them with: uv pip install pyyaml jsonschema")
+    print("Missing dependencies. Run this script with `uv run`, which installs them from the header.")
     sys.exit(2)
 
 # Chronological order of the packing phases, used to pick "the most recent phase present".

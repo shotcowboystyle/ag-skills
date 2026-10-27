@@ -1,7 +1,7 @@
 ---
 name: packing-inventory
 description: Build or update the inventory of what is being carried — items, quantities, weights, carriage restrictions, and how replaceable each thing is at the destination. Use when the user is listing what they have packed or intend to pack, dictating the contents of a bag, or asking what is in their luggage. Writes inventory.yaml, which the solver and the leave-behind ranking both read.
-allowed-tools: Read, Write, Edit, Bash(python3 *), Bash(ls *), Grep, Glob
+allowed-tools: Read, Write, Edit, Bash(uv run *), Bash(ls *), Grep, Glob
 ---
 
 # Packing Inventory
@@ -29,7 +29,7 @@ what you can identify, and ask about anything ambiguous. Good for clothing, poor
 everything from a photo is `weight_source: estimated`.
 
 **Category sweep.** For packing not yet done: walk the categories in
-`data/packing-categories.md` and ask what is going in each. Slower, but it is the only mode
+`$TPA/data/packing-categories.md` and ask what is going in each. Slower, but it is the only mode
 that catches the thing they have not thought of yet.
 
 **Import.** A previous trip's `inventory.yaml` is the best starting point a repeat traveller
@@ -46,7 +46,7 @@ Ask how much of the inventory can be weighed. In descending order of usefulness:
    account for the majority of the mass.
 2. **Vendor / catalogue** — a published spec weight for electronics and hardware. Usually
    accurate, usually excludes the cable and the case, so weigh those separately.
-3. **Estimated** — from `data/typical-weights.md`. Fine for socks, not for a laptop.
+3. **Estimated** — from `$TPA/data/typical-weights.md`. Fine for socks, not for a laptop.
 
 Record which, per item, in `weight_source`. That field is what lets `reconcile.py` tell the
 difference between "the inventory is missing items" and "the estimates are drifting".
@@ -60,7 +60,7 @@ produce a plan that is 4 kg pessimistic.
 - **`carriage`** — anything that cannot travel in an arbitrary bag. Power banks and spare
   lithium batteries are cabin-only in essentially every jurisdiction; liquids over 100 ml
   cannot go through the cabin security check; sharps, tools and some aerosols are
-  checked-only or barred. See `data/carriage-rules.md`. Set `carriage_reason` every time; the
+  checked-only or barred. See `$TPA/data/carriage-rules.md`. Set `carriage_reason` every time; the
   solver treats these as hard constraints and the reason is what the traveller reads when they
   wonder why the plan put a heavy thing in the small bag.
 - **`tier`** — essential / useful / nice-to-have / expendable. Assign it as you capture, not
@@ -80,7 +80,7 @@ produce a plan that is 4 kg pessimistic.
 2. Capture in the mode the user chose. Assign stable ids (`I001`…) and never renumber; the
    plan, the PDFs and the conversation all reference them.
 3. Fill `carriage`, `tier` and `replaceable_at_destination` as you go.
-4. Validate: `python3 $TPA/scripts/validate.py . --json`.
+4. Validate: `uv run $TPA/scripts/validate.py . --json`.
 5. Report: item count, itemised total in kg, the split by `weight_source`, and the ten heaviest
    items. The heavy-ten list is the single most useful thing to show a traveller — it is where
    every kilogram of headroom is going to come from.

@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["pyyaml>=6"]
+# ///
 """Render the counter card and the packing list as Markdown, straight from the workspace YAML.
 
 These are the same two documents `typst/counter-card.typ` and `typst/packing-list.typ`
@@ -8,9 +12,9 @@ static site, and the immediate consumer here is an Astro wiki that wants readabl
 Nothing is transcribed by hand; every figure comes out of the YAML.
 
 Run:
-    python scripts/render_markdown.py [WORKSPACE_DIR] --doc counter-card [--out FILE]
-    python scripts/render_markdown.py [WORKSPACE_DIR] --doc packing-list [--out FILE]
-    python scripts/render_markdown.py [WORKSPACE_DIR] --doc both --out-dir DIR
+    uv run scripts/render_markdown.py [WORKSPACE_DIR] --doc counter-card [--out FILE]
+    uv run scripts/render_markdown.py [WORKSPACE_DIR] --doc packing-list [--out FILE]
+    uv run scripts/render_markdown.py [WORKSPACE_DIR] --doc both --out-dir DIR
 
 A single document goes to stdout unless `--out`/`--out-dir` is given; `--doc both`
 defaults to `<workspace>/output/`.
@@ -55,7 +59,7 @@ from typing import Any, Sequence
 try:
     import yaml
 except ImportError:  # pragma: no cover - environment guard
-    print("Missing dependencies. Install them with: uv pip install pyyaml jsonschema")
+    print("Missing dependencies. Run this script with `uv run`, which installs them from the header.")
     sys.exit(2)
 
 RENDERER_VERSION = "1.0.0"
@@ -523,7 +527,7 @@ class Workspace:
     def binding_block(self, kind: str) -> dict[str, Any]:
         """Read a block out of `allowances.binding`.
 
-        `personal` is spelled `personal_item` in docs/data-model.md and `personal` in the
+        `personal` is spelled `personal_item` in references/data-model.md and `personal` in the
         worked example and in counter-card.typ. Both are in the wild, so both are read;
         silently rendering an em dash because the key was the other spelling would look
         exactly like a workspace with no personal-item allowance.

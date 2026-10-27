@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://shotcowboystyle.github.io/travel-packing-assistant/schema/itinerary.schema.json",
   "title": "itinerary.yaml",
-  "description": "Segments, tickets and carriers for one trip workspace. See docs/data-model.md.",
+  "description": "Segments, tickets and carriers for one trip workspace. See references/data-model.md.",
   "type": "object",
   "additionalProperties": false,
   "required": ["trip", "segments"],

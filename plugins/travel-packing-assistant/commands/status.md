@@ -14,8 +14,8 @@ Read whichever of `itinerary.yaml`, `allowances.yaml`, `bags.yaml`, `inventory.y
 `plan.yaml` exist in the current workspace, then run:
 
 ```bash
-python3 $TPA/scripts/validate.py . --json
-python3 $TPA/scripts/reconcile.py . --json
+uv run $TPA/scripts/validate.py . --json
+uv run $TPA/scripts/reconcile.py . --json
 ```
 
 Report, in this order:

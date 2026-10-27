@@ -6,7 +6,7 @@
 # Two segments sold on one ticket: a transatlantic leg followed by a short-haul
 # connection. That combination is the interesting case, because bags are
 # through-checked and the tightest per-segment allowance governs the whole
-# journey (see docs/design-notes.md).
+# journey (see references/design-notes.md).
 
 trip:
   id: sample-bos-tlv-0826
