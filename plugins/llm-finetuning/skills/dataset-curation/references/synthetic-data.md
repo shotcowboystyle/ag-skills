@@ -58,8 +58,8 @@ rather than replacing them:
 prompt or persona selection toward the current
 student model's actual failure modes rather than
 sampling uniformly — layers on top of any method
-above and is what delivers the 1.3–2x sample
-efficiency gain cited in `SKILL.md`. It requires an
+above and is where the sample-efficiency gain in
+`SKILL.md` comes from. It requires an
 eval signal on the student to know what its failure
 modes currently are; without that signal, generation
 defaults to untargeted/static.
@@ -102,8 +102,8 @@ what's left:
    are dropped regardless of how they scored
    upstream.
 
-The **10–30% typical accept rate** from `SKILL.md`
-is the funnel's end-to-end yield across all six
+The **accept rate** you measure on a pilot batch
+(see `SKILL.md`) is the funnel's end-to-end yield across all six
 stages, not any single stage's pass rate — budget
 raw generation volume against the full-funnel yield,
 not against any one stage's rate.

@@ -395,7 +395,7 @@
     {
       "name": "design-ops",
       "description": "UX/UI design ops \u2014 briefs, tokens, components, screens and pages graded against live Awwwards and Mobbin references, plus Material 3/Compose, React Native, and web component design. Absorbs the former ui-design plugin.",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "public@shotcowboystyle.com",
@@ -472,7 +472,7 @@
       "name": "documentation-standards",
       "source": "./plugins/documentation-standards",
       "description": "HADS (Human-AI Document Standard) \u2014 semantic tagging convention for docs that work for both humans and AI models \u2014 plus the grounded-vault pattern for provenance-linked, drift-checked knowledge stores.",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": {
         "name": "Niksa Barlovic",
         "url": "https://github.com/catcam"
@@ -510,7 +510,7 @@
     {
       "name": "evidence-ops",
       "description": "Chain-of-custody evidence handling \u2014 hash, timestamp, inspect metadata, append to an immutable custody register, package as BagIt, verify, and sync to WORM or S3 Object Lock storage.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "public@shotcowboystyle.com",
@@ -750,7 +750,7 @@
     {
       "name": "llm-finetuning",
       "description": "Eval-gated LLM fine-tuning lifecycle (LoRA/QLoRA, DPO, GRPO/RLVR, vision SFT, quantized export). Use when fine-tuning an open-weights model end-to-end: building the eval harness first, selecting method and model, preparing data, training with Unsloth or TRL, gating checkpoints, and exporting GGUF/FP8.",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -776,7 +776,7 @@
     {
       "name": "matter-ops",
       "description": "Legal and OSINT matter workspaces \u2014 analyse documents, track sources and entities, build timelines, redact for disclosure, and render typeset briefs from workspace material.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "public@shotcowboystyle.com",
@@ -850,7 +850,7 @@
       "name": "operating-kit",
       "source": "./plugins/operating-kit",
       "description": "Portable operating method: session lifecycle agents, pre-ship code review, deploy with live verification and state doc update, and production log health check",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "Sharrmavishal",
         "url": "https://github.com/Sharrmavishal"
@@ -936,7 +936,7 @@
       "name": "reverse-engineering",
       "source": "./plugins/reverse-engineering",
       "description": "Binary reverse engineering, malware analysis, firmware security, and software protection research for authorized security research, CTF competitions, and defensive security",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "author": {
         "name": "D\u00e1vid Balatoni",
         "url": "https://github.com/balcsida"
@@ -1084,7 +1084,7 @@
       "name": "skill-forge-essentials",
       "source": "./plugins/skill-forge-essentials",
       "description": "Behavioral skills for AI-specific failure patterns: hidden code debt from agent generation and context compaction amnesia via behavioral self-enforcement",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "Adit Jain",
         "url": "https://github.com/Adit-Jain-srm"
@@ -1108,7 +1108,7 @@
     {
       "name": "startup-business-analyst",
       "description": "Comprehensive startup business analysis with market sizing (TAM/SAM/SOM), financial modeling, team planning, and strategic research for early-stage companies",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"

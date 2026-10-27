@@ -323,7 +323,7 @@
     {
       "name": "design-ops",
       "source": "./plugins/design-ops",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "description": "UX/UI design ops \u2014 briefs, tokens, components, screens and pages graded against live Awwwards and Mobbin references, plus Material 3/Compose, React Native, and web component design. Absorbs the former ui-design plugin.",
       "author": {
         "name": "Curtis Blanton",
@@ -378,7 +378,7 @@
     {
       "name": "documentation-standards",
       "source": "./plugins/documentation-standards",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "HADS (Human-AI Document Standard) \u2014 semantic tagging convention for writing documentation that works efficiently for both human readers and AI models \u2014 plus the grounded-vault pattern: a raw/wiki/archive knowledge store with per-claim provenance links and git fingerprints for zero-token drift detection.",
       "author": {
         "name": "Niksa Barlovic",
@@ -411,7 +411,7 @@
     {
       "name": "evidence-ops",
       "source": "./plugins/evidence-ops",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "Chain-of-custody evidence handling \u2014 hash, timestamp, inspect metadata, append to an immutable custody register, package as BagIt, verify, and sync to WORM or S3 Object Lock storage.",
       "author": {
         "name": "Curtis Blanton",
@@ -566,7 +566,7 @@
     {
       "name": "llm-finetuning",
       "source": "./plugins/llm-finetuning",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "description": "Eval-gated LLM fine-tuning lifecycle: LoRA/QLoRA SFT, preference optimization (DPO/ORPO/KTO), GRPO/RLVR, vision SFT, and quantized export \u2014 Unsloth-first with TRL fallback, no eval harness means no fine-tune",
       "author": {
         "name": "Curtis Blanton",
@@ -588,7 +588,7 @@
     {
       "name": "matter-ops",
       "source": "./plugins/matter-ops",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "Legal and OSINT matter workspaces \u2014 analyse documents, track sources and entities, build timelines, redact for disclosure, and render typeset briefs from workspace material.",
       "author": {
         "name": "Curtis Blanton",
@@ -632,7 +632,7 @@
     {
       "name": "operating-kit",
       "source": "./plugins/operating-kit",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Portable operating method: session lifecycle agents (session-start/end), pre-ship code review, deploy with live verification, and production log health check. All agents use {{placeholders}} that adapt to your project.",
       "author": {
         "name": "Sharrmavishal",
@@ -695,7 +695,7 @@
     {
       "name": "reverse-engineering",
       "source": "./plugins/reverse-engineering",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "description": "Binary reverse engineering, malware analysis, firmware security, and software protection research for authorized security research, CTF competitions, and defensive security",
       "author": {
         "name": "D\u00e1vid Balatoni",
@@ -794,7 +794,7 @@
     {
       "name": "skill-forge-essentials",
       "source": "./plugins/skill-forge-essentials",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "description": "Three behavioral skills addressing AI-specific failure patterns: hidden code debt from agent generation, context compaction amnesia, and imprecise Design Mode edits",
       "author": {
         "name": "Adit Jain",
@@ -817,7 +817,7 @@
     {
       "name": "startup-business-analyst",
       "source": "./plugins/startup-business-analyst",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "description": "Comprehensive startup business analysis with market sizing (TAM/SAM/SOM), financial modeling, team planning, and strategic research",
       "author": {
         "name": "Curtis Blanton",

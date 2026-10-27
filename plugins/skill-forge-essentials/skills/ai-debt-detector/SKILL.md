@@ -16,10 +16,10 @@ AI agents generate code that passes the happy path but hides debt: missing error
 
 ## When to Use
 
-- After any AI code generation session (20+ lines produced)
+- After an AI code generation session that produced more than a trivial edit
 - Before merging AI-generated PRs
 - When code works but something feels off
-- After vibe-coding sprints where debt accumulates fastest
+- After a fast prototyping sprint with little review
 - When the agent claims done without showing verification
 
 ## Process
@@ -38,7 +38,7 @@ After code generation, scan for these AI-specific debt patterns:
 
 3. **EDGE CASES** - What inputs break this?
    - Empty array/string? null/undefined? Multi-MB input? Unicode? Concurrent calls?
-   - Does the code assume the happy path? (AI almost always does)
+   - Does the code assume the happy path? (generated code often does)
 
 4. **HALLUCINATED DEPS** - Do all imports actually exist?
    - Is every package in package.json/requirements.txt?
@@ -68,4 +68,4 @@ After code generation, scan for these AI-specific debt patterns:
 
 ## Why This Exists
 
-AI agents systematically optimize for "looks correct" and "passes the happy path." They miss failure modes, orphan resources, and hallucinate dependencies at rates significantly higher than manual code. This skill forces an audit for those specific blind spots.
+AI agents systematically optimize for "looks correct" and "passes the happy path." They miss failure modes, orphan resources, and hallucinate dependencies. How often, relative to hand-written code, needs measurement in your codebase. This skill forces an audit for those specific blind spots.
