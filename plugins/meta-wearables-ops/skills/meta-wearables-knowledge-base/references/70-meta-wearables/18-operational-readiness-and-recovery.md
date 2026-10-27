@@ -112,7 +112,7 @@ report only redacted identifiers or hashes.
 ## Evidence tasks
 
 Use the [device and release evidence packet](12-device-and-release-evidence-packet.md)
-and the portable [operational-readiness skill](../../../meta-wearables-operational-readiness/SKILL.md).
+and the portable [operational-readiness skill](../../../meta-wearables-diagnostics/SKILL.md).
 
 | ID | Task | Evidence level |
 | --- | --- | --- |

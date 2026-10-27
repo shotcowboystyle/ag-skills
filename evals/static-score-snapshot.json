@@ -3419,58 +3419,13 @@
       "token_efficiency": 1.0
     }
   },
-  "meta-wearables-ops/meta-dat-android-api-atlas": {
+  "meta-wearables-ops/meta-wearables-dat-integration": {
     "badge": "bronze",
-    "composite": 68.40909090909089,
-    "digest": "cfee294286fcdde7a13e19f0fd7d2f1fa20afb8a18eaa0acd86e18bb04b830a0",
-    "static_score": 0.6849999999999999,
+    "composite": 60.23863636363636,
+    "digest": "c7b8f705d10ab2e146d45c1ea9670289e255bf336f2671836f06f1d4c11b8e36",
+    "static_score": 0.6013499999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.30000000000000004,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-dat-android-integration": {
-    "badge": "bronze",
-    "composite": 64.77272727272727,
-    "digest": "93776fa306844197772032904a47cf91db2b345da95c414a3068d563f1576f78",
-    "static_score": 0.6512,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.5599999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.25,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-dat-api-atlas": {
-    "badge": "bronze",
-    "composite": 68.02575757575758,
-    "digest": "174b42259843860cac6d15b97f1f964aa20e4b03d7258e0d7e126f4feee103ec",
-    "static_score": 0.669465,
-    "sub_scores": {
-      "ecosystem_coherence": 0.83,
-      "frontmatter_quality": 0.6199999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.2,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-dat-camera-audio": {
-    "badge": "no_badge",
-    "composite": 57.50454545454544,
-    "digest": "6e416e1af950f87a913f4565c969c8858fce1ba5adfb045e1ccf93606b873a38",
-    "static_score": 0.57834,
-    "sub_scores": {
-      "ecosystem_coherence": 0.91,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7,
@@ -3479,303 +3434,138 @@
       "token_efficiency": 1.0
     }
   },
-  "meta-wearables-ops/meta-dat-display": {
-    "badge": "no_badge",
-    "composite": 56.44772727272727,
-    "digest": "32854df548471ec9baad2df109a9aac973c02d98cffe3c227a3c28209df82dff",
-    "static_score": 0.561765,
-    "sub_scores": {
-      "ecosystem_coherence": 0.99,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.2,
-      "structural_completeness": 0.2,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-dat-ios-integration": {
-    "badge": "no_badge",
-    "composite": 56.89848484848485,
-    "digest": "2d11517b583d1bbce464fb39bfe791bb2255e7278b9f3039c013fdd7742009ab",
-    "static_score": 0.5655899999999999,
-    "sub_scores": {
-      "ecosystem_coherence": 0.99,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7999999999999999,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.15,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-agentic-team": {
+  "meta-wearables-ops/meta-wearables-device-capabilities": {
     "badge": "bronze",
-    "composite": 68.60151515151514,
-    "digest": "0deb1c66ff7cd2ffe3bfee96c1da13d339e9ffacac8335c90789a29e7c76e5ea",
-    "static_score": 0.6820999999999999,
-    "sub_scores": {
-      "ecosystem_coherence": 0.83,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.75,
-      "structural_completeness": 0.25,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-app-architecture": {
-    "badge": "silver",
-    "composite": 72.72727272727273,
-    "digest": "96b9dc6754ef69b03ac6dfe2756a88a2cc712f0f1ff7401f58c3dab86e08ff67",
-    "static_score": 0.7145,
+    "composite": 64.99999999999999,
+    "digest": "c1f12f8b76e6d8fac86bb0be3ec67fc382ec65f1264e1561b8b996f37081a9a0",
+    "static_score": 0.6487,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.25,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-debugging-observability": {
-    "badge": "no_badge",
-    "composite": 56.24242424242424,
-    "digest": "e9b0411f70ddb2e9fc88ec9833c678c25d7fa6ce2571a367cdd60196e191e260",
-    "static_score": 0.5645600000000001,
-    "sub_scores": {
-      "ecosystem_coherence": 1.0,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
+      "progressive_disclosure": 0.35,
       "structural_completeness": 0.30000000000000004,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-developer-operations": {
-    "badge": "silver",
-    "composite": 75.22727272727272,
-    "digest": "46cefd3b0c58fa2572d33a65e297d36bedf660be9d4dc65e6649dbd089b11821",
-    "static_score": 0.7387,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.71,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.30000000000000004,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-device-compatibility": {
-    "badge": "silver",
-    "composite": 72.5,
-    "digest": "5e916b6fdba55721a6900b24f3be0b790dccd93bf32437c155452e05651b3d4a",
-    "static_score": 0.7095,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.2,
       "token_efficiency": 1.0
     }
   },
   "meta-wearables-ops/meta-wearables-device-proof": {
     "badge": "no_badge",
-    "composite": 55.86818181818181,
-    "digest": "55d9beba7c889d691f6c0e2bdede58190872f19951c22a0fd58b2a83fe8afa44",
-    "static_score": 0.57001,
+    "composite": 56.195454545454545,
+    "digest": "ce7efc4bfc92ae54624d16c9941561c36e9af26f6d24d68629dbd04a098cac30",
+    "static_score": 0.57411,
     "sub_scores": {
-      "ecosystem_coherence": 0.99,
+      "ecosystem_coherence": 0.91,
       "frontmatter_quality": 0.5599999999999999,
       "harness_portability": 1.0,
-      "orchestration_wiring": 0.7,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35,
+      "token_efficiency": 0.9733333333333334
+    }
+  },
+  "meta-wearables-ops/meta-wearables-diagnostics": {
+    "badge": "bronze",
+    "composite": 66.06818181818181,
+    "digest": "512b6dd2f5ef676913354c08af44d7e3975e09c150536a05d49799f84102c322",
+    "static_score": 0.656165,
+    "sub_scores": {
+      "ecosystem_coherence": 0.75,
+      "frontmatter_quality": 0.5599999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.65,
       "structural_completeness": 0.30000000000000004,
       "token_efficiency": 1.0
     }
   },
-  "meta-wearables-ops/meta-wearables-full-sdk-audit": {
-    "badge": "bronze",
-    "composite": 69.0909090909091,
-    "digest": "cc290301a641bd442c7ca1f886c228524ebcc43ad33908ccc13e9f2323b0fcfe",
-    "static_score": 0.6807,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.5599999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.2,
-      "token_efficiency": 1.0
-    }
-  },
   "meta-wearables-ops/meta-wearables-implementation-recipes": {
-    "badge": "silver",
-    "composite": 72.72727272727273,
-    "digest": "5553c6276530c2e92138f76c417248abcca7568ec57aae9e0c256a674af3ab04",
-    "static_score": 0.7145,
+    "badge": "bronze",
+    "composite": 68.4090909090909,
+    "digest": "825606cbabb999ca74c1474da3271d838432a43bf8a1976ff7d43a9481bee46e",
+    "static_score": 0.6775,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.25,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-input-sensors": {
-    "badge": "bronze",
-    "composite": 66.70909090909092,
-    "digest": "a9ad39e930f6af6f64108b207fe86bc06aa27b4c5046c6c13973d07c775831bd",
-    "static_score": 0.66969,
-    "sub_scores": {
-      "ecosystem_coherence": 0.91,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.45,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.30000000000000004,
       "token_efficiency": 1.0
     }
   },
   "meta-wearables-ops/meta-wearables-knowledge-base": {
     "badge": "no_badge",
-    "composite": 58.33333333333333,
-    "digest": "7e258c85c2e8dba584939d892798ab4775a84eb61a2c2f68a7f09a9bbc391dc0",
-    "static_score": 0.5674,
+    "composite": 51.93939393939394,
+    "digest": "f619198ca6574eed64e30c827ed51a363b12c3fb38eff1d6dad98fa1b3d5c482",
+    "static_score": 0.50976,
     "sub_scores": {
       "ecosystem_coherence": 0.5,
-      "frontmatter_quality": 0.6199999999999999,
+      "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.2,
-      "structural_completeness": 0.0,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-on-device-compliance": {
-    "badge": "silver",
-    "composite": 72.95454545454545,
-    "digest": "c289dde71cebc93ae90d4454bfab00dc8284e946a52c35004bcdde51fef9075f",
-    "static_score": 0.7195,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.30000000000000004,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-operational-readiness": {
-    "badge": "bronze",
-    "composite": 64.77272727272727,
-    "digest": "490aa7f5c03f7061a80289dd258ab3541d7b9c404ee51866a90a81ff71a29df0",
-    "static_score": 0.6437,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.5599999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.25,
-      "token_efficiency": 1.0
-    }
-  },
-  "meta-wearables-ops/meta-wearables-privacy-publishing": {
-    "badge": "bronze",
-    "composite": 67.95454545454544,
-    "digest": "9cf7113a87478ff4bcb1d7db598c477f6a7f41e05ce60fb30ecae016ec0ca1b7",
-    "static_score": 0.6675,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.35,
       "structural_completeness": 0.2,
       "token_efficiency": 1.0
     }
   },
   "meta-wearables-ops/meta-wearables-route-planner": {
-    "badge": "bronze",
-    "composite": 60.22727272727272,
-    "digest": "4382332d92993fbd342b4e6844b48c2b0486570091a278c1b5e2bdbe2d5c4e92",
-    "static_score": 0.6092,
+    "badge": "silver",
+    "composite": 70.68181818181817,
+    "digest": "bc6aebecd7f0d18c413e430f717459b586c63cd808e65cc771eca62ac199b755",
+    "static_score": 0.7042,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.5599999999999999,
+      "frontmatter_quality": 0.71,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.7,
-      "progressive_disclosure": 0.35,
-      "structural_completeness": 0.25,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
       "token_efficiency": 1.0
     }
   },
-  "meta-wearables-ops/meta-wearables-security-attestation": {
-    "badge": "no_badge",
-    "composite": 44.21282360024082,
-    "digest": "fd400167af5e7d10f52cb9d1d8f6f1e00b7b69c6f9ae089197ee2c7edbbf96ba",
-    "static_score": 0.44055695364238406,
+  "meta-wearables-ops/meta-wearables-sdk-audit": {
+    "badge": "bronze",
+    "composite": 61.22727272727273,
+    "digest": "5942b7827aecf32addbe27c6579f3d7b9562805fc94df7540d0d4a4fef459974",
+    "static_score": 0.60471,
     "sub_scores": {
-      "ecosystem_coherence": 1.0,
+      "ecosystem_coherence": 0.5,
+      "frontmatter_quality": 0.6199999999999999,
+      "harness_portability": 1.0,
+      "orchestration_wiring": 0.75,
+      "progressive_disclosure": 0.65,
+      "structural_completeness": 0.30000000000000004,
+      "token_efficiency": 1.0
+    }
+  },
+  "meta-wearables-ops/meta-wearables-trust-and-release": {
+    "badge": "bronze",
+    "composite": 65.26363636363637,
+    "digest": "3c8a01331b5b6365c78e91d61b4b946dc5890bc486fe2fb90cbb3e1e6feea824",
+    "static_score": 0.63837,
+    "sub_scores": {
+      "ecosystem_coherence": 0.83,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
       "progressive_disclosure": 0.65,
-      "structural_completeness": 0.30000000000000004,
-      "token_efficiency": 0.9973509933774835
-    }
-  },
-  "meta-wearables-ops/meta-wearables-source-refresh": {
-    "badge": "bronze",
-    "composite": 63.49166666666666,
-    "digest": "e079f41f53457efe5e8217ec74bb1370ea7312c4d8fe06534a21cf3efdea97b6",
-    "static_score": 0.6248149999999999,
-    "sub_scores": {
-      "ecosystem_coherence": 0.83,
-      "frontmatter_quality": 0.6199999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.35,
       "structural_completeness": 0.15,
       "token_efficiency": 1.0
     }
   },
-  "meta-wearables-ops/meta-wearables-transport-reliability": {
-    "badge": "silver",
-    "composite": 75.53030303030303,
-    "digest": "148e97eb297713cdabfc3e34632b51b1b4ec6150b8749a5b710fa0e500233adc",
-    "static_score": 0.7324999999999999,
-    "sub_scores": {
-      "ecosystem_coherence": 0.75,
-      "frontmatter_quality": 0.6499999999999999,
-      "harness_portability": 1.0,
-      "orchestration_wiring": 0.95,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.2,
-      "token_efficiency": 1.0
-    }
-  },
   "meta-wearables-ops/meta-wearables-web-apps": {
-    "badge": "silver",
-    "composite": 72.72727272727273,
-    "digest": "c9943cb3d65118c12f8f777ca5c23dd81505289badc2b6e39b5c390f280033cd",
-    "static_score": 0.7145,
+    "badge": "bronze",
+    "composite": 65.20454545454544,
+    "digest": "83d696020b2422b8fab3e4f0e599bb895697f55b4c0143f3a5f31b9c11adbf16",
+    "static_score": 0.6483749999999999,
     "sub_scores": {
       "ecosystem_coherence": 0.75,
       "frontmatter_quality": 0.6499999999999999,
       "harness_portability": 1.0,
       "orchestration_wiring": 0.85,
-      "progressive_disclosure": 0.65,
-      "structural_completeness": 0.25,
+      "progressive_disclosure": 0.35,
+      "structural_completeness": 0.35000000000000003,
       "token_efficiency": 1.0
     }
   },

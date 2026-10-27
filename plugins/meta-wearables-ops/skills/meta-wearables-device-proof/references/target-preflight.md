@@ -73,7 +73,7 @@ For a machine-readable redacted receipt that keeps the same boundary, run the
 portable helper from the device-proof package against the actual target:
 
 ```bash
-python3 scripts/run_ios_target_preflight.py <target-root> \
+uv run $SKILL/scripts/run_ios_target_preflight.py <target-root> \
   --project <App>.xcodeproj \
   --scheme <Scheme> \
   --configuration Debug \
@@ -143,10 +143,10 @@ For a redacted static receipt before dependency work, run the portable helper
 from the device-proof package against the actual Gradle root:
 
 ```bash
-python3 scripts/run_android_target_preflight.py <target-root> \\
-  --module app \\
-  --variant debug \\
-  --route native-dat-android \\
+uv run $SKILL/scripts/run_android_target_preflight.py <target-root> \
+  --module app \
+  --variant debug \
+  --route native-dat-android \
   --json
 ```
 

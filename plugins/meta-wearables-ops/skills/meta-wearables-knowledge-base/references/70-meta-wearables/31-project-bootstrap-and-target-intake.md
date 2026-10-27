@@ -2,14 +2,13 @@
 
 The Meta Wearables lane is a knowledge base and portable skill team; it is not
 an app target. When a request arrives before an Xcode project, Gradle module,
-or hosted Web App exists, use the portable [project bootstrap packet](../../../meta-wearables-agentic-team/references/project-bootstrap-packet.md)
+or hosted Web App exists, use the portable [project bootstrap packet](../../../meta-wearables-route-planner/references/project-bootstrap-packet.md)
 to create a clean implementation handoff in a new sibling project folder.
 
-Start by running the bundled [team preflight runner](../../../meta-wearables-agentic-team/scripts/run_team_preflight.py)
-against the knowledge-base root and, when the app is a sibling, pass that app
-root with `--target-root`. Its decision receipt combines structural,
-manifest, capability-plan, and optional live-source checks; neither a green
-receipt nor a structural target signal is a build or hardware claim.
+Start with the [route planner](../../../meta-wearables-route-planner/SKILL.md),
+then run the device-proof [target-surface inspector](../../../meta-wearables-device-proof/scripts/inspect_target_surfaces.py)
+against the app root. Neither a structural target signal nor a green receipt
+is a build or hardware claim.
 
 ## Why this route exists
 
@@ -33,8 +32,8 @@ the selected route rather than invent a third SDK. “Gen 3” remains
    mode, channel, privacy, and processing-location tuple.
 4. Select one vertical slice: native Display, camera-to-phone, Web App Display,
    or phone fallback. Do not start with an undifferentiated “full SDK” build.
-5. Route the slice through the 23-role [agent team](../../../meta-wearables-agentic-team/SKILL.md),
-   carrying manifest API rows, capability/evidence-plan IDs, owner roles, and
+5. Route the slice through the [route planner](../../../meta-wearables-route-planner/SKILL.md),
+   carrying manifest API rows, capability/evidence-plan IDs, owner skills, and
    open gates.
 6. Promote evidence only in order: static, mock/simulator, build, connected,
    named physical device, signed artifact, and release channel.
@@ -76,8 +75,7 @@ Android artifacts, native Display, and Web Apps have identical capabilities.
 
 ## Sources and handoff
 
-- [Portable project bootstrap packet](../../../meta-wearables-agentic-team/references/project-bootstrap-packet.md)
-- [Agent team roster and handoff contract](30-agent-team-roster-and-handoff-contract.md)
+- [Portable project bootstrap packet](../../../meta-wearables-route-planner/references/project-bootstrap-packet.md)
 - [Reference implementation playbooks](28-reference-implementation-playbooks.md)
 - [Implementation recipes and build handoffs](29-implementation-recipes-and-build-handoffs.md)
 - [Device and release evidence packet](12-device-and-release-evidence-packet.md)

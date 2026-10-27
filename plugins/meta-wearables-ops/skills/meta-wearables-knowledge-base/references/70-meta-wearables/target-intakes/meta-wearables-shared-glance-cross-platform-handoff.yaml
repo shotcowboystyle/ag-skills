@@ -79,20 +79,15 @@ evidence_tasks:
   - ODC-RELEASE-01
 
 owner_roles:
-  - meta-wearables-agentic-team
-  - meta-wearables-full-sdk-audit
-  - meta-wearables-app-architecture
+  - meta-wearables-sdk-audit
+  - meta-wearables-route-planner
   - meta-wearables-implementation-recipes
-  - meta-dat-ios-integration
-  - meta-dat-android-integration
-  - meta-dat-display
+  - meta-wearables-dat-integration
+  - meta-wearables-device-capabilities
   - meta-wearables-web-apps
-  - meta-wearables-input-sensors
   - meta-wearables-device-proof
-  - meta-wearables-on-device-compliance
-  - meta-wearables-privacy-publishing
-  - meta-wearables-device-compatibility
-  - meta-wearables-operational-readiness
+  - meta-wearables-trust-and-release
+  - meta-wearables-diagnostics
 
 data_contract:
   processing_location: mixed

@@ -34,16 +34,16 @@ The official iOS plugin publishes ten role skills under
 
 | Upstream role | Local handoff | Use |
 | --- | --- | --- |
-| `getting-started` | `meta-dat-ios-integration` | Swift Package Manager, modules, target configuration, initialization, callback, and first route. |
-| `permissions-registration` | `meta-dat-ios-integration` + privacy | Meta AI registration, permissions, Developer Mode, and release-channel conditions. |
-| `camera-streaming` | `meta-dat-camera-audio` | Camera, stream, frame/photo publishers, configuration, and backpressure. |
-| `display-access` | `meta-dat-display` | Native Display capability, content DSL, input, video, and link gates. |
-| `session-lifecycle` | `meta-dat-ios-integration` + device proof | Session/stream state, pause, availability, and teardown. |
+| `getting-started` | `meta-wearables-dat-integration` | Swift Package Manager, modules, target configuration, initialization, callback, and first route. |
+| `permissions-registration` | `meta-wearables-dat-integration` + privacy | Meta AI registration, permissions, Developer Mode, and release-channel conditions. |
+| `camera-streaming` | `meta-wearables-device-capabilities` | Camera, stream, frame/photo publishers, configuration, and backpressure. |
+| `display-access` | `meta-wearables-device-capabilities` | Native Display capability, content DSL, input, video, and link gates. |
+| `session-lifecycle` | `meta-wearables-dat-integration` + device proof | Session/stream state, pause, availability, and teardown. |
 | `mockdevice-testing` | `meta-wearables-device-proof` | Deterministic device, permission, media, and UI-test control. |
-| `debugging` | `meta-dat-api-atlas` + device proof | Developer Mode, compatibility, logs, and typed diagnosis. |
-| `live-debugging-mcp` | `meta-dat-api-atlas` + device proof | Read-only DAT Inspector/debug-server diagnosis and redacted bundles. |
-| `dat-conventions` | `meta-dat-api-atlas` | Naming, async patterns, source search, build/test conventions, and MCP use. |
-| `sample-app-guide` | `meta-dat-api-atlas` + Apple roles | CameraAccess/DisplayAccess target shape and sample configuration review. |
+| `debugging` | `meta-wearables-sdk-audit` + device proof | Developer Mode, compatibility, logs, and typed diagnosis. |
+| `live-debugging-mcp` | `meta-wearables-sdk-audit` + device proof | Read-only DAT Inspector/debug-server diagnosis and redacted bundles. |
+| `dat-conventions` | `meta-wearables-sdk-audit` | Naming, async patterns, source search, build/test conventions, and MCP use. |
+| `sample-app-guide` | `meta-wearables-sdk-audit` + Apple roles | CameraAccess/DisplayAccess target shape and sample configuration review. |
 
 The local roles synthesize these routes with Apple privacy, concurrency,
 accessibility, and release evidence. The upstream plugin remains the exact
@@ -58,7 +58,7 @@ not only the role count.
 The Android plugin mirrors the same ten conceptual roles under
 `plugins/mwdat-android/skills/`, but Kotlin, Gradle, Manifest, `Flow`/
 `StateFlow`, and `DatResult` are distinct contracts. The local
-`meta-dat-android-integration` role owns this route. It must not infer Swift
+`meta-wearables-dat-integration` role owns this route. It must not infer Swift
 signatures, iOS Info.plist keys, or iOS evidence from Android parity.
 
 The public 0.9.0 Android artifacts are:
@@ -74,7 +74,7 @@ The repository uses GitHub Packages and documents a `read:packages` token
 through `GITHUB_TOKEN` or local Gradle properties. Never print, commit, or
 embed that token in a knowledge-base page, fixture, archive, or build log.
 
-The local [`meta-dat-android-api-atlas`](../../../meta-dat-android-api-atlas/SKILL.md)
+The local [`meta-wearables-dat-integration`](../../../meta-wearables-dat-integration/SKILL.md)
 role is the Android counterpart to the iOS API atlas. It owns exact Maven
 artifact/symbol mapping, the 0.9 camera/Display/`DatResult`/DAM/R8 migration
 ledger, Android `Session`/`DeviceSession` source conflict, Java interop, and
@@ -113,14 +113,14 @@ the upstream plugin directory on every source-tree refresh.
 ## Local cross-cutting compliance role
 
 The upstream repositories do not publish one single “on-device compliance”
-role. The local [`meta-wearables-on-device-compliance`](../../../meta-wearables-on-device-compliance/SKILL.md)
+role. The local [`meta-wearables-trust-and-release`](../../../meta-wearables-trust-and-release/SKILL.md)
 package composes the upstream DAT/Web Apps facts with the workspace privacy,
 thermal, lifecycle, storage, network, fallback, and evidence contract. It
 classifies processing as `glasses-native`, `phone-local`, `remote`, `mixed`, or
 `unknown`; it does not add a new Meta SDK or imply that a phone companion is
 glasses-native.
 
-The local [`meta-wearables-operational-readiness`](../../../meta-wearables-operational-readiness/SKILL.md)
+The local [`meta-wearables-diagnostics`](../../../meta-wearables-diagnostics/SKILL.md)
 package owns the cross-surface reliability layer that upstream roles leave
 distributed: the companion/firmware/on-glasses-DAT-app tuple, Developer Mode
 versus release-channel behavior, version-dependency conflicts, update-required
@@ -128,7 +128,7 @@ and device-unavailable diagnosis, thermal/power stop behavior, bounded recovery,
 and redacted operational evidence. It does not convert a repository issue or a
 successful recovery attempt into an official support guarantee.
 
-The local [`meta-wearables-app-architecture`](../../../meta-wearables-app-architecture/SKILL.md)
+The local [`meta-wearables-route-planner`](../../../meta-wearables-route-planner/SKILL.md)
 package owns the implementation boundary that upstream role skills assume but
 do not define as one contract: shared product state and policy, iOS/Android
 adapters, native Display/Web App presenters, phone fallback, session epochs,
@@ -136,7 +136,7 @@ resource ownership, bounded media queues, stale-event rejection, and layered
 reducer/fake/mock/browser/physical test seams. It does not add a cross-platform
 SDK or erase platform-specific API and lifecycle differences.
 
-The local [`meta-wearables-developer-operations`](../../../meta-wearables-developer-operations/SKILL.md)
+The local [`meta-wearables-trust-and-release`](../../../meta-wearables-trust-and-release/SKILL.md)
 package owns the administrative layer surfaced by the full reference: MMA and
 Wearables team boundaries, projects, platform app identities, product listings,
 permission justifications, integration versions, DAT build readiness, invite-only
@@ -144,7 +144,7 @@ channels, tester Meta Accounts, Meta AI channel state, telemetry, and bounded
 account recovery. It does not mutate an external account without explicit live
 authorization or convert channel access into physical-device proof.
 
-The local [`meta-wearables-security-attestation`](../../../meta-wearables-security-attestation/SKILL.md)
+The local [`meta-wearables-trust-and-release`](../../../meta-wearables-trust-and-release/SKILL.md)
 package owns the security boundary that crosses those administrative and mobile
 integration roles: iOS/Android identity tuples, Meta AI callback ownership and
 stale/duplicate handling, Developer Mode versus release attestation, GitHub
@@ -153,7 +153,7 @@ privacy-manifest/App Store gates, processing-location handoff, and `SEC-*`
 evidence. It does not claim account access, credential validity, physical
 capability, local processing, or store approval from source/configuration alone.
 
-The local [`meta-wearables-transport-reliability`](../../../meta-wearables-transport-reliability/SKILL.md)
+The local [`meta-wearables-device-capabilities`](../../../meta-wearables-device-capabilities/SKILL.md)
 package owns the transport layer that cuts across the upstream camera, audio,
 session, Display, and debugging roles: Bluetooth control, iOS Wi-Fi/local-network
 and Bonjour configuration, Android Bluetooth/Internet/artifact parity, HFP/A2DP
@@ -161,7 +161,7 @@ route state, bounded queues, route changes, thermal/power, disconnect, and
 recovery. It keeps iOS's explicit Wi-Fi signal separate from Android's unresolved
 DAT Wi-Fi parity and never turns a declared permission into physical proof.
 
-The local [`meta-wearables-debugging-observability`](../../../meta-wearables-debugging-observability/SKILL.md)
+The local [`meta-wearables-diagnostics`](../../../meta-wearables-diagnostics/SKILL.md)
 package makes the upstream `debugging` and `live-debugging-mcp` roles
 first-class. It owns the read-only debug-server connection/readiness baseline,
 companion-boundary and device-path diagnosis, narrow event/error evidence,
@@ -169,7 +169,7 @@ platform-specific failure mapping, and redacted diagnostic handoff. It does
 not mutate external state or turn app-visible debug events into physical or
 release proof.
 
-The local [`meta-wearables-input-sensors`](../../../meta-wearables-input-sensors/SKILL.md)
+The local [`meta-wearables-device-capabilities`](../../../meta-wearables-device-capabilities/SKILL.md)
 package owns the cross-surface input/sensor contract that upstream roles leave
 distributed: native Display callbacks, Web App D-pad/EMG/temple guidance,
 browser motion/orientation/geolocation, phone sensor fallbacks, permission and

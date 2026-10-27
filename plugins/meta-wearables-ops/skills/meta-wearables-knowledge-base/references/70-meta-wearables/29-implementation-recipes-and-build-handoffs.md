@@ -4,7 +4,7 @@ This route turns a selected Meta Wearables API row and vertical-slice playbook
 into a source-aligned implementation skeleton for iOS DAT, Android DAT, native
 Display, Ray-Ban Display Web Apps, or a shared outcome with a phone fallback.
 
-The detailed portable reference is the [implementation-recipes skill](../../../meta-wearables-implementation-recipes/SKILL.md), its [recipe reference](../../../meta-wearables-implementation-recipes/references/implementation-recipes.md), and the [implementation-handoff template](../../../meta-wearables-implementation-recipes/references/implementation-handoff-template.yaml). Load the [source-pinned API register](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml) and one [vertical-slice playbook](28-reference-implementation-playbooks.md) first.
+The detailed portable reference is the [implementation-recipes skill](../../../meta-wearables-implementation-recipes/SKILL.md), its [recipe reference](../../../meta-wearables-implementation-recipes/references/implementation-recipes.md), and the [implementation-handoff template](../../../meta-wearables-implementation-recipes/references/implementation-handoff-template.yaml). Load the [source-pinned API register](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml) and one [vertical-slice playbook](28-reference-implementation-playbooks.md) first.
 
 The current cross-platform first-slice packet is the [shared-glance handoff](target-intakes/meta-wearables-shared-glance-cross-platform-handoff.yaml).
 It is deliberately a draft: it proves that the iOS, Android, Web App, shared
@@ -43,12 +43,12 @@ Every generated recipe must state:
 Validate the packet before writing target code:
 
 ```sh
-python3 ../skills/packages/meta-wearables-implementation-recipes/scripts/validate_implementation_handoff.py \
-  <packet> \
-  --manifest ../skills/packages/meta-wearables-full-sdk-audit/references/surface-manifest.yaml \
-  --plan ../skills/packages/meta-wearables-full-sdk-audit/references/capability-evidence-plan.yaml \
-  --team-manifest ../skills/packages/meta-wearables-agentic-team/references/team-manifest.yaml
+# run from the meta-wearables-ops skills folder
+uv run meta-wearables-implementation-recipes/scripts/validate_implementation_handoff.py <packet>
 ```
+
+The surface manifest and capability plan default to the sdk-audit copies, and
+`owner_roles` must name skills in this plugin.
 
 The bundled template is allowed to contain placeholders; a real
 `ready-for-implementation` packet is not.
@@ -65,7 +65,8 @@ Run its deterministic Swift Testing suite before adapting it into a sibling
 project:
 
 ```sh
-swift test --package-path ../skills/packages/meta-wearables-implementation-recipes/assets/meta-wearables-domain-starter
+# run from the meta-wearables-ops skills folder
+swift test --package-path meta-wearables-implementation-recipes/assets/meta-wearables-domain-starter
 ```
 
 Passing this package proves only the shared reducer contract. The selected DAT
@@ -98,14 +99,16 @@ host global.
 Run its deterministic Node suite from the knowledge-base directory:
 
 ```sh
-node --test ../skills/packages/meta-wearables-implementation-recipes/assets/meta-wearables-web-starter/test/display-state.test.mjs
+# run from the meta-wearables-ops skills folder
+node --test meta-wearables-implementation-recipes/assets/meta-wearables-web-starter/test/display-state.test.mjs
 ```
 
 Run the strict local Web App preflight as well:
 
 ```sh
-python3 ../skills/packages/meta-wearables-web-apps/scripts/run_webapp_preflight.py \
-  ../skills/packages/meta-wearables-implementation-recipes/assets/meta-wearables-web-starter \
+# run from the meta-wearables-ops skills folder
+uv run meta-wearables-web-apps/scripts/run_webapp_preflight.py \
+  meta-wearables-implementation-recipes/assets/meta-wearables-web-starter \
   --require-meta-markers --node-check
 ```
 
@@ -149,7 +152,7 @@ until a Maven-backed target exists.
 
 - [Portable implementation recipes skill](../../../meta-wearables-implementation-recipes/SKILL.md)
 - [Implementation recipe reference](../../../meta-wearables-implementation-recipes/references/implementation-recipes.md)
-- [Source-pinned API register](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
+- [Source-pinned API register](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
 - [Vertical-slice playbooks](28-reference-implementation-playbooks.md)
 - [Application architecture and platform boundaries](19-application-architecture-and-platform-boundaries.md)
 - [DAT iOS changelog](https://github.com/facebook/meta-wearables-dat-ios/blob/main/CHANGELOG.md)

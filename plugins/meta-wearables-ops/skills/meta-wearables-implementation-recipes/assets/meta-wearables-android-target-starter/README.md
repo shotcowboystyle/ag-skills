@@ -63,7 +63,7 @@ registration, transport, firmware, companion readiness, Display rendering,
 camera/audio behavior, Gen 2/Gen 3 compatibility, or release behavior.
 
 Use the reusable [Android Display starter](../meta-wearables-android-display-starter/README.md)
-for the first native Display slice and the [project bootstrap packet](../../../meta-wearables-agentic-team/references/project-bootstrap-packet.md)
+for the first native Display slice and the [project bootstrap packet](../../../meta-wearables-route-planner/references/project-bootstrap-packet.md)
 for the completed sibling-project intake.
 
 ## Official anchors

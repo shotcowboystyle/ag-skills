@@ -64,19 +64,14 @@ evidence_tasks:
   - REL-01
 
 owner_roles:
-  - meta-wearables-agentic-team
-  - meta-wearables-full-sdk-audit
-  - meta-dat-ios-integration
-  - meta-dat-api-atlas
-  - meta-dat-camera-audio
-  - meta-dat-display
-  - meta-wearables-app-architecture
+  - meta-wearables-sdk-audit
+  - meta-wearables-dat-integration
+  - meta-wearables-device-capabilities
+  - meta-wearables-route-planner
   - meta-wearables-device-proof
-  - meta-wearables-on-device-compliance
-  - meta-wearables-privacy-publishing
-  - meta-wearables-security-attestation
-  - meta-wearables-operational-readiness
-  - meta-wearables-source-refresh
+  - meta-wearables-trust-and-release
+  - meta-wearables-diagnostics
+  - meta-wearables-knowledge-base
 
 data_contract:
   processing_location: phone-local

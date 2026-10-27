@@ -1,50 +1,117 @@
 ---
 name: meta-wearables-route-planner
-description: Choose the correct Meta Wearables route across native iOS DAT, native Display, Ray-Ban Display Web Apps, phone fallback, and unsupported or unverified device requests. Use before implementation whenever a product mentions Ray-Ban Meta, Oakley Meta, Meta Glasses, Display, camera, audio, input, sensors, Gen 2, Gen 3, or the Meta Wearables SDK.
+description: Entry point for any Meta Wearables app or feature. Picks the route (DAT iOS, DAT Android, native Display, Ray-Ban Display Web App, phone fallback, or blocked), designs the architecture (shared domain, adapters, state owner, fallback, test seams), and runs new-project intake. Use when starting a wearable app or feature, when a request names Ray-Ban Meta, Oakley Meta, Meta Glasses, Display, Gen 2, Gen 3, or the Meta Wearables SDK, or when deciding how iOS, Android, Display, and Web App code share behavior.
 allowed-tools: Read, Grep, Glob
+last_verified: 2026-08-22
 ---
 
 # Meta Wearables route planner
 
 ## Overview
 
-Turn a wearable idea into a verified platform route before package imports, UI work, permissions, or marketing copy harden around an assumption.
+Turn a wearable idea into a verified route and an architecture before package
+imports, UI, permissions, or marketing copy harden around an assumption. This
+skill plans; the lane skills build. Hand off once the route is chosen:
+
+| Lane | Skill |
+| --- | --- |
+| "Full SDK", parity, API atlas, surface manifest | [meta-wearables-sdk-audit](../meta-wearables-sdk-audit/SKILL.md) |
+| DAT iOS/Android setup, registration, Android API atlas | [meta-wearables-dat-integration](../meta-wearables-dat-integration/SKILL.md) |
+| Camera, audio, native Display, input, sensors, transport | [meta-wearables-device-capabilities](../meta-wearables-device-capabilities/SKILL.md) |
+| Ray-Ban Display Web Apps | [meta-wearables-web-apps](../meta-wearables-web-apps/SKILL.md) |
+| Swift, Kotlin, Web App scaffolding | [meta-wearables-implementation-recipes](../meta-wearables-implementation-recipes/SKILL.md) |
+| Failures, readiness, compatibility | [meta-wearables-diagnostics](../meta-wearables-diagnostics/SKILL.md) |
+| On-device claims, privacy, attestation, Developer Center, release | [meta-wearables-trust-and-release](../meta-wearables-trust-and-release/SKILL.md) |
+| Connected, physical, signed proof | [meta-wearables-device-proof](../meta-wearables-device-proof/SKILL.md) |
+
+Apply the [shared rules](../meta-wearables-knowledge-base/references/shared-rules.md) — evidence ladder, device labels, secrets, claims.
 
 ## Read before acting
 
-- Inspect the actual project, target platforms, deployment target, existing device integrations, and whether the requested surface is a companion app or a glasses-delivered experience.
-- Read [platform and route selection](../meta-wearables-knowledge-base/references/70-meta-wearables/00-platform-and-route-selection.md), [device models and capability matrix](../meta-wearables-knowledge-base/references/70-meta-wearables/05-device-models-and-capability-matrix.md), and [the Meta source registry](../meta-wearables-knowledge-base/references/sources/meta-wearables-source-registry.md).
-- Read the [device-generation and runtime-support matrix](../meta-wearables-knowledge-base/references/70-meta-wearables/16-device-generation-and-runtime-support-matrix.md) when product wording includes Gen 2, Gen 3, Meta Glasses, Display, or an SDK alias.
-- Read the [version-dependency and device-compatibility route](../meta-wearables-knowledge-base/references/70-meta-wearables/26-version-dependency-and-device-compatibility-evidence.md) when wording includes firmware, companion/DAT-app version, support matrix, or compatibility failure.
-- Read the [full SDK capability and source-conflict matrix](../meta-wearables-knowledge-base/references/70-meta-wearables/15-full-sdk-capability-and-source-conflict-matrix.md) when the request says “full,” “regular SDK,” “all capabilities,” or parity.
-- Load the portable [surface manifest](../meta-wearables-full-sdk-audit/references/surface-manifest.yaml) and resolve its `terminology_contract` before selecting a route; preserve ambiguous or unresolved status instead of translating user labels into SDK symbols.
-- Read the [DAT Android API surface atlas](../meta-wearables-knowledge-base/references/70-meta-wearables/20-dat-android-api-surface-atlas.md) when Android/Kotlin/Java symbols, Maven coordinates, or 0.9 migration behavior is in scope.
-- Read [Developer Center project and release operations](../meta-wearables-knowledge-base/references/70-meta-wearables/21-developer-center-project-and-release-operations.md) when account/team/project identity, tester access, versions, release channels, or telemetry is part of the route.
-- Read [transport, audio, and runtime reliability](../meta-wearables-knowledge-base/references/70-meta-wearables/22-transport-audio-and-runtime-reliability.md) when the capability or failure involves Bluetooth, Wi-Fi/local network, HFP/A2DP, latency, backpressure, thermal/power, or link recovery.
-- Read the [on-device compliance and runtime contract](../meta-wearables-knowledge-base/references/70-meta-wearables/17-on-device-compliance-and-runtime-contract.md) when the request says “on-device,” “local-first,” private, offline, low-latency, or asks where processing occurs.
-- Read the [operational readiness and recovery route](../meta-wearables-knowledge-base/references/70-meta-wearables/18-operational-readiness-and-recovery.md) when the request includes firmware, companion versions, Developer Mode, release channels, update-required/device-unavailable errors, or recovery.
-- Read the [application architecture and platform-boundaries route](../meta-wearables-knowledge-base/references/70-meta-wearables/19-application-architecture-and-platform-boundaries.md) when more than one surface, platform, capability, or phone fallback will share product behavior.
-- Read [input, sensors, and physical interaction](../meta-wearables-knowledge-base/references/70-meta-wearables/24-input-sensors-and-physical-interaction.md) when the outcome depends on Display actions, D-pad/captouch, Neural Band/EMG, temple gestures, motion/orientation, geolocation, browser sensors, or an “on-device” sensor claim.
-- Read the [security, attestation, and credential-boundaries route](../meta-wearables-knowledge-base/references/70-meta-wearables/25-security-attestation-and-credential-boundaries.md) when the outcome depends on bundle/package identity, Meta AI callbacks, Developer Mode, release channels, app attestation, credentials, Web App origin, privacy-manifest/App Store gates, or an “on-device” trust claim.
-- Refresh the official [DAT iOS repository](https://github.com/facebook/meta-wearables-dat-ios), [DAT Android repository](https://github.com/facebook/meta-wearables-dat-android), [DAT iOS changelog](https://github.com/facebook/meta-wearables-dat-ios/blob/main/CHANGELOG.md), [DAT Android changelog](https://github.com/facebook/meta-wearables-dat-android/blob/main/CHANGELOG.md), [Wearables Developer Center](https://wearables.developer.meta.com/docs/develop/), and [Web Apps documentation](https://wearables.developer.meta.com/docs/develop/webapps).
-- If the request says “regular SDK,” resolve the phrase against the current official docs and repository. Do not invent a second native iOS SDK or silently substitute Web Apps for DAT.
-
-## Fast path
-
-Resolve one request through the route map: exact surface, capability, runtime, fallback, and evidence. If labels such as “regular SDK” or “Gen 3” remain ambiguous, return a blocked or `to-verify` route instead of branching into every lane.
+- Inspect the real workspace: Xcode project, Gradle build, hosted Web App,
+  min SDK, package graph, permissions, and existing device integrations. If
+  none exists, this is a bootstrap.
+- Read [platform and route selection](../meta-wearables-knowledge-base/references/70-meta-wearables/00-platform-and-route-selection.md),
+  the [device models and capability matrix](../meta-wearables-knowledge-base/references/70-meta-wearables/05-device-models-and-capability-matrix.md),
+  [application architecture and platform boundaries](../meta-wearables-knowledge-base/references/70-meta-wearables/19-application-architecture-and-platform-boundaries.md),
+  and the [Meta source registry](../meta-wearables-knowledge-base/references/sources/meta-wearables-source-registry.md).
+- Resolve user wording through the `terminology_contract` in the
+  [surface manifest](../meta-wearables-sdk-audit/references/surface-manifest.yaml)
+  before picking a route. Keep ambiguous terms ambiguous.
+- [Route details](references/route-details.md) maps request wording to the
+  knowledge-base page to read and lists assumptions to reject.
+- Refresh the official [DAT iOS](https://github.com/facebook/meta-wearables-dat-ios)
+  and [DAT Android](https://github.com/facebook/meta-wearables-dat-android)
+  repositories before relying on a version-sensitive symbol.
 
 ## Route map
 
-| User outcome | Candidate route | Choose it when | First gate |
-| --- | --- | --- | --- |
-| iOS app discovers/uses supported glasses capabilities | native DAT iOS | the capability is exposed by the current DAT package and device | package/API and registration availability |
-| Android app discovers/uses supported glasses capabilities | native DAT Android | the capability is exposed by the selected Maven artifact and device | Gradle/API and registration availability |
-| glanceable native surface from the companion app | DAT Display | runtime device reports Display support | `DeviceType.supportsDisplay()` and physical model |
-| HTML/CSS/JS experience delivered to Ray-Ban Display | Meta Wearables Web App | the target is explicitly the Web App surface | public HTTPS URL, 600×600, input/focus contract |
-| wearer input, motion, orientation, or location | native Display, Web App, or phone fallback | the exact source is identified and the selected runtime exposes it | source/capability/permission or secure-context gate plus physical task |
-| setup, consent, unavailable state, or unsupported device | phone-first fallback | wearable is absent, denied, disconnected, or not proven | useful phone workflow without wearable |
-| “Gen 3 support” or unnamed future model | to-verify / blocked | official source and runtime mapping are missing | exact device type, firmware, capability, hardware |
+| User outcome | Route | First gate |
+| --- | --- | --- |
+| iOS app uses glasses capabilities | native DAT iOS | package/API and registration |
+| Android app uses glasses capabilities | native DAT Android | Gradle/API and registration |
+| glanceable native surface from the phone app | DAT Display | `supportsDisplay()` and physical model |
+| HTML/CSS/JS on Ray-Ban Display | Web App | public HTTPS URL, 600×600, focus/input |
+| wearer input, motion, orientation, location | Display, Web App, or phone | source/permission gate plus physical task |
+| setup, consent, unavailable, unsupported | phone-first fallback | useful phone flow without wearable |
+| "Gen 3" or unnamed future model | blocked / `to-verify` | device type, firmware, capability |
 
-The native DAT route and Web App route can coexist in one product, but they have different packages, lifecycle, deployment, and proof requirements.
+Native DAT and Web Apps can coexist in one product but stay separate routes.
 
-Further sections — read when the above is not enough: `references/details.md`.
+## Workflow
+
+1. **Intake.** Rewrite the request as an outcome (capture, show, notify,
+   navigate, control, configure). Record surface, fallback, capabilities, device
+   wording, processing location, evidence level, and worst-case failure.
+2. **Pick the route** from the map. Name rejected alternatives. Resolve
+   "regular SDK" and "Gen 3" or return them blocked; never branch into every lane.
+3. **Draw the boundaries** with the [architecture contract](references/architecture-contract.md):
+   shared domain/policy, one wearable coordinator that reduces SDK events into
+   state, separate iOS, Android, Display, and Web App adapters, presenters, and
+   test fakes. DAT imports, `Flow`/`AsyncSequence`, `DatResult`, and Web APIs
+   stay inside adapters.
+4. **Model state before effects:** registration, permission, device selection,
+   session, capability, transport, thermal, cancellation, and fallback. Give
+   each session an owner, an epoch, and a stop path so stale frames or Display
+   actions cannot cross sessions. Fallback is typed state, not a retry spinner.
+5. **Label the data path** of every frame, sample, transcript, sensor value,
+   Display payload, and log as glasses-native, phone-local, remote, mixed, or
+   unknown.
+6. **Pick one vertical slice** from the [playbooks](references/vertical-slice-playbooks.md):
+   native Display, camera-to-phone, audio-first, Web App, or shared outcome.
+   Carry its manifest row IDs, state machine, fallback, and proof ladder.
+7. **No target yet?** Fill the [project bootstrap packet](references/project-bootstrap-packet.md)
+   in a new sibling folder — never inside this skills repository — and pick the first slice.
+8. **Hand off** each lane to its owning skill with sources, versions, open
+   gates, and the next proof task. Stop unless the user asked for the build.
+
+## Fast path
+
+For one feature: route, four boxes (domain, adapter, presenter, fake), one
+playbook, one adapter method and typed fallback before any parity work.
+
+## Required output
+
+1. Route, rejected alternatives, and the terminology status of "Gen 3" and
+   "regular SDK" from the manifest.
+2. Exact SDK repository, tag or commit, package/artifact, and device/model/capability table.
+3. Module boundary diagram, ownership table, and shared state machine with
+   platform adapter interfaces; symbols marked `source`, `compile`, or `to-verify`.
+4. Data-flow, privacy, thermal, lifecycle, and fallback contract.
+5. Selected vertical slice with manifest and evidence row IDs.
+6. Bootstrap packet with sibling path, when no target exists.
+7. Test seams (reducer, fake, MockDevice, browser, connected, physical) and the
+   firmware/companion/channel/signing gates.
+8. Lane handoffs and the next evidence task.
+
+## Hard boundaries
+
+- Never put DAT imports, Meta AI registration, or Web App browser APIs in a
+  SwiftUI/Compose view or the shared domain model.
+- Never treat one common interface as parity; return per-platform
+  unsupported or `to-verify` states where platforms differ.
+- Never call a phone-local fallback glasses-native, or a Web App a native DAT module.
+- Never hide a camera, audio, Display, sensor, or remote failure behind an
+  unbounded retry or a generic loading state.
+- Plan only. Do not create accounts, request credentials, deploy, or contact
+  testers without an explicit request.

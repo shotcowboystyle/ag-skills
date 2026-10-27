@@ -32,7 +32,6 @@ app instead of treating this date as a permanent latest-version claim.
 | Security, attestation, and credential boundaries | iOS/Android identity tuples, Meta AI callback validation, Developer Mode versus attested release channels, package/signing secrets, privacy-manifest/App Store gates, redaction, and security evidence | Source/configuration does not prove account access, attestation, signing, physical capability, local processing, or App Store/Play/production eligibility. |
 | Version dependency and device compatibility | Versioned DAT iOS/Android migrations, Android artifact availability, authenticated version-table access state, firmware drift, product-label/runtime separation, Gen 2 evidence, and Gen 3/“regular SDK” routing | Public 0.9.0 source and a community issue do not establish current firmware support, a Gen 3 mapping, or universal capability behavior. |
 | Source-pinned surface manifest | Machine-readable journey, module/artifact, terminology, capability, conflict, generation, refresh, and capability/evidence-plan inventory for full-SDK routing | Manifest and plan are routing contracts; exact package/API, account, target, physical, and release evidence remain authoritative. |
-| Agent team roster and handoff contract | Machine-checked 23-role local roster, 32 upstream plugin-role handoffs, shared evidence contract, claim gates, and a consolidated team-preflight receipt | Team ownership and preflight checks are orchestration evidence; they do not prove a target build, account state, physical behavior, or release. |
 | Project bootstrap and target intake | A sibling-project handoff for requests that arrive before an Xcode target, Gradle project, or hosted Web App exists | The packet freezes route, target tuple, first vertical slice, fallback, privacy path, and proof task; it does not build the app or prove hardware. |
 | Existing target intake and preflight | Redacted target-routing receipt for the existing Tiny Detour iOS/Web sibling, its DAT 0.9.0 lockfile/products, privacy boundary, and current preflight gaps | Target structure and lockfile are static evidence; disk/API-rate-limit failures, build, account, physical, signed, and release gates remain separate. |
 | Completion audit and next proof | Requirement-by-requirement status for KB coverage, full DAT routes, Display/Gen 2/Gen 3 claims, on-device contracts, app targets, and release evidence | This page is a status contract; only authoritative target, account, physical, signed, and release artifacts can close its open rows. |
@@ -74,10 +73,9 @@ surface is identified; it does not invent a third SDK.
 28. [Security, attestation, and credential boundaries](25-security-attestation-and-credential-boundaries.md)
 29. [Version-dependency and device-compatibility evidence](26-version-dependency-and-device-compatibility-evidence.md)
 30. [Source-pinned surface manifest](27-source-pinned-surface-manifest.md)
-31. [Agent team roster and handoff contract](30-agent-team-roster-and-handoff-contract.md)
-32. [Project bootstrap and target intake](31-project-bootstrap-and-target-intake.md)
-33. [Existing target intake and preflight](33-existing-target-intake-and-preflight.md)
-34. [Completion audit and next proof](32-completion-audit-and-next-proof.md)
+31. [Project bootstrap and target intake](31-project-bootstrap-and-target-intake.md)
+32. [Existing target intake and preflight](33-existing-target-intake-and-preflight.md)
+33. [Completion audit and next proof](32-completion-audit-and-next-proof.md)
 
 The reusable specialist packages live under
 the Meta Wearables skill team (the other skills in this plugin). The central

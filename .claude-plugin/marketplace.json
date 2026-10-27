@@ -800,7 +800,7 @@
     {
       "name": "meta-wearables-ops",
       "description": "Meta smart-glasses engineering \u2014 Wearables Device Access SDK integration on iOS and Android, camera, display, sensors, transport reliability, on-device compliance, and device-backed release proof.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "public@shotcowboystyle.com",

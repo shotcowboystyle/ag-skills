@@ -19,6 +19,22 @@ Mark text composer, offline, back, extended gestures, and sensors
 `source-conflict`/`to-verify` until the exact Developer Center/MCP result,
 simulator, firmware, and physical MRBD run agree. Keep a phone/manual fallback.
 
+For each conflicted feature, record the source revision, exact simulator/build,
+target firmware, physical result, fallback, and release decision. Do not
+collapse the conflicted features into a single "supported" list. The
+2026-08-30 relocation compare changed README, installer, and plugin metadata
+only; it added no runtime/API proof row.
+
+## Reading list
+
+- [Web Apps, Display, and input](../../meta-wearables-knowledge-base/references/70-meta-wearables/06-web-apps-display-and-input.md)
+- [Input, sensors, and physical interaction](../../meta-wearables-knowledge-base/references/70-meta-wearables/24-input-sensors-and-physical-interaction.md) and the [input/sensor contract](../../meta-wearables-device-capabilities/references/input-sensor-contract.md) — D-pad/EMG/temple input, motion, orientation, geolocation
+- [On-device compliance and runtime contract](../../meta-wearables-knowledge-base/references/70-meta-wearables/17-on-device-compliance-and-runtime-contract.md) — public-data boundaries, processing location, network/storage, typed fallback
+- [Security, attestation, and credential boundaries](../../meta-wearables-knowledge-base/references/70-meta-wearables/25-security-attestation-and-credential-boundaries.md) — HTTPS origin, client-visible assets, server-side credentials; a Web App has no native DAT attestation
+- [Operational readiness and recovery](../../meta-wearables-knowledge-base/references/70-meta-wearables/18-operational-readiness-and-recovery.md) — companion, firmware, public HTTPS launch, Display provisioning, release channel
+- [Application architecture and platform boundaries](../../meta-wearables-knowledge-base/references/70-meta-wearables/19-application-architecture-and-platform-boundaries.md) — shared state with a native companion
+- [Full Developer Center reference](https://wearables.developer.meta.com/llms.txt?full=true) — compare against toolkit `main`; record any login/access limit instead of treating an inaccessible page as proof
+
 ## Layout
 
 - Treat the Ray-Ban Display Web App surface as a 600×600 canvas.

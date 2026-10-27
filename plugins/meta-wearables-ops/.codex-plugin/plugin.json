@@ -1,6 +1,6 @@
 {
   "name": "meta-wearables-ops",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Meta smart-glasses engineering \u2014 Wearables Device Access SDK integration on iOS and Android, camera, display, sensors, transport reliability, on-device compliance, and device-backed release proof.",
   "skills": "./skills/",
   "author": {

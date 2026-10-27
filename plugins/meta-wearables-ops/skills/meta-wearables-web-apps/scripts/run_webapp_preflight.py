@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = []
+# ///
 """Emit a conservative Meta Wearables Web App source/hosting receipt.
 
 The runner distinguishes a generic local web surface from a Meta-marked Web

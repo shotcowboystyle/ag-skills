@@ -59,7 +59,7 @@ implementation anchor for 0.9.0; the API reference and package graph decide
 what a real target may import.
 
 For machine-readable routing, load the iOS rows in the [source-pinned API
-surface register](../../../meta-wearables-full-sdk-audit/references/surface-manifest.yaml)
+surface register](../../../meta-wearables-sdk-audit/references/surface-manifest.yaml)
 (`IOS-*` plus the conceptual-index row). Each row carries source anchors,
 status, compile/runtime gate, privacy path, fallback, and migration notes; it
 does not replace the selected package’s generated API or target build.
