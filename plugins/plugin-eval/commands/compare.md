@@ -7,7 +7,10 @@ Run a pairwise comparison between two skills and report which is better on each 
 
 ## Running
 
+Resolve both paths to absolute first, and stop if either does not exist:
+
 ```bash
-cd plugins/plugin-eval
-uv run plugin-eval compare {argument}
+a="$(cd "<skill-a>" && pwd)"
+b="$(cd "<skill-b>" && pwd)"
+uv run --directory "${CLAUDE_PLUGIN_ROOT}" plugin-eval compare "$a" "$b"
 ```

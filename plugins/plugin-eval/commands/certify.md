@@ -9,7 +9,9 @@ For a skill, this makes 55 model calls through your Max plan. For a plugin direc
 
 ## Running
 
+Resolve the path to absolute first, and stop if it does not exist:
+
 ```bash
-cd plugins/plugin-eval
-uv run plugin-eval certify {argument} --output markdown
+target="$(cd "{argument}" && pwd)"
+uv run --directory "${CLAUDE_PLUGIN_ROOT}" plugin-eval certify "$target" --output markdown
 ```
