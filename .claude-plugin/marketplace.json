@@ -85,7 +85,7 @@
       "name": "api-scaffolding",
       "source": "./plugins/api-scaffolding",
       "description": "REST and GraphQL API scaffolding, framework selection, backend architecture, and API generation",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -111,7 +111,7 @@
       "name": "application-performance",
       "source": "./plugins/application-performance",
       "description": "Application profiling, performance optimization, and observability for frontend and backend systems",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -136,7 +136,7 @@
     {
       "name": "backend-api-security",
       "description": "API security hardening, authentication implementation, authorization patterns, rate limiting, and input validation",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -150,7 +150,7 @@
       "name": "backend-development",
       "source": "./plugins/backend-development",
       "description": "Backend API design, GraphQL architecture, workflow orchestration with Temporal, and test-driven backend development",
-      "version": "1.3.3",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -213,7 +213,7 @@
     {
       "name": "cicd-automation",
       "description": "CI/CD pipeline configuration, GitHub Actions/GitLab CI workflow setup, and automated deployment pipeline orchestration",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -226,7 +226,7 @@
     {
       "name": "cloud-infrastructure",
       "description": "Cloud architecture design for AWS/Azure/GCP/OCI, Kubernetes cluster configuration, Terraform infrastructure-as-code, hybrid cloud networking, and multi-cloud cost optimization",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -304,7 +304,7 @@
     {
       "name": "data-engineering",
       "description": "ETL pipeline construction, data warehouse design, batch processing workflows, and data-driven feature development",
-      "version": "1.3.3",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -318,7 +318,7 @@
       "name": "database-cloud-optimization",
       "source": "./plugins/database-cloud-optimization",
       "description": "Database query optimization, cloud cost optimization, and scalability improvements",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -331,7 +331,7 @@
       "name": "database-design",
       "source": "./plugins/database-design",
       "description": "Database architecture, schema design, and SQL optimization for production systems",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -344,7 +344,7 @@
       "name": "database-migrations",
       "source": "./plugins/database-migrations",
       "description": "Database migration automation, observability, and cross-database migration strategies",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -369,7 +369,7 @@
     {
       "name": "deployment-strategies",
       "description": "Deployment patterns, rollback automation, and infrastructure templates",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -382,7 +382,7 @@
     {
       "name": "deployment-validation",
       "description": "Pre-deployment checks, configuration validation, and deployment readiness assessment",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -445,7 +445,7 @@
     {
       "name": "distributed-debugging",
       "description": "Distributed system tracing and debugging across microservices",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -589,7 +589,7 @@
       "name": "full-stack-orchestration",
       "source": "./plugins/full-stack-orchestration",
       "description": "End-to-end feature orchestration with testing, security, performance, and deployment",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -674,7 +674,7 @@
     {
       "name": "incident-response",
       "description": "Production incident management, triage workflows, and automated incident resolution",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -724,7 +724,7 @@
     {
       "name": "kubernetes-operations",
       "description": "Kubernetes manifest generation, networking configuration, security policies, observability setup, GitOps workflows, and auto-scaling",
-      "version": "1.2.3",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -824,7 +824,7 @@
       "name": "multi-platform-apps",
       "source": "./plugins/multi-platform-apps",
       "description": "Cross-platform application development coordinating web, iOS, Android, and desktop implementations",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -836,7 +836,7 @@
     {
       "name": "observability-monitoring",
       "description": "Metrics collection, logging infrastructure, distributed tracing, SLO implementation, and monitoring dashboards",
-      "version": "1.2.4",
+      "version": "1.3.0",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"

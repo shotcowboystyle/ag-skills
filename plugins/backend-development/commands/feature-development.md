@@ -175,14 +175,14 @@ Do NOT proceed to Phase 2 until the user selects option 1. If they select option
 
 Read `.feature-dev/01-requirements.md` and `.feature-dev/02-architecture.md`.
 
-Use the Task tool to launch the backend architect for implementation:
+Use the Task tool to implement the backend:
 
 ```
 Task:
-  subagent_type: "backend-development-backend-architect"
+  subagent_type: "general-purpose"
   description: "Implement backend for $FEATURE"
   prompt: |
-    Implement the backend for this feature based on the approved architecture.
+    You are a backend developer. Implement the backend for this feature based on the approved architecture.
 
     ## Requirements
     [Insert contents of .feature-dev/01-requirements.md]

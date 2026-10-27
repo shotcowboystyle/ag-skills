@@ -310,10 +310,10 @@ Use the Task tool:
 
 ```
 Task:
-  subagent_type: "data-engineering-backend-architect"
+  subagent_type: "general-purpose"
   description: "Implement backend for $FEATURE with full instrumentation"
   prompt: |
-    Implement the backend for feature: $FEATURE with full instrumentation.
+    You are a backend developer. Implement the backend for feature: $FEATURE with full instrumentation.
 
     ## Architecture
     [Insert contents of .data-driven-feature/04-architecture.md]

@@ -72,7 +72,7 @@ Use the Task tool to launch the incident responder agent:
 
 ```
 Task:
-  subagent_type: "incident-responder"
+  subagent_type: "incident-response-incident-responder"
   description: "URGENT: Classify incident: $INCIDENT"
   prompt: |
     URGENT: Detect and classify incident: $INCIDENT
@@ -130,7 +130,7 @@ Read `.incident-response/01-classification.md` and `.incident-response/02-observ
 
 ```
 Task:
-  subagent_type: "incident-responder"
+  subagent_type: "incident-response-incident-responder"
   description: "Immediate mitigation for: $INCIDENT"
   prompt: |
     Implement immediate mitigation for this incident.
@@ -432,7 +432,7 @@ Read `.incident-response/01-classification.md` and `.incident-response/07-deploy
 
 ```
 Task:
-  subagent_type: "incident-responder"
+  subagent_type: "incident-response-incident-responder"
   description: "Assess customer impact for: $INCIDENT"
   prompt: |
     Assess and document customer impact for this incident.

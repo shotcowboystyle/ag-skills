@@ -51,6 +51,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from tools.adapters.base import WORKTREE, list_plugins, parse_frontmatter
 from tools.adapters.capabilities import CAPABILITIES
+from tools.shared_agents import MARKER as SHARED_AGENT_MARKER
 
 PLUGINS_DIR = WORKTREE / "plugins"
 DOCS_DIR = WORKTREE / "docs"
@@ -1168,14 +1169,15 @@ def check_duplicate_agent_bodies(report: Report) -> None:
     check_agent_divergence deliberately ignores identical copies. This check counts
     them, one finding per group, so the dedupe work can show progress. Bodies are
     compared after the frontmatter, with line endings and leading blank lines
-    normalized as in normalized_agent_text.
+    normalized as in normalized_agent_text. Copies built from shared/agents/ are skipped:
+    they already have one source.
     """
     if not PLUGINS_DIR.is_dir():
         return
     groups: dict[str, list[Path]] = defaultdict(list)
     for agent in sorted(PLUGINS_DIR.glob("*/agents/*.md")):
         raw = read_text_or_none(agent, report)
-        if raw is None:
+        if raw is None or SHARED_AGENT_MARKER in raw.split("\n---", 1)[0]:
             continue
         body = parse_frontmatter(raw.lstrip(BOM).lstrip())[1]
         normalized = BODY_LEADING_BLANKS_RE.sub("", body.replace("\r\n", "\n")).rstrip()
