@@ -1,156 +1,119 @@
 ---
 name: paypal-integration
-description: Integrate PayPal payment processing with support for express checkout, subscriptions, and refund management. Use when implementing PayPal payments, processing online transactions, or building e-commerce checkout flows.
+description: Integrate PayPal payment processing with server-side Orders v2 checkout, verified webhooks, subscriptions, and refunds. Use when implementing PayPal payments, processing online transactions, or building e-commerce checkout flows.
+last_verified: 2026-10-27
 ---
 
 # PayPal Integration
 
-Master PayPal payment integration including Express Checkout, IPN handling, recurring billing, and refund workflows.
+PayPal checkout on the Orders v2 REST API: the server creates and captures orders, the browser only renders buttons, and webhooks are verified before they are trusted.
 
 ## When to Use This Skill
 
 - Integrating PayPal as a payment option
-- Implementing express checkout flows
-- Setting up recurring billing with PayPal
-- Processing refunds and payment disputes
-- Handling PayPal webhooks (IPN)
-- Supporting international payments
-- Implementing PayPal subscriptions
+- Implementing PayPal Checkout (Smart Payment Buttons)
+- Setting up recurring billing with PayPal Subscriptions
+- Processing refunds and handling disputes
+- Handling PayPal webhooks
 
-## Core Concepts
+## Core Rules
 
-### 1. Payment Products
-
-**PayPal Checkout**
-
-- One-time payments
-- Express checkout experience
-- Guest and PayPal account payments
-
-**PayPal Subscriptions**
-
-- Recurring billing
-- Subscription plans
-- Automatic renewals
-
-**PayPal Payouts**
-
-- Send money to multiple recipients
-- Marketplace and platform payments
-
-### 2. Integration Methods
-
-**Client-Side (JavaScript SDK)**
-
-- Smart Payment Buttons
-- Hosted payment flow
-- Minimal backend code
-
-**Server-Side (REST API)**
-
-- Full control over payment flow
-- Custom checkout UI
-- Advanced features
-
-### 3. IPN (Instant Payment Notification)
-
-- Webhook-like payment notifications
-- Asynchronous payment updates
-- Verification required
+1. **The server sets the price.** The browser sends cart item IDs, never amounts. The server looks up prices and calls `POST /v2/checkout/orders`.
+2. **The server captures.** The browser's `onApprove` calls your backend, which calls `POST /v2/checkout/orders/{id}/capture`. Never call `actions.order.create()` or `actions.order.capture()` in the browser: a buyer can edit the amount in DevTools.
+3. **Check the capture, not just the order.** An order can be `COMPLETED` while its capture is `PENDING`. Fulfil on `purchase_units[0].payments.captures[0].status == "COMPLETED"` or on the `PAYMENT.CAPTURE.COMPLETED` webhook.
+4. **Verify every webhook** with `POST /v1/notifications/verify-webhook-signature` before acting on it, and dedupe by event `id`.
+5. **Use webhooks, not IPN.** IPN is the legacy notification system for classic NVP/SOAP integrations. Orders v2 integrations use webhooks.
+6. **Don't use `paypalrestsdk`.** It targets the deprecated v1 Payments API and cannot capture a v2 order.
 
 ## Quick Start
 
-```javascript
-// Frontend - PayPal Smart Buttons
+```html
+<!-- Frontend: JS SDK v5 buttons. v6 is PayPal's recommended SDK for new builds;
+     the server endpoints below work unchanged with either. -->
 <div id="paypal-button-container"></div>
-
 <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
 <script>
   paypal.Buttons({
-    createOrder: function(data, actions) {
-      return actions.order.create({
-        purchase_units: [{
-          amount: {
-            value: '25.00'
-          }
-        }]
+    async createOrder() {
+      const res = await fetch("/api/paypal/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cart: [{ sku: "PRO-PLAN", quantity: 1 }] }),
       });
+      const order = await res.json();
+      if (!order.id) throw new Error("Could not create order");
+      return order.id;
     },
-    onApprove: function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        // Payment successful
-        console.log('Transaction completed by ' + details.payer.name.given_name);
-
-        // Send to backend for verification
-        fetch('/api/paypal/capture', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({orderID: data.orderID})
-        });
-      });
-    }
-  }).render('#paypal-button-container');
+    async onApprove(data, actions) {
+      const res = await fetch(`/api/paypal/orders/${data.orderID}/capture`, { method: "POST" });
+      const result = await res.json();
+      if (result.issue === "INSTRUMENT_DECLINED") return actions.restart();
+      if (result.status !== "COMPLETED") throw new Error("Payment not completed");
+      window.location.href = "/thank-you";
+    },
+  }).render("#paypal-button-container");
 </script>
 ```
 
 ```python
-# Backend - Verify and capture order
-from paypalrestsdk import Payment
-import paypalrestsdk
+# Backend (Flask). PayPalClient is defined in references/details.md.
+import os
+from decimal import Decimal  # never use floats for money
+from flask import Flask, request, jsonify
 
-paypalrestsdk.configure({
-    "mode": "sandbox",  # or "live"
-    "client_id": "YOUR_CLIENT_ID",
-    "client_secret": "YOUR_CLIENT_SECRET"
-})
+app = Flask(__name__)
+paypal = PayPalClient(
+    os.environ["PAYPAL_CLIENT_ID"],
+    os.environ["PAYPAL_CLIENT_SECRET"],
+    mode=os.environ.get("PAYPAL_MODE", "sandbox"),
+)
 
-def capture_paypal_order(order_id):
-    """Capture a PayPal order."""
-    payment = Payment.find(order_id)
+PRICES = {"PRO-PLAN": "25.00"}  # server-side catalog; load from your DB
 
-    if payment.execute({"payer_id": payment.payer.payer_info.payer_id}):
-        # Payment successful
-        return {
-            'status': 'success',
-            'transaction_id': payment.id,
-            'amount': payment.transactions[0].amount.total
-        }
-    else:
-        # Payment failed
-        return {
-            'status': 'failed',
-            'error': payment.error
-        }
+
+@app.post("/api/paypal/orders")
+def create_order():
+    cart = request.get_json()["cart"]
+    total = sum(Decimal(PRICES[item["sku"]]) * int(item["quantity"]) for item in cart)
+    order = paypal.create_order(total, currency="USD")
+    return jsonify({"id": order["id"]})
+
+
+@app.post("/api/paypal/orders/<order_id>/capture")
+def capture_order(order_id):
+    result = paypal.capture_order(order_id)
+    if result.get("details"):  # PayPal error body, e.g. INSTRUMENT_DECLINED
+        return jsonify({"issue": result["details"][0]["issue"]}), 422
+
+    capture = result["purchase_units"][0]["payments"]["captures"][0]
+    if capture["status"] == "COMPLETED":
+        mark_order_paid(order_id, capture_id=capture["id"])  # idempotent on capture_id
+    # PENDING captures are resolved later by the PAYMENT.CAPTURE.* webhooks
+    return jsonify({"status": capture["status"]})
 ```
 
 ## Detailed patterns and worked examples
 
-Detailed pattern documentation lives in `references/details.md`. Read that file when the navigation tier above is insufficient.
+`references/details.md` covers the `PayPalClient` (OAuth token caching, create/capture/get with `PayPal-Request-Id` idempotency), the verified webhook handler, subscriptions, and refunds.
 
 ## Testing
 
 ```python
-# Use sandbox credentials
-SANDBOX_CLIENT_ID = "..."
-SANDBOX_SECRET = "..."
+# Sandbox credentials and test buyer/seller accounts come from developer.paypal.com.
+import os
+from decimal import Decimal
 
-# Test accounts
-# Create test buyer and seller accounts at developer.paypal.com
-
-def test_payment_flow():
-    """Test complete payment flow."""
-    client = PayPalClient(SANDBOX_CLIENT_ID, SANDBOX_SECRET, mode='sandbox')
-
-    # Create order
-    order = client.create_order(10.00)
-    assert 'id' in order
-
-    # Get approval URL
-    approval_url = next((link['href'] for link in order['links'] if link['rel'] == 'approve'), None)
-    assert approval_url is not None
-
-    # After approval (manual step with test account)
-    # Capture order
-    # captured = client.capture_order(order['id'])
-    # assert captured['status'] == 'COMPLETED'
+def test_create_order_sandbox():
+    client = PayPalClient(
+        os.environ["PAYPAL_SANDBOX_CLIENT_ID"],
+        os.environ["PAYPAL_SANDBOX_CLIENT_SECRET"],
+        mode="sandbox",
+    )
+    order = client.create_order(Decimal("10.00"))
+    assert order["status"] == "CREATED"
+    assert any(link["rel"] == "approve" for link in order["links"])
+    # Approval needs a sandbox buyer in a browser; capture after that:
+    # assert client.capture_order(order["id"])["status"] == "COMPLETED"
 ```
+
+Use the Developer Dashboard's webhook simulator to send sample events. Simulator events can't be verified with `verify-webhook-signature`, so test verification with real sandbox transactions.

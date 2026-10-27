@@ -109,8 +109,8 @@ Skills provide domain guidance that coding agents can load when relevant. Each s
 | Skill                  | Description                                                                   |
 | ---------------------- | ----------------------------------------------------------------------------- |
 | **stripe-integration** | Implement Stripe payment processing for checkout, subscriptions, and webhooks |
-| **paypal-integration** | Integrate PayPal payment processing with express checkout and subscriptions   |
-| **pci-compliance**     | Implement PCI DSS compliance for secure payment card data handling            |
+| **paypal-integration** | Integrate PayPal Orders v2 checkout, verified webhooks, and subscriptions     |
+| **pci-compliance**     | Apply PCI DSS v4.0.1 with scope reduction and secure card data handling       |
 | **billing-automation** | Build automated billing systems for recurring payments and invoicing          |
 
 ### Python Development (16 skills)
