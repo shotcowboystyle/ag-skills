@@ -123,7 +123,7 @@ Task:
     Deliverables:
     1. Root cause hypothesis with supporting evidence
     2. Code-level analysis: variable states, control flow, timing issues
-    3. Git bisect analysis: identify introducing commit (automate with git bisect run)
+    3. Git bisect analysis: identify introducing commit (automate with git bisect run in a separate worktree)
     4. Dependency analysis: version conflicts, API changes, configuration drift
     5. State inspection: database state, cache state, external API responses
     6. Failure mechanism: why does the code fail under these specific conditions
