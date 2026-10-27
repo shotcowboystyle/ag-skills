@@ -305,7 +305,6 @@ user_service:
 ```
 ````
 
-````
 
 ### Example 4: README Generation
 

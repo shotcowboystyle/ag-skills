@@ -84,4 +84,4 @@ Every DAT test report should include:
 - [DAT iOS Display Access sample](https://github.com/facebook/meta-wearables-dat-ios/tree/main/samples/DisplayAccess)
 - [DAT iOS testing guide](https://wearables.developer.meta.com/docs/testing-mdk-ios)
 - [Apple testing a release build](https://developer.apple.com/documentation/xcode/testing-a-release-build)
-- Evidence and verification language (`ios-knowledge-base` skill: `references/00-foundations/05-evidence-and-verification-language.md`)
+- Evidence and verification language (`ios-knowledge-base` skill: [05-evidence-and-verification-language.md](../../../../../ios-ops/skills/ios-knowledge-base/references/00-foundations/05-evidence-and-verification-language.md))

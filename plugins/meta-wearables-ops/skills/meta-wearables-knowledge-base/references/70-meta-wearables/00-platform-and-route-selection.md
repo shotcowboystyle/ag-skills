@@ -69,4 +69,4 @@ Before implementation, record:
 - [Full Wearables platform reference](https://wearables.developer.meta.com/llms.txt?full=true)
 - [Meta Wearables Web Apps documentation](https://wearables.developer.meta.com/docs/develop/webapps)
 - [AVAudioSession](https://developer.apple.com/documentation/avfaudio/avaudiosession)
-- Evidence and verification language (`ios-knowledge-base` skill: `references/00-foundations/05-evidence-and-verification-language.md`)
+- Evidence and verification language (`ios-knowledge-base` skill: [05-evidence-and-verification-language.md](../../../../../ios-ops/skills/ios-knowledge-base/references/00-foundations/05-evidence-and-verification-language.md))

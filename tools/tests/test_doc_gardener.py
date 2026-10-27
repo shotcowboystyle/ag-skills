@@ -1457,7 +1457,7 @@ class TestArgumentsFraming:
         assert self._run(tmp_path, monkeypatch).findings == []
 
 
-# ── Audit checks (warn-only) ─────────────────────────────────────────────────
+# ── Audit checks (errors under --strict) ─────────────────────────────────────
 
 
 def _audit_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, check: str) -> list[str]:
@@ -1578,6 +1578,11 @@ class TestAgentTools:
         _write(tmp_path, "p/agents/code-reviewer.md", "---\nname: r\ntools: Read, Grep\n---\nB\n")
         _write(tmp_path, "p/agents/builder.md", "---\nname: b\ntools: [Read, Write]\n---\nB\n")
         _write(tmp_path, "p/agents/locked.md", "---\nname: l\ntools: []\n---\nB\n")
+        _write(
+            tmp_path,
+            "p/agents/review-policy-author.md",
+            "---\nname: a\ntools: Read, Write, Edit\n---\nB\n",
+        )
         assert _audit_run(tmp_path, monkeypatch, "agent-tools") == []
 
 
@@ -1618,6 +1623,29 @@ class TestHazardPatterns:
             "cat > ./out.txt\nexiftool -all= staged/copy.jpg\n",
         )
         assert _audit_run(tmp_path, monkeypatch, "hazards") == []
+
+    def test_commands_named_as_data_or_in_prose_are_skipped(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        _write(
+            tmp_path,
+            "p/skills/s/SKILL.md",
+            "Never use `git push --force`. Every git push builds a preview.\n\n"
+            '```json\n{"matcher": "git push --force"}\n```\n\n'
+            "````markdown\n4. Push to the branch (`git push origin feature`)\n"
+            "```bash\ngit push origin feature\n```\n````\n",
+        )
+        assert _audit_run(tmp_path, monkeypatch, "hazards") == []
+
+    def test_allowed_tools_pre_approving_push(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        _write(
+            tmp_path,
+            "p/skills/s/SKILL.md",
+            "---\nname: s\nallowed-tools: Read, Bash(git push *)\n---\nBody.\n",
+        )
+        assert _audit_run(tmp_path, monkeypatch, "hazards") == ["HAZARD_UNCONFIRMED_PUSH"]
 
 
 class TestPolicyFields:
@@ -1667,13 +1695,64 @@ class TestPolicyFields:
         assert self._kinds(tmp_path, monkeypatch) == ([] if ok else [("error", "BAD_HARNESSES")])
 
 
-def test_audit_findings_never_fail_strict(
+# One fixture per audit check, each producing exactly that check's findings.
+_AUDIT_FIXTURES = {
+    "split-corruption": {"p/skills/s/SKILL.md": "# S\n\n```python\nprint(1)\n"},
+    "bundled-refs": {"p/skills/s/SKILL.md": "Run `scripts/missing.py`.\n"},
+    "command-agent-refs": {
+        "p/agents/reviewer.md": "---\nname: p-reviewer\ntools: Read\n---\nB\n",
+        "p/commands/go.md": '---\ndescription: x\n---\nsubagent_type: "reviewer"\n',
+    },
+    "skill-size": {
+        "p/skills/s/references/details.md": "x\n",
+        "p/skills/s/SKILL.md": "---\nname: s\n---\n" + "x" * 9000,
+    },
+    "agent-tools": {"p/agents/helper.md": "---\nname: helper\n---\nB\n"},
+    "agent-duplicates": {
+        "a/agents/x.md": "---\nname: a-x\ntools: Read\n---\nSame body.\n",
+        "b/agents/x.md": "---\nname: b-x\ntools: Read\n---\nSame body.\n",
+    },
+    "hazards": {"p/skills/s/SKILL.md": "```bash\ngit push origin main\n```\n"},
+}
+
+# Audit checks whose only audit finding stays a warning under --strict.
+_WARN_ONLY_AUDIT_CHECKS = {"policy-fields"}
+
+
+def test_every_audit_check_has_a_strict_fixture():
+    audit_checks = {name for name, check in CHECKS.items() if "AUDIT" in check.__code__.co_names}
+    assert audit_checks == set(_AUDIT_FIXTURES) | _WARN_ONLY_AUDIT_CHECKS
+
+
+def test_stale_last_verified_stays_a_warning_under_strict(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ):
     _patch_paths(monkeypatch, tmp_path)
-    _write(tmp_path, "p/agents/helper.md", "---\nname: helper\n---\nB\n")
-    monkeypatch.setattr(sys, "argv", ["doc_gardener.py", "--strict", "--check", "agent-tools"])
+    _write(tmp_path, "p/skills/s/SKILL.md", "---\nname: s\nlast_verified: 2020-01-01\n---\nB\n")
+    monkeypatch.setattr(sys, "argv", ["doc_gardener.py", "--strict", "--check", "policy-fields"])
     assert main() == 0
     out = capsys.readouterr().out
-    assert "AGENT_NO_TOOLS           1" in out  # per-check count in the summary
-    assert "plugins/p/agents/helper.md:" in out
+    assert "[audit  ] STALE_LAST_VERIFIED" in out
+    assert "[error  ]" not in out
+
+
+@pytest.mark.parametrize("check", sorted(_AUDIT_FIXTURES))
+def test_audit_findings_fail_strict_only(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    check: str,
+):
+    _patch_paths(monkeypatch, tmp_path)
+    for rel, text in _AUDIT_FIXTURES[check].items():
+        _write(tmp_path, rel, text)
+
+    monkeypatch.setattr(sys, "argv", ["doc_gardener.py", "--check", check])
+    assert main() == 0
+    assert "[audit  ]" in capsys.readouterr().out
+
+    monkeypatch.setattr(sys, "argv", ["doc_gardener.py", "--strict", "--check", check])
+    assert main() == 1
+    out = capsys.readouterr().out
+    assert "[error  ]" in out
+    assert "[audit  ]" not in out

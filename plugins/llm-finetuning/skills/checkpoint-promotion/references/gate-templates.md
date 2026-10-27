@@ -106,7 +106,7 @@ every report rather than leaving it implicit.
 
 The frozen benchmark set and the drift budget it's
 scored against — matches `eval-harness-first`'s
-`references/grader-templates.md` `drift-suite.yaml`
+[grader-templates.md](../../eval-harness-first/references/grader-templates.md) `drift-suite.yaml`
 example exactly, so a report generated here diffs
 against the same frozen numbers that skill's
 baseline file recorded:
@@ -266,7 +266,7 @@ judge-scored arena:
   first, independent of quality.
 - **Judge:** pinned snapshot, calibrated per
   `eval-harness-first`'s
-  `references/judge-calibration.md` — an
+  [judge-calibration.md](../../eval-harness-first/references/judge-calibration.md) — an
   uncalibrated judge here invalidates the whole
   stage.
 - **Win-rate threshold:** checkpoint must win
@@ -327,7 +327,7 @@ optimizer steps in the same move, which makes it
 impossible to attribute a drift-score change to
 either variable alone — see `dataset-curation`'s
 replay-mix construction recipe
-(`references/synthetic-data.md`) for the full
+([synthetic-data.md](../../dataset-curation/references/synthetic-data.md)) for the full
 swap procedure. Do not assume the dose-response is
 monotonic: a documented dogfood run saw 30.4%
 replay (added, not swapped) score 18 points *worse*

@@ -155,7 +155,7 @@ Detailed pattern documentation lives in `references/details.md`. Read that file 
 7. **Branch Before Risky Operations**: Create backup branch before complex rebases
 
 ```bash
-# Safe force push
+# Safe force push. Show the user what will be pushed and get their confirmation first.
 git push --force-with-lease origin feature/branch
 
 # Create backup before risky operation

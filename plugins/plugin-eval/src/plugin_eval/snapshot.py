@@ -1,7 +1,7 @@
-"""Per-skill static score snapshot, keyed by a hash of each skill's content.
+"""Per-skill and per-agent static score snapshot, keyed by a hash of each one's content.
 
 The snapshot records what the static layer scores every skill in the repo at
-quick depth. An entry whose skill content changed is skipped, so editing a skill
+quick depth, and every agent under `plugins/*/agents/` (keyed `<plugin>/agents/<stem>`). An entry whose skill content changed is skipped, so editing a skill
 never fails a check. An entry whose content did not change but whose numbers did
 points at a change in the scoring code, which is what the snapshot exists to catch.
 """
@@ -17,7 +17,8 @@ from pathlib import Path
 from pydantic import BaseModel
 
 from plugin_eval.engine import EvalEngine
-from plugin_eval.models import Depth, EvalConfig
+from plugin_eval.layers.static import StaticAnalyzer
+from plugin_eval.models import Badge, Depth, EvalConfig
 
 # A frozen copy of the parser's cross-reference pattern. The digest must not call
 # scoring code. If it did, a change to that code would move the digest as well as
@@ -25,6 +26,11 @@ from plugin_eval.models import Depth, EvalConfig
 _REFERENCE_PATTERN = re.compile(
     r"(?<![\w-])((?:skill|skills|sub-skills)/[a-z0-9-]+(?:/[a-z0-9-]+)*)"
 )
+
+# Copies built from shared/agents/ carry this line in their frontmatter. They have one
+# source, so they are not duplicates. Mirrors tools/shared_agents.py MARKER.
+_SHARED_AGENT_MARKER = "# Generated from shared/agents/"
+_FRONTMATTER_RE = re.compile(r"\A\ufeff?\s*---\n.*?\n---[ \t]*\n?", re.DOTALL)
 
 
 class SnapshotEntry(BaseModel):
@@ -79,8 +85,37 @@ def skill_digest(skill_dir: Path) -> str:
     return h.hexdigest()
 
 
+def agent_duplicate_counts(plugins_dir: Path) -> dict[Path, int]:
+    """For each agent, how many agents in other plugins have the same body.
+
+    Bodies are compared after the frontmatter with line endings and surrounding
+    whitespace normalized. Copies built from shared/agents/ count as zero.
+    """
+    groups: dict[str, list[Path]] = {}
+    counts: dict[Path, int] = {}
+    for agent in sorted(plugins_dir.glob("*/agents/*.md")):
+        text = agent.read_text(encoding="utf-8").replace("\r\n", "\n")
+        counts[agent] = 0
+        match = _FRONTMATTER_RE.match(text)
+        if match and _SHARED_AGENT_MARKER in match.group(0):
+            continue
+        body = text[match.end() :] if match else text
+        groups.setdefault(hashlib.sha256(body.strip().encode()).hexdigest(), []).append(agent)
+    for paths in groups.values():
+        for path in paths:
+            counts[path] = sum(1 for p in paths if p.parent.parent != path.parent.parent)
+    return counts
+
+
+def agent_digest(agent: Path, duplicates: int) -> str:
+    """sha256 over the agent file (CRLF as LF) and its duplicate count, which the score uses."""
+    h = hashlib.sha256(agent.read_bytes().replace(b"\r\n", b"\n"))
+    h.update(f"\0duplicates\0{duplicates}".encode())
+    return h.hexdigest()
+
+
 def build_snapshot(plugins_dir: Path) -> dict[str, SnapshotEntry]:
-    """Score every skill under plugins_dir the way `plugin-eval score --depth quick` does."""
+    """Score every skill the way `plugin-eval score --depth quick` does, and every agent."""
     engine = EvalEngine(EvalConfig(depth=Depth.QUICK))
     snap: dict[str, SnapshotEntry] = {}
     for skill_md in sorted(plugins_dir.glob("*/skills/*/SKILL.md")):
@@ -95,6 +130,17 @@ def build_snapshot(plugins_dir: Path) -> dict[str, SnapshotEntry]:
             sub_scores={name: float(value) for name, value in static.sub_scores.items()},
             composite=composite.score,
             badge=composite.badge.value,
+        )
+    analyzer = StaticAnalyzer()
+    for agent, duplicates in agent_duplicate_counts(plugins_dir).items():
+        result = analyzer.analyze_agent(agent, duplicates=duplicates)
+        score = result.score * 100.0
+        snap[f"{agent.parent.parent.name}/agents/{agent.stem}"] = SnapshotEntry(
+            digest=agent_digest(agent, duplicates),
+            static_score=result.score,
+            sub_scores={name: float(value) for name, value in result.sub_scores.items()},
+            composite=score,
+            badge=Badge.from_scores(score, elo=None).value,
         )
     return snap
 

@@ -17,7 +17,8 @@ git rebase -i main
 # - Reorder commits logically
 # - Drop unnecessary commits
 
-# Force push cleaned branch (safe if no one else is using it)
+# Force push cleaned branch (safe if no one else is using it).
+# Confirm with the user before pushing: it rewrites the remote branch.
 git push --force-with-lease origin feature/user-auth
 ```
 
@@ -77,7 +78,7 @@ git worktree add ../myapp-hotfix hotfix/critical-bug
 
 # Work on hotfix in separate directory
 cd ../myapp-hotfix
-# Make changes, commit
+# Make changes, commit, and confirm with the user before pushing
 git commit -m "fix: resolve critical bug"
 git push origin hotfix/critical-bug
 

@@ -250,3 +250,82 @@ class TestTriggerExemptions:
         result = analyzer.analyze_skill(skill_dir)
         flags = [ap.flag for ap in result.anti_patterns]
         assert "MISSING_TRIGGER" in flags
+
+
+_GOOD_AGENT = """---
+name: p-api-reviewer
+description: Review an API diff for breaking changes. Use when a PR touches route handlers.
+model: sonnet
+tools: Read, Grep, Glob
+---
+
+Review the API changes in the given diff.
+
+## Procedure
+
+1. List changed route handlers.
+2. Compare old and new shapes.
+3. Mark each change breaking or not.
+
+## Output
+
+A table of `endpoint | change | breaking?`, then a verdict line.
+"""
+
+
+def _write_agent(tmp_path: Path, text: str, stem: str = "api-reviewer") -> Path:
+    path = tmp_path / "p" / "agents" / f"{stem}.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text)
+    return path
+
+
+class TestAnalyzeAgent:
+    def test_well_shaped_agent_scores_full(self, tmp_path: Path) -> None:
+        result = StaticAnalyzer().analyze_agent(_write_agent(tmp_path, _GOOD_AGENT))
+        assert result.sub_scores == {
+            "frontmatter_quality": 1.0,
+            "tool_scoping": 1.0,
+            "model_tier": 1.0,
+            "procedure": 1.0,
+            "output_contract": 1.0,
+            "uniqueness": 1.0,
+        }
+        assert result.score == 1.0
+
+    def test_capability_list_persona_scores_low(self, tmp_path: Path) -> None:
+        text = (
+            "---\nname: x\ndescription: Expert.\nmodel: opus\n---\n\n"
+            "You are an expert.\n\n## Capabilities\n- REST\n- gRPC\n"
+        )
+        sub = StaticAnalyzer().analyze_agent(_write_agent(tmp_path, text, "x")).sub_scores
+        assert sub["frontmatter_quality"] == 0.5  # name and model, no trigger, too short
+        assert sub["tool_scoping"] == 0.0
+        assert sub["model_tier"] == 0.5  # opus with no justification line
+        assert sub["procedure"] == 0.0
+        assert sub["output_contract"] == 0.0
+
+    def test_read_only_role_with_write_tools(self, tmp_path: Path) -> None:
+        text = _GOOD_AGENT.replace("tools: Read, Grep, Glob", "tools: Read, Edit")
+        sub = StaticAnalyzer().analyze_agent(_write_agent(tmp_path, text)).sub_scores
+        assert sub["tool_scoping"] == 0.5
+
+    def test_justified_opus_and_numbered_headings(self, tmp_path: Path) -> None:
+        text = _GOOD_AGENT.replace("model: sonnet", "model: opus").replace(
+            "Review the API changes", "Model: opus, because it traces contracts.\n\nReview the API changes"
+        )
+        text = text.replace("1. List", "### 1. List").replace("2. Compare", "### 2: Compare")
+        sub = StaticAnalyzer().analyze_agent(_write_agent(tmp_path, text)).sub_scores
+        assert sub["model_tier"] == 1.0
+        assert sub["procedure"] == 1.0
+
+    def test_steps_inside_code_fences_do_not_count(self, tmp_path: Path) -> None:
+        text = _GOOD_AGENT.replace("1. List", "```\n1. List").replace(
+            "3. Mark each change breaking or not.", "3. Mark each change breaking or not.\n```"
+        )
+        sub = StaticAnalyzer().analyze_agent(_write_agent(tmp_path, text)).sub_scores
+        assert sub["procedure"] == 0.0
+
+    def test_duplicates_zero_uniqueness(self, tmp_path: Path) -> None:
+        result = StaticAnalyzer().analyze_agent(_write_agent(tmp_path, _GOOD_AGENT), duplicates=2)
+        assert result.sub_scores["uniqueness"] == 0.0

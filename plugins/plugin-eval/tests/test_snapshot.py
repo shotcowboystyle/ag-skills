@@ -2,6 +2,8 @@ from pathlib import Path
 
 from plugin_eval.snapshot import (
     SnapshotEntry,
+    agent_duplicate_counts,
+    build_snapshot,
     compare_snapshot,
     skill_digest,
 )
@@ -92,3 +94,34 @@ def test_compare_skips_changed_content_and_flags_score_drift() -> None:
     assert result.stale == 1
     assert len(result.diffs) == 1
     assert "p/one" in result.diffs[0]
+
+
+def _agent(root: Path, plugin: str, body: str, frontmatter: str = "") -> Path:
+    path = root / plugin / "agents" / "x.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(f"---\n{frontmatter}name: {plugin}-x\ntools: Read\n---\n{body}\n")
+    return path
+
+
+def test_duplicate_counts_skip_same_plugin_and_shared_copies(tmp_path: Path) -> None:
+    a = _agent(tmp_path, "a", "Same body.")
+    b = _agent(tmp_path, "b", "Same body.")
+    shared = "# Generated from shared/agents/x.md by `make generate-all`.\n"
+    c = _agent(tmp_path, "c", "Shared body.", shared)
+    d = _agent(tmp_path, "d", "Shared body.", shared)
+    assert agent_duplicate_counts(tmp_path) == {a: 1, b: 1, c: 0, d: 0}
+
+
+def test_snapshot_includes_agents(tmp_path: Path) -> None:
+    make_skill(tmp_path, "body")
+    _agent(tmp_path, "p", "Body.")
+    snap = build_snapshot(tmp_path)
+    assert set(snap) == {"p/s", "p/agents/x"}
+    assert set(snap["p/agents/x"].sub_scores) == {
+        "frontmatter_quality",
+        "tool_scoping",
+        "model_tier",
+        "procedure",
+        "output_contract",
+        "uniqueness",
+    }

@@ -2,6 +2,7 @@
 name: review-policy-author
 description: Cedar policy author specialized in gating AI agent review actions (PR comments, reviews, merges, CI edits) behind human approval. Use when writing, auditing, or extending a review-governance.cedar policy for review-bot governance.
 model: sonnet
+tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
 # Review Policy Author

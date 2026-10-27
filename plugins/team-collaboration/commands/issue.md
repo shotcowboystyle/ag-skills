@@ -124,7 +124,7 @@ git checkout -b spike/issue-${ISSUE_NUMBER}-investigation
 **Branch Configuration**
 
 ```bash
-# Set upstream tracking
+# Set upstream tracking (pushes the branch; confirm with the user first)
 git push -u origin feature/issue-${ISSUE_NUMBER}-feature-name
 
 # Configure branch protection locally

@@ -2,6 +2,7 @@
 name: android-developer
 description: Build native Android apps with Kotlin and Jetpack Compose — Material 3, coroutines/Flow, Room, Hilt, WorkManager, and Play release. Use PROACTIVELY for Android-specific features, Compose UI, or native Android development. Not for React Native or Flutter.
 model: inherit
+tools: Read, Grep, Glob, Bash, Write, Edit
 last_verified: 2026-10-27
 ---
 

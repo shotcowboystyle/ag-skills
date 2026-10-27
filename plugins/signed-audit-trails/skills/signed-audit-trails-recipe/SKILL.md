@@ -70,18 +70,9 @@ commands, and limits writes to the project with `..` segments denied.
 
 ## Step 3: Use Claude Code normally
 
-Start Claude Code. Every tool call goes through both hooks:
-
-```
-You: Please read the README and summarize it.
-
-Claude: I will read README.md.
-  [PreToolUse: Read ./README.md -> allow]
-  [Tool: Read executes]
-  [PostToolUse: receipt rcpt-a8f3c9d2 signed to ./receipts/]
-
-... summary of README ...
-```
+Start Claude Code. Every tool call goes through both hooks.
+See `references/walkthrough-examples.md` for a sample session showing the
+hook decisions around one `Read` call.
 
 A session of 20 tool calls appends 20 receipts to `./receipts/receipts.jsonl`.
 
@@ -117,21 +108,9 @@ Exit codes:
 
 ## Step 6: Demonstrate tamper detection
 
-Change the newest receipt's `decision` from `allow` to `deny`:
-
-```bash
-python3 -c "
-import json
-path = './receipts/receipts.jsonl'
-lines = open(path).read().splitlines()
-r = json.loads(lines[-1])
-r['payload']['decision'] = 'deny'
-lines[-1] = json.dumps(r)
-open(path, 'w').write('\n'.join(lines) + '\n')
-"
-
-npx @veritasacta/verify@0.9.2 --replay-chain ./receipts/receipts.jsonl --key "$PUB"
-```
+Change the newest receipt's `decision` from `allow` to `deny` with the tamper
+script in `references/walkthrough-examples.md`, which rewrites the last line of
+`./receipts/receipts.jsonl`, then verify again with the Step 5 command.
 
 The verifier exits with code `1` and reports which line failed. The
 Ed25519 signature no longer matches the JCS-canonical bytes of the
@@ -159,19 +138,11 @@ For the formal wire format see
 
 ## Cross-implementation interop
 
-The receipt format has four independent implementations today:
-
-| Implementation | Language | Use case |
-|----------------|----------|----------|
-| [protect-mcp](https://www.npmjs.com/package/protect-mcp) | TypeScript | Claude Code, Cursor, MCP hosts |
-| [protect-mcp-adk](https://pypi.org/project/protect-mcp-adk/) | Python | Google Agent Development Kit |
-| [sb-runtime](https://github.com/ScopeBlind/sb-runtime) | Rust | OS-level sandbox (Landlock + seccomp) |
-| APS governance hook | Python | CrewAI, LangChain |
-
-A receipt produced by any of them verifies against
+The receipt format has four independent implementations (TypeScript, Python,
+Rust), and a receipt from any of them verifies against
 [`@veritasacta/verify`](https://www.npmjs.com/package/@veritasacta/verify).
-The auditor does not need to trust the operator's tooling choice: the format
-is the contract.
+The format is the contract, so the auditor does not need to trust the
+operator's tooling. See `references/interop-and-slsa.md` for the list.
 
 ## CI/CD integration
 
@@ -184,32 +155,12 @@ unreviewed code.
 
 ## Composition with SLSA provenance for agent-built software
 
-When Claude Code builds and releases software (running `npm install`,
-`npm build`, `npm publish` as tool calls), the receipt chain is the
-per-step build log. SLSA Provenance v1 has an extension point for this: the
-`byproducts` field can reference the receipt chain alongside the build
-attestation.
-
-The [agent-commit build type](https://refs.arewm.com/agent-commit/v0.2)
-documents the pattern using the ResourceDescriptor shape:
-
-```json
-{
-  "name": "decision-receipts",
-  "digest": { "sha256": "..." },
-  "uri": "oci://registry/org/build-xyz/receipts:sha256-...",
-  "annotations": {
-    "predicateType": "https://veritasacta.com/attestation/decision-receipt/v0.1",
-    "signerRole": "supervisor-hook"
-  }
-}
-```
-
-The SLSA provenance is signed by the builder identity; the receipt
-attestation is signed by the supervisor-hook identity. Two trust domains,
-cross-referenced at the byproduct layer. See
-[slsa-framework/slsa#1594](https://github.com/slsa-framework/slsa/issues/1594)
-for the composition discussion.
+When Claude Code builds and releases software, the receipt chain is the
+per-step build log. Reference it from the SLSA Provenance v1 `byproducts`
+field: the builder identity signs the provenance and the supervisor-hook
+identity signs the receipts, two trust domains cross-referenced at the
+byproduct layer. See `references/interop-and-slsa.md` for the
+ResourceDescriptor shape and links.
 
 ## Common pitfalls
 
@@ -240,13 +191,6 @@ create the policy in Step 2.
 
 ## References
 
-- [`draft-farley-acta-signed-receipts`](https://datatracker.ietf.org/doc/draft-farley-acta-signed-receipts/) — IETF draft, receipt wire format
-- [RFC 8032](https://datatracker.ietf.org/doc/html/rfc8032) — Ed25519
-- [RFC 8785](https://datatracker.ietf.org/doc/html/rfc8785) — JCS
-- [Cedar policy language](https://docs.cedarpolicy.com/)
-- [protect-mcp on npm](https://www.npmjs.com/package/protect-mcp)
-- [@veritasacta/verify on npm](https://www.npmjs.com/package/@veritasacta/verify)
-- [in-toto/attestation#549](https://github.com/in-toto/attestation/pull/549) — Decision Receipt predicate proposal
-- [agent-commit build type](https://refs.arewm.com/agent-commit/v0.2) — SLSA provenance for agent-produced commits
-- [Microsoft Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit) (`examples/protect-mcp-governed/`)
-- [AWS Cedar for Agents](https://github.com/cedar-policy/cedar-for-agents)
+See `references/interop-and-slsa.md` for the specifications (the IETF receipt
+draft, RFC 8032 Ed25519, RFC 8785 JCS, Cedar) and the related projects and
+proposals.

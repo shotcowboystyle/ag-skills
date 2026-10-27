@@ -20,7 +20,7 @@ whether the color key was `color` or `colors`. Downstream commands read whicheve
 they happened to assume, so a `/style` followed by `/screen` could silently find
 no palette at all.
 
-`scripts/check-corpus.py` now fails the build if any `.design-ops/*.json` path is
+The upstream design-ops corpus check (`check-corpus.py`) now fails the build if any `.design-ops/*.json` path is
 written with more than one top-level key set.
 
 ## The resolution

@@ -119,4 +119,4 @@ physical device. Keep those as separate gates in the project handoff.
 - [iOS DAT API reference](https://wearables.developer.meta.com/docs/reference/ios_swift/dat/latest)
 - [iOS integration guide](https://wearables.developer.meta.com/docs/build-integration-ios)
 - [Swift Package Manager](https://developer.apple.com/documentation/swift_packages)
-- Evidence and verification language (`ios-knowledge-base` skill: `references/00-foundations/05-evidence-and-verification-language.md`)
+- Evidence and verification language (`ios-knowledge-base` skill: [05-evidence-and-verification-language.md](../../../../../ios-ops/skills/ios-knowledge-base/references/00-foundations/05-evidence-and-verification-language.md))

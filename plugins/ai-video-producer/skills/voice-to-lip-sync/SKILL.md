@@ -14,7 +14,7 @@ Generates a voice line and conforms an existing silent character clip to it.
 
 ## Inputs
 
-- The line to be spoken (from `scripts/final/script.md` or the shot brief).
+- The line to be spoken (from the project's `./scripts/final/script.md` or the shot brief).
 - A character clip in `clips/raw/` or `generation/image-to-video/`.
 - Voice selection from `brief/tools-and-models.md`. If a voice clone is in use, source audio lives at `assets/voice-clones/<name>.wav`.
 

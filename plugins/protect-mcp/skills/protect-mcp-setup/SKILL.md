@@ -37,7 +37,7 @@ Read [Threat model](#threat-model) before relying on the receipts as evidence.
 claude plugin marketplace add shotcowboystyle/ag-skills
 claude plugin install protect-mcp@claude-code-workflows
 
-# 2. Create ./protect.cedar from the starter policy below.
+# 2. Create ./protect.cedar from references/starter-policy.md.
 
 # 3. Create the signing key once. An existing key is never replaced.
 #    See references/receipt-format.md to rotate it.
@@ -80,76 +80,23 @@ does not record the tool output.
 ## Cedar Policy File
 
 Cedar denies by default. A call is allowed when at least one `permit` matches
-and no `forbid` matches. A matching `forbid` always wins, so the forbids below
+and no `forbid` matches. A matching `forbid` always wins, so the starter forbids
 hold even if you add broader permits later.
 
-Create `./protect.cedar` at the project root and replace `/path/to/project`
-with the project's absolute path:
+Create `./protect.cedar` at the project root from the starter policy in
+`references/starter-policy.md`, replacing `/path/to/project` with the
+project's absolute path. It:
 
-```cedar
-// Read-only tools. Add WebFetch with your own URL rule.
-permit (principal, action == Action::"MCP::Tool::call", resource) when {
-    resource == Tool::"Read" || resource == Tool::"Glob" || resource == Tool::"Grep"
-};
+- permits `Read`, `Glob` and `Grep`, and forbids them on the signing key,
+  `.env` files and SSH keys;
+- permits read-only git subcommands and a few built-ins in `Bash`, and forbids
+  chaining, `$` expansion, redirection, `rm -rf`, and naming those secrets;
+- permits `Write` and `Edit` inside the project only, and forbids writes via
+  `..` or to the policy, the key, the receipts, secrets, or `.claude/`
+  settings (which can turn the hooks off).
 
-// Never read the signing key, .env files, or SSH keys. Grep and Glob take
-// `path`; keep the key gitignored as well, since Grep skips gitignored files.
-forbid (principal, action == Action::"MCP::Tool::call", resource) when {
-    (resource == Tool::"Read" || resource == Tool::"Grep" || resource == Tool::"Glob") &&
-    context has input &&
-    ((context.input has file_path &&
-      (context.input.file_path like "*protect-mcp.key*" ||
-       context.input.file_path like "*.env*" || context.input.file_path like "*.ssh*")) ||
-     (context.input has path &&
-      (context.input.path like "*protect-mcp.key*" ||
-       context.input.path like "*.env*" || context.input.path like "*.ssh*")))
-};
-
-// Shell: read-only git subcommands and a few harmless built-ins. No `cat`:
-// use Read, which the forbid above covers. No interpreter or package-manager
-// prefix (`npm`, `node`, `python`, `make`): they run arbitrary code.
-permit (principal, action == Action::"MCP::Tool::call", resource == Tool::"Bash") when {
-    context has input && context.input has command &&
-    (context.input.command like "git status*" || context.input.command like "git diff*" ||
-     context.input.command like "git log*" || context.input.command like "git show*" ||
-     context.input.command like "ls*" || context.input.command like "pwd*" ||
-     context.input.command like "echo *" || context.input.command like "test *")
-};
-
-// No chaining (`&` also denies `2>&1`), `$` expansion, redirection (`>` or
-// `<`, which covers `<(`), file output (`git diff --output`), reads outside
-// git (`git diff --no-index`), rm -rf, or naming the secrets above
-forbid (principal, action == Action::"MCP::Tool::call", resource == Tool::"Bash") when {
-    context has input && context.input has command &&
-    (context.input.command like "*;*" || context.input.command like "*&*" ||
-     context.input.command like "*|*" || context.input.command like "*$*" ||
-     context.input.command like "*`*" || context.input.command like "*>*" ||
-     context.input.command like "*<*" || context.input.command like "*\n*" ||
-     context.input.command like "*--output*" || context.input.command like "*--no-index*" ||
-     context.input.command like "*rm -rf*" || context.input.command like "*protect-mcp.key*" ||
-     context.input.command like "*.env*" || context.input.command like "*.ssh*")
-};
-
-// Writes only inside the project (paths are absolute), never via `..`
-permit (principal, action == Action::"MCP::Tool::call", resource) when {
-    (resource == Tool::"Write" || resource == Tool::"Edit") &&
-    context has input && context.input has file_path &&
-    context.input.file_path like "/path/to/project/*"
-};
-
-// Never write the policy, the key, the receipts, secrets, or Claude Code
-// settings (which can turn the hooks off)
-forbid (principal, action == Action::"MCP::Tool::call", resource) when {
-    (resource == Tool::"Write" || resource == Tool::"Edit") &&
-    context has input && context.input has file_path &&
-    (context.input.file_path like "*/../*" || context.input.file_path like "*/.." ||
-     context.input.file_path like "*protect.cedar*" ||
-     context.input.file_path like "*protect-mcp.key*" ||
-     context.input.file_path like "*/receipts/*" ||
-     context.input.file_path like "*.env*" || context.input.file_path like "*.ssh*" ||
-     context.input.file_path like "*/.claude/*")
-};
-```
+Do not permit interpreter or package-manager prefixes (`npm`, `node`,
+`python`, `make`) broadly: they run arbitrary code.
 
 String matching is best-effort. `like` checks the raw string, not a resolved
 path or a parsed command, so a symlink or a reworded command can get past a

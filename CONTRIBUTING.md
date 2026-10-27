@@ -76,13 +76,13 @@ Every PR runs these on CI (`.github/workflows/`); run them locally before pushin
 
 ```bash
 make validate STRICT=1     # structural validation across all harness outputs
-make garden                # drift, dead-link, stale-artifact detection
+make garden STRICT=1       # drift, dead links, stale artifacts, audit checks
 make test                  # full pytest suite (plugin-eval + tools/tests/)
 make smoke-test            # real-CLI subprocess tests (OpenCode, Antigravity, Codex, Claude, Pi, gh skill, npx skills)
 ```
 
-`make garden STRICT=1` also fails on warnings such as `SKILL_OVER_CODEX_CAP`.
-Main currently passes it cleanly, so keep it that way. CI gates on errors only.
+`STRICT=1` fails on warnings such as `SKILL_OVER_CODEX_CAP` and turns the audit checks
+(see [docs/authoring.md](docs/authoring.md#content-policy)) into errors. CI runs it strict.
 
 Code-quality checks (also in CI):
 

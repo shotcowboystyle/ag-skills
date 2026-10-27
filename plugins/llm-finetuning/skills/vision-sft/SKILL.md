@@ -172,7 +172,7 @@ check, not just a clean training log.
 Base VLM choice is out of scope for this skill —
 it lives in one place, the model catalog at
 `finetuning-method-selection`'s
-[`references/model-catalog.md`](../finetuning-method-selection/references/model-catalog.md). This skill and its
+[model-catalog.md](../finetuning-method-selection/references/model-catalog.md). This skill and its
 references describe recipes by architecture
 family only, never by recommending one model over
 another.

@@ -41,7 +41,22 @@ to invoke your skill/agent.
 ## Content policy
 
 These rules apply to every agent, skill and command. `make garden` enforces the parts it
-can check mechanically; reviewers enforce the rest.
+can check mechanically; reviewers enforce the rest. The mechanical checks are audit findings:
+warnings in a plain `make garden`, errors under `make garden STRICT=1`, which CI runs.
+`STALE_LAST_VERIFIED` is the exception: it stays a warning, see [Freshness](#freshness).
+
+| Finding | Rule |
+|---|---|
+| `AGENT_NO_TOOLS`, `READ_ONLY_AGENT_WRITES` | [Tools](#tools) |
+| `AGENT_BODY_DUPLICATE` | [Share one agent across plugins](#share-one-agent-across-plugins) |
+| `AGENT_REF_UNSCOPED`, `AGENT_CALLED_SKILL` | [Use globally unique agent names](#use-globally-unique-agent-names) |
+| `HAZARD_OVERWRITE`, `HAZARD_UNCONFIRMED_PUSH` | [Safety](#safety) |
+| `SKILL_OVER_8KB` | [Respect the Codex 8 KB skill body cap](#respect-the-codex-8-kb-skill-body-cap) |
+| `BUNDLED_FILE_MISSING`, `SPLIT_UNCLOSED_FENCE`, `SPLIT_STRAY_HEADING` | Paths in a skill resolve from its own folder; fences close |
+
+The static score snapshot (`evals/static-score-snapshot.json`, `make eval-snapshot`) also
+scores every agent on frontmatter, `tools:`, model tier, numbered procedure, output contract
+and duplicate bodies, so a regression shows up in the PR diff.
 
 ### Model tiers
 
@@ -85,7 +100,7 @@ name: security-auditor
 tools: Read, Grep, Glob
 ```
 
-`make garden` reports `AGENT_NO_TOOLS` and `READ_ONLY_AGENT_WRITES` as audit warnings.
+`make garden STRICT=1` fails on `AGENT_NO_TOOLS` and `READ_ONLY_AGENT_WRITES`.
 
 ### Agent shape
 
@@ -152,7 +167,7 @@ jq '.hooks.PreToolUse += [$hook]' --argjson hook "$HOOK" ~/.claude/settings.json
   && mv "$tmp" ~/.claude/settings.json
 ```
 
-`make garden` reports `HAZARD_*` patterns (overwrites, unconfirmed pushes) as audit warnings.
+`make garden STRICT=1` fails on `HAZARD_*` patterns (overwrites, unconfirmed pushes).
 
 ### Freshness
 
@@ -174,7 +189,8 @@ last_verified: 2026-10-19
 
 A malformed date fails `make garden` (`BAD_LAST_VERIFIED`) and
 `node tools/validate.mjs <skill-dir>`. A date
-over 180 days old is an audit warning (`STALE_LAST_VERIFIED`).
+over 180 days old is a warning (`STALE_LAST_VERIFIED`). It stays a warning under
+`STRICT=1`, so an expired date never fails CI on its own.
 
 ### Harness requirements
 

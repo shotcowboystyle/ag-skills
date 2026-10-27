@@ -58,8 +58,8 @@ exiftool -b -ThumbnailImage /path/to/evidence.jpg > thumbnail.jpg
 exiftool -all= /path/to/working_copy.jpg
 
 # ExifTool automatically creates an '_original' backup (e.g., working_copy.jpg_original).
-# To overwrite the file in place without creating a backup, use:
-exiftool -all= -overwrite_original /path/to/working_copy.jpg
+# Keep it until the stripped copy's hash is in the custody log. Skip
+# `-overwrite_original`: it drops the backup, and on the wrong path it rewrites an original.
 ```
 
 ### Copying tags between files

@@ -5,7 +5,7 @@ carries the scripts, templates, and edge cases.
 
 ## Vault check script
 
-`scripts/check_vault.py` walks every page under `wiki/`, verifies each linked claim against
+Save this script in the vault as `./scripts/check_vault.py`. It walks every page under `wiki/`, verifies each linked claim against
 its raw source, and compares each fingerprint with the current tree. It uses only the standard
 library and `git`.
 

@@ -6,7 +6,7 @@ Full tables and a complete worked config backing
 the summary in `SKILL.md`. Base models are never
 named here — every example is labeled by size
 class only; see `finetuning-method-selection`'s
-[`references/model-catalog.md`](../../finetuning-method-selection/references/model-catalog.md) for which actual
+[model-catalog.md](../../finetuning-method-selection/references/model-catalog.md) for which actual
 model to use at a given size class.
 
 ## Rank and Alpha by Task Type
