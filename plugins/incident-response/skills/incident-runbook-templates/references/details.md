@@ -49,7 +49,6 @@ kubectl rollout history deployment/payment-service -n payments
 # Check error rates
 curl -s "http://prometheus:9090/api/v1/query?query=sum(rate(http_requests_total{status=~'5..'}[5m]))"
 ```
-````
 
 ### 2. Quick Health Checks
 
@@ -273,7 +272,7 @@ Follow-up:
 
 ### Template 2: Database Incident Runbook
 
-```markdown
+````markdown
 # Database Incident Runbook
 
 ## Quick Reference
@@ -303,7 +302,6 @@ SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
 WHERE state = 'idle'
 AND query_start < now() - interval '10 minutes';
-````
 
 ## Replication Lag
 
@@ -339,4 +337,4 @@ psql -c "VACUUM FULL large_table;"
 # If emergency, delete old data or expand disk
 ```
 
-```
+````

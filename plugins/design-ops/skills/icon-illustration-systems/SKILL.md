@@ -25,10 +25,23 @@ universal when it is learned.
 - **Decorative icons are invisible to screen readers, meaningful ones are not.**
   That distinction is a decision you make per icon, not a default.
 
+## Procedure
+
+1. **Decide labels first.** For each icon, ask whether the metaphor is on the
+   universal list. If not, it ships with a visible label.
+2. **Pick one set.** Choose a single library by style, weight range, coverage
+   and licence (see Routing). Do not mix sets in one interface.
+3. **Set the size scale.** Use the tokens below, and draw or pick dedicated
+   small variants for 16px and 12px instead of scaling down.
+4. **Mark every icon** as meaningful or decorative and wire it as shown under
+   Accessibility.
+5. **Wire states and colour** through `currentColor` and the state tokens in
+   `references/icon-implementation-recipes.md`.
+6. **Optimize** each SVG with the SVGO config in the same file before it lands.
+
 ## Constants
 
-Every recipe in the reference files emits these.
-
+Every recipe in the reference files emits these size tokens.
 
 | Token | Size | Line Height | Use Cases | Touch Target |
 |-------|------|-------------|-----------|--------------|
@@ -47,70 +60,7 @@ Every recipe in the reference files emits these.
 - Never scale a 24px icon down to 12px by setting width/height — use a dedicated small variant
 - Design at 24px, then create size-specific variants for 16px and 12px
 
----
-
-## 4. Icon Design Rules
-
-
-| State | Opacity | Color Token | Transform | Cursor | Additional |
-|-------|---------|-------------|-----------|--------|------------|
-| **Default** | 100% | `--icon-default` (gray-600) | none | default | — |
-| **Hover** | 100% | `--icon-hover` (gray-900) | none | pointer | transition: color 150ms ease |
-| **Active / Pressed** | 100% | `--icon-active` (primary-600) | scale(0.95) | pointer | transition: transform 100ms ease |
-| **Disabled** | 38% | `--icon-disabled` (gray-400) | none | not-allowed | pointer-events: none |
-| **Selected / On** | 100% | `--icon-selected` (primary-600) | none | pointer | Switch to filled variant if available |
-| **Focus-visible** | 100% | `--icon-focus` (gray-900) | none | pointer | 2px focus ring offset 2px |
-| **Drag** | 80% | `--icon-default` | scale(1.05) | grabbing | drop-shadow for lift effect |
-
-### State Transition CSS
-```css
-.icon-button {
-  color: var(--icon-default);
-  transition: color 150ms ease, transform 100ms ease, opacity 150ms ease;
-}
-.icon-button:hover { color: var(--icon-hover); }
-.icon-button:active { color: var(--icon-active); transform: scale(0.95); }
-.icon-button:disabled { color: var(--icon-disabled); opacity: 0.38; pointer-events: none; }
-.icon-button[aria-selected="true"] { color: var(--icon-selected); }
-.icon-button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
-```
-
----
-
-## 8. Animated Icons
-
-## Index
-
-| Need | Reference |
-|---|---|
-| Choose an icon set (Lucide, Heroicons, Phosphor, Tabler) | `icon-library-catalog.md` |
-| SF Symbols and Material Symbols conventions | `icon-library-catalog.md` |
-| Licence and coverage comparison | `icon-library-catalog.md` |
-| React icon component, inline vs sprite vs font | `icon-implementation-recipes.md` |
-| Animated icons: spinner, toggle, hamburger morph | `icon-implementation-recipes.md` |
-| SVGO config and size targets | `icon-implementation-recipes.md` |
-| Choosing an illustration style | `illustration-systems.md` |
-| Empty-state and spot illustrations | `illustration-systems.md` |
-| The 24x24 grid, keyline shapes, safe zones | `icon-geometry-and-color.md` |
-| currentColor, multi-colour icons, dark mode | `icon-geometry-and-color.md` |
-
-## Reference architecture
-
-| File | Covers | Lines |
-|---|---|---|
-| `references/icon-library-catalog.md` | 6 libraries + platform conventions | 237 |
-| `references/icon-implementation-recipes.md` | component, states, animation, SVGO | 206 |
-| `references/illustration-systems.md` | 16 styles, empty states, spot art | 168 |
-| `references/icon-geometry-and-color.md` | grid, keylines, colour | 71 |
-
-## What every reference file contains
-
-1. When to reach for it, and the simpler option to try first
-2. Complete code, not fragments
-3. The accessibility wiring for that specific case
-4. Dark-mode behaviour
-5. The mistake that case invites
-
+## Accessibility
 
 ### Meaningful vs Decorative Icons
 Every icon is either **meaningful** (conveys information) or **decorative** (visual embellishment). The treatment differs completely:
@@ -145,16 +95,12 @@ Every icon is either **meaningful** (conveys information) or **decorative** (vis
 
 ### Accessibility Rules
 1. **Every icon** must have either `aria-hidden="true"` (decorative) or an accessible name (meaningful)
-2. Add `focusable="false"` to inline SVGs in IE/Edge legacy to prevent tab-stop issues
+2. `focusable="false"` on inline SVGs only matters for legacy IE/Edge tab stops; it is harmless elsewhere
 3. Use `role="img"` when the SVG is meaningful and uses `<title>` for its label
 4. Toggle icons must announce their state: `aria-pressed="true/false"` or `aria-expanded`
-5. Icon-only buttons require a minimum 44x44px touch target (WCAG 2.5.8)
+5. Icon-only buttons need a 24x24px target at minimum (WCAG 2.5.8, AA); aim for 44x44px on touch (2.5.5, AAA)
 6. Color alone must not be the only indicator — pair colored icons with shape changes (e.g., filled vs outline for selected)
 7. Animated icons must respect `prefers-reduced-motion` (WCAG 2.3.3)
-
----
-
-## 14. Icon Color
 
 ## Routing
 

@@ -159,7 +159,6 @@ psql -c "SELECT count(*) FROM pg_stat_activity;"
 # Clear cache (emergency only)
 redis-cli FLUSHDB
 ```
-````
 
 ### Important Links
 
@@ -264,3 +263,4 @@ I'll be available on Slack until 17:00 today.
 - Status page: Updated at 08:45
 - Customer support: Notified
 - Exec team: Aware
+````

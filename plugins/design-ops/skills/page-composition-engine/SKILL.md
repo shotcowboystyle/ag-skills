@@ -1,10 +1,10 @@
 ---
 name: page-composition-engine
-description: 100+ full-page recipes giving exact block order, spacing rhythm, visual pacing, and content hierarchy for landing pages, dashboards, e-commerce, auth, settings, and profiles. Use when composing a whole page. For a single section in isolation, use layout-block-intelligence.
+description: Full-page recipes giving exact block order, spacing rhythm, visual pacing, and content hierarchy for landing pages, dashboards, e-commerce, auth, settings, and profiles. Use when composing a whole page. For a single section in isolation, use layout-block-intelligence.
 allowed-tools: Read, Grep, Glob
 ---
 
-# Page Composition Engine — 100+ Full-Page Recipes
+# Page Composition Engine
 
 ## The Art of Page Composition
 
@@ -29,6 +29,21 @@ Pages that are part of a multi-step process.
 ### Content Pages (Information)
 Pages primarily delivering content.
 - Blog posts, documentation, help center, changelog
+
+## Procedure
+
+1. **Name the archetype** (marketing, product, transactional, content) and the
+   one action the page exists to get.
+2. **Start from the nearest recipe** in the references (see Routing). For a
+   login, signup or onboarding page, use the auth recipes below.
+3. **Order blocks along the narrative arc** below; drop any stage the page does
+   not need rather than padding it.
+4. **Specify each block** from `layout-block-intelligence`, which holds the
+   variants, anatomy and code for every block type a recipe names.
+5. **Set rhythm**: alternate dense and light blocks and backgrounds, and apply
+   the spacing scale.
+6. **Check the first viewport** for what, why, how and trust, then apply the
+   responsive rules.
 
 ## Composition Theory
 
@@ -79,7 +94,7 @@ The first viewport (above the fold) must accomplish:
 3. **How** — Primary CTA button
 4. **Trust** — Social proof element (logos, rating, user count)
 
-Research shows content below the fold IS seen (80%+ of users scroll), but first-viewport quality determines IF they scroll.
+Most visitors do scroll, but only if the first viewport gives them a reason to.
 
 ### Content-to-Chrome Ratio
 
@@ -87,147 +102,20 @@ Research shows content below the fold IS seen (80%+ of users scroll), but first-
 - App pages: 75-85% content, 15-25% chrome (nav + sidebar + toolbars)
 - Dashboards: 70-80% content, 20-30% chrome
 
-## Landing Page Recipes
-
-### LP-01: SaaS Product Landing Page
-The workhorse B2B SaaS landing page.
-
-```
-1. NAV-01    Top bar (logo + links + "Get Started" CTA)
-2. HERO-02   Split hero (headline left, product screenshot right)
-3. PROOF-01  Customer logos bar ("Trusted by...")
-4. FEAT-05   Alternating feature rows (3 features, zigzag layout)
-5. STATS-01  4-column stats ("10K+ users", "99.9% uptime", etc.)
-6. PROOF-03  Testimonial cards (3 customers)
-7. FEAT-01   3-column icon+text grid (secondary features)
-8. CTA-01    Simple CTA banner (heading + button)
-9. PRICE-01  3-column pricing table
-10. FAQ-01   Accordion FAQ
-11. CTA-04   CTA with email input
-12. FOOTER-03 4-column footer
-```
-
-**Background rhythm:** white → gray-50 → white → dark → white → gray-50 → white → dark → white → gray-50
-
-### LP-02: Mobile App Landing Page
-```
-1. NAV-01    Top bar
-2. HERO-12   App store hero (device mockup)
-3. PROOF-01  Customer logos / press bar
-4. FEAT-01   3-column feature grid (icon + text)
-5. FEAT-06   Bento grid (screenshots in various sizes)
-6. PROOF-04  Single large testimonial quote
-7. STATS-01  4-column stats
-8. PROOF-03  Testimonial cards
-9. CTA-01    CTA with app store badges
-10. FAQ-01   FAQ accordion
-11. FOOTER-02 3-column footer
-```
-
-### LP-03: Startup / Coming Soon Page
-```
-1. NAV-01    Minimal top bar (logo + CTA only)
-2. HERO-01   Centered text hero (bold headline + waitlist CTA)
-3. PROOF-12  User count ("Join 5,000+ on the waitlist")
-4. FEAT-01   3-column value props (icons + text)
-5. TEAM-01   Team grid (founders)
-6. FAQ-01    FAQ accordion
-7. CTA-04    Email capture CTA
-8. FOOTER-08 Minimal footer
-```
-
-### LP-04: Enterprise B2B Landing Page
-```
-1. NAV-02    Top bar with mega menu
-2. HERO-02   Split hero (text + enterprise product screenshot)
-3. PROOF-01  Customer logos bar (Fortune 500 logos)
-4. PROOF-18  Trust badges (SOC2, HIPAA, GDPR)
-5. FEAT-05   Alternating feature rows (4+ features)
-6. PROOF-09  Case study snippets (3 case studies)
-7. STATS-01  Impact metrics
-8. FEAT-01   Integration/platform icons grid
-9. PROOF-03  Enterprise testimonials
-10. CTA-08   CTA with "Book a Demo" + "Contact Sales"
-11. FAQ-01   FAQ accordion
-12. FOOTER-04 5-column footer with compliance badges
-```
-
-### LP-05: E-commerce Product Landing Page
-```
-1. NAV-03    Top bar with search + cart
-2. HERO-14   Product hero (product image + price + buy CTA)
-3. PROOF-07  Star rating + review count
-4. FEAT-01   3-column product benefits
-5. CONTENT-06 Product image gallery
-6. PROOF-08  Review cards (customer reviews)
-7. FEAT-11   Comparison (this product vs. alternatives)
-8. PROOF-15  Metric callouts ("1M+ sold")
-9. CTA-01    Buy CTA banner
-10. FAQ-01   Product FAQ
-11. CONTENT-08 Related products grid
-12. FOOTER-03 Footer with trust badges + payment icons
-```
-
-## App Page Recipes
-
-### APP-01: Dashboard Home Page
-```
-1. NAV-06    Sidebar nav (persistent)
-2. NAV-01    Top bar (search + user menu)
-3. DASH-01   KPI card row (4 primary metrics)
-4. DASH-04   Chart container (primary chart — line or area)
-5. DASH-05   Chart container (secondary chart — bar)
-6. DASH-09   Activity feed (recent events)
-```
-
-### APP-02: Settings Page
-```
-1. NAV-06    Sidebar nav (with "Settings" active)
-2. NAV-11    Settings sub-navigation (General, Account, Billing, etc.)
-3. FORM-06   Settings form (grouped sections with save buttons)
-```
-
-### APP-03: Profile Page
-```
-1. NAV-06    Sidebar nav
-2. CONTENT-04 Profile header (avatar + name + bio + edit button)
-3. STATS-04   Stats bar (posts, followers, etc.)
-4. NAV-11    Profile tabs (Posts, Activity, About)
-5. CONTENT-02 Content list (user's items)
-```
-
-### APP-04: List/Feed Page
-```
-1. NAV-06    Sidebar nav
-2. NAV-01    Top bar
-3. DASH-22   Filter bar (search + filters + sort + view toggle)
-4. DASH-13   List view OR DASH-16 Grid view
-5. DASH-25   Empty state (if no items)
-```
-
-### APP-05: Detail/Item Page
-```
-1. NAV-06    Sidebar nav
-2. NAV-10    Breadcrumb bar
-3. CONTENT-04 Item header (title + metadata + actions)
-4. CONTENT-13 Tabbed content (Details, Activity, Comments)
-5. FORM-06   Edit form (if editable)
-```
-
 ## Auth Page Recipes
 
 ### AUTH-01: Login Page
 ```
 1. Two-column layout:
    Left: Brand panel (logo + tagline + illustration)
-   Right: FORM-03 Login form (email + password + social login + forgot password link)
+   Right: Login form (email + password + social login + forgot password link)
 ```
 
 ### AUTH-02: Signup Page
 ```
 1. Two-column layout:
    Left: Brand panel (logo + value props + social proof)
-   Right: FORM-04 Signup form (name + email + password + terms checkbox)
+   Right: Signup form (name + email + password + terms checkbox)
 ```
 
 ### AUTH-03: Onboarding Flow (3-step)

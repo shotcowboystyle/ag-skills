@@ -1119,3 +1119,33 @@ Each flow pattern includes: trigger, step sequence, decision nodes, happy path, 
 - **Key Metrics**: Handoff usage rate, cross-device session rate, sync failure rate.
 
 ---
+
+## Flow diagram notation
+
+When documenting or communicating user flows, use these conventions.
+
+### Node types
+- **Start / End**: Rounded rectangle (pill shape). Green for start, red for end.
+- **Screen / Page**: Rectangle. Contains screen name. Color-coded by section.
+- **Decision**: Diamond. Contains yes/no or conditional question.
+- **Action**: Rectangle with rounded corners. User or system action.
+- **Sub-flow**: Rectangle with double border. Links to separate flow diagram.
+- **Wait / Delay**: Hourglass or clock icon. Async step (email verification, processing).
+
+### Path types
+- **Happy Path**: Solid green arrows. The primary expected journey.
+- **Error Path**: Dashed red arrows. What happens when things fail.
+- **Alternative Path**: Dotted blue arrows. Valid but less common routes.
+- **Escape Hatch**: Gray arrows. Exit points (cancel, back, close).
+
+### Entry points
+- **Direct URL**: Globe icon. User arrives via typed URL or link.
+- **Deep Link**: Chain icon. From push notification, email, or external app.
+- **Navigation**: Menu icon. From in-app navigation.
+- **System Trigger**: Gear icon. Automated redirect (session expire, maintenance).
+
+### Edge-case annotations
+- **Conditional**: Annotate arrows with conditions (e.g., "if cart > $50").
+- **Frequency**: Label paths with expected traffic percentage (e.g., "80% of users").
+- **Data Dependencies**: Note when a step requires data from a previous step.
+- **Timeout**: Note time limits (e.g., "OTP expires in 10 min").

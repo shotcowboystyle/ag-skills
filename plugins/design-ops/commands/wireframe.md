@@ -838,7 +838,7 @@ When creating wireframes, draw knowledge from:
 - `screen-flow-patterns` skill — 25+ screen type catalog with canonical layout patterns for each
 - `ui-pattern-intelligence` skill — 200+ UI patterns, navigation/data display/input/feedback recommendations per screen type
 - `layout-block-intelligence` skill — 500+ layout section/block patterns (hero, features, pricing, CTA, dashboard blocks)
-- `page-composition-engine` skill — 100+ full-page composition recipes with block stacking order and visual rhythm
+- `page-composition-engine` skill — full-page composition recipes with block stacking order and visual rhythm
 - `cognitive-psychology-ux` skill — scanning patterns (F-pattern for text-heavy, Z-pattern for marketing, Gutenberg diagram), Gestalt grouping (proximity, similarity, closure), Fitts's Law (target size and distance)
 - `component-patterns-code` skill — component patterns that will implement these wireframes (feasibility check)
 - `visual-design-mastery` skill — `composition-mastery.md` for grid systems, visual hierarchy, rule of thirds
