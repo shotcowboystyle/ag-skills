@@ -98,7 +98,7 @@
       "name": "api-testing-observability",
       "source": "./plugins/api-testing-observability",
       "description": "API testing automation, request mocking, OpenAPI documentation generation, observability setup, and monitoring",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -240,7 +240,7 @@
       "name": "code-documentation",
       "source": "./plugins/code-documentation",
       "description": "Documentation generation, code explanation, and technical writing with automated doc generation and tutorial creation",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -278,7 +278,7 @@
     {
       "name": "conductor",
       "description": "Context-Driven Development plugin that transforms Claude Code into a project management tool with structured workflow: Context \u2192 Spec & Plan \u2192 Implement",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"
@@ -459,7 +459,7 @@
       "name": "documentation-generation",
       "source": "./plugins/documentation-generation",
       "description": "OpenAPI specification generation, Mermaid diagram creation, tutorial writing, API reference documentation",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "author": {
         "name": "Curtis Blanton",
         "email": "curtis@shotcowboystyle.com"

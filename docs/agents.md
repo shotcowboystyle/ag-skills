@@ -106,7 +106,7 @@ Reference for 179 local AI agents organized by category. The model column lists 
 
 | Agent                                                                     | Model | Description                                                                          |
 | ------------------------------------------------------------------------- | ----- | ------------------------------------------------------------------------------------ |
-| [conductor-validator](../plugins/conductor/agents/conductor-validator.md) | opus  | Validates Conductor project artifacts for completeness, consistency, and correctness |
+| [conductor-validator](../plugins/conductor/agents/conductor-validator.md) | haiku | Checks conductor/ artifacts and track IDs after setup and before implement |
 
 ### Quality Assurance & Security
 
@@ -189,9 +189,9 @@ Reference for 179 local AI agents organized by category. The model column lists 
 | ------------------------------------------------------------------------------------ | ------ | --------------------------------------------------------------------- |
 | [docs-architect](../plugins/code-documentation/agents/docs-architect.md)             | sonnet | Comprehensive technical documentation generation                      |
 | [api-documenter](../plugins/api-testing-observability/agents/api-documenter.md)      | sonnet | OpenAPI/Swagger specifications and developer docs                     |
-| [reference-builder](../plugins/documentation-generation/agents/reference-builder.md) | haiku  | Technical references and API documentation                            |
+| [reference-builder](../plugins/documentation-generation/agents/reference-builder.md) | sonnet | Module, CLI and config references traced to the source               |
 | [tutorial-engineer](../plugins/code-documentation/agents/tutorial-engineer.md)       | sonnet | Step-by-step tutorials and educational content                        |
-| [mermaid-expert](../plugins/documentation-generation/agents/mermaid-expert.md)       | haiku  | Diagram creation (flowcharts, sequences, ERDs)                        |
+| [mermaid-expert](../plugins/documentation-generation/agents/mermaid-expert.md)       | haiku  | Mermaid diagrams, render-checked with mermaid-cli                     |
 | [c4-code](../plugins/c4-architecture/agents/c4-code.md)                              | haiku  | C4 Code-level documentation with function signatures and dependencies |
 | [c4-component](../plugins/c4-architecture/agents/c4-component.md)                    | sonnet | C4 Component-level architecture synthesis and documentation           |
 | [c4-container](../plugins/c4-architecture/agents/c4-container.md)                    | sonnet | C4 Container-level architecture with API documentation                |

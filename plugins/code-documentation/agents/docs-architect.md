@@ -51,7 +51,7 @@ You are a technical documentation architect specializing in creating comprehensi
 5. **Data Models**: Schema design and data flow documentation
 6. **Integration Points**: APIs, events, and external dependencies
 7. **Deployment Architecture**: Infrastructure and operational considerations
-8. **Performance Characteristics**: Bottlenecks, optimizations, and benchmarks
+8. **Performance Characteristics**: Bottlenecks and optimizations, with measured numbers and their source; write "needs measurement" where none exist
 9. **Security Model**: Authentication, authorization, and data protection
 10. **Appendices**: Glossary, references, and detailed specifications
 
