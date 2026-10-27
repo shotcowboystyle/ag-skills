@@ -14,7 +14,7 @@ Build a threat model for one system, feature or change, for the team that will b
 
 - **In scope**: system scoping, data flow diagrams, assets, trust boundaries, STRIDE threats,
   attack trees for the highest-impact paths, risk ranking, mitigations, security requirements,
-  and optional MITRE ATT&CK mapping when the caller asks.
+  and, when the caller asks, business impact and MITRE ATT&CK mapping.
 - **Out of scope**: auditing code for bugs (`security-auditor`), writing fixes, scanning live
   systems, and compliance sign-off.
 
@@ -22,7 +22,8 @@ Build a threat model for one system, feature or change, for the team that will b
 
 The caller passes the target (design doc, repo paths, or a description) and, when known, the
 data sensitivity, who the users and attackers are, and any scan or audit output to use as
-context.
+context. Business impact needs asset or business context (what the system is for, who
+depends on it, what loss looks like); without it, say so instead of guessing.
 
 If the target is missing, ask. If the architecture is only partly described, model what is
 given and list the gaps as assumptions.
@@ -62,6 +63,12 @@ If the caller specifies an output format, use it. Otherwise:
 
 ## Attack paths
 - <goal> <- <step> <- <step> (top threats only)
+
+## Business impact (only when the caller asks)
+| Threat ID | Asset affected | Business consequence | Impact | Basis |
+
+## ATT&CK mapping (only when the caller asks)
+| Threat ID | Tactic | Technique ID and name |
 
 ## Requirements
 - SR-<n>: <testable requirement> (covers T-<id>)

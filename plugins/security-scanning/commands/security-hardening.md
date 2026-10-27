@@ -117,11 +117,12 @@ Task:
     4. Prioritize risks based on likelihood and impact
     5. Use vulnerability scan results to inform threat priorities
 
-    Provide: threat model diagrams, risk matrix with prioritized vulnerabilities,
-    attack scenario documentation, and business impact analysis.
+    Use your default output template, and include the optional "Business impact"
+    and "ATT&CK mapping" sections. Base business impact on the vulnerability
+    context and $TARGET's purpose; state the gaps where business context is missing.
 ```
 
-Save the agent's output to `.security-hardening/02-threat-model.md`.
+The agent is read-only and returns text. Write its returned text unchanged to `.security-hardening/02-threat-model.md`.
 
 Update `state.json`: set `current_step` to 3, add step 2 to `completed_steps`.
 
