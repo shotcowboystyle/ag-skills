@@ -172,3 +172,4 @@ opencode.json
 .pi/skills/
 .pi/prompts/
 .pi/agents/
+.context/
